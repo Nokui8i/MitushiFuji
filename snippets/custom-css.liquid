@@ -645,4 +645,58 @@ drawer[role="dialog"][id*="size"] td:first-child,
 drawer[role="dialog"][id*="Size"] td:first-child {
   font-weight: 600 !important;
 }
+
+/* ===== FEATURED PRODUCT CAROUSEL - Center Text Under Image ===== */
+/* יישור מושלם של הטקסט (שם מוצר + מחיר) מתחת לתמונה */
+
+/* הכרטיס עצמו - מיושר למרכז */
+.fpc .product-card,
+.fpc .product {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+/* התוכן של הכרטיס - מיושר למרכז, ללא padding שמזיז */
+.fpc .card__content--outer,
+.fpc .card__content {
+  text-align: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100% !important;
+}
+
+/* שם המוצר - מיושר למרכז */
+.fpc .card__heading,
+.fpc .card__heading a {
+  text-align: center !important;
+  display: block !important;
+}
+
+/* המחיר - מיושר למרכז */
+.fpc .price,
+.fpc .product-price {
+  text-align: center !important;
+  justify-content: center !important;
+  display: flex !important;
+}
+
+/* Vendor - גם מיושר למרכז */
+.fpc .card__content-vendor {
+  text-align: center !important;
+}
+
+/* Color swatches - מיושרים למרכז */
+.fpc .card-product-color-swatch {
+  justify-content: center !important;
+  display: flex !important;
+}
+
+/* Rating - מיושר למרכז */
+.fpc .product-rating {
+  justify-content: center !important;
+  display: flex !important;
+}
 </style>
