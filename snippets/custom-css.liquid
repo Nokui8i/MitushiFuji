@@ -1148,26 +1148,51 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   min-height: 0 !important;
 }
 
-@media (min-width: 990px) {
-  /* Product Hotspots - הקטנת הקונטיינר (CSS אגרסיבי) */
-  /* מגביל את רוחב הסקשן (כמו עמוד מוצר) */
-  .product-hotspots .ctnr,
-  .product-hotspots .page-width,
-  .product-hotspots .container {
-    max-width: 1100px !important; /* נסה 1000/1100/1200 */
-    margin: 0 auto !important;
-  }
+/* Product Hotspots - הקטנת הקונטיינר - כל המסכים */
+/* מגביל את רוחב הסקשן (כמו עמוד מוצר) */
+.product-hotspots .ctnr,
+.product-hotspots .page-width,
+.product-hotspots .container {
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+}
 
-  /* הגבלת רוחב הקונטיינר של התמונה הראשית (hotspot) - כמו product page */
+/* הגבלת רוחב הקונטיינר של התמונה הראשית (hotspot) - כל המסכים */
+.product-hotspots .clm:has(sht-grid),
+.product-hotspots .clm:has([id*="hotspotContainer"]),
+.product-hotspots .s-content .clm:first-child {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+@media (min-width: 990px) {
+  /* דסקטופ: 50% רוחב עם max-width 900px */
   .product-hotspots .clm:has(sht-grid),
   .product-hotspots .clm:has([id*="hotspotContainer"]),
   .product-hotspots .s-content .clm:first-child {
     max-width: 900px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    max-width: 50% !important; /* כמו product page - חצי מהרוחב */
     flex: 0 0 50% !important;
   }
+}
+
+@media (max-width: 749px) {
+  /* מובייל: הקטנת הקונטיינר גם במובייל */
+  .product-hotspots .clm:has(sht-grid),
+  .product-hotspots .clm:has([id*="hotspotContainer"]),
+  .product-hotspots .s-content .clm:first-child {
+    max-width: 90% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  
+  .product-hotspots .ctnr,
+  .product-hotspots .page-width,
+  .product-hotspots .container {
+    max-width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
 
   /* ===== הפתרון העיקרי: שבירת h-100 והחלפה ב-max-height ===== */
   /* זה הקונטיינר שמחזיק את כל ה-hotspot grid (כרגע h-100) - שובר את הגובה */
