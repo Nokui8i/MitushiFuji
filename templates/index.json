@@ -154,6 +154,38 @@
         "badge_shape": "badge--star"
       }
     },
+    "statistics_home": {
+      "type": "statistics",
+      "blocks": {
+        "stat_1": {
+          "type": "statistic",
+          "settings": {
+            "number": "100000",
+            "suffix": "+",
+            "label": "HAPPY ANIME FANS",
+            "description": ""
+          }
+        }
+      },
+      "block_order": [
+        "stat_1"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "subheading": "",
+        "heading": "",
+        "description": "",
+        "content_align": "ta-center",
+        "show_navigation": true,
+        "animation_duration": 2000,
+        "remove_padding_top": false,
+        "remove_padding_bottom": false,
+        "badge_text": "",
+        "badge_color": "color-accent-1",
+        "badge_position": "p-badge--top-left",
+        "badge_shape": "badge--star"
+      }
+    },
     "video_banner_xE4peK": {
       "type": "video-banner",
       "blocks": {
@@ -199,42 +231,6 @@
     "17687530853fdb3082": {
       "type": "_blocks",
       "settings": {}
-    },
-    "statistics_home": {
-      "type": "statistics",
-      "settings": {
-        "color_scheme": "scheme-1",
-        "heading": "",
-        "subheading": "",
-        "description": "",
-        "content_align": "ta-center",
-        "show_navigation": true,
-        "animation_duration": 1000,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false
-      },
-      "blocks": {
-        "stat_1": {
-          "type": "statistic",
-          "settings": {
-            "number": "100000",
-            "suffix": "+",
-            "label": "HAPPY ANIME FANS"
-          }
-        },
-        "stat_2": {
-          "type": "statistic",
-          "settings": {
-            "number": "875.91",
-            "suffix": "+",
-            "label": "Some Metric"
-          }
-        }
-      },
-      "block_order": [
-        "stat_1",
-        "stat_2"
-      ]
     }
   },
   "order": [
