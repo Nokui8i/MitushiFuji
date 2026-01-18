@@ -83,7 +83,7 @@
                       <sht-carousel-itm tabindex="0" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero" role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}" style="--w-xs:12;--w-sm:12;--w-md:12;" {{ block.shopify_attributes }}>
                         <div class="statistics-item ta-center">
                           <div class="statistics-number">
-                            <span class="js-number-animate" data-target="100000" data-duration="{{ section.settings.animation_duration | default: 1000 }}" data-auto-plus="true">0</span><span class="statistics-suffix statistics-suffix-auto">+</span>
+                            <span class="js-number-animate" data-target="100000" data-duration="{{ section.settings.animation_duration | default: 3000 }}" data-auto-plus="true">0</span><span class="statistics-suffix statistics-suffix-auto">+</span>
                           </div>
                           
                           {% if block.settings.label != blank %}
@@ -129,84 +129,42 @@
   }
   
   /* Footer-like background */
-  .product-hotspots-with-blurred-background {
+  .product-hotspots-with-blurred-background.section,
+  .product-hotspots-with-blurred-background,
+  section.product-hotspots-with-blurred-background,
+  .section.product-hotspots-with-blurred-background,
+  .product-hotspots-with-blurred-background[class*="color-"],
+  section.product-hotspots-with-blurred-background[class*="color-"] {
     position: relative;
     overflow: hidden;
-    background: #121212 !important;
+    background-color: #f5f5f5 !important;
+    background: #f5f5f5 !important;
   }
   
-  .product-hotspots-with-blurred-background::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
-    background: inherit;
-    filter: blur(20px) brightness(0.7);
-    transform: scale(1.1);
-    opacity: 0.8;
+  /* הסרת כל ה-overlays */
+  .product-hotspots-with-blurred-background.section::before,
+  .product-hotspots-with-blurred-background::before,
+  section.product-hotspots-with-blurred-background::before,
+  .section.product-hotspots-with-blurred-background::before,
+  .product-hotspots-with-blurred-background[class*="color-"]::before {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
   
-  .product-hotspots-with-blurred-background::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
-    background: rgba(0, 0, 0, calc(var(--darkness-value, 60) / 100));
+  .product-hotspots-with-blurred-background.section::after,
+  .product-hotspots-with-blurred-background::after,
+  section.product-hotspots-with-blurred-background::after,
+  .section.product-hotspots-with-blurred-background::after,
+  .product-hotspots-with-blurred-background[class*="color-"]::after {
+    display: none !important;
+    content: none !important;
+    background: transparent !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
   
-  .product-hotspots-with-blurred-background[data-darkness] {
-    --darkness-value: 60;
-  }
-  
-  .product-hotspots-with-blurred-background[data-darkness="0"] {
-    --darkness-value: 0;
-  }
-  
-  .product-hotspots-with-blurred-background[data-darkness="10"] {
-    --darkness-value: 10;
-  }
-  
-  .product-hotspots-with-blurred-background[data-darkness="20"] {
-    --darkness-value: 20;
-  }
-  
-  .product-hotspots-with-blurred-background[data-darkness="30"] {
-    --darkness-value: 30;
-  }
-  
-  .product-hotspots-with-blurred-background[data-darkness="40"] {
-    --darkness-value: 40;
-  }
-  
-  .product-hotspots-with-blurred-background[data-darkness="50"] {
-    --darkness-value: 50;
-  }
-  
-  .product-hotspots-with-blurred-background[data-darkness="60"] {
-    --darkness-value: 60;
-  }
-  
-  .product-hotspots-with-blurred-background[data-darkness="70"] {
-    --darkness-value: 70;
-  }
-  
-  .product-hotspots-with-blurred-background[data-darkness="80"] {
-    --darkness-value: 80;
-  }
-  
-  .product-hotspots-with-blurred-background[data-darkness="90"] {
-    --darkness-value: 90;
-  }
-  
-  .product-hotspots-with-blurred-background[data-darkness="100"] {
-    --darkness-value: 100;
-  }
   
   .product-hotspots-with-blurred-background > * {
     position: relative;
@@ -422,8 +380,8 @@
       "id": "animation_duration",
       "label": "Animation duration (ms)",
       "min": 500,
-      "max": 3000,
-      "default": 1000,
+      "max": 5000,
+      "default": 3000,
       "step": 100
     },
     {
