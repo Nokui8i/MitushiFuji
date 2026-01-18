@@ -16,13 +16,8 @@
       let clickCount = 0;
       let clickTimer = null;
       
-      // הסר event listeners קודמים אם יש (למניעת כפילות)
-      const newButton = button.cloneNode(true);
-      button.parentNode.replaceChild(newButton, button);
-      const actualButton = newButton;
-      
       // Add click handler עם capture phase כדי לעצור לפני handlers אחרים
-      actualButton.addEventListener('click', function(e) {
+      button.addEventListener('click', function(e) {
         // בדסקטופ - מעביר ישר לעמוד המוצר
         if (!isMobile()) {
           e.preventDefault();
