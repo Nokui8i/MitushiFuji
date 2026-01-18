@@ -701,25 +701,32 @@ drawer[role="dialog"][id*="Size"] td:first-child {
 }
 
 /* ===== FEATURED PRODUCT CAROUSEL - Big Image Like Product Page (No Crop) ===== */
-/* תמונות גדולות כמו בעמוד מוצר - מוצגות בשלמותן בלי חיתוך */
+/* תמונות גדולות כמו בעמוד מוצר - מוצגות בשלמותן בלי חיתוך, משתמשות ב-ratio של התמונה */
 
 @media (min-width: 990px) {
-  /* הקונטיינר של התמונה - גובה קבוע, לא 1:1 */
+  /* הקונטיינר של התמונה - משתמש ב-ratio של התמונה (כמו עמוד מוצר) */
   .fpc .card__media {
-    height: 520px !important;
-    aspect-ratio: auto !important;
     width: 100% !important;
     position: relative !important;
     overflow: hidden !important;
     background: transparent !important;
+    min-height: 400px !important; /* מינימום כדי שהכרטיסים לא יהיו קטנים מדי */
   }
 
-  /* ה-wrapper של התמונה */
+  /* ה-wrapper של התמונה - משתמש ב-ratio מהתמונה */
   .fpc .product__image-first,
   .fpc .product__image-second {
-    height: 100% !important;
     width: 100% !important;
-    aspect-ratio: auto !important;
+    height: auto !important;
+  }
+
+  /* ה-wrapper הפנימי - משתמש ב-var(--ratio) כמו בעמוד מוצר */
+  .fpc .card__media .js-wrap-image-lazy,
+  .fpc .card__media .animation,
+  .fpc .card__media sht-image-atf {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: var(--ratio) !important; /* משתמש ב-ratio של התמונה */
   }
 
   /* התמונה עצמה - מוצגת בשלמותה בלי חיתוך (כמו עמוד מוצר) */
@@ -732,59 +739,13 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     object-fit: contain !important;
     object-position: center !important;
     background: transparent !important;
-  }
-
-  /* ה-wrapper הפנימי של התמונה */
-  .fpc .card__media .js-wrap-image-lazy,
-  .fpc .card__media .animation {
-    width: 100% !important;
-    height: 100% !important;
-    aspect-ratio: auto !important;
   }
 }
 
 /* ===== FEATURED PRODUCT CAROUSEL - Bigger Cards on Desktop ===== */
-/* הגדלת הכרטיסים בדסקטופ + 1:1 + שיפור טקסט */
+/* הגדלת הכרטיסים בדסקטופ + שיפור טקסט */
 
 @media (min-width: 990px) {
-  /* הקונטיינר של התמונה - גובה קבוע, לא 1:1 (כמו עמוד מוצר) */
-  .fpc .card__media {
-    height: 520px !important;
-    aspect-ratio: auto !important;
-    width: 100% !important;
-    position: relative !important;
-    overflow: hidden !important;
-    background: transparent !important;
-  }
-
-  /* ה-wrapper של התמונה */
-  .fpc .product__image-first,
-  .fpc .product__image-second {
-    height: 100% !important;
-    width: 100% !important;
-    aspect-ratio: auto !important;
-  }
-
-  /* התמונה עצמה - מוצגת בשלמותה בלי חיתוך (כמו עמוד מוצר) */
-  .fpc .card__media img,
-  .fpc .product__image-first img,
-  .fpc .product__image-second img,
-  .fpc .js-image-lazy {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important;
-    object-position: center !important;
-    background: transparent !important;
-  }
-
-  /* ה-wrapper הפנימי של התמונה */
-  .fpc .card__media .js-wrap-image-lazy,
-  .fpc .card__media .animation {
-    width: 100% !important;
-    height: 100% !important;
-    aspect-ratio: auto !important;
-  }
-
   /* ריווח טוב יותר בין תמונה לטקסט */
   .fpc .card__content--outer,
   .fpc .card__content {
