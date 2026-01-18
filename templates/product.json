@@ -112,11 +112,7 @@
         "social_share_WtzmrF",
         "custom_text_NQGmCh"
       ],
-      "custom_css": [
-        "/* Rounded corners for product images */.product__media-wrapper,.product__media-item,.product__thumbnail,.product__media-wrapper img,.product__media-item img,.product__thumbnail img,[data-product-media-container] {border-radius: 12px !important; overflow: hidden !important;}",
-        " /* Size constraints */.product__media-wrapper,.product__media-container {max-width: 700px !important; max-height: 700px !important; margin: 0 auto !important;}",
-        ".product__media img {width: 100% !important; height: auto !important; object-fit: contain !important;}"
-      ],
+      "custom_css": [],
       "settings": {
         "color_scheme": "",
         "enable_sticky_content": false,
