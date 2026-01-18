@@ -246,63 +246,7 @@
   }
 }
 
-@media (max-width: 749px) {
-  /* המיכל של הגלריה - מאפשר swipe */
-  .product-media,
-  .product__media,
-  .product__media-wrapper,
-  .product-gallery,
-  .product__media-list,
-  .product-slideshow__items,
-  .product-slideshow__slider,
-  .product-gallery-carousel,
-  .js-product-slideshow,
-  .js-carousel-items,
-  .carousel-wrapper,
-  .product-slideshow {
-    touch-action: pan-x pan-y !important; /* מאפשר גרירה אופקית ואנכית */
-    -webkit-overflow-scrolling: touch !important; /* smooth scrolling ב-iOS */
-    overflow-x: auto !important; /* מאפשר scroll אופקי */
-    overflow-y: hidden !important;
-    scroll-snap-type: x mandatory !important; /* snap לתמונות */
-    -webkit-scroll-snap-type: x mandatory !important;
-  }
-
-  /* כל תמונה - snap point */
-  .product-slideshow__item,
-  .js-product-slideshow-item,
-  .js-carousel-item,
-  .carousel__item {
-    scroll-snap-align: start !important;
-    -webkit-scroll-snap-align: start !important;
-    touch-action: pan-y !important;
-    pointer-events: auto !important; /* מאפשר touch */
-  }
-
-  /* כפתור זום/אוברליי לא יחסום swipe */
-  .product__media-zoom,
-  .product__zoom,
-  .zoom,
-  .media-zoom,
-  .product__media-toggle,
-  .product__media-icon,
-  .js-product-media-open-gallery-btn,
-  .js-zoom-item,
-  sht-zoom {
-    pointer-events: none !important; /* מבטל חסימת swipe */
-  }
-
-  /* וודא שהתמונות עצמן לא חוסמות את ה-touch */
-  .product-slideshow__item img,
-  .product-slideshow__item video,
-  .product-slideshow__item sht-prd-slideshow-itm,
-  .product__media img,
-  .product-gallery img {
-    touch-action: pan-y !important;
-    pointer-events: auto !important;
-    user-select: none !important; /* מונע selection במקום swipe */
-    -webkit-user-select: none !important;
-  }
+/* כפילות הוסרה - הכל ב-@media הראשון למעלה */
 
   /* ===== מובייל: תמונה גדולה ונקייה כמו ANIQI ===== */
   /* גובה יפה לגלריה במובייל */
