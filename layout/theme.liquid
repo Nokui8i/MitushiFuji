@@ -142,5 +142,87 @@
       <script src="{{ 'library-instant-page.js' | asset_url }}" type="module" defer="defer"></script>
     {%- endif -%}
     <link rel="stylesheet" href="{{ 'animation.css' | asset_url }}" media="print" onload="this.media='all'">
+    <script>
+      // גלילה אוטומטית ל-thumbnail הפעיל אם הוא לא נראה
+      (function() {
+        document.addEventListener('DOMContentLoaded', function() {
+          // מצא את כל ה-product slideshows
+          const slideshows = document.querySelectorAll('sht-prd-slideshow');
+          
+          slideshows.forEach(slideshow => {
+            const thumbContainer = slideshow.querySelector('.product-slideshow__thumbs');
+            const thumbButtons = slideshow.querySelectorAll('.js-slideshow-btn-thumb');
+            
+            if (!thumbContainer || !thumbButtons.length) return;
+            
+            // פונקציה לבדוק אם thumbnail נראה ויגלול אליו אם צריך
+            function scrollToActiveThumb() {
+              const activeThumb = slideshow.querySelector('.product-slideshow__thumb.is-active-item');
+              if (!activeThumb) return;
+              
+              const containerRect = thumbContainer.getBoundingClientRect();
+              const thumbRect = activeThumb.getBoundingClientRect();
+              
+              // בדוק אם ה-thumbnail לא נראה (מחוץ ל-viewport של הקונטיינר)
+              const isOutOfView = thumbRect.bottom > containerRect.bottom || thumbRect.top < containerRect.top;
+              
+              if (isOutOfView) {
+                // גלול בתוך הקונטיינר כך שה-thumbnail יהיה נראה
+                // חשב את המיקום היחסי בתוך הקונטיינר
+                const thumbOffsetTop = activeThumb.offsetTop;
+                const containerScrollTop = thumbContainer.scrollTop;
+                const containerHeight = thumbContainer.clientHeight;
+                const thumbHeight = activeThumb.offsetHeight;
+                
+                // בדוק אם צריך לגלול למטה
+                if (thumbRect.bottom > containerRect.bottom) {
+                  thumbContainer.scrollTo({
+                    top: thumbOffsetTop - containerHeight + thumbHeight + 10, // 10px margin
+                    behavior: 'smooth'
+                  });
+                }
+                // בדוק אם צריך לגלול למעלה
+                else if (thumbRect.top < containerRect.top) {
+                  thumbContainer.scrollTo({
+                    top: thumbOffsetTop - 10, // 10px margin
+                    behavior: 'smooth'
+                  });
+                }
+              }
+            }
+            
+            // האזן ללחיצות על thumbnails
+            thumbButtons.forEach(button => {
+              button.addEventListener('click', function() {
+                // המתן קצת עד שה-active class יתעדכן
+                setTimeout(scrollToActiveThumb, 150);
+              });
+            });
+            
+            // גם האזן לשינויים ב-active class (למקרה של שינוי variant)
+            const observer = new MutationObserver(function(mutations) {
+              mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                  const target = mutation.target;
+                  if (target.classList.contains('product-slideshow__thumb') && 
+                      target.classList.contains('is-active-item')) {
+                    setTimeout(scrollToActiveThumb, 150);
+                  }
+                }
+              });
+            });
+            
+            // צפה בשינויים ב-thumbnails
+            const thumbItems = slideshow.querySelectorAll('.product-slideshow__thumb');
+            thumbItems.forEach(item => {
+              observer.observe(item, {
+                attributes: true,
+                attributeFilter: ['class']
+              });
+            });
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
