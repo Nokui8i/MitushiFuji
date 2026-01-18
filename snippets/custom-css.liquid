@@ -33,8 +33,9 @@
   align-items: stretch !important;
   align-self: flex-start !important;
   scroll-snap-type: none !important;
-  row-gap: 12px !important; /* רווח אחיד ונקי בין thumbnails */
-  gap: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important; /* רווח אחיד ונקי בין thumbnails */
 }
 
 /* Prevent items from stretching to fill height */
@@ -44,12 +45,18 @@
   flex: 0 0 auto !important;
 }
 
-/* הסר margin/padding מה-thumbnail items */
-.product-slideshow__thumb {
-  margin: 0 !important;
+/* Guaranteed spacing between thumbnails */
+/* רווח מובטח בין thumbnails - margin-bottom */
+.product-slideshow__thumbs.vertical-carousel__container .product-slideshow__thumb {
+  margin-bottom: 12px !important;
   padding: 0 !important;
   height: auto !important; /* התכווץ לגודל התמונה */
   flex: 0 0 auto !important; /* אל תתמתח למלא גובה */
+}
+
+/* הסר margin מה-thumbnail האחרון */
+.product-slideshow__thumbs.vertical-carousel__container .product-slideshow__thumb:last-child {
+  margin-bottom: 0 !important;
 }
 
 /* ה-thumbnail button גם מתכווץ */
