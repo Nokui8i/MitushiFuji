@@ -133,6 +133,15 @@
   overflow: hidden;
 }
 
+/* מובייל: מאפשר scroll אופקי */
+@media (max-width: 989px) {
+  .product-slideshow__items {
+    overflow-x: auto !important; /* מאפשר scroll אופקי במובייל */
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important; /* smooth scrolling ב-iOS */
+  }
+}
+
 /* ===== מובייל: אפשר swipe על התמונות בעמוד המוצר ===== */
 /* מאפשר swipe במובייל להעברת תמונות */
 @media (max-width: 989px) {
