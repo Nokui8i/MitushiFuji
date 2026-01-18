@@ -83,7 +83,7 @@
                       <sht-carousel-itm tabindex="0" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero" role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}" style="--w-xs:12;--w-sm:12;--w-md:12;" {{ block.shopify_attributes }}>
                         <div class="statistics-item ta-center">
                           <div class="statistics-number">
-                            <span class="js-number-animate" data-target="100000" data-duration="{{ section.settings.animation_duration | default: 2000 }}" data-auto-plus="true">0</span><span class="statistics-suffix statistics-suffix-auto" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; font-size: 120px !important; font-weight: 900 !important; background: linear-gradient(to right, #8B0000, #000000) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important; margin-left: 4px !important;">+</span>
+                            <span class="js-number-animate" data-target="100000" data-duration="{{ section.settings.animation_duration | default: 2000 }}" data-auto-plus="true">0</span><span class="statistics-suffix statistics-suffix-auto">+</span>
                           </div>
                           
                           {% if block.settings.label != blank %}
@@ -143,11 +143,14 @@
     background-clip: text;
     display: inline-block;
     letter-spacing: -2px;
+    white-space: nowrap;
   }
   
   .product-hotspots-with-statistics .statistics-number .js-number-animate {
     display: inline-block;
     line-height: 1.1;
+    vertical-align: baseline;
+    letter-spacing: -2px;
   }
   
   .product-hotspots-with-statistics .statistics-suffix,
@@ -158,13 +161,15 @@
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     background-clip: text !important;
-    margin-left: 4px !important;
+    margin-left: 0 !important;
     display: inline-block !important;
     visibility: visible !important;
     opacity: 1 !important;
     position: relative !important;
     z-index: 1 !important;
     line-height: 1.1 !important;
+    vertical-align: baseline !important;
+    letter-spacing: -2px !important;
   }
   
   .product-hotspots-with-statistics .statistics-label {
@@ -195,6 +200,11 @@
     .product-hotspots-with-statistics .statistics-number {
       font-size: 80px;
       display: inline-block !important;
+      letter-spacing: -2px;
+    }
+    
+    .product-hotspots-with-statistics .statistics-number .js-number-animate {
+      letter-spacing: -2px;
     }
     
     .product-hotspots-with-statistics .statistics-suffix,
@@ -205,13 +215,15 @@
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
-      margin-left: 4px !important;
+      margin-left: 0 !important;
       display: inline-block !important;
       visibility: visible !important;
       opacity: 1 !important;
       position: relative !important;
       z-index: 1 !important;
       line-height: 1.1 !important;
+      vertical-align: baseline !important;
+      letter-spacing: -2px !important;
     }
     
     .product-hotspots-with-statistics .statistics-item {
