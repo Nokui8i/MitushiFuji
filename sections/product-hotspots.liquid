@@ -48,7 +48,7 @@
                       assign aria_current = ' aria-current="true"'
                     endif
                    -%}
-                  <button style="--axis-x: {{ block.settings.left_offset }}%; --axis-y: {{ block.settings.top_offset }}%" class="js-carousel-trigger js-tooltip-placeholder p-absolute hotspot-item br-50p d-flex middle-xs center-xs c-pointer {{ active_class }} b-zero" {{ aria_current }} aria-describedby="carouselItem-{{ forloop.index }}-{{ section.id }}" aria-label="{{ 'products.product.media.load_product_hotspot' | t: product_name: block.settings.product.title }}" aria-controls="carousel-{{ section.id }}" type="button">
+                  <button style="--axis-x: {{ block.settings.left_offset }}%; --axis-y: {{ block.settings.top_offset }}%" class="js-carousel-trigger js-tooltip-placeholder js-hotspot-link p-absolute hotspot-item br-50p d-flex middle-xs center-xs c-pointer {{ active_class }} b-zero" {{ aria_current }} aria-describedby="carouselItem-{{ forloop.index }}-{{ section.id }}" aria-label="{{ 'products.product.media.load_product_hotspot' | t: product_name: block.settings.product.title }}" aria-controls="carousel-{{ section.id }}" type="button" data-product-url="{{ block.settings.product.url }}">
                     <span class="hotspot-content opacity-0 hidden-xs js-tooltip-content p-absolute zi-1 ta-left fs-body">
                       <span class="h6 mb-8 d-block">
                         {{ block.settings.product.title }}
