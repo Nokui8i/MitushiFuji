@@ -32,7 +32,7 @@
     {% render 'section-header', content_align: 'ta-left', subheading: section.settings.subheading, heading: section.settings.heading, description: section.settings.description, badge_text: section.settings.badge_text, badge_position: section.settings.badge_position, badge_shape: section.settings.badge_shape, badge_color: section.settings.badge_color, section: section %}
     <div class="s-content rw middle-xs {{ s_content_class }} product-hotspots-with-statistics">
       <div class="clm" style="--w-xs:12;--w-sm:12;--w-md:6;">
-        <div class="p-relative" id="hotspotContainer-{{ section.id }}">
+        <div class="p-relative hotspot-container-glow" id="hotspotContainer-{{ section.id }}">
           <sht-grid class="p-relative h-100 w-100 d-block">
             <div class="p-relative js-grid o-hidden">
               {% render 'image', image_item: hotspot_image, ratio: section.settings.image_hotspot.aspect_ratio, image_classes: 'js-animate anm anm-zoomOut', media_wrap_style: '--delay: .0s;' %}
@@ -122,6 +122,12 @@
 </div>
 
 <style>
+  /* Glow effect for hotspot container */
+  .hotspot-container-glow {
+    box-shadow: 0 0 15px rgba(192, 0, 0, 0.3), 0 0 25px rgba(192, 0, 0, 0.2);
+    border-radius: 8px;
+  }
+  
   /* Blurred and darkened background effect */
   .product-hotspots-with-blurred-background {
     position: relative;
@@ -228,6 +234,7 @@
     display: inline-block;
     letter-spacing: -2px;
     white-space: nowrap;
+    filter: drop-shadow(0 0 8px rgba(192, 0, 0, 0.4)) drop-shadow(0 0 12px rgba(192, 0, 0, 0.3));
   }
   
   .product-hotspots-with-statistics .statistics-number .js-number-animate {
@@ -254,6 +261,7 @@
     line-height: 1.1 !important;
     vertical-align: baseline !important;
     letter-spacing: -2px !important;
+    filter: drop-shadow(0 0 8px rgba(192, 0, 0, 0.4)) drop-shadow(0 0 12px rgba(192, 0, 0, 0.3)) !important;
   }
   
   .product-hotspots-with-statistics .statistics-label {
@@ -308,6 +316,15 @@
       line-height: 1.1 !important;
       vertical-align: baseline !important;
       letter-spacing: -2px !important;
+      filter: drop-shadow(0 0 6px rgba(192, 0, 0, 0.4)) drop-shadow(0 0 10px rgba(192, 0, 0, 0.3)) !important;
+    }
+    
+    .hotspot-container-glow {
+      box-shadow: 0 0 12px rgba(192, 0, 0, 0.3), 0 0 20px rgba(192, 0, 0, 0.2);
+    }
+    
+    .product-hotspots-with-statistics .statistics-number {
+      filter: drop-shadow(0 0 6px rgba(192, 0, 0, 0.4)) drop-shadow(0 0 10px rgba(192, 0, 0, 0.3));
     }
     
     .product-hotspots-with-statistics .statistics-item {
