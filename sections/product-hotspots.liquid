@@ -82,11 +82,9 @@
                     {% if block.type == 'statistic' %}
                       <sht-carousel-itm tabindex="0" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero" role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}" style="--w-xs:12;--w-sm:12;--w-md:12;" {{ block.shopify_attributes }}>
                         <div class="statistics-item ta-center">
-                          {% if block.settings.number != blank %}
-                            <div class="statistics-number">
-                              <span class="js-number-animate" data-target="{{ block.settings.number }}" data-duration="{{ section.settings.animation_duration | default: 1000 }}" data-auto-plus="true">0</span><span class="statistics-suffix statistics-suffix-auto" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; font-size: 120px !important; font-weight: 900 !important; background: linear-gradient(to right, #8B0000, #000000) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important; margin-left: 4px !important;">+</span>
-                            </div>
-                          {% endif %}
+                          <div class="statistics-number">
+                            <span class="js-number-animate" data-target="100000" data-duration="{{ section.settings.animation_duration | default: 2000 }}" data-auto-plus="true">0</span><span class="statistics-suffix statistics-suffix-auto" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; font-size: 120px !important; font-weight: 900 !important; background: linear-gradient(to right, #8B0000, #000000) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important; margin-left: 4px !important;">+</span>
+                          </div>
                           
                           {% if block.settings.label != blank %}
                             <div class="statistics-label">
@@ -282,9 +280,9 @@
       "type": "range",
       "id": "animation_duration",
       "label": "Animation duration (ms)",
-      "min": 500,
-      "max": 3000,
-      "default": 1000,
+      "min": 1000,
+      "max": 5000,
+      "default": 2000,
       "step": 100
     },
     {
@@ -410,18 +408,6 @@
       "type": "statistic",
       "name": "Statistic",
       "settings": [
-        {
-          "type": "text",
-          "id": "number",
-          "label": "Number",
-          "info": "The target number for animation (e.g., 100000 or 875.91)"
-        },
-        {
-          "type": "text",
-          "id": "suffix",
-          "label": "Suffix",
-          "info": "Optional suffix like + or %"
-        },
         {
           "type": "text",
           "id": "label",
