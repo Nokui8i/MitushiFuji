@@ -29,20 +29,21 @@
 .product-slideshow__thumbs {
   align-self: flex-start !important;
   justify-content: flex-start !important;
+  align-items: stretch !important;
   scroll-snap-type: none !important;
-  gap: 0 !important; /* הסר רווחים בין thumbnails */
+  row-gap: 10px !important; /* רווח אחיד בין thumbnails */
 }
 
 /* הסר margin/padding מה-thumbnail items */
 .product-slideshow__thumb {
   margin: 0 !important;
-  margin-bottom: 0 !important;
   padding: 0 !important;
+  height: auto !important; /* התכווץ לגודל התמונה */
 }
 
-/* הסר gap מהקונטיינר אם יש */
-.product-slideshow__thumbs.vertical-carousel__container {
-  gap: 0 !important;
+/* ה-thumbnail button גם מתכווץ */
+.product-slideshow__thumb .btn-slideshow-thumb {
+  height: auto !important;
 }
 
 /* Product thumbnails: fixed height + internal scroll */
@@ -112,6 +113,8 @@
 .product-slideshow__items {
   position: relative;
   overflow: hidden;
+  max-width: 700px !important; /* הגבל גודל התמונה הגדולה */
+  margin: 0 auto !important;
 }
 
 .js-product-slideshow-item {
@@ -172,5 +175,20 @@
     0 0 0 2px #ffffff,
     0 0 0 3px rgba(0,0,0,0.25) !important;
   transition: box-shadow 0.3s ease-in-out !important;
+}
+
+/* === MAIN PRODUCT MEDIA: rounded corners + overflow === */
+/* פינות עגולות ותמונות נכונות לתמונה הגדולה */
+.product-slideshow__item .js-product-media-open-gallery-btn,
+.product-slideshow__item .js-wrap-image-lazy {
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+
+/* === THUMBNAILS: rounded + active ring (clean version) === */
+.product-slideshow__thumb .btn-slideshow-thumb,
+.product-slideshow__thumb img {
+  border-radius: 12px !important;
+  overflow: hidden !important;
 }
 </style>
