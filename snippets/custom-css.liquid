@@ -1641,10 +1641,40 @@ section[data-ui-component="Running Content Section"] {
 }
 
 .running-content .marquee-item {
-  gap: 8px !important;
+  gap: 0 !important;
+  margin-right: 48px !important;
+  margin-left: 0 !important;
+}
+
+.running-content .js-marquee-list .marquee-item:not(:last-child) {
+  margin-right: 48px !important;
 }
 
 .running-content .content-item__wrapper {
-  gap: 8px !important;
+  gap: 12px !important;
+}
+
+/* האטת האנימציה */
+.running-content sht-marquee-section {
+  --marquee-duration: 80s !important;
+}
+
+.running-content .marquee-container,
+.running-content .js-marquee-container {
+  --marquee-duration: 80s !important;
+}
+
+.running-content .js-marquee-items,
+.running-content .marquee__items,
+.running-content .marquee__items--animate {
+  --marquee-duration: 80s !important;
+  animation-duration: 80s !important;
+  animation-timing-function: linear !important;
+}
+
+.running-content [class*="marquee"],
+.running-content [class*="animation"] {
+  animation-duration: 80s !important;
+  animation-timing-function: linear !important;
 }
 </style>
