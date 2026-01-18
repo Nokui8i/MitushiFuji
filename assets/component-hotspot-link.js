@@ -40,9 +40,30 @@
         }, 2000);
         
         if (clickCount === 1) {
-          // לחיצה ראשונה - רק מציגה פרטים (tooltip), לא מעבירה
-          // ה-carousel trigger יעשה את זה
+          // לחיצה ראשונה - מציגה פרטים (tooltip), לא מעבירה
+          e.preventDefault();
           e.stopPropagation();
+          
+          // מציג את ה-tooltip במובייל
+          const tooltip = button.querySelector('.js-tooltip-content');
+          if (tooltip) {
+            // הסר hidden-xs אם יש
+            tooltip.classList.remove('hidden-xs', 'opacity-0');
+            tooltip.classList.add('opacity-1');
+            tooltip.style.display = 'block';
+            tooltip.style.opacity = '1';
+            tooltip.style.visibility = 'visible';
+            
+            // הסתר tooltip אחרי 3 שניות
+            setTimeout(function() {
+              tooltip.classList.add('opacity-0');
+              tooltip.style.opacity = '0';
+              setTimeout(function() {
+                tooltip.style.display = '';
+                tooltip.style.visibility = '';
+              }, 300);
+            }, 3000);
+          }
         } else if (clickCount === 2) {
           // לחיצה שנייה - מעבירה לעמוד המוצר
           e.preventDefault();
