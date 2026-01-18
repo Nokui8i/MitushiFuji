@@ -67,8 +67,8 @@
           "type": "basic_description",
           "settings": {
             "heading": "",
-            "enable_collapsible": false,
-            "expand_collapsible_by_default": true,
+            "enable_collapsible": true,
+            "expand_collapsible_by_default": false,
             "enable_icon": false,
             "accent_scheme": "color-accent-bg-1",
             "icon_source": "theme_library",
