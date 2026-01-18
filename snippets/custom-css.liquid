@@ -700,11 +700,11 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   display: flex !important;
 }
 
-/* ===== FEATURED PRODUCT CAROUSEL - Big Image Like Product Page (No Crop) ===== */
-/* תמונות גדולות כמו בעמוד מוצר - מוצגות בשלמותן בלי חיתוך, כל הקונטיינרים באותו גודל */
+/* ===== FEATURED PRODUCT CAROUSEL - Image Adjusts to Container ===== */
+/* התמונה מתאימה את עצמה לקונטיינר (לא הקונטיינר לתמונה) - כל הקונטיינרים באותו גודל */
 
 @media (min-width: 990px) {
-  /* הקונטיינר של התמונה - גובה קבוע כדי שכל הקונטיינרים יהיו באותו גודל */
+  /* הקונטיינר של התמונה - גובה קבוע, התמונה תתאים את עצמה אליו */
   .fpc .card__media {
     width: 100% !important;
     height: 520px !important; /* גובה קבוע - כל הקונטיינרים באותו גודל */
@@ -716,32 +716,33 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     justify-content: center !important;
   }
 
-  /* ה-wrapper של התמונה - תופס את כל הגובה */
+  /* ה-wrapper של התמונה - תופס את כל הקונטיינר */
   .fpc .product__image-first,
   .fpc .product__image-second {
     width: 100% !important;
     height: 100% !important;
   }
 
-  /* ה-wrapper הפנימי - תופס את כל הגובה */
+  /* ה-wrapper הפנימי - תופס את כל הקונטיינר, לא משתמש ב-ratio של התמונה */
   .fpc .card__media .js-wrap-image-lazy,
   .fpc .card__media .animation,
   .fpc .card__media sht-image-atf {
     width: 100% !important;
     height: 100% !important;
+    aspect-ratio: unset !important; /* מבטל את ה-ratio של התמונה */
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
   }
 
-  /* התמונה עצמה - מוצגת בשלמותה בלי חיתוך (כמו עמוד מוצר) */
+  /* התמונה עצמה - מתאימה את עצמה לקונטיינר */
   .fpc .card__media img,
   .fpc .product__image-first img,
   .fpc .product__image-second img,
   .fpc .js-image-lazy {
     width: 100% !important;
     height: 100% !important;
-    object-fit: contain !important;
+    object-fit: contain !important; /* מוצגת בשלמותה בתוך הקונטיינר */
     object-position: center !important;
     background: transparent !important;
   }
