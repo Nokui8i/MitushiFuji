@@ -208,7 +208,7 @@
         "subheading": "",
         "description": "",
         "content_align": "ta-center",
-        "items_per_row": 3,
+        "show_navigation": true,
         "animation_duration": 2000,
         "remove_padding_top": false,
         "remove_padding_bottom": false

@@ -17,48 +17,64 @@
     %}
     
     <div class="s-content">
-      <div class="rw gap-unequal">
-        {% for block in section.blocks %}
-          <div class="clm ta-center" style="--w-xs:12;--w-sm:6;--w-md:{{ 12 | divided_by: section.settings.items_per_row }};" {{ block.shopify_attributes }}>
-            <div class="statistics-item">
-              {% if block.settings.number != blank %}
-                <div class="statistics-number">
-                  <span class="js-number-animate" data-target="{{ block.settings.number }}" data-duration="{{ section.settings.animation_duration | default: 2000 }}">0</span>
-                  {% if block.settings.suffix != blank %}
-                    <span class="statistics-suffix">{{ block.settings.suffix }}</span>
-                  {% endif %}
-                </div>
-              {% endif %}
-              
-              {% if block.settings.label != blank %}
-                <div class="statistics-label">
-                  {{ block.settings.label }}
-                </div>
-              {% endif %}
-              
-              {% if block.settings.description != blank %}
-                <div class="statistics-description">
-                  {{ block.settings.description }}
-                </div>
-              {% endif %}
-            </div>
+      <sht-carousel class="p-relative d-block statistics-carousel">
+        <div aria-atomic="true" class="d-flex fw-nowrap carousel ox-auto p-relative scrollable scrollable-x disable-scrollbars js-carousel-items">
+          {% for block in section.blocks %}
+            <sht-carousel-itm tabindex="0" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero" role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}" style="--w-xs:12;--w-sm:12;--w-md:12;" {{ block.shopify_attributes }}>
+              <div class="statistics-item ta-center">
+                {% if block.settings.number != blank %}
+                  <div class="statistics-number">
+                    <span class="js-number-animate" data-target="{{ block.settings.number }}" data-duration="{{ section.settings.animation_duration | default: 2000 }}">0</span>
+                    {% if block.settings.suffix != blank %}
+                      <span class="statistics-suffix">{{ block.settings.suffix }}</span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+                
+                {% if block.settings.label != blank %}
+                  <div class="statistics-label">
+                    {{ block.settings.label }}
+                  </div>
+                {% endif %}
+                
+                {% if block.settings.description != blank %}
+                  <div class="statistics-description">
+                    {{ block.settings.description }}
+                  </div>
+                {% endif %}
+              </div>
+            </sht-carousel-itm>
+          {% endfor %}
+        </div>
+        <div class="carousel-pagination middle-y w-100 p-absolute no-js-hidden zi-1 {{ section.settings.show_navigation | default: 'd-flex' | replace: 'false', 'd-none' }}">
+          <div class="p-absolute left-0">
+            <button type="button" data-step="1" class="js-carousel-prev-btn btn btn-primary--animate rtl-flip-x btn-icon btn-small p-absolute middle-y left-0 zi-1" aria-label="{{ 'accessibility.previous_slide' | t }}" name="previous" disabled>{% render 'icon-chevron-left' %}</button>
           </div>
-        {% endfor %}
-      </div>
+          <div class="p-absolute right-0">
+            <button type="button" data-step="1" class="js-carousel-next-btn btn btn-primary--animate rtl-flip-x btn-icon btn-small p-absolute middle-y right-0 zi-1" aria-label="{{ 'accessibility.next_slide' | t }}" name="next" disabled>{% render 'icon-chevron-right' %}</button>
+          </div>
+        </div>
+      </sht-carousel>
     </div>
   </div>
 </div>
 
 <style>
+  .statistics-carousel {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
   .statistics-item {
-    padding: 24px;
+    padding: 40px 24px;
+    width: 100%;
   }
   
   .statistics-number {
-    font-size: 48px;
+    font-size: 64px;
     font-weight: 700;
     line-height: 1.2;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     background: linear-gradient(to right, #8B0000, #000000);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -66,7 +82,7 @@
   }
   
   .statistics-suffix {
-    font-size: 48px;
+    font-size: 64px;
     font-weight: 700;
     background: linear-gradient(to right, #8B0000, #000000);
     -webkit-background-clip: text;
@@ -75,7 +91,7 @@
   }
   
   .statistics-label {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -87,13 +103,27 @@
     color: rgba(var(--color-foreground), 0.7);
   }
   
+  /* Carousel - לא loop */
+  .statistics-carousel .js-carousel-items {
+    scroll-snap-type: x mandatory;
+  }
+  
+  .statistics-carousel .js-carousel-item {
+    scroll-snap-align: center;
+    flex: 0 0 100% !important;
+  }
+  
   @media (max-width: 749px) {
     .statistics-number {
-      font-size: 36px;
+      font-size: 48px;
     }
     
     .statistics-suffix {
-      font-size: 36px;
+      font-size: 48px;
+    }
+    
+    .statistics-item {
+      padding: 32px 20px;
     }
   }
 </style>
@@ -149,13 +179,10 @@
       ]
     },
     {
-      "type": "range",
-      "id": "items_per_row",
-      "label": "Items per row",
-      "min": 2,
-      "max": 4,
-      "default": 3,
-      "step": 1
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "t:general.show_navigation",
+      "default": true
     },
     {
       "type": "range",
