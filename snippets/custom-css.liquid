@@ -714,6 +714,7 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    border-radius: 18px !important; /* פינות עגולות כמו עמוד מוצר */
   }
 
   /* ה-wrapper של התמונה - תופס את כל הקונטיינר */
@@ -721,6 +722,8 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   .fpc .product__image-second {
     width: 100% !important;
     height: 100% !important;
+    border-radius: 18px !important; /* פינות עגולות */
+    overflow: hidden !important;
   }
 
   /* ה-wrapper הפנימי - תופס את כל הקונטיינר, לא משתמש ב-ratio של התמונה */
@@ -733,6 +736,8 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    border-radius: 18px !important; /* פינות עגולות */
+    overflow: hidden !important;
   }
 
   /* התמונה עצמה - מתאימה את עצמה לקונטיינר */
@@ -745,6 +750,7 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     object-fit: contain !important; /* מוצגת בשלמותה בתוך הקונטיינר */
     object-position: center !important;
     background: transparent !important;
+    border-radius: 18px !important; /* פינות עגולות */
   }
 }
 
