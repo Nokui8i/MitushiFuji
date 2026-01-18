@@ -1,0 +1,311 @@
+{%- liquid
+  assign heading_style = section.settings.enable_large_heading | default: '' | replace: 'true', 'headline'
+-%}
+
+<div class="section color-{{- section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} {% render 'animation-loader', section: section %}" data-ui-component="Statistics Section" role="region" aria-labelledby="sectionHeading-{{ section.id | md5 | truncate: 12, "" }}">
+  <div class="ctnr">
+    {% render 'section-header', 
+      content_align: section.settings.content_align, 
+      subheading: section.settings.subheading, 
+      heading: section.settings.heading, 
+      description: section.settings.description, 
+      badge_text: section.settings.badge_text, 
+      badge_position: section.settings.badge_position, 
+      badge_shape: section.settings.badge_shape, 
+      badge_color: section.settings.badge_color, 
+      section: section 
+    %}
+    
+    <div class="s-content">
+      <div class="rw gap-unequal">
+        {% for block in section.blocks %}
+          <div class="clm ta-center" style="--w-xs:12;--w-sm:6;--w-md:{{ 12 | divided_by: section.settings.items_per_row }};" {{ block.shopify_attributes }}>
+            <div class="statistics-item">
+              {% if block.settings.number != blank %}
+                <div class="statistics-number">
+                  <span class="js-number-animate" data-target="{{ block.settings.number }}" data-duration="{{ section.settings.animation_duration | default: 2000 }}">0</span>
+                  {% if block.settings.suffix != blank %}
+                    <span class="statistics-suffix">{{ block.settings.suffix }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+              
+              {% if block.settings.label != blank %}
+                <div class="statistics-label">
+                  {{ block.settings.label }}
+                </div>
+              {% endif %}
+              
+              {% if block.settings.description != blank %}
+                <div class="statistics-description">
+                  {{ block.settings.description }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .statistics-item {
+    padding: 24px;
+  }
+  
+  .statistics-number {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    background: linear-gradient(to right, #8B0000, #000000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .statistics-suffix {
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(to right, #8B0000, #000000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .statistics-label {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  
+  .statistics-description {
+    font-size: 14px;
+    color: rgba(var(--color-foreground), 0.7);
+  }
+  
+  @media (max-width: 749px) {
+    .statistics-number {
+      font-size: 36px;
+    }
+    
+    .statistics-suffix {
+      font-size: 36px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Statistics with Animation",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:general.general"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:general.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:general.section_subheading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:general.section_heading",
+      "default": "Our Statistics"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "t:general.section_description"
+    },
+    {
+      "type": "select",
+      "id": "content_align",
+      "label": "t:general.content_alignment",
+      "default": "ta-center",
+      "options": [
+        {
+          "value": "ta-left",
+          "label": "t:general.left"
+        },
+        {
+          "value": "ta-center",
+          "label": "t:general.center"
+        },
+        {
+          "value": "ta-right",
+          "label": "t:general.right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "items_per_row",
+      "label": "Items per row",
+      "min": 2,
+      "max": 4,
+      "default": 3,
+      "step": 1
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "label": "Animation duration (ms)",
+      "min": 1000,
+      "max": 5000,
+      "default": 2000,
+      "step": 100
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_top",
+      "label": "t:general.remove_padding_top",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_bottom",
+      "label": "t:general.remove_padding_bottom",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:general.prominent_badge"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "t:general.text",
+      "info": "t:general.prominent_badge_text_info"
+    },
+    {
+      "type": "select",
+      "id": "badge_color",
+      "label": "t:general.accent_scheme",
+      "default": "color-accent-1",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "color-accent-1",
+          "label": "t:general.main"
+        },
+        {
+          "value": "color-accent-2",
+          "label": "t:general.extra"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "badge_position",
+      "label": "t:general.position",
+      "default": "p-badge--top-left",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "p-badge--top-left",
+          "label": "t:general.left"
+        },
+        {
+          "value": "p-badge--top-right",
+          "label": "t:general.right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "badge_shape",
+      "label": "t:general.shape",
+      "default": "badge--star",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "badge--star",
+          "label": "t:general.star"
+        },
+        {
+          "value": "badge--diamond",
+          "label": "t:general.diamond"
+        },
+        {
+          "value": "badge--asterisk",
+          "label": "t:general.asterisk"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "statistic",
+      "name": "Statistic",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "info": "The target number for animation (e.g., 100000 or 875.91)"
+        },
+        {
+          "type": "text",
+          "id": "suffix",
+          "label": "Suffix",
+          "info": "Optional suffix like + or %"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "HAPPY ANIME FANS"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "info": "Optional description text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Statistics with Animation",
+      "blocks": [
+        {
+          "type": "statistic",
+          "settings": {
+            "number": "100000",
+            "suffix": "+",
+            "label": "HAPPY ANIME FANS"
+          }
+        },
+        {
+          "type": "statistic",
+          "settings": {
+            "number": "875.91",
+            "suffix": "+",
+            "label": "Some Metric"
+          }
+        },
+        {
+          "type": "statistic",
+          "settings": {
+            "number": "5000",
+            "suffix": "+",
+            "label": "Another Stat"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
