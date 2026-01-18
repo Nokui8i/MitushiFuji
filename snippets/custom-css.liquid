@@ -128,15 +128,16 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-/* MAIN IMAGE: rounded corners on container only */
-/* פינות עגולות לתמונה הגדולה - רק על הקונטיינר החיצוני */
+/* MAIN IMAGE: rounded corners on container */
+/* פינות עגולות לתמונה הגדולה - על הקונטיינר החיצוני וה-wrapper הפנימי */
 .product-slideshow__item {
   border-radius: 18px !important;
   overflow: hidden !important;
 }
 
-/* ה-wrapper הפנימי - רק overflow hidden, לא border-radius (כי הוא בתוך הקונטיינר) */
+/* ה-wrapper הפנימי - גם פינות עגולות כדי שהתמונה תראה עגולה */
 .product-slideshow__item sht-prd-slideshow-itm {
+  border-radius: 18px !important;
   overflow: hidden !important;
 }
 
