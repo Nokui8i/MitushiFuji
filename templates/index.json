@@ -124,6 +124,7 @@
         "description": "",
         "background_color": "",
         "background_image": "shopify://shop_images/one-piece-portgas-d-ace-anime-wallpaper-576b720bda38a10459b7514d93fff326.jpg",
+        "background_darkness": 0,
         "show_navigation": true,
         "show_statistics_navigation": true,
         "animation_duration": 2000,
@@ -216,9 +217,9 @@
   "order": [
     "image_banner_TnVcW9",
     "featured_product_carousel_EaipjV",
-    "product_hotspots_znJJMA",
     "collection-list",
     "video_banner_xE4peK",
+    "product_hotspots_znJJMA",
     "17687530853fdb3082"
   ]
 }
