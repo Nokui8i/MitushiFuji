@@ -211,25 +211,35 @@
 /* Product page: reduce space between gallery and product info (desktop) */
 /* הקטנת הרווח בין עמודת התמונות לעמודת הפרטים - כמו AINIQI */
 @media (min-width: 769px) {
-  /* Make media column wider (closer to AINIQI look) */
-  .product-slideshow__items {
-    max-width: 950px !important; /* רוחב רחב יותר */
-    margin: 0 !important; /* שלא ימרכז וייצור רווח */
+  /* Force smaller gap between the two columns */
+  /* כפה gap קטן יותר בין העמודות */
+  .product-details {
+    gap: 20px !important;
+    column-gap: 20px !important;
   }
 
-  /* Reduce gap between media + product info columns */
-  .product-details.gap-36 {
-    gap: 24px !important; /* הקטנת הרווח מ-36px ל-24px */
-  }
-
-  /* In case this utility adds extra gap on md+ */
-  .product-details.c-gap-md-1 {
-    column-gap: 24px !important;
-  }
-
-  /* Remove any extra margin from media wrapper */
-  .product__media-wrapper {
+  /* In case the theme uses margins/padding on the columns */
+  /* הסר margins/padding מהעמודות */
+  .product-details > .product__media-wrapper {
     margin-right: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .product-details > .main-product-info-container,
+  .product-details > [id^="productInfo-"] {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  /* Make media column wider (closer to AINIQI look) */
+  /* הגדלת רוחב התמונה */
+  .product__media-wrapper {
+    max-width: none !important;
+  }
+
+  .product-slideshow__items {
+    max-width: 100% !important;
+    margin: 0 !important;
   }
 }
 </style>
