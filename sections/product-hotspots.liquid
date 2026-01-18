@@ -84,11 +84,11 @@
                         <div class="statistics-item ta-center">
                           {% if block.settings.number != blank %}
                             <div class="statistics-number">
-                              <span class="js-number-animate" data-target="{{ block.settings.number }}" data-duration="{{ section.settings.animation_duration | default: 1000 }}">0</span>{% if block.settings.suffix != blank %}<span class="statistics-suffix">{{ block.settings.suffix }}</span>{% endif %}
+                              <span class="js-number-animate" data-target="{{ block.settings.number }}" data-duration="{{ section.settings.animation_duration | default: 1000 }}" data-suffix="{{ block.settings.suffix | default: '' }}">0</span>{% if block.settings.suffix != blank %}<span class="statistics-suffix" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">{{ block.settings.suffix }}</span>{% endif %}
                             </div>
                           {% elsif block.settings.suffix != blank %}
                             <div class="statistics-number">
-                              <span class="statistics-suffix">{{ block.settings.suffix }}</span>
+                              <span class="statistics-suffix" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">{{ block.settings.suffix }}</span>
                             </div>
                           {% endif %}
                           
@@ -159,7 +159,9 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-left: 6px;
-    display: inline-block;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
   .product-hotspots-with-statistics .statistics-label {
@@ -192,7 +194,16 @@
     }
     
     .product-hotspots-with-statistics .statistics-suffix {
-      font-size: 80px;
+      font-size: 80px !important;
+      font-weight: 900 !important;
+      background: linear-gradient(to right, #8B0000, #000000) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+      margin-left: 6px !important;
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     
     .product-hotspots-with-statistics .statistics-item {
@@ -201,6 +212,10 @@
     
     .product-hotspots-with-statistics .statistics-label {
       font-size: 16px;
+    }
+    
+    .product-hotspots-with-statistics .statistics-number {
+      display: inline-block !important;
     }
   }
 </style>
