@@ -46,13 +46,15 @@
           e.stopImmediatePropagation();
           
           // סגור כל ה-tooltips האחרים לפני הצגת אחד חדש
+          const currentTooltip = button.querySelector('.js-tooltip-content');
           document.querySelectorAll('.js-tooltip-content').forEach(function(otherTooltip) {
-            if (otherTooltip !== button.querySelector('.js-tooltip-content')) {
+            if (otherTooltip !== currentTooltip) {
               otherTooltip.classList.remove('opacity-1', 'show', 'd-block');
               otherTooltip.classList.add('opacity-0');
               otherTooltip.style.display = 'none';
               otherTooltip.style.visibility = 'hidden';
               otherTooltip.style.opacity = '0';
+              otherTooltip.dataset.isShowing = '';
             }
           });
           
@@ -70,7 +72,7 @@
           }
           
           // מציג את ה-tooltip במובייל
-          const tooltip = button.querySelector('.js-tooltip-content');
+          const tooltip = currentTooltip;
           if (tooltip && !tooltip.dataset.isShowing) {
             tooltip.dataset.isShowing = 'true';
             
