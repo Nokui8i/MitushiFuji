@@ -88,15 +88,6 @@
     "product_hotspots_znJJMA": {
       "type": "product-hotspots",
       "blocks": {
-        "statistic_CamanL": {
-          "type": "statistic",
-          "settings": {
-            "number": "100000",
-            "suffix": "+",
-            "label": "HAPPY ANIME FANS",
-            "description": ""
-          }
-        },
         "hotspot_VbDkbd": {
           "type": "hotspot",
           "settings": {
@@ -111,6 +102,15 @@
             "product": "gum-gum-shorts",
             "top_offset": 73,
             "left_offset": 53
+          }
+        },
+        "statistic_CamanL": {
+          "type": "statistic",
+          "settings": {
+            "number": "100000",
+            "suffix": "",
+            "label": "HAPPY ANIME FANS",
+            "description": ""
           }
         }
       },
