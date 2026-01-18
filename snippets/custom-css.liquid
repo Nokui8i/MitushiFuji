@@ -130,26 +130,15 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-/* MAIN IMAGE: force rounded corners on the actual visible wrapper */
-/* פינות עגולות לתמונה הגדולה - מכסה את כל המבנה */
-.product-slideshow__item sht-prd-slideshow-itm,
-.product-slideshow__item sht-prd-slideshow-itm > *,
-.product-slideshow__item .js-product-media-open-gallery-btn,
-.product-slideshow__item .js-product-media-open-gallery-btn > *,
-.product-slideshow__item .js-wrap-image-lazy,
-.product-slideshow__item .js-wrap-image-lazy > *,
-.product-slideshow__item img,
-.product-slideshow__item picture,
-.product-slideshow__item .media,
-.product-slideshow__item video {
+/* MAIN IMAGE: rounded corners on container only */
+/* פינות עגולות לתמונה הגדולה - רק על הקונטיינר החיצוני */
+.product-slideshow__item {
   border-radius: 18px !important;
   overflow: hidden !important;
 }
 
-/* In case the slideshow item itself is the clipping container */
-/* אם ה-slideshow item עצמו הוא הקונטיינר */
-.product-slideshow__item {
-  border-radius: 18px !important;
+/* ה-wrapper הפנימי - רק overflow hidden, לא border-radius (כי הוא בתוך הקונטיינר) */
+.product-slideshow__item sht-prd-slideshow-itm {
   overflow: hidden !important;
 }
 
