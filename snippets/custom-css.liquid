@@ -818,4 +818,139 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     max-width: 100% !important;
   }
 }
+
+/* ===== PRODUCT HOTSPOTS - Same styling as Featured Product Carousel ===== */
+/* פינות עגולות + ריווח קטן + קונטיינר מתאים לתמונה */
+
+@media (min-width: 990px) {
+  /* Product Hotspots - הקונטיינר של התמונה מתאים את עצמו לתמונה */
+  .product-hotspots .card__media,
+  .product-hotspots .product-card__media,
+  .product-hotspots .card__media {
+    width: 100% !important;
+    height: auto !important;
+    position: relative !important;
+    overflow: hidden !important;
+    background: transparent !important;
+    border-radius: 18px !important;
+    aspect-ratio: auto !important;
+  }
+
+  /* ה-wrapper של התמונה */
+  .product-hotspots .product__image-first,
+  .product-hotspots .product__image-second {
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  /* ה-wrapper הפנימי - משתמש ב-ratio של התמונה */
+  .product-hotspots .card__media .js-wrap-image-lazy,
+  .product-hotspots .card__media .animation,
+  .product-hotspots .card__media sht-image-atf {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: var(--ratio) !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  /* התמונה עצמה - ממלאת את הקונטיינר בלי פסים */
+  .product-hotspots .card__media img,
+  .product-hotspots .product__image-first img,
+  .product-hotspots .product__image-second img,
+  .product-hotspots .js-image-lazy {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    background: transparent !important;
+    border-radius: 18px !important;
+    display: block !important;
+  }
+
+  /* גם ה-product-card עצמו - פינות עגולות */
+  .product-hotspots .product-card,
+  .product-hotspots .product {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  /* הקישור בתוך card__media - גם פינות עגולות */
+  .product-hotspots .card__media a {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    display: block !important;
+  }
+
+  /* ריווח קטן מאוד בין תמונה לטקסט */
+  .product-hotspots .card__content--outer,
+  .product-hotspots .card__content {
+    padding-top: 6px !important;
+    margin-top: 0 !important;
+  }
+
+  /* לקרב את המחיר לשם המוצר */
+  .product-hotspots .price,
+  .product-hotspots .product-price {
+    margin-top: 4px !important;
+  }
+}
+
+/* ===== COLLECTION LIST - Same styling as Featured Product Carousel ===== */
+/* פינות עגולות + ריווח קטן + קונטיינר מתאים לתמונה */
+
+@media (min-width: 990px) {
+  /* Collection List - הקונטיינר של התמונה מתאים את עצמו לתמונה */
+  .collection-list .card__media,
+  .collection-list .card-collection {
+    width: 100% !important;
+    height: auto !important;
+    position: relative !important;
+    overflow: hidden !important;
+    background: transparent !important;
+    border-radius: 18px !important;
+    aspect-ratio: auto !important;
+  }
+
+  /* ה-wrapper של התמונה */
+  .collection-list .js-wrap-image-lazy,
+  .collection-list .animation,
+  .collection-list sht-image-atf {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: var(--ratio) !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  /* התמונה עצמה - ממלאת את הקונטיינר בלי פסים */
+  .collection-list .card__media img,
+  .collection-list .card-collection img,
+  .collection-list .js-image-lazy {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    background: transparent !important;
+    border-radius: 18px !important;
+    display: block !important;
+  }
+
+  /* הקישור בתוך card__media - גם פינות עגולות */
+  .collection-list .card__media a,
+  .collection-list .card-collection a {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    display: block !important;
+  }
+
+  /* ריווח קטן מאוד בין תמונה לטקסט */
+  .collection-list .card__content,
+  .collection-list .card__content--inner {
+    padding-top: 6px !important;
+    margin-top: 0 !important;
+  }
+}
 </style>
