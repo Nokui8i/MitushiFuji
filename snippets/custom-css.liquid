@@ -446,24 +446,35 @@ sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body .rte {
 }
 
 /* ===== TABLE STYLING (Size Chart) - AINIQI Style ===== */
-/* עיצוב טבלאות כמו AINIQI - קווים דקים, מרווחים יפים */
+/* עיצוב טבלאות כמו AINIQI - קווים דקים, מרווחים יפים, sticky header */
 
 sht-dialog.sht-dialog[id*="dialogSizeGuide"] table {
   width: 100% !important;
   border-collapse: collapse !important;
   font-size: 14px !important;
   margin: 0 !important;
+  background: #ffffff !important;
 }
 
-/* Table Headers */
+/* Table Headers - Sticky כמו AINIQI */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] thead {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+  background: #ffffff !important;
+}
+
 sht-dialog.sht-dialog[id*="dialogSizeGuide"] th {
   text-transform: none !important;
   font-weight: 700 !important;
   padding: 14px 10px !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
   text-align: left !important;
-  background: transparent !important;
+  background: #fafafa !important;
   color: #000000 !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
 }
 
 /* Table Cells */
@@ -472,6 +483,7 @@ sht-dialog.sht-dialog[id*="dialogSizeGuide"] td {
   border-bottom: 1px solid rgba(0, 0, 0, 0.10) !important;
   vertical-align: middle !important;
   color: #000000 !important;
+  background: #ffffff !important;
 }
 
 /* First Column (Size) - בולט יותר */
@@ -482,6 +494,11 @@ sht-dialog.sht-dialog[id*="dialogSizeGuide"] td:first-child {
 /* Last row - no border */
 sht-dialog.sht-dialog[id*="dialogSizeGuide"] tr:last-child td {
   border-bottom: none !important;
+}
+
+/* Hover effect on rows */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] tbody tr:hover {
+  background: rgba(0, 0, 0, 0.02) !important;
 }
 
 /* ===== MOBILE: Horizontal Scroll for Wide Tables ===== */
@@ -513,5 +530,86 @@ sht-dialog.sht-dialog[id*="dialogSizeGuide"] tr:last-child td {
   sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__header h3 {
     font-size: 18px !important;
   }
+
+  /* Table smaller text on mobile */
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] table {
+    font-size: 13px !important;
+  }
+
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] th,
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] td {
+    padding: 12px 8px !important;
+  }
+}
+
+/* ===== SUPPORT FOR DRAWER ELEMENT (if theme uses drawer) ===== */
+/* תמיכה גם ב-drawer element אם יש כזה */
+
+drawer[role="dialog"][id*="size"],
+drawer[role="dialog"][id*="Size"] {
+  --drawer-width: 720px !important;
+}
+
+drawer[role="dialog"][id*="size"] .drawer__wrapper,
+drawer[role="dialog"][id*="Size"] .drawer__wrapper {
+  max-width: 760px !important;
+  width: calc(100% - 48px) !important;
+  border-radius: 16px !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+}
+
+drawer[role="dialog"][id*="size"] .drawer__content,
+drawer[role="dialog"][id*="Size"] .drawer__content {
+  padding: 28px !important;
+  max-height: 80vh !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+drawer[role="dialog"][id*="size"] .drawer__header,
+drawer[role="dialog"][id*="Size"] .drawer__header {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  padding: 0 0 20px 0 !important;
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+drawer[role="dialog"][id*="size"] table,
+drawer[role="dialog"][id*="Size"] table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-size: 14px !important;
+}
+
+drawer[role="dialog"][id*="size"] thead,
+drawer[role="dialog"][id*="Size"] thead {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+  background: #ffffff !important;
+}
+
+drawer[role="dialog"][id*="size"] th,
+drawer[role="dialog"][id*="Size"] th {
+  font-weight: 700 !important;
+  padding: 14px 10px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+  background: #fafafa !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+}
+
+drawer[role="dialog"][id*="size"] td,
+drawer[role="dialog"][id*="Size"] td {
+  padding: 16px 10px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.10) !important;
+}
+
+drawer[role="dialog"][id*="size"] td:first-child,
+drawer[role="dialog"][id*="Size"] td:first-child {
+  font-weight: 600 !important;
 }
 </style>
