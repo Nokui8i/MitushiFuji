@@ -135,6 +135,7 @@
       "block_order": [
         "content_nzUy7K"
       ],
+      "disabled": true,
       "settings": {
         "color_scheme": "",
         "enable_large_heading": false,
@@ -195,7 +196,6 @@
         "heading": "",
         "description": "",
         "background_color": "",
-        "background_image": "shopify://shop_images/one-piece-portgas-d-ace-anime-wallpaper-576b720bda38a10459b7514d93fff326.jpg",
         "background_darkness": 0,
         "show_navigation": true,
         "show_statistics_navigation": true,
