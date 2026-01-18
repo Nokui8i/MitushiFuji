@@ -855,17 +855,34 @@ drawer[role="dialog"][id*="Size"] td:first-child {
 }
 
 @media (min-width: 990px) {
-  /* Product Hotspots - אותו גודל כמו התמונה הראשית בעמוד המוצר */
-  /* הגבלת רוחב הסקשן כמו product page */
-  .product-hotspots .ctnr {
-    max-width: 1200px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+  /* Product Hotspots - הקטנת הקונטיינר (CSS אגרסיבי) */
+  /* מגביל את רוחב הסקשן (כמו עמוד מוצר) */
+  .product-hotspots .ctnr,
+  .product-hotspots .page-width,
+  .product-hotspots .container {
+    max-width: 1100px !important; /* נסה 1000/1100/1200 */
+    margin: 0 auto !important;
   }
 
-  /* הגבלת רוחב הקונטיינר של התמונה הראשית (hotspot) */
-  .product-hotspots .clm:has(sht-grid) {
-    max-width: 50% !important; /* כמו product page - חצי מהרוחב */
+  /* הקטנת גובה אזור התמונה (הכי חשוב) */
+  .product-hotspots .media,
+  .product-hotspots .media > img,
+  .product-hotspots .media img,
+  .product-hotspots .js-grid-image,
+  .product-hotspots .js-grid .media,
+  .product-hotspots .js-grid img,
+  .product-hotspots sht-grid .media,
+  .product-hotspots [id*="hotspotContainer"] .media {
+    max-height: 600px !important;  /* נסה 520/560/600 */
+  }
+
+  /* אם התמה נותנת גובה מינימלי ענק */
+  .product-hotspots .media,
+  .product-hotspots .js-grid,
+  .product-hotspots sht-grid,
+  .product-hotspots [id*="hotspotContainer"] {
+    min-height: 0 !important;
+    height: auto !important;
   }
 
   /* הקונטיינר הראשי של התמונה - מתאים את עצמו לתמונה */
@@ -874,7 +891,7 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   .product-hotspots .js-grid {
     width: 100% !important;
     height: auto !important;
-    max-height: none !important;
+    max-height: 600px !important;
     position: relative !important;
   }
 
@@ -884,15 +901,19 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   .product-hotspots .js-grid .animation {
     width: 100% !important;
     height: auto !important;
+    max-height: 600px !important;
     aspect-ratio: var(--ratio) !important;
   }
 
   /* התמונה עצמה - כמו product page - contain (תמיד תראה בשלמותה) */
   .product-hotspots .js-grid img,
   .product-hotspots .js-grid .js-image-lazy,
-  .product-hotspots .js-grid .media {
+  .product-hotspots .js-grid .media,
+  .product-hotspots .js-grid-image,
+  .product-hotspots .media img {
     width: 100% !important;
     height: 100% !important;
+    max-height: 600px !important;
     object-fit: contain !important; /* כמו product page */
     object-position: center !important;
     background: transparent !important;
