@@ -133,6 +133,14 @@
   overflow: hidden;
 }
 
+/* מובייל: מאפשר scroll אופקי - זה הכי חשוב! */
+@media (max-width: 989px) {
+  .product-slideshow__items {
+    overflow-x: auto !important; /* מאפשר scroll אופקי במובייל */
+    overflow-y: hidden !important;
+  }
+}
+
 /* מובייל: מאפשר scroll אופקי */
 @media (max-width: 989px) {
   .product-slideshow__items,
@@ -147,16 +155,19 @@
   /* הסר disable-scrollbars אם יש - מאפשר scroll במובייל */
   .product-slideshow__items.disable-scrollbars,
   .scrollable-x.disable-scrollbars,
-  .scrollable.disable-scrollbars {
+  .scrollable.disable-scrollbars,
+  .js-carousel-items.disable-scrollbars {
     scrollbar-width: thin !important; /* Firefox */
     -ms-overflow-style: auto !important; /* IE/Edge */
-    overflow-x: auto !important; /* מאפשר scroll אופקי */
+    overflow-x: auto !important; /* מאפשר scroll אופקי - הכי חשוב! */
     overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important; /* smooth scrolling ב-iOS */
   }
   
   .product-slideshow__items.disable-scrollbars::-webkit-scrollbar,
   .scrollable-x.disable-scrollbars::-webkit-scrollbar,
-  .scrollable.disable-scrollbars::-webkit-scrollbar {
+  .scrollable.disable-scrollbars::-webkit-scrollbar,
+  .js-carousel-items.disable-scrollbars::-webkit-scrollbar {
     display: block !important; /* Chrome/Safari - show scrollbar */
     height: 4px !important;
   }
@@ -245,8 +256,6 @@
     -webkit-user-select: none !important;
   }
 }
-
-/* כפילות הוסרה - הכל ב-@media הראשון למעלה */
 
   /* ===== מובייל: תמונה גדולה ונקייה כמו ANIQI ===== */
   /* גובה יפה לגלריה במובייל */
