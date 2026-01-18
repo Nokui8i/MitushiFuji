@@ -699,4 +699,42 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   justify-content: center !important;
   display: flex !important;
 }
+
+/* ===== FEATURED PRODUCT CAROUSEL - Force 1:1 Square Ratio ===== */
+/* כפיית יחס 1:1 (ריבוע) על כל הכרטיסיות */
+
+/* הקונטיינר של התמונה - ריבוע מושלם */
+.fpc .card__media {
+  aspect-ratio: 1 / 1 !important;
+  width: 100% !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* ה-wrapper של התמונה - גם ריבוע */
+.fpc .product__image-first,
+.fpc .product__image-second {
+  aspect-ratio: 1 / 1 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* התמונה עצמה - ממלאת את הריבוע עם cover */
+.fpc .card__media img,
+.fpc .product__image-first img,
+.fpc .product__image-second img,
+.fpc .js-image-lazy {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+/* ה-wrapper הפנימי של התמונה */
+.fpc .card__media .js-wrap-image-lazy,
+.fpc .card__media .animation {
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+}
 </style>
