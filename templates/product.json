@@ -40,7 +40,8 @@
           "settings": {
             "show_stock_number": false,
             "variant_picker_type": "button",
-            "enable_variant_swatches": true
+            "enable_variant_swatches": true,
+            "enable_variant_scroll": false
           }
         },
         "purchasing": {
