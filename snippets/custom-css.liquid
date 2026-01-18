@@ -129,4 +129,35 @@
   opacity: 0.6;
   transition: opacity 0.3s ease-in-out;
 }
+
+/* Rounded corners for main product media */
+/* פינות עגולות לתמונה הגדולה */
+.product-slideshow__item,
+.product-slideshow__item sht-prd-slideshow-itm,
+.product-slideshow__item .media,
+.product-slideshow__item img,
+.product-slideshow__item video {
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+
+/* Rounded corners for thumbnails */
+/* פינות עגולות ל-thumbnails */
+.product-slideshow__thumb,
+.btn-slideshow-thumb,
+.product-slideshow__thumb img,
+.product-slideshow__thumb .js-wrap-image-lazy,
+.product-slideshow__thumb .animation {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+/* Active thumbnail highlight (white border) */
+/* מסגרת לבנה סביב ה-thumbnail הפעיל */
+.product-slideshow__thumb.is-active-item .btn-slideshow-thumb {
+  box-shadow:
+    0 0 0 2px #ffffff,
+    0 0 0 3px rgba(0,0,0,0.25) !important;
+  transition: box-shadow 0.3s ease-in-out !important;
+}
 </style>
