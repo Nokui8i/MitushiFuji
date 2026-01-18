@@ -700,57 +700,53 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   display: flex !important;
 }
 
-/* ===== FEATURED PRODUCT CAROUSEL - Image Adjusts to Container ===== */
-/* התמונה מתאימה את עצמה לקונטיינר (לא הקונטיינר לתמונה) - כל הקונטיינרים באותו גודל */
+/* ===== FEATURED PRODUCT CAROUSEL - Container Adapts to Image ===== */
+/* הקונטיינר מתאים את עצמו לתמונה (Adapt to image) - בלי פסים ריקים */
 
 @media (min-width: 990px) {
-  /* הקונטיינר של התמונה - גובה קבוע, התמונה תתאים את עצמה אליו */
+  /* הקונטיינר של התמונה - מתאים את עצמו לתמונה, לא גובה קבוע */
   .fpc .card__media {
     width: 100% !important;
-    height: 520px !important; /* גובה קבוע - כל הקונטיינרים באותו גודל */
+    height: auto !important; /* לא גובה קבוע - מתאים לתמונה */
     position: relative !important;
     overflow: hidden !important;
-    background: transparent !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    background: transparent !important; /* מבטל רקע/overlay שגורם לפסים */
     border-radius: 18px !important; /* פינות עגולות כמו עמוד מוצר */
+    aspect-ratio: auto !important; /* לא לכפות יחס - התמונה קובעת */
   }
 
-  /* ה-wrapper של התמונה - תופס את כל הקונטיינר */
+  /* ה-wrapper של התמונה - מתאים את עצמו לתמונה */
   .fpc .product__image-first,
   .fpc .product__image-second {
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     border-radius: 18px !important; /* פינות עגולות */
     overflow: hidden !important;
   }
 
-  /* ה-wrapper הפנימי - תופס את כל הקונטיינר, לא משתמש ב-ratio של התמונה */
+  /* ה-wrapper הפנימי - משתמש ב-ratio של התמונה (כמו עמוד מוצר) */
   .fpc .card__media .js-wrap-image-lazy,
   .fpc .card__media .animation,
   .fpc .card__media sht-image-atf {
     width: 100% !important;
-    height: 100% !important;
-    aspect-ratio: unset !important; /* מבטל את ה-ratio של התמונה */
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    height: auto !important;
+    aspect-ratio: var(--ratio) !important; /* משתמש ב-ratio של התמונה */
     border-radius: 18px !important; /* פינות עגולות */
     overflow: hidden !important;
   }
 
-  /* התמונה עצמה - מתאימה את עצמה לקונטיינר */
+  /* התמונה עצמה - ממלאת את הקונטיינר בלי פסים */
   .fpc .card__media img,
   .fpc .product__image-first img,
   .fpc .product__image-second img,
   .fpc .js-image-lazy {
     width: 100% !important;
     height: 100% !important;
-    object-fit: contain !important; /* מוצגת בשלמותה בתוך הקונטיינר */
+    object-fit: cover !important; /* ממלא את הקונטיינר בלי פסים */
     object-position: center !important;
     background: transparent !important;
     border-radius: 18px !important; /* פינות עגולות */
+    display: block !important;
   }
 
   /* גם ה-product-card עצמו - פינות עגולות */
