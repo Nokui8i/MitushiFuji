@@ -85,58 +85,6 @@
         "badge_shape": "badge--asterisk"
       }
     },
-    "product_hotspots_znJJMA": {
-      "type": "product-hotspots",
-      "blocks": {
-        "hotspot_VbDkbd": {
-          "type": "hotspot",
-          "settings": {
-            "product": "the-mark-of-ash",
-            "top_offset": 45,
-            "left_offset": 43
-          }
-        },
-        "hotspot_RVRDyE": {
-          "type": "hotspot",
-          "settings": {
-            "product": "gum-gum-shorts",
-            "top_offset": 73,
-            "left_offset": 53
-          }
-        },
-        "statistic_CamanL": {
-          "type": "statistic",
-          "settings": {
-            "label": "HAPPY ANIME FANS",
-            "description": ""
-          }
-        }
-      },
-      "block_order": [
-        "hotspot_VbDkbd",
-        "hotspot_RVRDyE",
-        "statistic_CamanL"
-      ],
-      "settings": {
-        "color_scheme": "scheme-1",
-        "subheading": "",
-        "heading": "",
-        "description": "",
-        "background_color": "",
-        "background_image": "shopify://shop_images/one-piece-portgas-d-ace-anime-wallpaper-576b720bda38a10459b7514d93fff326.jpg",
-        "background_darkness": 0,
-        "show_navigation": true,
-        "show_statistics_navigation": true,
-        "animation_duration": 2000,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false,
-        "image_hotspot": "shopify://shop_images/DSC00565.webp",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--top-left",
-        "badge_shape": "badge--star"
-      }
-    },
     "collection-list": {
       "type": "collection-list",
       "custom_css": [
@@ -207,6 +155,58 @@
         "badge_position": "p-badge--top-right",
         "badge_shape": "badge--star",
         "video_banner_link": ""
+      }
+    },
+    "product_hotspots_znJJMA": {
+      "type": "product-hotspots",
+      "blocks": {
+        "hotspot_VbDkbd": {
+          "type": "hotspot",
+          "settings": {
+            "product": "the-mark-of-ash",
+            "top_offset": 45,
+            "left_offset": 43
+          }
+        },
+        "hotspot_RVRDyE": {
+          "type": "hotspot",
+          "settings": {
+            "product": "gum-gum-shorts",
+            "top_offset": 73,
+            "left_offset": 53
+          }
+        },
+        "statistic_CamanL": {
+          "type": "statistic",
+          "settings": {
+            "label": "HAPPY ANIME FANS",
+            "description": ""
+          }
+        }
+      },
+      "block_order": [
+        "hotspot_VbDkbd",
+        "hotspot_RVRDyE",
+        "statistic_CamanL"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "subheading": "",
+        "heading": "",
+        "description": "",
+        "background_color": "",
+        "background_image": "shopify://shop_images/one-piece-portgas-d-ace-anime-wallpaper-576b720bda38a10459b7514d93fff326.jpg",
+        "background_darkness": 0,
+        "show_navigation": true,
+        "show_statistics_navigation": true,
+        "animation_duration": 5000,
+        "remove_padding_top": false,
+        "remove_padding_bottom": false,
+        "image_hotspot": "shopify://shop_images/DSC00565.webp",
+        "badge_text": "",
+        "badge_color": "color-accent-1",
+        "badge_position": "p-badge--top-left",
+        "badge_shape": "badge--star"
       }
     },
     "17687530853fdb3082": {
