@@ -1,201 +1,391 @@
 {% comment %}
-  Random Products Carousel (Synced)
-  - Renders products from a chosen collection
+  Random Products Carousel (Synced) - FUJI Style
+  - Renders products from a chosen collection using FUJI card-product snippet
   - JS will hide/show random subset (synced by seed)
 {% endcomment %}
 
-<section
-  class="rp-carousel section"
+{%- liquid
+  assign md = 12.0 | divided_by : section.settings.columns_desktop
+  assign card_content_inner = false
+  if section.settings.style_card == 'card'
+    assign card_content_inner = true
+  endif
+-%}
+
+<div class="fpc rp-carousel section color-{{- section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }}" 
   data-rp-carousel="true"
   data-rp-count="{{ section.settings.limit }}"
   data-rp-seed-mode="{{ section.settings.seed_mode }}"
->
-  <div class="rp-carousel__inner page-width">
-    {% if section.settings.heading != blank %}
-      <h2 class="rp-carousel__heading" style="text-align: {{ section.settings.align }};">
-        {{ section.settings.heading }}
-      </h2>
-    {% endif %}
-
-    {% assign coll = section.settings.collection %}
-    {% if coll != blank and coll.products_count > 0 %}
-      <div class="rp-carousel__grid">
-        {% for product in coll.products limit: section.settings.max_pool %}
-          <article class="rp-card" data-rp-item>
-            <a class="rp-card__link" href="{{ product.url }}">
-              <div class="rp-card__media">
-                {% if product.featured_image %}
-                  {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'rp-card__img' }}
-                {% else %}
-                  {{ 'product-apparel-1' | placeholder_svg_tag: 'rp-card__img' }}
-                {% endif %}
-              </div>
-
-              <div class="rp-card__info" style="text-align: {{ section.settings.align }};">
-                <div class="rp-card__title">{{ product.title }}</div>
-                {% if section.settings.show_price %}
-                  <div class="rp-card__price">
-                    {{ product.price | money }}
-                  </div>
-                {% endif %}
-              </div>
-            </a>
-          </article>
-        {% endfor %}
-      </div>
-    {% else %}
-      <p style="text-align: center;">בחר Collection בהגדרות של ה-Section כדי להציג מוצרים.</p>
-    {% endif %}
+  data-ui-component="Random Products Carousel Section" 
+  role="region" 
+  aria-labelledby="sectionHeading-{{ section.id | md5 | truncate: 12, "" }}">
+  <div class="ctnr {{ section.settings.content_align }}">
+    {%- render 'section-header',
+      content_align: section.settings.content_align,
+      subheading: section.settings.subheading,
+      heading: section.settings.heading,
+      description: section.settings.description,
+      badge_text: section.settings.badge_text,
+      badge_position: section.settings.badge_position,
+      badge_shape: section.settings.badge_shape,
+      badge_color: section.settings.badge_color,
+      section: section
+    -%}
+    <div class="s-content">
+      <sht-carousel class="p-relative d-block">
+        <div aria-atomic="true" class="d-flex fw-nowrap carousel ox-auto p-relative scrollable scrollable-x disable-scrollbars js-carousel-items js-animate">
+          {% assign coll = section.settings.collection %}
+          {% if coll != blank and coll.products_count > 0 %}
+            {% for product in coll.products limit: section.settings.max_pool %}
+              <sht-carousel-itm tabindex="0" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero anm anm-fadeInUp rp-carousel-item" 
+                data-rp-item
+                role="group" 
+                aria-roledescription="Slide" 
+                aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}"
+                style="--w-xs:12;--w-sm:6;--w-md:{{- md -}}; --delay: {{ forloop.index | times: 0.05 -}}s; --duration: .6s;" 
+                data-item-index="{{ forloop.index }}">
+                {% render 'card-product',
+                  product: product,
+                  show_vendor: settings.show_product_vendor,
+                  show_color_swatch: settings.show_color_swatches,
+                  show_sale_badge: settings.show_sale_badge,
+                  enable_quick_buy: settings.enable_quick_buy,
+                  ratio: section.settings.image_ratio,
+                  card_content_inner: card_content_inner,
+                  image_width: '320, 450, 550, 750',
+                  overlay_opacity: section.settings.image_overlay_opacity,
+                  section: section,
+                  is_first: forloop.first,
+                  show_ranking: false,
+                  ranking_badge_shape: section.settings.ranking_badge_shape,
+                  ranking_badge_color: section.settings.ranking_badge_color,
+                  ranking_badge_number: forloop.index,
+                  color_rating_star: false,
+                  star_rating_overlay: false,
+                  show_second_image: settings.show_second_image
+                %}
+              </sht-carousel-itm>
+            {% endfor %}
+          {% else %}
+            <p style="text-align: center; padding: 40px;">בחר Collection בהגדרות של ה-Section כדי להציג מוצרים.</p>
+          {% endif %}
+        </div>
+        {% if section.settings.show_navigation %}
+          <div class="carousel-pagination zi-1 middle-y w-100 p-absolute no-js-hidden {{ section.settings.show_navigation | default: 'd-none d-block-sm' | replace: 'true', '' }}">
+            <div class="p-absolute left-0">
+              <button type="button" data-step="1" class="js-carousel-prev-btn rtl-flip-x btn btn-primary--animate btn-icon btn-small p-absolute middle-y left-0" aria-label="{{ 'accessibility.previous_slide' | t }}" name="previous" disabled>{% render 'icon-chevron-left' %}</button>
+            </div>
+            <div class="p-absolute right-0">
+              <button type="button" data-step="1" class="js-carousel-next-btn rtl-flip-x btn btn-primary--animate btn-icon btn-small p-absolute middle-y right-0" aria-label="{{ 'accessibility.next_slide' | t }}" name="next" disabled>{% render 'icon-chevron-right' %}</button>
+            </div>
+          </div>
+        {% endif %}
+      </sht-carousel>
+    </div>
   </div>
-</section>
+</div>
 
 {% style %}
-  .rp-carousel { 
-    padding: 24px 0; 
-  }
-  .rp-carousel__heading { 
-    margin: 0 0 16px; 
-    font-size: 22px; 
-    font-weight: 700;
-  }
-  .rp-carousel__grid {
-    display: grid;
-    gap: 16px;
-    grid-template-columns: repeat({{ section.settings.columns_desktop }}, minmax(0, 1fr));
-  }
-  .rp-card {
-    display: flex;
-    flex-direction: column;
-  }
-  .rp-card__link {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  .rp-card__media { 
-    aspect-ratio: 1 / 1; 
-    overflow: hidden; 
-    border-radius: 12px;
-    background: #f5f5f5;
-  }
-  .rp-card__img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    display: block; 
-  }
-  .rp-card__info {
-    padding: 12px 0;
-  }
-  .rp-card__title { 
-    font-size: 14px; 
-    margin-top: 10px; 
-    font-weight: 500;
-    line-height: 1.4;
-  }
-  .rp-card__price { 
-    font-size: 13px; 
-    margin-top: 6px; 
-    opacity: .9; 
-    font-weight: 600;
-  }
-
-  @media (max-width: 749px){
-    .rp-carousel__grid { 
-      grid-template-columns: repeat({{ section.settings.columns_mobile }}, minmax(0, 1fr)); 
-    }
-    .rp-carousel__heading { 
-      font-size: 18px; 
-    }
-    .rp-carousel {
-      padding: 16px 0;
-    }
+  /* Random Products Carousel - FUJI Style Integration */
+  .rp-carousel.fpc {
+    /* Uses FUJI's existing styles via .fpc class */
   }
 {% endstyle %}
 
 {% schema %}
 {
   "name": "Random products (synced)",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
   "settings": [
-    { 
-      "type": "text", 
-      "id": "heading", 
-      "label": "Heading", 
-      "default": "You may also like" 
+    {
+      "type": "header",
+      "content": "t:general.general"
     },
-    { 
-      "type": "select", 
-      "id": "align", 
-      "label": "Text alignment", 
-      "default": "center",
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:general.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:general.section_subheading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:general.section_heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "t:general.section_description"
+    },
+    {
+      "type": "header",
+      "content": "t:general.layout"
+    },
+    {
+      "type": "select",
+      "id": "style_card",
+      "label": "t:general.style",
+      "default": "standard",
+      "info": "t:general.mask_overlay",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
+        {
+          "value": "standard",
+          "label": "t:general.standard"
+        },
+        {
+          "value": "card",
+          "label": "t:general.card"
+        }
       ]
     },
-    { 
-      "type": "collection", 
-      "id": "collection", 
-      "label": "Collection source" 
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "t:general.items_per_row_on_desktop",
+      "default": "4",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ]
     },
-    { 
-      "type": "range", 
-      "id": "limit", 
-      "label": "How many to show", 
-      "min": 2, 
-      "max": 12, 
-      "step": 1, 
-      "default": 6 
+    {
+      "type": "select",
+      "id": "content_align",
+      "label": "t:general.content_alignment",
+      "default": "ta-center",
+      "options": [
+        {
+          "value": "ta-left",
+          "label": "t:general.left"
+        },
+        {
+          "value": "ta-center",
+          "label": "t:general.center"
+        }
+      ]
     },
-    { 
-      "type": "range", 
-      "id": "max_pool", 
-      "label": "Pool size (how many to load then randomize)", 
-      "min": 6, 
-      "max": 50, 
-      "step": 1, 
-      "default": 24 
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "t:general.show_navigation_on_mobile",
+      "default": true
     },
-    { 
-      "type": "select", 
-      "id": "seed_mode", 
-      "label": "Random sync mode", 
+    {
+      "type": "checkbox",
+      "id": "remove_padding_top",
+      "label": "t:general.remove_padding_top",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_bottom",
+      "label": "t:general.remove_padding_bottom",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Product source"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection source"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "How many to show (after randomization)",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "max_pool",
+      "label": "Pool size (how many to load then randomize)",
+      "min": 6,
+      "max": 50,
+      "step": 1,
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "seed_mode",
+      "label": "Random sync mode",
       "default": "daily",
       "options": [
-        { "value": "daily", "label": "Synced daily (same across pages, changes daily)" },
-        { "value": "visit", "label": "Synced per visit (same across pages for visitor)" }
+        {
+          "value": "daily",
+          "label": "Synced daily (same across pages, changes daily)"
+        },
+        {
+          "value": "visit",
+          "label": "Synced per visit (same across pages for visitor)"
+        }
       ]
     },
-    { 
-      "type": "checkbox", 
-      "id": "show_price", 
-      "label": "Show price", 
-      "default": true 
+    {
+      "type": "header",
+      "content": "t:general.header_product_items"
     },
-    { 
-      "type": "range", 
-      "id": "columns_desktop", 
-      "label": "Columns on desktop", 
-      "min": 2, 
-      "max": 6, 
-      "step": 1, 
-      "default": 4 
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:general.image_ratio",
+      "default": "1/1",
+      "options": [
+        {
+          "value": "1/1",
+          "label": "t:general.square"
+        },
+        {
+          "value": "2/3",
+          "label": "t:general.portrait_2_3"
+        },
+        {
+          "value": "3/2",
+          "label": "t:general.landscape_3_2"
+        },
+        {
+          "value": "auto",
+          "label": "t:general.adapt_to_image"
+        }
+      ]
     },
-    { 
-      "type": "range", 
-      "id": "columns_mobile", 
-      "label": "Columns on mobile", 
-      "min": 1, 
-      "max": 2, 
-      "step": 1, 
-      "default": 1 
+    {
+      "type": "range",
+      "unit": "%",
+      "max": 90,
+      "min": 0,
+      "step": 1,
+      "default": 30,
+      "id": "image_overlay_opacity",
+      "label": "t:general.mask_overlay_opacity"
+    },
+    {
+      "type": "header",
+      "content": "t:general.prominent_badge"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "t:general.text",
+      "info": "t:general.prominent_badge_text_info"
+    },
+    {
+      "type": "select",
+      "id": "badge_color",
+      "label": "t:general.accent_scheme",
+      "default": "color-accent-1",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "color-accent-1",
+          "label": "t:general.main"
+        },
+        {
+          "value": "color-accent-2",
+          "label": "t:general.extra"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "badge_position",
+      "label": "t:general.position",
+      "default": "p-badge--bottom-right",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "p-badge--bottom-left",
+          "label": "t:general.left"
+        },
+        {
+          "value": "p-badge--bottom-right",
+          "label": "t:general.right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "badge_shape",
+      "label": "t:general.shape",
+      "default": "badge--star",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "badge--star",
+          "label": "t:general.star"
+        },
+        {
+          "value": "badge--diamond",
+          "label": "t:general.diamond"
+        },
+        {
+          "value": "badge--asterisk",
+          "label": "t:general.asterisk"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "ranking_badge_shape",
+      "label": "Ranking badge shape (if enabled)",
+      "default": "ribbon",
+      "options": [
+        {
+          "value": "ribbon",
+          "label": "t:general.ribbon"
+        },
+        {
+          "value": "rectangle",
+          "label": "t:general.rectangle"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "ranking_badge_color",
+      "label": "Ranking badge color (if enabled)",
+      "default": "color-accent-1",
+      "options": [
+        {
+          "value": "color-accent-1",
+          "label": "t:general.main"
+        },
+        {
+          "value": "color-accent-2",
+          "label": "t:general.extra"
+        }
+      ]
     }
   ],
   "presets": [
-    { "name": "Random products (synced)" }
+    {
+      "name": "Random products (synced)"
+    }
   ]
 }
 {% endschema %}

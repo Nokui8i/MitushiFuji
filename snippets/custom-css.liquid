@@ -737,4 +737,24 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   height: 100% !important;
   aspect-ratio: 1 / 1 !important;
 }
+
+/* ===== RANDOM PRODUCTS CAROUSEL - FUJI Style Integration ===== */
+/* ה-Section החדש משתמש ב-FUJI card-product, אז הוא כבר נראה זהה */
+/* ה-CSS הזה רק מוודא שהכל עובד מושלם */
+
+/* הסתר מוצרים שלא נבחרו ברנדומיזציה */
+.rp-carousel-item[data-rp-item][style*="display: none"] {
+  display: none !important;
+}
+
+/* וודא שהקרוסלה עובדת כמו שצריך */
+.rp-carousel.fpc .carousel__item {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.rp-carousel.fpc .carousel__item[style*="display: none"] {
+  opacity: 0;
+  pointer-events: none;
+}
 </style>

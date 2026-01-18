@@ -44,8 +44,24 @@
       const keep = new Set(indices);
 
       items.forEach((el, i) => {
-        el.style.display = keep.has(i) ? '' : 'none';
+        if (keep.has(i)) {
+          el.style.display = '';
+          el.style.opacity = '1';
+        } else {
+          el.style.display = 'none';
+          el.style.opacity = '0';
+        }
       });
+
+      // Update carousel if it exists (for FUJI carousel functionality)
+      const carousel = root.querySelector('.js-carousel-items');
+      if (carousel && typeof window.SHTHelper !== 'undefined') {
+        // Trigger carousel update if needed
+        setTimeout(() => {
+          const event = new Event('resize');
+          window.dispatchEvent(event);
+        }, 100);
+      }
     });
   }
 
