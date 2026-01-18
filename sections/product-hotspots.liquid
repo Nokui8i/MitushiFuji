@@ -83,7 +83,7 @@
                       <sht-carousel-itm tabindex="0" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero" role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}" style="--w-xs:12;--w-sm:12;--w-md:12;" {{ block.shopify_attributes }}>
                         <div class="statistics-item ta-center">
                           <div class="statistics-number">
-                            <span class="js-number-animate" data-target="100000" data-duration="{{ section.settings.animation_duration | default: 2000 }}" data-auto-plus="true">0</span><span class="statistics-suffix statistics-suffix-auto">+</span>
+                            <span class="js-number-animate" data-target="100000" data-duration="{{ section.settings.animation_duration | default: 1000 }}" data-auto-plus="true">0</span><span class="statistics-suffix statistics-suffix-auto">+</span>
                           </div>
                           
                           {% if block.settings.label != blank %}
@@ -128,22 +128,11 @@
     border-radius: 8px;
   }
   
-  /* Gradient background effect */
+  /* Solid dark background - no color differences */
   .product-hotspots-with-blurred-background {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(to bottom, 
-      rgba(30, 30, 30, 1) 0%,
-      rgba(20, 20, 20, 1) 20%,
-      rgba(10, 10, 10, 1) 42%,
-      rgba(5, 5, 5, 1) 46%,
-      rgba(0, 0, 0, 1) 48%,
-      rgba(0, 0, 0, 1) 52%,
-      rgba(5, 5, 5, 1) 54%,
-      rgba(10, 10, 10, 1) 58%,
-      rgba(20, 20, 20, 1) 80%,
-      rgba(30, 30, 30, 1) 100%
-    ) !important;
+    background: rgba(0, 0, 0, 1) !important;
   }
   
   .product-hotspots-with-blurred-background::before {
@@ -239,7 +228,7 @@
     font-weight: 900;
     line-height: 1.1;
     margin-bottom: 20px;
-    background: linear-gradient(to bottom, #C00000, #000000);
+    background: linear-gradient(to bottom, #FF0000, #CC0000);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -260,7 +249,7 @@
   .product-hotspots-with-statistics .statistics-suffix-auto {
     font-size: 120px !important;
     font-weight: 900 !important;
-    background: linear-gradient(to bottom, #C00000, #000000) !important;
+    background: linear-gradient(to bottom, #FF0000, #CC0000) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     background-clip: text !important;
@@ -315,7 +304,7 @@
     .product-hotspots-with-statistics .statistics-suffix-auto {
       font-size: 80px !important;
       font-weight: 900 !important;
-      background: linear-gradient(to bottom, #C00000, #000000) !important;
+      background: linear-gradient(to bottom, #FF0000, #CC0000) !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
@@ -432,9 +421,9 @@
       "type": "range",
       "id": "animation_duration",
       "label": "Animation duration (ms)",
-      "min": 1000,
-      "max": 5000,
-      "default": 2000,
+      "min": 500,
+      "max": 3000,
+      "default": 1000,
       "step": 100
     },
     {
