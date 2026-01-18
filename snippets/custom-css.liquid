@@ -143,15 +143,23 @@
 }
 
 /* ===== מובייל: אפשר swipe על התמונות בעמוד המוצר ===== */
-/* מאפשר swipe במובייל להעברת תמונות */
-@media (max-width: 989px) {
-  /* הקונטיינר של התמונות - מאפשר swipe */
+/* מאפשר swipe במובייל להעברת תמונות - כמו ANIQI */
+
+@media (max-width: 749px) {
+  /* המיכל של הגלריה - מאפשר swipe */
+  .product-media,
+  .product__media,
+  .product__media-wrapper,
+  .product-gallery,
+  .product__media-list,
   .product-slideshow__items,
   .product-slideshow__slider,
   .product-gallery-carousel,
   .js-product-slideshow,
-  .js-carousel-items {
-    touch-action: pan-x !important; /* מאפשר swipe אופקי */
+  .js-carousel-items,
+  .carousel-wrapper,
+  .product-slideshow {
+    touch-action: pan-y !important; /* מאפשר גרירה אופקית בלי "לשבור" גלילה */
     -webkit-overflow-scrolling: touch !important; /* smooth scrolling ב-iOS */
     overflow-x: auto !important; /* מאפשר scroll אופקי */
     overflow-y: hidden !important;
@@ -162,29 +170,68 @@
   /* כל תמונה - snap point */
   .product-slideshow__item,
   .js-product-slideshow-item,
-  .js-carousel-item {
+  .js-carousel-item,
+  .carousel__item {
     scroll-snap-align: start !important;
     -webkit-scroll-snap-align: start !important;
-    touch-action: pan-x !important;
+    touch-action: pan-y !important;
     pointer-events: auto !important; /* מאפשר touch */
+  }
+
+  /* כפתור זום/אוברליי לא יחסום swipe */
+  .product__media-zoom,
+  .product__zoom,
+  .zoom,
+  .media-zoom,
+  .product__media-toggle,
+  .product__media-icon,
+  .js-product-media-open-gallery-btn,
+  .js-zoom-item,
+  sht-zoom {
+    pointer-events: none !important; /* מבטל חסימת swipe */
   }
 
   /* וודא שהתמונות עצמן לא חוסמות את ה-touch */
   .product-slideshow__item img,
   .product-slideshow__item video,
-  .product-slideshow__item sht-prd-slideshow-itm {
-    touch-action: pan-x !important;
+  .product-slideshow__item sht-prd-slideshow-itm,
+  .product__media img,
+  .product-gallery img {
+    touch-action: pan-y !important;
     pointer-events: auto !important;
     user-select: none !important; /* מונע selection במקום swipe */
     -webkit-user-select: none !important;
   }
 
-  /* הקונטיינר הראשי - מאפשר swipe */
+  /* ===== מובייל: תמונה גדולה ונקייה כמו ANIQI ===== */
+  /* גובה יפה לגלריה במובייל */
+  .product__media,
   .product__media-wrapper,
-  .product-slideshow {
-    touch-action: pan-x !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
+  .product-gallery,
+  .product__media-list,
+  .product-slideshow__slider {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    width: 100% !important;
+  }
+
+  /* התמונה עצמה - גדולה ונקייה */
+  .product__media img,
+  .product-gallery img,
+  .product-slideshow__item img,
+  .product-slideshow__item video {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    object-fit: contain !important; /* תמיד תראה בשלמותה */
+    object-position: center !important;
+  }
+
+  /* הקונטיינר של התמונה - מתאים את עצמו לתמונה */
+  .product-slideshow__item,
+  .js-product-slideshow-item {
+    width: 100% !important;
+    flex: 0 0 100% !important; /* כל תמונה תופסת 100% מהרוחב */
   }
 }
 
