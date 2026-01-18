@@ -786,5 +786,25 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   .fpc .card__content-vendor {
     margin-bottom: 8px !important;
   }
+
+  /* ===== הרחבת הקונטיינר של Featured Product Carousel בדסקטופ ===== */
+  /* מבטל את הגבלת הרוחב של ה-section כדי שהכרטיסים יהיו גדולים יותר */
+  
+  /* הקונטיינר הראשי - הרחבה מלאה */
+  .fpc .ctnr {
+    max-width: 100% !important;
+    padding-left: 4vw !important;
+    padding-right: 4vw !important;
+  }
+
+  /* אם יש wrapper פנימי נוסף */
+  .fpc .s-content {
+    max-width: 100% !important;
+  }
+
+  /* וודא שהקרוסלה עצמה תתפרס */
+  .fpc .carousel {
+    max-width: 100% !important;
+  }
 }
 </style>
