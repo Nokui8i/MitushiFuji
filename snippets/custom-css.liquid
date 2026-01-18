@@ -1489,5 +1489,69 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     padding-top: 6px !important;
     margin-top: 0 !important;
   }
+
+  /* Statistics בצד ימין של Product Hotspots - Layout משותף */
+  @media (min-width: 990px) {
+    /* Wrapper משותף - משתמש ב-flexbox על שני ה-sections */
+    .product-hotspots-section-wrapper + .statistics-next-to-hotspots {
+      display: flex !important;
+      flex-direction: row !important;
+      gap: 0 !important;
+      align-items: flex-start !important;
+    }
+    
+    /* Container משותף - משתמש ב-grid */
+    .product-hotspots-section-wrapper {
+      display: inline-block !important;
+      width: calc(50% - 12px) !important;
+      vertical-align: top !important;
+      margin-right: 24px !important;
+    }
+    
+    /* Statistics - צד ימין */
+    .product-hotspots-section-wrapper + .statistics-next-to-hotspots {
+      display: inline-block !important;
+      width: calc(50% - 12px) !important;
+      vertical-align: top !important;
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    
+    .product-hotspots-section-wrapper + .statistics-next-to-hotspots .ctnr {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      width: 100% !important;
+    }
+    
+    .product-hotspots-section-wrapper + .statistics-next-to-hotspots .section-header {
+      display: none !important;
+    }
+    
+    .statistics-content-wrapper {
+      width: 100% !important;
+    }
+    
+    /* הסר את ה-section wrapper של Statistics */
+    .product-hotspots-section-wrapper + .statistics-next-to-hotspots.section {
+      background: transparent !important;
+    }
+  }
+  
+  /* במובייל - נשאר אחד מתחת לשני */
+  @media (max-width: 989px) {
+    .product-hotspots-section-wrapper {
+      display: block !important;
+      width: 100% !important;
+      margin-right: 0 !important;
+    }
+    
+    .product-hotspots-section-wrapper + .statistics-next-to-hotspots {
+      display: block !important;
+      width: 100% !important;
+      margin-top: 40px !important;
+    }
+  }
 }
 </style>
