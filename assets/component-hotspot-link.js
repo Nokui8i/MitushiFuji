@@ -47,20 +47,33 @@
           // מציג את ה-tooltip במובייל
           const tooltip = button.querySelector('.js-tooltip-content');
           if (tooltip) {
-            // הסר hidden-xs אם יש
-            tooltip.classList.remove('hidden-xs', 'opacity-0');
-            tooltip.classList.add('opacity-1');
-            tooltip.style.display = 'block';
-            tooltip.style.opacity = '1';
-            tooltip.style.visibility = 'visible';
+            // הסר כל המחלקות שמסתירות
+            tooltip.classList.remove('hidden-xs', 'opacity-0', 'd-none');
+            tooltip.classList.add('opacity-1', 'show', 'd-block');
+            
+            // Set inline styles to force visibility
+            tooltip.style.setProperty('display', 'block', 'important');
+            tooltip.style.setProperty('opacity', '1', 'important');
+            tooltip.style.setProperty('visibility', 'visible', 'important');
+            tooltip.style.setProperty('position', 'absolute', 'important');
+            tooltip.style.setProperty('z-index', '999', 'important');
+            tooltip.style.setProperty('pointer-events', 'none', 'important');
+            
+            // Position tooltip near the button (above it)
+            const rect = button.getBoundingClientRect();
+            const tooltipHeight = tooltip.offsetHeight || 80;
+            tooltip.style.setProperty('left', '50%', 'important');
+            tooltip.style.setProperty('top', (rect.top - tooltipHeight - 10) + 'px', 'important');
+            tooltip.style.setProperty('transform', 'translateX(-50%)', 'important');
             
             // הסתר tooltip אחרי 3 שניות
             setTimeout(function() {
+              tooltip.classList.remove('opacity-1', 'show', 'd-block');
               tooltip.classList.add('opacity-0');
               tooltip.style.opacity = '0';
               setTimeout(function() {
-                tooltip.style.display = '';
-                tooltip.style.visibility = '';
+                tooltip.style.display = 'none';
+                tooltip.style.visibility = 'hidden';
               }, 300);
             }, 3000);
           }
