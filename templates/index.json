@@ -191,6 +191,7 @@
       "block_order": [
         "content_nzUy7K"
       ],
+      "disabled": true,
       "settings": {
         "color_scheme": "",
         "enable_large_heading": false,
@@ -212,6 +213,70 @@
         "badge_shape": "badge--star",
         "video_banner_link": ""
       }
+    },
+    "running_content_WeVz9x": {
+      "type": "running-content",
+      "blocks": {
+        "content_PBCNmD": {
+          "type": "content",
+          "settings": {
+            "custom_text_color": "#f2d908",
+            "custom_icon_color": "",
+            "enable_icon": true,
+            "text": "BORN FROM ANIME",
+            "font_style": "marquee-font--body",
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "custom_svg": "",
+            "link": ""
+          }
+        },
+        "content_QiHmmi": {
+          "type": "content",
+          "settings": {
+            "custom_text_color": "#f2d908",
+            "custom_icon_color": "",
+            "enable_icon": true,
+            "text": "STREET UNIFORM",
+            "font_style": "marquee-font--body",
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "custom_svg": "",
+            "link": ""
+          }
+        },
+        "content_UbRzer": {
+          "type": "content",
+          "settings": {
+            "custom_text_color": "#f2d908",
+            "custom_icon_color": "",
+            "enable_icon": true,
+            "text": "PURE ANIME ENERGY",
+            "font_style": "marquee-font--body",
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "custom_svg": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "content_PBCNmD",
+        "content_QiHmmi",
+        "content_UbRzer"
+      ],
+      "name": "t:general.running_content",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "accent_scheme": "color-accent-1",
+        "custom_background_color": "",
+        "speed": "2",
+        "slope_style": "none",
+        "item_size": "h3",
+        "scroll_direction": "left",
+        "remove_padding_top": true,
+        "remove_padding_bottom": true
+      }
     }
   },
   "order": [
@@ -220,6 +285,7 @@
     "collection-list",
     "17687530853fdb3082",
     "product_hotspots_znJJMA",
-    "video_banner_xE4peK"
+    "video_banner_xE4peK",
+    "running_content_WeVz9x"
   ]
 }
