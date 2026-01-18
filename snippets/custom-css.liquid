@@ -820,7 +820,15 @@ drawer[role="dialog"][id*="Size"] td:first-child {
 }
 
 /* ===== PRODUCT HOTSPOTS - Same styling as Featured Product Carousel ===== */
-/* פינות עגולות + ריווח קטן + קונטיינר מתאים לתמונה */
+/* פינות עגולות + ריווח קטן + קונטיינר מתאים לתמונה + אותו גודל כמו product page */
+
+/* Product Hotspots - הקטנת padding של הסקשן */
+@media (min-width: 990px) {
+  .product-hotspots.section {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+  }
+}
 
 /* Product Hotspots - התמונה הגדולה הראשית (עם hotspots) - פינות עגולות - כל המסכים */
 .product-hotspots [id*="hotspotContainer"] {
