@@ -160,6 +160,44 @@
 
 /* ===== מובייל: אפשר swipe על התמונות בעמוד המוצר ===== */
 /* מאפשר swipe במובייל להעברת תמונות - כמו ANIQI */
+/* FUJI - Enable natural swipe/scroll on product & section carousels (mobile) */
+
+@media (max-width: 749px) {
+  /* הקונטיינרים הנפוצים בתמה - גלילה אופקית חלקה */
+  .product-slideshow__slider,
+  .js-carousel-items,
+  .product-slideshow__items,
+  .scrollable.scrollable-x,
+  .scrollable-x,
+  [data-ui-component*="carousel"],
+  [aria-label*="slider"],
+  .product-slideshow__items.js-product-slideshow {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    scroll-behavior: smooth !important;
+    touch-action: pan-y !important; /* מאפשר גלילה למעלה/למטה בדף */
+  }
+
+  /* כל פריט "ייתפס" לסנאפ */
+  .product-slideshow__slider > *,
+  .js-carousel-items > *,
+  .product-slideshow__items > * {
+    scroll-snap-align: center !important;
+  }
+
+  /* כפתורי זום/אוברליי לא יחסום swipe במובייל */
+  .product__media-wrapper .btn,
+  .product__media-wrapper .icon,
+  .product__media-wrapper .product__media-zoom,
+  .product__media-wrapper .zoom,
+  .js-product-media-open-gallery-btn,
+  .js-zoom-item,
+  sht-zoom {
+    pointer-events: none !important;
+  }
+}
 
 @media (max-width: 749px) {
   /* המיכל של הגלריה - מאפשר swipe */

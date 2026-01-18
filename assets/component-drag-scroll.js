@@ -1,93 +1,118 @@
-// Enable drag-to-scroll for horizontal carousels (mouse + touch)
-// תומך ב-FUJI theme custom elements
-(function () {
-  const selectors = [
-    ".js-carousel-items",
+// FUJI - Drag/Swipe for horizontal scroll carousels (pointer-based)
+// תומך ב-scrollable carousel של FUJI (לא Swiper אמיתי)
+(() => {
+  const SELECTORS = [
     ".product-slideshow__slider",
-    ".product-slideshow__thumbs",
+    ".js-carousel-items",
     ".product-slideshow__items",
+    ".scrollable.scrollable-x",
     ".scrollable-x",
-    "[role='list'][aria-label*='slider']",
-    "sht-carousel-wrapper .scrollable-x",
-    ".carousel-wrapper .scrollable-x",
-    ".product-slideshow__items.js-product-slideshow"
+    "[data-ui-component*='carousel']",
+    "[aria-label*='slider']"
   ];
 
-  function enableDragScroll(el) {
-    if (!el || el.dataset.dragScrollInit === "1") return;
-    el.dataset.dragScrollInit = "1";
+  function isScrollableX(el) {
+    return el && el.scrollWidth > el.clientWidth + 5;
+  }
 
-    // Only if it's actually horizontally scrollable
-    const canScrollX = () => el.scrollWidth > el.clientWidth + 5;
-    if (!canScrollX()) return;
+  function initDrag(el) {
+    if (!el || el.dataset.swipeInit === "1") return;
+    if (!isScrollableX(el)) return;
 
-    let isDown = false;
+    el.dataset.swipeInit = "1";
+    el.style.cursor = "grab";
+    el.style.userSelect = "none";
+    el.style.webkitUserSelect = "none";
+    el.style.touchAction = "pan-y"; // allow vertical page scroll
+
+    let dragging = false;
     let startX = 0;
     let startScrollLeft = 0;
 
-    el.style.cursor = "grab";
-    el.style.touchAction = "pan-x pan-y"; // allow horizontal and vertical scroll
-    el.style.webkitOverflowScrolling = "touch"; // smooth scrolling on iOS
+    const onPointerDown = (e) => {
+      // רק כפתור שמאל בעכבר
+      if (e.pointerType === "mouse" && e.button !== 0) return;
 
-    const onDown = (e) => {
-      isDown = true;
-      el.style.cursor = "grabbing";
-      startX = (e.touches ? e.touches[0].pageX : e.pageX);
+      dragging = true;
+      startX = e.clientX;
       startScrollLeft = el.scrollLeft;
+
+      el.style.cursor = "grabbing";
+      el.setPointerCapture?.(e.pointerId);
+
+      // אם מתחילים לגרור על לינק/תמונה, לא "יקפוץ"
+      e.preventDefault();
     };
 
-    const onMove = (e) => {
-      if (!isDown) return;
-      // Prevent page from selecting text while dragging
-      e.preventDefault?.();
-      const x = (e.touches ? e.touches[0].pageX : e.pageX);
-      const walk = x - startX;
-      el.scrollLeft = startScrollLeft - walk;
+    const onPointerMove = (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      el.scrollLeft = startScrollLeft - dx;
+      e.preventDefault();
     };
 
-    const onUp = () => {
-      isDown = false;
+    const stop = () => {
+      if (!dragging) return;
+      dragging = false;
       el.style.cursor = "grab";
+      el.releasePointerCapture?.();
     };
 
-    el.addEventListener("mousedown", onDown);
-    window.addEventListener("mousemove", onMove, { passive: false });
-    window.addEventListener("mouseup", onUp);
+    el.addEventListener("pointerdown", onPointerDown, { passive: false });
+    el.addEventListener("pointermove", onPointerMove, { passive: false });
+    el.addEventListener("pointerup", stop);
+    el.addEventListener("pointercancel", stop);
+    el.addEventListener("mouseleave", stop);
 
-    el.addEventListener("touchstart", onDown, { passive: true });
-    el.addEventListener("touchmove", onMove, { passive: false });
-    el.addEventListener("touchend", onUp);
-    el.addEventListener("touchcancel", onUp);
+    // למנוע "לחיצה" בטעות בזמן גרירה על לינקים
+    el.addEventListener("click", (e) => {
+      // אם הייתה גרירה משמעותית, נחסום את הקליק
+      // (מניעת פתיחת מוצר כשסתם גוררים)
+      if (!el.dataset._dragDx) return;
+      const dx = parseFloat(el.dataset._dragDx);
+      if (Math.abs(dx) > 6) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      el.dataset._dragDx = "0";
+    }, true);
+
+    // למדוד גרירה כדי לחסום קליקים
+    el.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      el.dataset._dragDx = String(e.clientX - startX);
+    }, { passive: true });
   }
 
-  function init() {
-    selectors.forEach((sel) => {
-      document.querySelectorAll(sel).forEach(enableDragScroll);
+  function scan() {
+    SELECTORS.forEach((sel) => {
+      document.querySelectorAll(sel).forEach(initDrag);
     });
     
     // גם עבור custom elements של FUJI
     document.querySelectorAll("sht-carousel-wrapper").forEach((wrapper) => {
       const container = wrapper.querySelector(".scrollable-x, .js-carousel-items, .product-slideshow__items");
       if (container) {
-        enableDragScroll(container);
+        initDrag(container);
       }
     });
     
     // עבור product slideshow
     document.querySelectorAll("sht-prd-slideshow").forEach((slideshow) => {
-      const items = slideshow.querySelector(".product-slideshow__items, .js-product-slideshow");
+      const items = slideshow.querySelector(".product-slideshow__items, .js-product-slideshow, .product-slideshow__slider");
       if (items) {
-        enableDragScroll(items);
+        initDrag(items);
       }
     });
   }
 
   // run now + after theme sections reload
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", scan);
   } else {
-    init(); // run immediately if DOM already loaded
+    scan(); // run immediately if DOM already loaded
   }
-  document.addEventListener("shopify:section:load", init);
-  document.addEventListener("shopify:section:reorder", init);
+  document.addEventListener("shopify:section:load", scan);
+  document.addEventListener("shopify:section:reorder", scan);
+  window.addEventListener("resize", scan);
 })();
