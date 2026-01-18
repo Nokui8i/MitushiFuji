@@ -1031,9 +1031,13 @@ drawer[role="dialog"][id*="Size"] td:first-child {
 }
 
 /* Product Hotspots - התמונה הגדולה הראשית (עם hotspots) - פינות עגולות - כל המסכים */
-/* CSS אגרסיבי לתפוס את כל האלמנטים */
+/* CSS אגרסיבי לתפוס את כל האלמנטים - כולל הקונטיינר הראשי */
 .product-hotspots [id*="hotspotContainer"],
+.product-hotspots [id*="hotspotContainer"].p-relative,
+.product-hotspots .clm:has([id*="hotspotContainer"]),
 .product-hotspots [id*="hotspotContainer"] > *,
+.product-hotspots [id*="hotspotContainer"] sht-grid,
+.product-hotspots [id*="hotspotContainer"] .js-grid,
 .product-hotspots sht-grid,
 .product-hotspots .js-grid,
 .product-hotspots .js-grid .js-wrap-image-lazy,
@@ -1047,6 +1051,12 @@ drawer[role="dialog"][id*="Size"] td:first-child {
 .product-hotspots .media img,
 .product-hotspots sht-grid .media,
 .product-hotspots sht-grid img {
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+
+/* וודא שהקונטיינר הראשי עצמו עם פינות עגולות */
+.product-hotspots .clm:has([id*="hotspotContainer"]) {
   border-radius: 18px !important;
   overflow: hidden !important;
 }
