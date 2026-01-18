@@ -19,32 +19,15 @@
       // מצא את החלק הפנימי השחור (hotspot-inner-clickable)
       const innerClickable = button.querySelector('.hotspot-inner-clickable');
       
-      // אם אין חלק פנימי, הוסף event listener לכפתור עצמו
-      const clickTarget = innerClickable || button;
-      
-      // Add click handler עם capture phase כדי לעצור לפני handlers אחרים
-      clickTarget.addEventListener('click', function(e) {
-        // אם לחיצה על החלק הלבן (לא על החלק השחור), התעלם
+      // Add click handler - רק אם לחיצה על החלק השחור או על הכפתור עצמו (אם אין חלק שחור)
+      (innerClickable || button).addEventListener('click', function(e) {
+        // אם יש חלק פנימי, וודא שהלחיצה עליו
         if (innerClickable && e.target !== innerClickable && !innerClickable.contains(e.target)) {
+          // לחיצה על החלק הלבן - התעלם
           return;
         }
         
-        // העבר את ה-event לכפתור
-        const buttonEvent = new MouseEvent('click', {
-          bubbles: true,
-          cancelable: true,
-          view: window,
-          detail: e.detail
-        });
-        button.dispatchEvent(buttonEvent);
-        
-        // עצור את ה-event המקורי
-        e.preventDefault();
-        e.stopPropagation();
-      }, true);
-      
-      // Add click handler לכפתור עצמו (עכשיו רק החלק השחור מפעיל אותו)
-      button.addEventListener('click', function(e) {
+        // עכשיו מטפלים בלחיצה על החלק השחור או על הכפתור
         // בדסקטופ - מעביר ישר לעמוד המוצר
         if (!isMobile()) {
           e.preventDefault();
