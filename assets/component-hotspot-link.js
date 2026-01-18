@@ -16,7 +16,34 @@
       let clickCount = 0;
       let clickTimer = null;
       
+      // מצא את החלק הפנימי השחור (hotspot-inner-clickable)
+      const innerClickable = button.querySelector('.hotspot-inner-clickable');
+      
+      // אם אין חלק פנימי, הוסף event listener לכפתור עצמו
+      const clickTarget = innerClickable || button;
+      
       // Add click handler עם capture phase כדי לעצור לפני handlers אחרים
+      clickTarget.addEventListener('click', function(e) {
+        // אם לחיצה על החלק הלבן (לא על החלק השחור), התעלם
+        if (innerClickable && e.target !== innerClickable && !innerClickable.contains(e.target)) {
+          return;
+        }
+        
+        // העבר את ה-event לכפתור
+        const buttonEvent = new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+          detail: e.detail
+        });
+        button.dispatchEvent(buttonEvent);
+        
+        // עצור את ה-event המקורי
+        e.preventDefault();
+        e.stopPropagation();
+      }, true);
+      
+      // Add click handler לכפתור עצמו (עכשיו רק החלק השחור מפעיל אותו)
       button.addEventListener('click', function(e) {
         // בדסקטופ - מעביר ישר לעמוד המוצר
         if (!isMobile()) {

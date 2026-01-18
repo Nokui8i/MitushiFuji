@@ -1077,6 +1077,25 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     opacity: 0 !important;
   }
 }
+
+/* Product Hotspots - רק החלק הפנימי השחור יגיב ללחיצה */
+.product-hotspots .js-hotspot-link.hotspot-item {
+  pointer-events: none !important; /* הכפתור עצמו לא מגיב */
+  cursor: default !important;
+}
+
+/* החלק הפנימי השחור - רק הוא יגיב */
+.product-hotspots .hotspot-inner-clickable {
+  width: 12px !important;
+  height: 12px !important;
+  background: black !important;
+  border-radius: 50% !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 10 !important;
+  flex-shrink: 0 !important;
+}
 /* CSS אגרסיבי לתפוס את כל האלמנטים */
 .product-hotspots [id*="hotspotContainer"],
 .product-hotspots [id*="hotspotContainer"] > *,
