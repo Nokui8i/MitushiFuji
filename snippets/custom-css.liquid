@@ -737,4 +737,54 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   height: 100% !important;
   aspect-ratio: 1 / 1 !important;
 }
+
+/* ===== FEATURED PRODUCT CAROUSEL - Bigger Cards on Desktop ===== */
+/* הגדלת הכרטיסים בדסקטופ + 1:1 + שיפור טקסט */
+
+@media (min-width: 990px) {
+  /* וודא שהכרטיסים 1:1 בדסקטופ */
+  .fpc .card__media {
+    aspect-ratio: 1 / 1 !important;
+    width: 100% !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  .fpc .card__media img,
+  .fpc .product__image-first img,
+  .fpc .product__image-second img,
+  .fpc .js-image-lazy {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+
+  /* ריווח טוב יותר בין תמונה לטקסט */
+  .fpc .card__content--outer,
+  .fpc .card__content {
+    padding-top: 16px !important;
+  }
+
+  /* הגדלת כותרת המוצר בדסקטופ */
+  .fpc .card__heading,
+  .fpc .card__heading a {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+  }
+
+  /* הגדלת המחיר בדסקטופ */
+  .fpc .price,
+  .fpc .product-price {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    margin-top: 8px !important;
+  }
+
+  /* ריווח טוב יותר בין אלמנטים */
+  .fpc .card__content-vendor {
+    margin-bottom: 8px !important;
+  }
+}
 </style>
