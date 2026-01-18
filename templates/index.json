@@ -92,7 +92,7 @@
           "type": "statistic",
           "settings": {
             "number": "100000",
-            "suffix": "",
+            "suffix": "+",
             "label": "HAPPY ANIME FANS",
             "description": ""
           }
@@ -115,9 +115,9 @@
         }
       },
       "block_order": [
-        "statistic_CamanL",
         "hotspot_VbDkbd",
-        "hotspot_RVRDyE"
+        "hotspot_RVRDyE",
+        "statistic_CamanL"
       ],
       "settings": {
         "color_scheme": "scheme-1",
