@@ -279,14 +279,18 @@
 
 /* === SIZE SLIDER (Variant Selector) === */
 /* סליידר אופקי לכפתורי המידות - גלילה/Swipe */
+/* פעיל רק כשה-setting "Enable scroll for variant buttons" מופעל ב-Theme Editor */
 
-/* הקונטיינר של ה-variant selector - מאפשר גלילה */
-.product__variants--radios {
+/* הקונטיינר של ה-variant selector - מאפשר גלילה (רק כשה-setting דולק) */
+.variant-selector--scroll.product__variants--radios,
+.variant-selector--scroll sht-variant-radios.product__variants--radios {
   overflow-x: visible !important;
 }
 
-/* ה-fieldset שמכיל את הכפתורים - גלילה אופקית */
-fieldset.form__fields.product-option.js-variant-radio-container {
+/* ה-fieldset שמכיל את הכפתורים - גלילה אופקית (רק כשה-setting דולק) */
+.variant-selector--scroll fieldset.form__fields.product-option.js-variant-radio-container,
+.variant-selector--scroll .product__variants--radios fieldset.form__fields.product-option.js-variant-radio-container,
+.variant-selector--scroll sht-variant-radios fieldset.form__fields.product-option.js-variant-radio-container {
   overflow-x: auto !important;
   overflow-y: hidden !important;
   -webkit-overflow-scrolling: touch !important;
@@ -295,36 +299,49 @@ fieldset.form__fields.product-option.js-variant-radio-container {
   gap: 10px !important;
   padding-bottom: 6px !important;
   padding-right: 0 !important;
+  max-width: 100% !important;
 }
 
-/* הרשימה עם הכפתורים - ללא wrap */
-fieldset.form__fields.product-option.js-variant-radio-container ul {
+/* הרשימה עם הכפתורים - ללא wrap (רק כשה-setting דולק) */
+.variant-selector--scroll fieldset.form__fields.product-option.js-variant-radio-container ul,
+.variant-selector--scroll .product__variants--radios fieldset.form__fields.product-option.js-variant-radio-container ul,
+.variant-selector--scroll sht-variant-radios fieldset.form__fields.product-option.js-variant-radio-container ul {
   flex-wrap: nowrap !important;
   white-space: nowrap !important;
   gap: 10px !important;
+  display: flex !important;
+  overflow-x: visible !important;
 }
 
 /* הסתר scrollbar (אופציונלי - נראה נקי יותר) */
-fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar {
+.variant-selector--scroll fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar,
+.variant-selector--scroll .product__variants--radios fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar,
+.variant-selector--scroll sht-variant-radios fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar {
   height: 4px !important;
 }
 
-fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-track {
+.variant-selector--scroll fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-track,
+.variant-selector--scroll .product__variants--radios fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-track,
+.variant-selector--scroll sht-variant-radios fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.05) !important;
   border-radius: 2px !important;
 }
 
-fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-thumb {
+.variant-selector--scroll fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-thumb,
+.variant-selector--scroll .product__variants--radios fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-thumb,
+.variant-selector--scroll sht-variant-radios fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.2) !important;
   border-radius: 2px !important;
 }
 
-fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-thumb:hover {
+.variant-selector--scroll fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-thumb:hover,
+.variant-selector--scroll .product__variants--radios fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-thumb:hover,
+.variant-selector--scroll sht-variant-radios fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.3) !important;
 }
 
 /* אם רוצים להסתיר לגמרי את ה-scrollbar (uncomment): */
-/* fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar {
+/* .variant-selector--scroll fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar {
   display: none !important;
 } */
 </style>

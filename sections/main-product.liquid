@@ -256,7 +256,7 @@
               <div class="js-variant-picker" id="variantPicker-{{- section.id }}">
                 {%- unless product.has_only_default_variant -%}
                   {%- if block.settings.variant_picker_type == 'button' -%}
-                    <sht-variant-radios class="product__variants--radios d-flex fd-column gap-24 no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}">
+                    <sht-variant-radios class="product__variants--radios d-flex fd-column gap-24 no-js-hidden {% if block.settings.enable_variant_scroll %}variant-selector--scroll{% endif %}" data-section="{{ section.id }}" data-url="{{ product.url }}">
                       {%- for option in product.options_with_values -%}
                         {% assign index = forloop.index | minus: 1 %}
                         <fieldset class="form__fields product-option js-variant-radio-container d-flex fw-wrap p-zero m-zero b-zero">
@@ -1252,6 +1252,13 @@
           "label": "t:general.show_variant_swatches",
           "info": "t:general.configure_variant_swatches_info",
           "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_variant_scroll",
+          "label": "Enable scroll for variant buttons (slider)",
+          "info": "When enabled, variant buttons become a horizontal scrollable slider",
+          "default": false
         }
       ]
     },
