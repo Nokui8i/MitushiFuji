@@ -703,32 +703,20 @@ drawer[role="dialog"][id*="Size"] td:first-child {
 /* ===== FEATURED PRODUCT CAROUSEL - Container Adapts to Image ===== */
 /* הקונטיינר מתאים את עצמו לתמונה (Adapt to image) - בלי פסים ריקים */
 
-/* מובייל: פינות עגולות וריווח טקסט */
-.fpc .card__media {
-  border-radius: 18px !important;
-  overflow: hidden !important;
-}
-
+/* ===== מובייל: פינות עגולות וריווח טקסט - CSS אגרסיבי ===== */
+/* כל המסכים - גם מובייל */
+.fpc .card__media,
+.fpc .product-card__media,
+.fpc .card__media a,
 .fpc .product__image-first,
-.fpc .product__image-second {
-  border-radius: 18px !important;
-  overflow: hidden !important;
-}
-
+.fpc .product__image-second,
 .fpc .card__media .js-wrap-image-lazy,
 .fpc .card__media .animation,
-.fpc .card__media sht-image-atf {
-  border-radius: 18px !important;
-  overflow: hidden !important;
-}
-
+.fpc .card__media sht-image-atf,
 .fpc .card__media img,
 .fpc .product__image-first img,
 .fpc .product__image-second img,
-.fpc .js-image-lazy {
-  border-radius: 18px !important;
-}
-
+.fpc .js-image-lazy,
 .fpc .product-card,
 .fpc .product {
   border-radius: 18px !important;
@@ -736,16 +724,27 @@ drawer[role="dialog"][id*="Size"] td:first-child {
 }
 
 .fpc .card__media a {
-  border-radius: 18px !important;
-  overflow: hidden !important;
   display: block !important;
 }
 
-/* ריווח קטן מאוד בין תמונה לטקסט במובייל */
+/* ריווח קטן מאוד בין תמונה לטקסט - כל המסכים */
 .fpc .card__content--outer,
 .fpc .card__content {
   padding-top: 6px !important;
   margin-top: 0 !important;
+  text-align: center !important;
+}
+
+/* וודא שהטקסט מיושר למרכז - כל המסכים */
+.fpc .card__heading,
+.fpc .card__heading a {
+  text-align: center !important;
+}
+
+.fpc .price,
+.fpc .product-price {
+  text-align: center !important;
+  justify-content: center !important;
 }
 
 @media (min-width: 990px) {
