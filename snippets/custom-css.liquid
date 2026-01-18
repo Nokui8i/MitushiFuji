@@ -133,6 +133,52 @@
   overflow: hidden;
 }
 
+/* ===== מובייל: אפשר swipe על התמונות בעמוד המוצר ===== */
+/* מאפשר swipe במובייל להעברת תמונות */
+@media (max-width: 989px) {
+  /* הקונטיינר של התמונות - מאפשר swipe */
+  .product-slideshow__items,
+  .product-slideshow__slider,
+  .product-gallery-carousel,
+  .js-product-slideshow,
+  .js-carousel-items {
+    touch-action: pan-x !important; /* מאפשר swipe אופקי */
+    -webkit-overflow-scrolling: touch !important; /* smooth scrolling ב-iOS */
+    overflow-x: auto !important; /* מאפשר scroll אופקי */
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory !important; /* snap לתמונות */
+    -webkit-scroll-snap-type: x mandatory !important;
+  }
+
+  /* כל תמונה - snap point */
+  .product-slideshow__item,
+  .js-product-slideshow-item,
+  .js-carousel-item {
+    scroll-snap-align: start !important;
+    -webkit-scroll-snap-align: start !important;
+    touch-action: pan-x !important;
+    pointer-events: auto !important; /* מאפשר touch */
+  }
+
+  /* וודא שהתמונות עצמן לא חוסמות את ה-touch */
+  .product-slideshow__item img,
+  .product-slideshow__item video,
+  .product-slideshow__item sht-prd-slideshow-itm {
+    touch-action: pan-x !important;
+    pointer-events: auto !important;
+    user-select: none !important; /* מונע selection במקום swipe */
+    -webkit-user-select: none !important;
+  }
+
+  /* הקונטיינר הראשי - מאפשר swipe */
+  .product__media-wrapper,
+  .product-slideshow {
+    touch-action: pan-x !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+  }
+}
+
 .js-product-slideshow-item {
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
