@@ -86,6 +86,10 @@
                             <div class="statistics-number">
                               <span class="js-number-animate" data-target="{{ block.settings.number }}" data-duration="{{ section.settings.animation_duration | default: 1000 }}">0</span>{% if block.settings.suffix != blank %}<span class="statistics-suffix">{{ block.settings.suffix }}</span>{% endif %}
                             </div>
+                          {% elsif block.settings.suffix != blank %}
+                            <div class="statistics-number">
+                              <span class="statistics-suffix">{{ block.settings.suffix }}</span>
+                            </div>
                           {% endif %}
                           
                           {% if block.settings.label != blank %}
@@ -135,8 +139,8 @@
   }
   
   .product-hotspots-with-statistics .statistics-number {
-    font-size: 96px;
-    font-weight: 800;
+    font-size: 120px;
+    font-weight: 900;
     line-height: 1.1;
     margin-bottom: 20px;
     background: linear-gradient(to right, #8B0000, #000000);
@@ -148,13 +152,13 @@
   }
   
   .product-hotspots-with-statistics .statistics-suffix {
-    font-size: 96px;
-    font-weight: 800;
+    font-size: 120px;
+    font-weight: 900;
     background: linear-gradient(to right, #8B0000, #000000);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-left: 4px;
+    margin-left: 6px;
     display: inline-block;
   }
   
@@ -184,11 +188,11 @@
   
   @media (max-width: 749px) {
     .product-hotspots-with-statistics .statistics-number {
-      font-size: 64px;
+      font-size: 80px;
     }
     
     .product-hotspots-with-statistics .statistics-suffix {
-      font-size: 64px;
+      font-size: 80px;
     }
     
     .product-hotspots-with-statistics .statistics-item {
