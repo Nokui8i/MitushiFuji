@@ -124,38 +124,6 @@
         "badge_shape": "badge--star"
       }
     },
-    "statistics_home": {
-      "type": "statistics",
-      "blocks": {
-        "stat_1": {
-          "type": "statistic",
-          "settings": {
-            "number": "100000",
-            "suffix": "+",
-            "label": "HAPPY ANIME FANS",
-            "description": ""
-          }
-        }
-      },
-      "block_order": [
-        "stat_1"
-      ],
-      "settings": {
-        "color_scheme": "scheme-1",
-        "subheading": "",
-        "heading": "",
-        "description": "",
-        "content_align": "ta-center",
-        "show_navigation": false,
-        "animation_duration": 3000,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false,
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--top-left",
-        "badge_shape": "badge--star"
-      }
-    },
     "collection-list": {
       "type": "collection-list",
       "custom_css": [
