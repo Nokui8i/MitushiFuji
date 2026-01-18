@@ -135,10 +135,26 @@
 
 /* מובייל: מאפשר scroll אופקי */
 @media (max-width: 989px) {
-  .product-slideshow__items {
+  .product-slideshow__items,
+  .product-slideshow__items.js-product-slideshow,
+  .js-carousel-items.product-slideshow__items {
     overflow-x: auto !important; /* מאפשר scroll אופקי במובייל */
     overflow-y: hidden !important;
     -webkit-overflow-scrolling: touch !important; /* smooth scrolling ב-iOS */
+    scroll-behavior: smooth !important;
+  }
+  
+  /* הסר disable-scrollbars אם יש */
+  .product-slideshow__items.disable-scrollbars,
+  .scrollable-x.disable-scrollbars {
+    scrollbar-width: thin !important; /* Firefox */
+    -ms-overflow-style: auto !important; /* IE/Edge */
+  }
+  
+  .product-slideshow__items.disable-scrollbars::-webkit-scrollbar,
+  .scrollable-x.disable-scrollbars::-webkit-scrollbar {
+    display: block !important; /* Chrome/Safari - show scrollbar */
+    height: 4px !important;
   }
 }
 
