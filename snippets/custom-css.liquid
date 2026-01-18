@@ -47,11 +47,9 @@
   height: 520px !important;
 }
 
-/* Prevent product media area from changing height between images */
-/* כפה aspect ratio קבוע על התמונה הראשית כדי שהקונטיינר לא ישנה גובה */
-.product-slideshow__items .product-slideshow__item sht-prd-slideshow-itm {
-  aspect-ratio: 1 / 1 !important;   /* ריבוע - הכי יציב. אפשר לשנות ל-4/5, 3/4 וכו' */
-}
+/* Allow MEDIA RATIO to work - use the --ratio CSS variable from theme */
+/* מאפשר ל-MEDIA RATIO לעבוד - משתמש ב-CSS variable מהתבנית */
+/* ה-aspect-ratio מוגדר דרך ה-Theme Editor ולא נכפה כאן */
 
 /* Main product image: fit image inside fixed container */
 /* התמונה הראשית - תמיד תראה בשלמותה בלי חיתוך או מתיחה */
