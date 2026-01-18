@@ -199,18 +199,7 @@
     "17687530853fdb3082": {
       "type": "_blocks",
       "settings": {}
-    }
-  },
-  "order": [
-    "image_banner_TnVcW9",
-    "featured_product_carousel_EaipjV",
-    "product_hotspots_znJJMA",
-    "collection-list",
-    "statistics_home",
-    "video_banner_xE4peK",
-    "17687530853fdb3082"
-  ],
-  "sections": {
+    },
     "statistics_home": {
       "type": "statistics",
       "settings": {
@@ -247,5 +236,14 @@
         "stat_2"
       ]
     }
-  }
+  },
+  "order": [
+    "image_banner_TnVcW9",
+    "featured_product_carousel_EaipjV",
+    "product_hotspots_znJJMA",
+    "collection-list",
+    "statistics_home",
+    "video_banner_xE4peK",
+    "17687530853fdb3082"
+  ]
 }
