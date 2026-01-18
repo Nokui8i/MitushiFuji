@@ -122,6 +122,42 @@
 </div>
 
 <style>
+  /* Blurred and darkened background effect */
+  .product-hotspots-with-blurred-background {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .product-hotspots-with-blurred-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    background: inherit;
+    filter: blur(20px) brightness(0.3);
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  
+  .product-hotspots-with-blurred-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  
+  .product-hotspots-with-blurred-background > * {
+    position: relative;
+    z-index: 1;
+  }
+  
   .product-hotspots-with-statistics .statistics-carousel {
     max-width: 100%;
     margin: 0 auto;
