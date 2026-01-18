@@ -413,7 +413,7 @@ sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__header .js-dialog-close-bt
 sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body {
   flex: 1 !important;
   overflow-y: auto !important;
-  overflow-x: hidden !important;
+  overflow-x: auto !important; /* גם אופקית - חשוב למובייל */
   -webkit-overflow-scrolling: touch !important;
   padding: 20px 0 0 0 !important;
   margin: 0 !important;
@@ -501,8 +501,8 @@ sht-dialog.sht-dialog[id*="dialogSizeGuide"] tbody tr:hover {
   background: rgba(0, 0, 0, 0.02) !important;
 }
 
-/* ===== MOBILE: Horizontal Scroll for Wide Tables ===== */
-/* במובייל - גלילה אופקית אם הטבלה רחבה */
+/* ===== MOBILE: Full Scroll Support (Like AINIQI) ===== */
+/* במובייל - גלילה מלאה (אנכית + אופקית) כמו AINIQI */
 
 @media (max-width: 768px) {
   /* Modal smaller on mobile */
@@ -514,16 +514,39 @@ sht-dialog.sht-dialog[id*="dialogSizeGuide"] tbody tr:hover {
 
   sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__content {
     padding: 20px !important;
+    max-height: 85vh !important;
+    overflow: hidden !important; /* הגלילה תהיה בתוך ה-body */
   }
 
-  /* Allow horizontal scroll for wide tables */
+  /* Body - Full scroll support (vertical + horizontal) */
   sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body {
+    max-height: calc(85vh - 80px) !important; /* פחות מקום ל-header */
+    overflow-y: auto !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    padding: 0 !important; /* הסר padding כדי שהטבלה תיגע בקצוות */
+    margin: 0 !important;
   }
 
+  /* Content wrapper - מאפשר גלילה חלקה */
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body .rte {
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Table - גלילה אופקית במובייל */
   sht-dialog.sht-dialog[id*="dialogSizeGuide"] table {
-    min-width: 560px !important;
+    min-width: 520px !important; /* גורם לגלילה אופקית אם המסך צר */
+    width: max-content !important; /* הטבלה תתאים את עצמה לתוכן */
+    margin: 0 !important;
+  }
+
+  /* Table cells - no wrap כדי שהעמודות לא ישברו */
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] th,
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] td {
+    white-space: nowrap !important; /* שלא ישבור עמודות לשורות */
+    padding: 12px 8px !important;
   }
 
   /* Header smaller on mobile */
@@ -536,9 +559,19 @@ sht-dialog.sht-dialog[id*="dialogSizeGuide"] tbody tr:hover {
     font-size: 13px !important;
   }
 
-  sht-dialog.sht-dialog[id*="dialogSizeGuide"] th,
-  sht-dialog.sht-dialog[id*="dialogSizeGuide"] td {
-    padding: 12px 8px !important;
+  /* Scrollbar styling for mobile */
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body::-webkit-scrollbar {
+    width: 4px !important;
+    height: 4px !important;
+  }
+
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-radius: 2px !important;
   }
 }
 

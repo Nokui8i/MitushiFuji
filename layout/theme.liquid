@@ -224,5 +224,70 @@
         });
       })();
     </script>
+    <script>
+      /* Size Chart Mobile Scroll Enhancement - Like AINIQI */
+      /* משפר את הגלילה במובייל ל-Size Chart */
+      document.addEventListener('DOMContentLoaded', function() {
+        // Function to enhance size chart scrolling on mobile
+        const enhanceSizeChartScroll = () => {
+          const sizeChartDialogs = document.querySelectorAll('sht-dialog[id*="dialogSizeGuide"]');
+          
+          sizeChartDialogs.forEach(dialog => {
+            const dialogBody = dialog.querySelector('.dialog__body');
+            const tables = dialog.querySelectorAll('table');
+            
+            if (dialogBody && tables.length > 0) {
+              // Ensure body has proper overflow for mobile
+              if (window.innerWidth <= 768) {
+                dialogBody.style.overflowX = 'auto';
+                dialogBody.style.overflowY = 'auto';
+                dialogBody.style.webkitOverflowScrolling = 'touch';
+                
+                // Ensure tables can scroll horizontally
+                tables.forEach(table => {
+                  if (table.offsetWidth > dialogBody.offsetWidth) {
+                    table.style.minWidth = '520px';
+                    table.style.width = 'max-content';
+                  }
+                  
+                  // Prevent cell wrapping
+                  const cells = table.querySelectorAll('th, td');
+                  cells.forEach(cell => {
+                    cell.style.whiteSpace = 'nowrap';
+                  });
+                });
+              }
+            }
+          });
+        };
+        
+        // Run on load
+        enhanceSizeChartScroll();
+        
+        // Run when dialogs are opened (mutation observer)
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'hidden') {
+              const target = mutation.target;
+              if (target.id && target.id.includes('dialogSizeGuide')) {
+                setTimeout(enhanceSizeChartScroll, 100);
+              }
+            }
+          });
+        });
+        
+        // Observe all size chart dialogs
+        document.querySelectorAll('sht-dialog[id*="dialogSizeGuide"]').forEach(dialog => {
+          observer.observe(dialog, { attributes: true });
+        });
+        
+        // Also run on window resize
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(enhanceSizeChartScroll, 250);
+        });
+      });
+    </script>
   </body>
 </html>
