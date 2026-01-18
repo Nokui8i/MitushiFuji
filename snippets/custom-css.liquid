@@ -879,6 +879,18 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     min-height: 0 !important;
   }
 
+  /* הקטנת גובה אזור התמונה (הכי חשוב) */
+  .product-hotspots .media,
+  .product-hotspots .media > img,
+  .product-hotspots .media img,
+  .product-hotspots .js-grid-image,
+  .product-hotspots .js-grid .media,
+  .product-hotspots .js-grid img,
+  .product-hotspots sht-grid .media,
+  .product-hotspots [id*="hotspotContainer"] .media {
+    max-height: 620px !important;  /* נסה 520/560/600/620 */
+  }
+
   /* להפסיק לכפות h-100 על השכבות הפנימיות */
   .product-hotspots [class*="h-100"],
   .product-hotspots [id*="hotspotContainer"] [class*="h-100"],
