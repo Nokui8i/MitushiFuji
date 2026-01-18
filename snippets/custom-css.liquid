@@ -221,4 +221,59 @@
     column-gap: 80px !important;
   }
 }
+
+/* === ACCORDION STYLE (Description section) === */
+/* עיצוב Accordion כמו בתמונה - קווים דקים + חץ עגול מימין */
+
+/* קווים דקים למעלה/למטה */
+.accordion__item.js-accordion-item {
+  border-top: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* כותרת Accordion - space-between */
+.accordion__header .js-accordion-trigger {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 18px 0 !important;
+  font-weight: 600 !important;
+}
+
+/* אייקון עגול מימין (החץ) */
+.accordion__toggle {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 999px !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  margin-left: 12px !important;
+}
+
+/* האייקון הפנימי (plus/minus) */
+.accordion__toggle .btn-icon {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+}
+
+/* הסר padding מ-button כדי שהכל יהיה מיושר */
+.accordion__header .js-accordion-trigger.pt-16.pb-16 {
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+}
+
+/* הסר padding מ-accordion__item כדי שהקווים יהיו צמודים */
+.accordion__item.js-accordion-item.pt-16.pb-16 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
 </style>
