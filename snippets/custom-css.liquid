@@ -752,16 +752,37 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     background: transparent !important;
     border-radius: 18px !important; /* פינות עגולות */
   }
+
+  /* גם ה-product-card עצמו - פינות עגולות */
+  .fpc .product-card,
+  .fpc .product {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  /* הקישור בתוך card__media - גם פינות עגולות */
+  .fpc .card__media a {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    display: block !important;
+  }
+
+  /* ריווח קטן יותר בין תמונה לטקסט - הטקסט קרוב לקונטיינר */
+  .fpc .card__content--outer,
+  .fpc .card__content {
+    padding-top: 8px !important; /* היה 16px - עכשיו 8px */
+    margin-top: 0 !important;
+  }
 }
 
 /* ===== FEATURED PRODUCT CAROUSEL - Bigger Cards on Desktop ===== */
 /* הגדלת הכרטיסים בדסקטופ + שיפור טקסט */
 
 @media (min-width: 990px) {
-  /* ריווח טוב יותר בין תמונה לטקסט */
+  /* ריווח קטן יותר בין תמונה לטקסט - הטקסט קרוב לקונטיינר */
   .fpc .card__content--outer,
   .fpc .card__content {
-    padding-top: 16px !important;
+    padding-top: 8px !important; /* היה 16px - עכשיו 8px קרוב יותר */
   }
 
   /* הגדלת כותרת המוצר בדסקטופ */
