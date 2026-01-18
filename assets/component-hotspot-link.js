@@ -40,9 +40,23 @@
         }, 2000);
         
         if (clickCount === 1) {
-          // לחיצה ראשונה - מציגה פרטים (tooltip), לא מעבירה
+          // לחיצה ראשונה - מציגה פרטים (tooltip), לא מעבירה ולא מפעילה carousel
           e.preventDefault();
           e.stopPropagation();
+          e.stopImmediatePropagation();
+          
+          // מונע הפעלת carousel בצד - מוצא את ה-carousel trigger ומבטל אותו
+          const carouselTrigger = button.closest('sht-carousel-trig');
+          if (carouselTrigger) {
+            const carouselId = carouselTrigger.getAttribute('data-carousel-target');
+            if (carouselId) {
+              const carousel = document.getElementById(carouselId);
+              if (carousel) {
+                // מונע שינוי ב-carousel - שומר את המצב הנוכחי
+                carousel.dataset.hotspotBlocked = 'true';
+              }
+            }
+          }
           
           // מציג את ה-tooltip במובייל
           const tooltip = button.querySelector('.js-tooltip-content');
@@ -74,6 +88,16 @@
               setTimeout(function() {
                 tooltip.style.display = 'none';
                 tooltip.style.visibility = 'hidden';
+                // הסר את החסימה אחרי שהכל נסגר
+                if (carouselTrigger) {
+                  const carouselId = carouselTrigger.getAttribute('data-carousel-target');
+                  if (carouselId) {
+                    const carousel = document.getElementById(carouselId);
+                    if (carousel) {
+                      delete carousel.dataset.hotspotBlocked;
+                    }
+                  }
+                }
               }, 300);
             }, 3000);
           }
