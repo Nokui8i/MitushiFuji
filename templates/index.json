@@ -195,6 +195,10 @@
         "badge_shape": "badge--star",
         "video_banner_link": ""
       }
+    },
+    "17687530853fdb3082": {
+      "type": "_blocks",
+      "settings": {}
     }
   },
   "order": [
@@ -202,6 +206,7 @@
     "featured_product_carousel_EaipjV",
     "product_hotspots_znJJMA",
     "collection-list",
-    "video_banner_xE4peK"
+    "video_banner_xE4peK",
+    "17687530853fdb3082"
   ]
 }
