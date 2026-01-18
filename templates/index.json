@@ -206,7 +206,46 @@
     "featured_product_carousel_EaipjV",
     "product_hotspots_znJJMA",
     "collection-list",
+    "statistics_home",
     "video_banner_xE4peK",
     "17687530853fdb3082"
-  ]
+  ],
+  "sections": {
+    "statistics_home": {
+      "type": "statistics",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "heading": "",
+        "subheading": "",
+        "description": "",
+        "content_align": "ta-center",
+        "items_per_row": 3,
+        "animation_duration": 2000,
+        "remove_padding_top": false,
+        "remove_padding_bottom": false
+      },
+      "blocks": {
+        "stat_1": {
+          "type": "statistic",
+          "settings": {
+            "number": "100000",
+            "suffix": "+",
+            "label": "HAPPY ANIME FANS"
+          }
+        },
+        "stat_2": {
+          "type": "statistic",
+          "settings": {
+            "number": "875.91",
+            "suffix": "+",
+            "label": "Some Metric"
+          }
+        }
+      },
+      "block_order": [
+        "stat_1",
+        "stat_2"
+      ]
+    }
+  }
 }
