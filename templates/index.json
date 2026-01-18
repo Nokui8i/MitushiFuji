@@ -88,6 +88,15 @@
     "product_hotspots_znJJMA": {
       "type": "product-hotspots",
       "blocks": {
+        "statistic_CamanL": {
+          "type": "statistic",
+          "settings": {
+            "number": "100000",
+            "suffix": "",
+            "label": "HAPPY ANIME FANS",
+            "description": ""
+          }
+        },
         "hotspot_VbDkbd": {
           "type": "hotspot",
           "settings": {
@@ -106,6 +115,7 @@
         }
       },
       "block_order": [
+        "statistic_CamanL",
         "hotspot_VbDkbd",
         "hotspot_RVRDyE"
       ],
@@ -115,6 +125,8 @@
         "heading": "",
         "description": "",
         "show_navigation": true,
+        "show_statistics_navigation": true,
+        "animation_duration": 2000,
         "remove_padding_top": false,
         "remove_padding_bottom": false,
         "image_hotspot": "shopify://shop_images/DSC00565.webp",
