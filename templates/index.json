@@ -65,7 +65,7 @@
         "items_per_row_on_desktop": "4",
         "content_align": "ta-center",
         "show_navigation": true,
-        "remove_padding_top": true,
+        "remove_padding_top": false,
         "remove_padding_bottom": true,
         "product_list": [
           "the-mark-of-ash",
@@ -115,7 +115,7 @@
         "heading": "",
         "description": "",
         "show_navigation": true,
-        "remove_padding_top": true,
+        "remove_padding_top": false,
         "remove_padding_bottom": false,
         "image_hotspot": "shopify://shop_images/ChatGPT_Image_Jan_14_2026_05_58_17_PM.png",
         "badge_text": "",
