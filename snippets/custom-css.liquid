@@ -868,34 +868,29 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     flex: 0 0 50% !important;
   }
 
-  /* הקטנת גובה אזור התמונה (הכי חשוב) */
-  .product-hotspots .media,
-  .product-hotspots .media > img,
-  .product-hotspots .media img,
-  .product-hotspots .js-grid-image,
-  .product-hotspots .js-grid .media,
-  .product-hotspots .js-grid img,
-  .product-hotspots sht-grid .media,
-  .product-hotspots [id*="hotspotContainer"] .media {
-    max-height: 600px !important;  /* נסה 520/560/600 */
+  /* ===== הפתרון העיקרי: שבירת h-100 והחלפה ב-max-height ===== */
+  /* זה הקונטיינר שמחזיק את כל ה-hotspot grid (כרגע h-100) - שובר את הגובה */
+  .product-hotspots sht-grid,
+  .product-hotspots .js-grid,
+  .product-hotspots [id*="hotspotContainer"] sht-grid,
+  .product-hotspots [id*="hotspotContainer"] .js-grid {
+    height: auto !important; /* שובר את h-100 */
+    max-height: 620px !important;   /* תשנה: 520 / 580 / 650 */
+    min-height: 0 !important;
   }
 
-  /* אם התמה נותנת גובה מינימלי ענק */
-  .product-hotspots .media,
-  .product-hotspots .js-grid,
-  .product-hotspots sht-grid,
-  .product-hotspots [id*="hotspotContainer"] {
-    min-height: 0 !important;
+  /* להפסיק לכפות h-100 על השכבות הפנימיות */
+  .product-hotspots [class*="h-100"],
+  .product-hotspots [id*="hotspotContainer"] [class*="h-100"],
+  .product-hotspots sht-grid[class*="h-100"],
+  .product-hotspots .js-grid[class*="h-100"] {
     height: auto !important;
   }
 
   /* הקונטיינר הראשי של התמונה - מתאים את עצמו לתמונה */
-  .product-hotspots [id*="hotspotContainer"],
-  .product-hotspots sht-grid,
-  .product-hotspots .js-grid {
-    width: 100% !important;
+  .product-hotspots [id*="hotspotContainer"] {
     height: auto !important;
-    max-height: 600px !important;
+    max-height: 620px !important;
     position: relative !important;
   }
 
@@ -905,7 +900,7 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   .product-hotspots .js-grid .animation {
     width: 100% !important;
     height: auto !important;
-    max-height: 600px !important;
+    max-height: 620px !important;
     aspect-ratio: var(--ratio) !important;
   }
 
@@ -914,14 +909,22 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   .product-hotspots .js-grid .js-image-lazy,
   .product-hotspots .js-grid .media,
   .product-hotspots .js-grid-image,
-  .product-hotspots .media img {
+  .product-hotspots .media img,
+  .product-hotspots [id*="hotspotContainer"] img {
     width: 100% !important;
     height: 100% !important;
-    max-height: 600px !important;
     object-fit: contain !important; /* כמו product page */
     object-position: center !important;
     background: transparent !important;
     display: block !important;
+  }
+
+  /* אם התמה נותנת גובה מינימלי ענק */
+  .product-hotspots .media,
+  .product-hotspots .js-grid,
+  .product-hotspots sht-grid,
+  .product-hotspots [id*="hotspotContainer"] {
+    min-height: 0 !important;
   }
 
   /* Product Hotspots - הקונטיינר של התמונה מתאים את עצמו לתמונה */
