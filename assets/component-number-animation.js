@@ -2,16 +2,19 @@
 // שימוש: הוסף class="js-number-animate" לאלמנט עם המספר
 // אפשר להוסיף data-target="100000" או שהקוד יקח את המספר מהטקסט
 (function() {
-  function animateNumber(element, target, duration = 2000) {
+  function animateNumber(element, target, duration = 1000) {
     const start = 0;
     const startTime = performance.now();
     const isDecimal = target.toString().includes('.') || target.toString().includes(',');
     
-    // שמור את הפורמט המקורי (פסיקים, נקודות, + וכו')
-    const originalText = element.textContent.trim();
-    const hasPlus = originalText.includes('+');
-    const hasComma = originalText.includes(',');
-    const hasDecimal = originalText.includes('.');
+      // שמור את הפורמט המקורי (פסיקים, נקודות, + וכו')
+      const originalText = element.textContent.trim();
+      const parentElement = element.parentElement;
+      const suffixElement = parentElement ? parentElement.querySelector('.statistics-suffix') : null;
+      const suffixText = suffixElement ? suffixElement.textContent.trim() : '';
+      const hasPlus = originalText.includes('+') || suffixText.includes('+');
+      const hasComma = originalText.includes(',');
+      const hasDecimal = originalText.includes('.');
     
     function formatNumber(num) {
       let formatted = num.toFixed(isDecimal ? 2 : 0);
@@ -28,11 +31,7 @@
         formatted = parts.join(hasComma && !hasDecimal ? ',' : '.');
       }
       
-      // הוסף + אם היה במקור
-      if (hasPlus) {
-        formatted += '+';
-      }
-      
+      // אל תוסיף + כאן - זה יבוא מה-suffix element
       return formatted;
     }
     
@@ -40,10 +39,12 @@
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
       
-      // Easing function (ease-out)
-      const easeOut = 1 - Math.pow(1 - progress, 3);
+      // Easing function (ease-out) - מהיר יותר
+      const easeOut = 1 - Math.pow(1 - progress, 2);
       const current = start + (target - start) * easeOut;
       
+      // עדכן רק את המספר, לא את ה-suffix
+      const suffix = element.dataset.suffix || '';
       element.textContent = formatNumber(current);
       
       if (progress < 1) {

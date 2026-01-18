@@ -209,7 +209,7 @@
         "description": "",
         "content_align": "ta-center",
         "show_navigation": true,
-        "animation_duration": 2000,
+        "animation_duration": 1000,
         "remove_padding_top": false,
         "remove_padding_bottom": false
       },

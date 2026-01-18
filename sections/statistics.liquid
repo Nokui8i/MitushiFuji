@@ -24,10 +24,7 @@
               <div class="statistics-item ta-center">
                 {% if block.settings.number != blank %}
                   <div class="statistics-number">
-                    <span class="js-number-animate" data-target="{{ block.settings.number }}" data-duration="{{ section.settings.animation_duration | default: 2000 }}">0</span>
-                    {% if block.settings.suffix != blank %}
-                      <span class="statistics-suffix">{{ block.settings.suffix }}</span>
-                    {% endif %}
+                    <span class="js-number-animate" data-target="{{ block.settings.number }}" data-duration="{{ section.settings.animation_duration | default: 1000 }}">0</span>{% if block.settings.suffix != blank %}<span class="statistics-suffix">{{ block.settings.suffix }}</span>{% endif %}
                   </div>
                 {% endif %}
                 
@@ -71,31 +68,36 @@
   }
   
   .statistics-number {
-    font-size: 64px;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 16px;
+    font-size: 96px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 20px;
     background: linear-gradient(to right, #8B0000, #000000);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    display: inline-block;
+    letter-spacing: -2px;
   }
   
   .statistics-suffix {
-    font-size: 64px;
-    font-weight: 700;
+    font-size: 96px;
+    font-weight: 800;
     background: linear-gradient(to right, #8B0000, #000000);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    margin-left: 4px;
+    display: inline-block;
   }
   
   .statistics-label {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    color: rgba(var(--color-foreground), 0.9);
   }
   
   .statistics-description {
@@ -115,15 +117,19 @@
   
   @media (max-width: 749px) {
     .statistics-number {
-      font-size: 48px;
+      font-size: 64px;
     }
     
     .statistics-suffix {
-      font-size: 48px;
+      font-size: 64px;
     }
     
     .statistics-item {
-      padding: 32px 20px;
+      padding: 40px 24px;
+    }
+    
+    .statistics-label {
+      font-size: 16px;
     }
   }
 </style>
@@ -188,9 +194,9 @@
       "type": "range",
       "id": "animation_duration",
       "label": "Animation duration (ms)",
-      "min": 1000,
-      "max": 5000,
-      "default": 2000,
+      "min": 500,
+      "max": 3000,
+      "default": 1000,
       "step": 100
     },
     {
