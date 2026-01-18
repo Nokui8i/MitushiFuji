@@ -17,7 +17,7 @@
       let clickTimer = null;
       
       // מצא את החלק הפנימי השחור (hotspot-inner-clickable)
-      const innerClickable = button.querySelector('.hotspot-inner-clickable');
+      let innerClickable = button.querySelector('.hotspot-inner-clickable');
       
       // אם אין חלק פנימי, צור אחד
       if (!innerClickable) {
@@ -30,7 +30,9 @@
       // Add click handler - רק אם לחיצה על החלק השחור
       innerClickable.addEventListener('click', function(e) {
         // עצור את ה-event כדי שלא יעבור לכפתור
+        e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
         
         // עכשיו מטפלים בלחיצה על החלק השחור
         // בדסקטופ - מעביר ישר לעמוד המוצר
@@ -126,11 +128,23 @@
             tooltip.style.setProperty('pointer-events', 'none', 'important');
             
             // Position tooltip near the button (above it)
-            const rect = button.getBoundingClientRect();
+            const rect = innerClickable.getBoundingClientRect();
             const tooltipHeight = tooltip.offsetHeight || 80;
-            tooltip.style.setProperty('left', '50%', 'important');
-            tooltip.style.setProperty('top', (rect.top - tooltipHeight - 10) + 'px', 'important');
-            tooltip.style.setProperty('transform', 'translateX(-50%)', 'important');
+            const viewportWidth = window.innerWidth;
+            
+            // במובייל - מיקום יחסי לחלק השחור
+            if (isMobile()) {
+              tooltip.style.setProperty('left', '50%', 'important');
+              tooltip.style.setProperty('top', (rect.top - tooltipHeight - 10) + 'px', 'important');
+              tooltip.style.setProperty('transform', 'translateX(-50%)', 'important');
+              tooltip.style.setProperty('max-width', '90vw', 'important');
+              tooltip.style.setProperty('left', Math.min(Math.max(rect.left + (rect.width / 2), 75), viewportWidth - 75) + 'px', 'important');
+              tooltip.style.setProperty('transform', 'translateX(-50%)', 'important');
+            } else {
+              tooltip.style.setProperty('left', '50%', 'important');
+              tooltip.style.setProperty('top', (rect.top - tooltipHeight - 10) + 'px', 'important');
+              tooltip.style.setProperty('transform', 'translateX(-50%)', 'important');
+            }
             
             // החזר את ה-class של FUJI theme אחרי שהצגנו את ה-tooltip שלנו
             if (wasTooltipPlaceholder) {
