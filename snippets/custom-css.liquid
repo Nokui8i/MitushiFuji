@@ -701,32 +701,37 @@ drawer[role="dialog"][id*="Size"] td:first-child {
 }
 
 /* ===== FEATURED PRODUCT CAROUSEL - Big Image Like Product Page (No Crop) ===== */
-/* תמונות גדולות כמו בעמוד מוצר - מוצגות בשלמותן בלי חיתוך, משתמשות ב-ratio של התמונה */
+/* תמונות גדולות כמו בעמוד מוצר - מוצגות בשלמותן בלי חיתוך, כל הקונטיינרים באותו גודל */
 
 @media (min-width: 990px) {
-  /* הקונטיינר של התמונה - משתמש ב-ratio של התמונה (כמו עמוד מוצר) */
+  /* הקונטיינר של התמונה - גובה קבוע כדי שכל הקונטיינרים יהיו באותו גודל */
   .fpc .card__media {
     width: 100% !important;
+    height: 520px !important; /* גובה קבוע - כל הקונטיינרים באותו גודל */
     position: relative !important;
     overflow: hidden !important;
     background: transparent !important;
-    min-height: 400px !important; /* מינימום כדי שהכרטיסים לא יהיו קטנים מדי */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
-  /* ה-wrapper של התמונה - משתמש ב-ratio מהתמונה */
+  /* ה-wrapper של התמונה - תופס את כל הגובה */
   .fpc .product__image-first,
   .fpc .product__image-second {
     width: 100% !important;
-    height: auto !important;
+    height: 100% !important;
   }
 
-  /* ה-wrapper הפנימי - משתמש ב-var(--ratio) כמו בעמוד מוצר */
+  /* ה-wrapper הפנימי - תופס את כל הגובה */
   .fpc .card__media .js-wrap-image-lazy,
   .fpc .card__media .animation,
   .fpc .card__media sht-image-atf {
     width: 100% !important;
-    height: auto !important;
-    aspect-ratio: var(--ratio) !important; /* משתמש ב-ratio של התמונה */
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   /* התמונה עצמה - מוצגת בשלמותה בלי חיתוך (כמו עמוד מוצר) */
