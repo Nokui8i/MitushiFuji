@@ -23,7 +23,7 @@
     el.style.cursor = "grab";
     el.style.userSelect = "none";
     el.style.webkitUserSelect = "none";
-    el.style.touchAction = "pan-y"; // allow vertical page scroll
+    el.style.touchAction = "pan-x pan-y"; // allow horizontal and vertical scroll
 
     let dragging = false;
     let startX = 0;
