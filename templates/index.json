@@ -199,7 +199,7 @@
         "background_darkness": 0,
         "show_navigation": true,
         "show_statistics_navigation": true,
-        "animation_duration": 5000,
+        "animation_duration": 900,
         "remove_padding_top": false,
         "remove_padding_bottom": false,
         "image_hotspot": "shopify://shop_images/DSC00565.webp",
