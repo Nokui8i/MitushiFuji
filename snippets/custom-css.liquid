@@ -1032,7 +1032,16 @@ drawer[role="dialog"][id*="Size"] td:first-child {
 
 /* Product Hotspots - התמונה הגדולה הראשית (עם hotspots) - פינות עגולות - כל המסכים */
 /* מובייל: מאפשר להציג tooltip ומסתיר את ה-carousel בצד */
+/* מונע את ה-tooltip של FUJI theme מלהציג במובייל */
 @media (max-width: 749px) {
+  .product-hotspots .js-tooltip-placeholder:hover .js-tooltip-content,
+  .product-hotspots .js-tooltip-placeholder:focus .js-tooltip-content,
+  .product-hotspots .js-tooltip-placeholder:active .js-tooltip-content {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+  
   .product-hotspots .hotspot-content.js-tooltip-content {
     display: none !important;
     visibility: hidden !important;
@@ -1048,6 +1057,8 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     pointer-events: none !important;
   }
   
+  /* רק tooltip עם dataset.isShowing='true' יוצג */
+  .product-hotspots .hotspot-content.js-tooltip-content[data-is-showing="true"],
   .product-hotspots .hotspot-content.js-tooltip-content.opacity-1,
   .product-hotspots .hotspot-content.js-tooltip-content.show,
   .product-hotspots .hotspot-content.js-tooltip-content.d-block {
@@ -1055,7 +1066,16 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     visibility: visible !important;
     opacity: 1 !important;
   }
-  
+}
+
+/* גם בדסקטופ - מונע tooltip של FUJI theme */
+@media (min-width: 990px) {
+  .product-hotspots .js-tooltip-placeholder:hover .js-tooltip-content,
+  .product-hotspots .js-tooltip-placeholder:focus .js-tooltip-content {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
 }
 /* CSS אגרסיבי לתפוס את כל האלמנטים */
 .product-hotspots [id*="hotspotContainer"],

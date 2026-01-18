@@ -45,8 +45,24 @@
           e.stopPropagation();
           e.stopImmediatePropagation();
           
-          // סגור כל ה-tooltips האחרים לפני הצגת אחד חדש
+          // סגור כל ה-tooltips (גם של FUJI theme וגם שלנו) לפני הצגת אחד חדש
           const currentTooltip = button.querySelector('.js-tooltip-content');
+          
+          // סגור כל ה-tooltips של FUJI theme
+          document.querySelectorAll('.js-tooltip-placeholder').forEach(function(placeholder) {
+            if (placeholder !== button) {
+              const tooltip = placeholder.querySelector('.js-tooltip-content');
+              if (tooltip) {
+                tooltip.classList.remove('opacity-1', 'show', 'd-block');
+                tooltip.classList.add('opacity-0');
+                tooltip.style.display = 'none';
+                tooltip.style.visibility = 'hidden';
+                tooltip.style.opacity = '0';
+              }
+            }
+          });
+          
+          // סגור כל ה-tooltips האחרים שלנו
           document.querySelectorAll('.js-tooltip-content').forEach(function(otherTooltip) {
             if (otherTooltip !== currentTooltip) {
               otherTooltip.classList.remove('opacity-1', 'show', 'd-block');
@@ -57,6 +73,12 @@
               otherTooltip.dataset.isShowing = '';
             }
           });
+          
+          // מונע את ה-tooltip של FUJI theme מלהציג - הסר את ה-class זמנית
+          const wasTooltipPlaceholder = button.classList.contains('js-tooltip-placeholder');
+          if (wasTooltipPlaceholder) {
+            button.classList.remove('js-tooltip-placeholder');
+          }
           
           // מונע הפעלת carousel בצד - מוצא את ה-carousel trigger ומבטל אותו
           const carouselTrigger = button.closest('sht-carousel-trig');
@@ -94,6 +116,13 @@
             tooltip.style.setProperty('left', '50%', 'important');
             tooltip.style.setProperty('top', (rect.top - tooltipHeight - 10) + 'px', 'important');
             tooltip.style.setProperty('transform', 'translateX(-50%)', 'important');
+            
+            // החזר את ה-class של FUJI theme אחרי שהצגנו את ה-tooltip שלנו
+            if (wasTooltipPlaceholder) {
+              setTimeout(function() {
+                button.classList.add('js-tooltip-placeholder');
+              }, 50);
+            }
             
             // הסתר tooltip אחרי 3 שניות
             setTimeout(function() {
