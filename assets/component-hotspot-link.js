@@ -134,11 +134,10 @@
             
             // במובייל - מיקום יחסי לחלק השחור
             if (isMobile()) {
-              tooltip.style.setProperty('left', '50%', 'important');
-              tooltip.style.setProperty('top', (rect.top - tooltipHeight - 10) + 'px', 'important');
-              tooltip.style.setProperty('transform', 'translateX(-50%)', 'important');
               tooltip.style.setProperty('max-width', '90vw', 'important');
-              tooltip.style.setProperty('left', Math.min(Math.max(rect.left + (rect.width / 2), 75), viewportWidth - 75) + 'px', 'important');
+              const tooltipLeft = Math.min(Math.max(rect.left + (rect.width / 2), 75), viewportWidth - 75);
+              tooltip.style.setProperty('left', tooltipLeft + 'px', 'important');
+              tooltip.style.setProperty('top', (rect.top - tooltipHeight - 10) + 'px', 'important');
               tooltip.style.setProperty('transform', 'translateX(-50%)', 'important');
             } else {
               tooltip.style.setProperty('left', '50%', 'important');
