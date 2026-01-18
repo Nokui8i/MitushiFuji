@@ -107,8 +107,6 @@
         "statistic_CamanL": {
           "type": "statistic",
           "settings": {
-            "number": "100000",
-            "suffix": "",
             "label": "HAPPY ANIME FANS",
             "description": ""
           }
@@ -124,6 +122,8 @@
         "subheading": "",
         "heading": "",
         "description": "",
+        "background_color": "",
+        "background_image": "shopify://shop_images/3_jpg.webp",
         "show_navigation": true,
         "show_statistics_navigation": true,
         "animation_duration": 2000,
