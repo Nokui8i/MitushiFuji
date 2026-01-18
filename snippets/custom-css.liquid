@@ -208,38 +208,15 @@
   overflow: hidden !important;
 }
 
-/* Product page: reduce space between gallery and product info (desktop) */
-/* הקטנת הרווח בין עמודת התמונות לעמודת הפרטים - כמו AINIQI */
+/* Product page: center the whole layout (like AINIQI) */
+/* מרכוז כל ה-layout של המוצר - פתרון נקי ופשוט */
 @media (min-width: 769px) {
-  /* Force smaller gap between the two columns */
-  /* כפה gap קטן יותר בין העמודות */
+  /* Center the whole product layout */
+  /* מרכוז כל בלוק המוצר ברוחב קבוע */
   .product-details {
-    gap: 20px !important;
-    column-gap: 20px !important;
-  }
-
-  /* In case the theme uses margins/padding on the columns */
-  /* הסר margins/padding מהעמודות */
-  .product-details > .product__media-wrapper {
-    margin-right: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  .product-details > .main-product-info-container,
-  .product-details > [id^="productInfo-"] {
-    margin-left: 0 !important;
-    padding-left: 0 !important;
-  }
-
-  /* Make media column wider (closer to AINIQI look) */
-  /* הגדלת רוחב התמונה */
-  .product__media-wrapper {
-    max-width: none !important;
-  }
-
-  .product-slideshow__items {
-    max-width: 100% !important;
-    margin: 0 !important;
+    max-width: 1200px !important;   /* נסה 1100 / 1200 / 1280 */
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 }
 </style>
