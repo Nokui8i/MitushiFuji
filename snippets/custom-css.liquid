@@ -860,6 +860,14 @@ drawer[role="dialog"][id*="Size"] td:first-child {
     margin: 0 auto !important;
   }
 
+  /* הגבלת רוחב הקונטיינר של התמונה הראשית (hotspot) - כמו product page */
+  .product-hotspots .clm:has(sht-grid),
+  .product-hotspots .clm:has([id*="hotspotContainer"]),
+  .product-hotspots .s-content .clm:first-child {
+    max-width: 50% !important; /* כמו product page - חצי מהרוחב */
+    flex: 0 0 50% !important;
+  }
+
   /* הקטנת גובה אזור התמונה (הכי חשוב) */
   .product-hotspots .media,
   .product-hotspots .media > img,
