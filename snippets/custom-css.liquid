@@ -850,6 +850,77 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   overflow: hidden !important;
 }
 
+/* ===== מובייל: שבירת h-100 והחלפה ב-max-height ===== */
+/* זה הקונטיינר שמחזיק את כל ה-hotspot grid (כרגע h-100) - שובר את הגובה */
+.product-hotspots sht-grid,
+.product-hotspots .js-grid,
+.product-hotspots [id*="hotspotContainer"] sht-grid,
+.product-hotspots [id*="hotspotContainer"] .js-grid {
+  height: auto !important; /* שובר את h-100 */
+  max-height: 400px !important;   /* מובייל: גובה קטן יותר */
+  min-height: 0 !important;
+}
+
+/* להפסיק לכפות h-100 על השכבות הפנימיות במובייל */
+.product-hotspots [class*="h-100"],
+.product-hotspots [id*="hotspotContainer"] [class*="h-100"],
+.product-hotspots sht-grid[class*="h-100"],
+.product-hotspots .js-grid[class*="h-100"] {
+  height: auto !important;
+}
+
+/* הקונטיינר הראשי של התמונה - מתאים את עצמו לתמונה במובייל */
+.product-hotspots [id*="hotspotContainer"] {
+  height: auto !important;
+  max-height: 400px !important;
+  position: relative !important;
+}
+
+/* הקטנת גובה אזור התמונה במובייל */
+.product-hotspots .media,
+.product-hotspots .media > img,
+.product-hotspots .media img,
+.product-hotspots .js-grid-image,
+.product-hotspots .js-grid .media,
+.product-hotspots .js-grid img,
+.product-hotspots sht-grid .media,
+.product-hotspots [id*="hotspotContainer"] .media {
+  max-height: 400px !important;
+}
+
+/* ה-wrapper הפנימי - משתמש ב-ratio של התמונה במובייל */
+.product-hotspots .js-grid .js-wrap-image-lazy,
+.product-hotspots .js-grid sht-image-atf,
+.product-hotspots .js-grid .animation {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 400px !important;
+  aspect-ratio: var(--ratio) !important;
+}
+
+/* התמונה עצמה - כמו product page - contain (תמיד תראה בשלמותה) במובייל */
+.product-hotspots .js-grid img,
+.product-hotspots .js-grid .js-image-lazy,
+.product-hotspots .js-grid .media,
+.product-hotspots .js-grid-image,
+.product-hotspots .media img,
+.product-hotspots [id*="hotspotContainer"] img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important; /* כמו product page */
+  object-position: center !important;
+  background: transparent !important;
+  display: block !important;
+}
+
+/* אם התמה נותנת גובה מינימלי ענק במובייל */
+.product-hotspots .media,
+.product-hotspots .js-grid,
+.product-hotspots sht-grid,
+.product-hotspots [id*="hotspotContainer"] {
+  min-height: 0 !important;
+}
+
 @media (min-width: 990px) {
   /* Product Hotspots - הקטנת הקונטיינר (CSS אגרסיבי) */
   /* מגביל את רוחב הסקשן (כמו עמוד מוצר) */
