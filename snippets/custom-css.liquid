@@ -822,27 +822,31 @@ drawer[role="dialog"][id*="Size"] td:first-child {
 /* ===== PRODUCT HOTSPOTS - Same styling as Featured Product Carousel ===== */
 /* פינות עגולות + ריווח קטן + קונטיינר מתאים לתמונה */
 
-@media (min-width: 990px) {
-  /* Product Hotspots - התמונה הגדולה הראשית (עם hotspots) - פינות עגולות */
-  /* הקונטיינר הראשי */
-  .product-hotspots [id*="hotspotContainer"],
-  .product-hotspots .clm:has(sht-grid),
-  .product-hotspots sht-grid,
-  .product-hotspots .js-grid {
-    border-radius: 18px !important;
-    overflow: hidden !important;
-  }
+/* Product Hotspots - התמונה הגדולה הראשית (עם hotspots) - פינות עגולות - כל המסכים */
+.product-hotspots [id*="hotspotContainer"] {
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
 
-  /* כל ה-wrappers והתמונות */
-  .product-hotspots .js-grid .js-wrap-image-lazy,
-  .product-hotspots .js-grid sht-image-atf,
-  .product-hotspots .js-grid .media-wrapper,
-  .product-hotspots .js-grid img,
-  .product-hotspots .js-grid-image,
-  .product-hotspots .js-grid .js-image-lazy {
-    border-radius: 18px !important;
-    overflow: hidden !important;
-  }
+.product-hotspots sht-grid,
+.product-hotspots .js-grid {
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+
+/* כל ה-wrappers והתמונות */
+.product-hotspots .js-grid .js-wrap-image-lazy,
+.product-hotspots .js-grid sht-image-atf,
+.product-hotspots .js-grid .media-wrapper,
+.product-hotspots .js-grid img,
+.product-hotspots .js-grid-image,
+.product-hotspots .js-grid .js-image-lazy,
+.product-hotspots .js-grid .media {
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+
+@media (min-width: 990px) {
 
   /* Product Hotspots - הקונטיינר של התמונה מתאים את עצמו לתמונה */
   .product-hotspots .card__media,
