@@ -16,8 +16,13 @@
       let clickCount = 0;
       let clickTimer = null;
       
-      // Add click handler
-      button.addEventListener('click', function(e) {
+      // הסר event listeners קודמים אם יש (למניעת כפילות)
+      const newButton = button.cloneNode(true);
+      button.parentNode.replaceChild(newButton, button);
+      const actualButton = newButton;
+      
+      // Add click handler עם capture phase כדי לעצור לפני handlers אחרים
+      actualButton.addEventListener('click', function(e) {
         // בדסקטופ - מעביר ישר לעמוד המוצר
         if (!isMobile()) {
           e.preventDefault();
@@ -45,6 +50,17 @@
           e.stopPropagation();
           e.stopImmediatePropagation();
           
+          // סגור כל ה-tooltips האחרים לפני הצגת אחד חדש
+          document.querySelectorAll('.js-tooltip-content').forEach(function(otherTooltip) {
+            if (otherTooltip !== button.querySelector('.js-tooltip-content')) {
+              otherTooltip.classList.remove('opacity-1', 'show', 'd-block');
+              otherTooltip.classList.add('opacity-0');
+              otherTooltip.style.display = 'none';
+              otherTooltip.style.visibility = 'hidden';
+              otherTooltip.style.opacity = '0';
+            }
+          });
+          
           // מונע הפעלת carousel בצד - מוצא את ה-carousel trigger ומבטל אותו
           const carouselTrigger = button.closest('sht-carousel-trig');
           if (carouselTrigger) {
@@ -60,7 +76,9 @@
           
           // מציג את ה-tooltip במובייל
           const tooltip = button.querySelector('.js-tooltip-content');
-          if (tooltip) {
+          if (tooltip && !tooltip.dataset.isShowing) {
+            tooltip.dataset.isShowing = 'true';
+            
             // הסר כל המחלקות שמסתירות
             tooltip.classList.remove('hidden-xs', 'opacity-0', 'd-none');
             tooltip.classList.add('opacity-1', 'show', 'd-block');
@@ -88,6 +106,7 @@
               setTimeout(function() {
                 tooltip.style.display = 'none';
                 tooltip.style.visibility = 'hidden';
+                tooltip.dataset.isShowing = '';
                 // הסר את החסימה אחרי שהכל נסגר
                 if (carouselTrigger) {
                   const carouselId = carouselTrigger.getAttribute('data-carousel-target');
@@ -112,7 +131,7 @@
             }
           }, 100);
         }
-      });
+      }, true); // useCapture = true כדי לעצור לפני handlers אחרים
     });
   }
   
