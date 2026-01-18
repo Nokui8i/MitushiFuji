@@ -27,7 +27,7 @@
   endif
 -%}
 
-<div class="section color-{{- section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} {% render 'animation-loader', section: section %} product-hotspots-with-blurred-background" data-ui-component="Product Hotspots Section" role="region" aria-labelledby="sectionHeading-{{ section.id | md5 | truncate: 12, "" }}" data-darkness="{{ section.settings.background_darkness | default: 60 }}" {% if section.settings.background_color != blank or section.settings.background_image != blank %}style="{% if section.settings.background_color != blank %}background-color: {{ section.settings.background_color }};{% endif %}{% if section.settings.background_image != blank %}background-image: url('{{ section.settings.background_image | image_url: width: 2000 }}'); background-size: cover; background-position: center; background-repeat: no-repeat;{% endif %}"{% endif %}>
+<div class="section color-{{- section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} {% render 'animation-loader', section: section %} product-hotspots-with-blurred-background" data-ui-component="Product Hotspots Section" role="region" aria-labelledby="sectionHeading-{{ section.id | md5 | truncate: 12, "" }}" style="--darkness-opacity: {{ darkness_opacity }};">
   <div class="ctnr">
     {% render 'section-header', content_align: 'ta-left', subheading: section.settings.subheading, heading: section.settings.heading, description: section.settings.description, badge_text: section.settings.badge_text, badge_position: section.settings.badge_position, badge_shape: section.settings.badge_shape, badge_color: section.settings.badge_color, section: section %}
     <div class="s-content rw middle-xs {{ s_content_class }} product-hotspots-with-statistics">
@@ -128,10 +128,20 @@
     border-radius: 8px;
   }
   
-  /* Blurred and darkened background effect */
+  /* Gradient background effect */
   .product-hotspots-with-blurred-background {
     position: relative;
     overflow: hidden;
+    background: linear-gradient(to bottom, 
+      rgba(245, 245, 245, 1) 0%,
+      rgba(230, 230, 230, 1) 15%,
+      rgba(50, 50, 50, 1) 40%,
+      rgba(0, 0, 0, 1) 50%,
+      rgba(0, 0, 0, 1) 60%,
+      rgba(50, 50, 50, 1) 75%,
+      rgba(230, 230, 230, 1) 85%,
+      rgba(245, 245, 245, 1) 100%
+    ) !important;
   }
   
   .product-hotspots-with-blurred-background::before {
