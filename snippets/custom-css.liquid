@@ -847,6 +847,49 @@ drawer[role="dialog"][id*="Size"] td:first-child {
 }
 
 @media (min-width: 990px) {
+  /* Product Hotspots - אותו גודל כמו התמונה הראשית בעמוד המוצר */
+  /* הגבלת רוחב הסקשן כמו product page */
+  .product-hotspots .ctnr {
+    max-width: 1200px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* הגבלת רוחב הקונטיינר של התמונה הראשית (hotspot) */
+  .product-hotspots .clm:has(sht-grid) {
+    max-width: 50% !important; /* כמו product page - חצי מהרוחב */
+  }
+
+  /* הקונטיינר הראשי של התמונה - מתאים את עצמו לתמונה */
+  .product-hotspots [id*="hotspotContainer"],
+  .product-hotspots sht-grid,
+  .product-hotspots .js-grid {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    position: relative !important;
+  }
+
+  /* ה-wrapper הפנימי - משתמש ב-ratio של התמונה (כמו product page) */
+  .product-hotspots .js-grid .js-wrap-image-lazy,
+  .product-hotspots .js-grid sht-image-atf,
+  .product-hotspots .js-grid .animation {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: var(--ratio) !important;
+  }
+
+  /* התמונה עצמה - כמו product page - contain (תמיד תראה בשלמותה) */
+  .product-hotspots .js-grid img,
+  .product-hotspots .js-grid .js-image-lazy,
+  .product-hotspots .js-grid .media {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important; /* כמו product page */
+    object-position: center !important;
+    background: transparent !important;
+    display: block !important;
+  }
 
   /* Product Hotspots - הקונטיינר של התמונה מתאים את עצמו לתמונה */
   .product-hotspots .card__media,
