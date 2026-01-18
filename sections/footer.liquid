@@ -193,6 +193,53 @@
     </div>
   </div>
 </footer>
+
+<style>
+  .js-footer.section {
+    background-color: #f5f5f5 !important;
+  }
+  
+  /* כל הטקסט ב-footer יהיה שחור */
+  .js-footer.section,
+  .js-footer.section *,
+  .js-footer .h6,
+  .js-footer .text-block,
+  .js-footer .footer__nav__link,
+  .js-footer .footer__nav a,
+  .js-footer .subtext,
+  .js-footer .subtext *,
+  .js-footer button,
+  .js-footer .btn-link,
+  .js-footer .js-collapsible-region-trigger,
+  .js-footer .js-country-switcher-btn,
+  .js-footer .js-language-switcher-btn,
+  .js-footer .footer__contact,
+  .js-footer .footer__socials,
+  .js-footer .footer__socials * {
+    color: #000000 !important;
+  }
+  
+  /* לינקים */
+  .js-footer a,
+  .js-footer a:visited,
+  .js-footer a:link {
+    color: #000000 !important;
+  }
+  
+  /* לינקים ב-hover */
+  .js-footer a:hover {
+    color: #000000 !important;
+    opacity: 0.7 !important;
+  }
+  
+  /* אייקונים */
+  .js-footer svg,
+  .js-footer path {
+    fill: #000000 !important;
+    stroke: #000000 !important;
+  }
+</style>
+
 {% schema %}
 {
   "name": "t:general.footer",
