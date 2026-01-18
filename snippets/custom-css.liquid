@@ -700,64 +700,89 @@ drawer[role="dialog"][id*="Size"] td:first-child {
   display: flex !important;
 }
 
-/* ===== FEATURED PRODUCT CAROUSEL - Force 1:1 Square Ratio ===== */
-/* כפיית יחס 1:1 (ריבוע) על כל הכרטיסיות */
-
-/* הקונטיינר של התמונה - ריבוע מושלם */
-.fpc .card__media {
-  aspect-ratio: 1 / 1 !important;
-  width: 100% !important;
-  position: relative !important;
-  overflow: hidden !important;
-}
-
-/* ה-wrapper של התמונה - גם ריבוע */
-.fpc .product__image-first,
-.fpc .product__image-second {
-  aspect-ratio: 1 / 1 !important;
-  width: 100% !important;
-  height: 100% !important;
-}
-
-/* התמונה עצמה - ממלאת את הריבוע עם cover */
-.fpc .card__media img,
-.fpc .product__image-first img,
-.fpc .product__image-second img,
-.fpc .js-image-lazy {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  object-position: center !important;
-}
-
-/* ה-wrapper הפנימי של התמונה */
-.fpc .card__media .js-wrap-image-lazy,
-.fpc .card__media .animation {
-  width: 100% !important;
-  height: 100% !important;
-  aspect-ratio: 1 / 1 !important;
-}
-
-/* ===== FEATURED PRODUCT CAROUSEL - Bigger Cards on Desktop ===== */
-/* הגדלת הכרטיסים בדסקטופ + 1:1 + שיפור טקסט */
+/* ===== FEATURED PRODUCT CAROUSEL - Big Image Like Product Page (No Crop) ===== */
+/* תמונות גדולות כמו בעמוד מוצר - מוצגות בשלמותן בלי חיתוך */
 
 @media (min-width: 990px) {
-  /* וודא שהכרטיסים 1:1 בדסקטופ */
+  /* הקונטיינר של התמונה - גובה קבוע, לא 1:1 */
   .fpc .card__media {
-    aspect-ratio: 1 / 1 !important;
+    height: 520px !important;
+    aspect-ratio: auto !important;
     width: 100% !important;
     position: relative !important;
     overflow: hidden !important;
+    background: transparent !important;
   }
 
+  /* ה-wrapper של התמונה */
+  .fpc .product__image-first,
+  .fpc .product__image-second {
+    height: 100% !important;
+    width: 100% !important;
+    aspect-ratio: auto !important;
+  }
+
+  /* התמונה עצמה - מוצגת בשלמותה בלי חיתוך (כמו עמוד מוצר) */
   .fpc .card__media img,
   .fpc .product__image-first img,
   .fpc .product__image-second img,
   .fpc .js-image-lazy {
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important;
+    object-fit: contain !important;
     object-position: center !important;
+    background: transparent !important;
+  }
+
+  /* ה-wrapper הפנימי של התמונה */
+  .fpc .card__media .js-wrap-image-lazy,
+  .fpc .card__media .animation {
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: auto !important;
+  }
+}
+
+/* ===== FEATURED PRODUCT CAROUSEL - Bigger Cards on Desktop ===== */
+/* הגדלת הכרטיסים בדסקטופ + 1:1 + שיפור טקסט */
+
+@media (min-width: 990px) {
+  /* הקונטיינר של התמונה - גובה קבוע, לא 1:1 (כמו עמוד מוצר) */
+  .fpc .card__media {
+    height: 520px !important;
+    aspect-ratio: auto !important;
+    width: 100% !important;
+    position: relative !important;
+    overflow: hidden !important;
+    background: transparent !important;
+  }
+
+  /* ה-wrapper של התמונה */
+  .fpc .product__image-first,
+  .fpc .product__image-second {
+    height: 100% !important;
+    width: 100% !important;
+    aspect-ratio: auto !important;
+  }
+
+  /* התמונה עצמה - מוצגת בשלמותה בלי חיתוך (כמו עמוד מוצר) */
+  .fpc .card__media img,
+  .fpc .product__image-first img,
+  .fpc .product__image-second img,
+  .fpc .js-image-lazy {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    background: transparent !important;
+  }
+
+  /* ה-wrapper הפנימי של התמונה */
+  .fpc .card__media .js-wrap-image-lazy,
+  .fpc .card__media .animation {
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: auto !important;
   }
 
   /* ריווח טוב יותר בין תמונה לטקסט */
