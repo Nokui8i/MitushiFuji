@@ -131,8 +131,6 @@
 .product-slideshow__items {
   position: relative;
   overflow: hidden;
-  max-width: 700px !important; /* הגבל גודל התמונה הגדולה */
-  margin: 0 auto !important;
 }
 
 .js-product-slideshow-item {
@@ -208,5 +206,30 @@
 .product-slideshow__thumb img {
   border-radius: 12px !important;
   overflow: hidden !important;
+}
+
+/* Product page: reduce space between gallery and product info (desktop) */
+/* הקטנת הרווח בין עמודת התמונות לעמודת הפרטים - כמו AINIQI */
+@media (min-width: 769px) {
+  /* Make media column wider (closer to AINIQI look) */
+  .product-slideshow__items {
+    max-width: 950px !important; /* רוחב רחב יותר */
+    margin: 0 !important; /* שלא ימרכז וייצור רווח */
+  }
+
+  /* Reduce gap between media + product info columns */
+  .product-details.gap-36 {
+    gap: 24px !important; /* הקטנת הרווח מ-36px ל-24px */
+  }
+
+  /* In case this utility adds extra gap on md+ */
+  .product-details.c-gap-md-1 {
+    column-gap: 24px !important;
+  }
+
+  /* Remove any extra margin from media wrapper */
+  .product__media-wrapper {
+    margin-right: 0 !important;
+  }
 }
 </style>
