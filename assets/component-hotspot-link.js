@@ -19,15 +19,20 @@
       // מצא את החלק הפנימי השחור (hotspot-inner-clickable)
       const innerClickable = button.querySelector('.hotspot-inner-clickable');
       
-      // Add click handler - רק אם לחיצה על החלק השחור או על הכפתור עצמו (אם אין חלק שחור)
-      (innerClickable || button).addEventListener('click', function(e) {
-        // אם יש חלק פנימי, וודא שהלחיצה עליו
-        if (innerClickable && e.target !== innerClickable && !innerClickable.contains(e.target)) {
-          // לחיצה על החלק הלבן - התעלם
-          return;
-        }
+      // אם אין חלק פנימי, צור אחד
+      if (!innerClickable) {
+        const newInner = document.createElement('span');
+        newInner.className = 'hotspot-inner-clickable br-50p';
+        button.insertBefore(newInner, button.firstChild);
+        innerClickable = newInner;
+      }
+      
+      // Add click handler - רק אם לחיצה על החלק השחור
+      innerClickable.addEventListener('click', function(e) {
+        // עצור את ה-event כדי שלא יעבור לכפתור
+        e.stopPropagation();
         
-        // עכשיו מטפלים בלחיצה על החלק השחור או על הכפתור
+        // עכשיו מטפלים בלחיצה על החלק השחור
         // בדסקטופ - מעביר ישר לעמוד המוצר
         if (!isMobile()) {
           e.preventDefault();
