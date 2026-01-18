@@ -31,7 +31,7 @@
   <div class="ctnr">
     {% render 'section-header', content_align: 'ta-left', subheading: section.settings.subheading, heading: section.settings.heading, description: section.settings.description, badge_text: section.settings.badge_text, badge_position: section.settings.badge_position, badge_shape: section.settings.badge_shape, badge_color: section.settings.badge_color, section: section %}
     <div class="s-content rw middle-xs {{ s_content_class }}">
-      <div class="clm" style="--w-xs:12;--w-sm:12;--w-md:4;">
+      <div class="clm" style="--w-xs:12;--w-sm:12;--w-md:12;">
         <div class="p-relative" id="hotspotContainer-{{ section.id }}">
           <sht-grid class="p-relative h-100 w-100 d-block">
             <div class="p-relative js-grid o-hidden">
@@ -56,38 +56,11 @@
                       {% render 'product-price', product: block.settings.product, target: block.settings.product %}
                     </span>
                   </button>
-                  {% capture carousel_item %}
-                    {{ carousel_item }}
-                    <sht-carousel-itm id="carouselItem-{{ forloop.index }}-{{ section.id }}" role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}" class="js-carousel-item w-100 p-relative scrollable-aln-start d-flex aln-itm-ctr fg-1 fs-0" {{ block.shopify_attributes }}>
-                      {% render 'card-product', product: block.settings.product, show_vendor: settings.show_product_vendor, show_color_swatch: settings.show_color_swatches, show_sale_badge: settings.show_sale_badge, enable_quick_buy: settings.enable_quick_buy, item_per_row: 1, ratio: settings.product_card_image_ratio, show_second_image: settings.show_second_image, card_content_inner: false, section: section, is_first: false %}
-                    </sht-carousel-itm>
-                  {% endcapture %}
                 {% endfor %}
               </sht-carousel-trig>
             </sht-hotspot>
           </sht-grid>
         </div>
-      </div>
-      <div class="clm m-auto" style="--w-xs:12;--w-sm:6;--w-md:4;">
-        <sht-carousel class="p-relative d-block hotspot-carousel" tabindex="0" id="carousel-{{ section.id }}" data-section-id="{{ section.id }}" data-carousel-trigger="carouselTrigger-{{ section.id }}">
-          <div class="between-xs middle-xs no-js-hidden js-carousel-pagination mt-16 mb-16 mb-md-24 mt-md-0 {{ section.settings.show_navigation | default: 'd-none d-flex-sm' | replace: 'true', 'd-flex' }}">
-            <button type="button" data-step="1" class="js-carousel-prev-btn rtl-flip-x btn btn-icon btn-plain btn-large" aria-label="{{ 'accessibility.previous_slide' | t }}" name="previous" disabled="disabled">
-              {%- render 'icon-chevron-left' -%}
-            </button>
-            <div class="carousel__counter">
-              <span class="js-carousel-counter-current">1</span>
-              <span aria-hidden="true"> {% if settings.enable_right_to_left %} \ {% else %} / {% endif %} </span>
-              <span class="visually-hidden">{{ 'accessibility.of' | t }}</span>
-              <span class="js-carousel-counter-total">{{ section.blocks.size }}</span>
-            </div>
-            <button type="button" data-step="1" class="js-carousel-next-btn rtl-flip-x btn btn-icon btn-plain btn-large" aria-label="{{ 'accessibility.next_slide' | t }}" name="next">
-              {%- render 'icon-chevron-right' -%}
-            </button>
-          </div>
-          <div aria-atomic="true" class="js-carousel-items ls-none d-flex p-zero m-zero ox-auto p-relative disable-scrollbars fw-nowrap scrollable scrollable-x">
-            {{ carousel_item }}
-          </div>
-        </sht-carousel>
       </div>
     </div>
   </div>
