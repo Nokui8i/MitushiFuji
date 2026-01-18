@@ -1,0 +1,197 @@
+{%- liquid
+  assign menu_items_count = link.links.size
+  assign promo_count = 0
+  
+  if promo_block.settings.primary_image != blank
+    assign promo_count = promo_count | plus: 1
+  endif
+  
+  if promo_block.settings.secondary_image != blank
+    assign promo_count = promo_count | plus: 1
+  endif
+
+  assign promo_heading_style = ''
+  assign promo_class = 'promotion-standard'
+  if promo_block.settings.promotion_card_style == 'card'
+    assign promo_heading_style = 'p-absolute bottom-0'
+    assign promo_class = 'sht-mask color-inverse'
+  endif
+  
+  case promo_count
+    when 1
+      assign max_menu_items = 4
+    when 2
+      assign max_menu_items = 3
+    else
+      assign max_menu_items = 6
+  endcase
+  if menu_items_count > max_menu_items
+    assign menu_items_count = max_menu_items
+  endif
+  assign item_width_percent = 100 | divided_by: menu_items_count
+-%}
+  <div class="menu-dropdown mega-menu-wrapper w-100 o-hidden js-mega-menu-wrapper" style="--menu-items-count: {{ menu_items_count }};--menu-item-width: {{ item_width_percent }}%; --promo-count: {{ promo_count }};">
+    <div class="d-flex mega-menu mega-menu--column ctnr disable-scrollbars">
+      <ul class="mega-menu__submenu m-zero w-100 ls-none d-flex fd-column pl-0" id="menuHeaderMenuList-{{ promo_block.id }}">
+        {%- for child_link in link.links -%}
+          {%- liquid
+            assign is_external_link = false
+            assign link_url = child_link.url
+            if link_url contains 'http://' or link_url contains 'https://'
+              unless link_url contains request.origin
+                assign is_external_link = true
+              endunless
+            endif
+            assign target_blank_lv2 = ''
+            if is_external_link and open_external_link
+              assign target_blank_lv2 = 'target = "_blank"'
+            endif
+            assign menu_apply_image = promo_block.settings.apply_menu_image_to
+            if menu_apply_image == 'level_2'
+              assign enable_menu_image_lv2 = true
+            endif
+            if menu_apply_image == 'level_3'
+              assign enable_menu_image_lv3 = true
+            endif
+            if menu_apply_image == 'level_2_and_3'
+              assign enable_menu_image_lv2 = true
+              assign enable_menu_image_lv3 = true
+            endif
+          -%}
+          <li class="menu__item p-relative">
+            {%- if child_link.links != blank -%}
+              <div class="menu__grandchild d-none">
+                <a href="{{ child_link.url }}" {{ target_blank_lv2 }} class="menu__link menu__link-lv2 d-flex fd-column gap-12 m-zero">
+                  {%- if enable_menu_image_lv2 and child_link.object.featured_image -%}
+                    {%- liquid
+                      assign image_class_lv2 = 'w-100 h-100 menu-item-media--' | append: promo_block.settings.menu_level_2_image_size
+                      assign image_lv2 = child_link.object.featured_image | image_url: width: 200 | image_tag: alt: child_link.object.featured_image.alt, class: 'w-100 h-100 of-cover', loading: 'lazy', fetchpriority: 'low', decoding: 'async'
+                    -%}
+                    {%- render 'image', image_item: image_lv2, ratio: '1/1', image_wrap_classes: 'w-100 h-100', image_classes: image_class_lv2 -%}
+                  {%- endif -%}
+                  <span class="menu-item-title">{{- child_link.title -}}</span>
+                </a>
+                <ul class="mega-menu__grandchild menu-dropdown__grandchild ls-none m-zero p-zero-md" role="menu">
+                  {%- capture grand_child_menu -%}
+                    {%- for grandchild_link in child_link.links -%}
+                      {%- liquid
+                        assign is_external_link = false
+                        assign link_url = grandchild_link.url
+                        if link_url contains 'http://' or link_url contains 'https://'
+                          unless link_url contains request.origin
+                            assign is_external_link = true
+                          endunless
+                        endif
+                        assign target_blank_lv3 = ''
+                        if is_external_link and open_external_link
+                          assign target_blank_lv3 = 'target = "_blank"'
+                        endif
+                      -%}
+
+                      <li class="menu__item menu__item__grandchild {{ grandchild_link.current | default: '' | replace: 'true', 'menu__item--current' }}">
+                        <a href="{{ grandchild_link.url }}" {{ target_blank_lv3 }} class="menu__link d-flex gap-12 middle-xs" role="menuitem">
+                          {%- if enable_menu_image_lv3 and grandchild_link.object.featured_image -%}
+                            {%- liquid
+                              assign image_class_lv3 = 'menu-item-media--' | append: promo_block.settings.menu_level_3_image_size
+                              assign image_lv3 = grandchild_link.object.featured_image | image_url: width: 200 | image_tag: alt: grandchild_link.object.featured_image.alt, class: 'w-100 h-100 of-cover', loading: 'lazy', fetchpriority: 'low', decoding: 'async'
+                            -%}
+                            {%- render 'image', image_item: image_lv3, ratio: '1/1', image_wrap_classes: image_class_lv3, image_classes: image_class_lv3 -%}
+                          {%- endif -%}
+                          <span class="menu-item-title">{{- grandchild_link.title -}}</span>
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  {%- endcapture -%}
+                  {{ grand_child_menu }}
+                </ul>
+              </div>
+              <details data-level="2">
+                <summary class="menu__link between-xs d-flex middle-xs">
+                  {{ child_link.title }}
+                  {{ icon_chevron_down }}
+                </summary>
+                <ul class="mega-menu__grandchild menu-dropdown__grandchild m-zero p-zero-md d-flex fd-column ls-none" role="menu">
+                  {{ grand_child_menu }}
+                </ul>
+              </details>
+            {%- else -%}
+              <a href="{{ child_link.url }}" {{ target_blank_lv2 }} class="menu__link menu__link-lv2 m-zero d-flex fd-column gap-12">
+                {%- if enable_menu_image_lv2 and child_link.object.featured_image -%}
+                  {%- liquid
+                    assign image_class_lv2 = 'w-100 h-100 menu-item-media--' | append: promo_block.settings.menu_level_2_image_size
+                    assign image_lv2 = child_link.object.featured_image | image_url: width: 200 | image_tag: alt: child_link.object.featured_image.alt, class: 'w-100 h-100 of-cover', loading: 'lazy', fetchpriority: 'low', decoding: 'async'
+                  -%}
+                  {%- render 'image', image_item: image_lv2, ratio: '1/1', image_wrap_classes: 'w-100 h-100', image_classes: image_class_lv2 -%}
+                {%- endif -%}
+                <span class="menu-item-title">{{- child_link.title -}}</span>
+              </a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+      <div class="mega-menu-promotions w-100 d-none hide-empty" style="--promo-count: {{ promo_count }};">
+        {%- if promo_block.settings.primary_image -%}
+          {%- liquid
+          unless promo_block.settings.image_overlay_color_first.alpha == 0.0 or promo_block.settings.image_overlay_color_first == blank
+            assign overlay_mask_color_first = '--color-page-bg-rgb: ' | append: promo_block.settings.image_overlay_color_first.red | append: ',' | append: promo_block.settings.image_overlay_color_first.green | append: ',' | append: promo_block.settings.image_overlay_color_first.blue | append: ';'
+          endunless
+          unless promo_block.settings.image_content_color_first.alpha == 0.0 or promo_block.settings.image_content_color_first == blank
+            assign overlay_content_color_first = 'color: ' | append: promo_block.settings.image_content_color_first | append: ';'
+          endunless
+          -%}
+          <div class="card__promotion p-relative o-hidden {{ promo_class }} media-hover-zoomed {% if promo_block.settings.image_ratio == 'auto' %}mah-fit-content{% endif %}"
+          style="--overlay: {{ promo_block.settings.image_overlay_opacity_first }};
+                {{- overlay_mask_color_first -}}">
+            <a href="{{ promo_block.settings.primary_link | default: '#' }}" class="p-absolute top-0 left-0 w-100 h-100 zi-3 hide-no-link" aria-label="{{ promo_block.settings.primary_heading }}"></a>
+            <div class="card__media">
+              {%- liquid
+                assign primary_image_alt = promo_block.settings.primary_image.image.alt | default: promo_block.settings.primary_image.image | split: '/' | last
+                assign primary_image_media = promo_block.settings.primary_image | image_url: width: promo_block.settings.primary_image.width | image_tag: alt: primary_image_alt, class: 'h-100 w-100 of-cover media js-image-lazy '
+                assign ratio = promo_block.settings.image_ratio
+                if promo_block.settings.image_ratio == 'auto'
+                  assign ratio = promo_block.settings.primary_image.aspect_ratio
+                endif
+                render 'image', image_item: primary_image_media, ratio: ratio, image_wrap_classes: 'h-100 w-100', image_classes: 'w-100 h-100'
+              -%}
+            </div>
+            <div class="card__content wb-break-word {{ promo_heading_style }} w-100 zi-2 {{ promo_block.settings.primary_heading | default: 'd-none' | replace: promo_block.settings.primary_heading, '' }}" style="{{- overlay_content_color_first -}}">
+              <span class="card__title h6">
+                {{- promo_block.settings.primary_heading -}}
+              </span>
+            </div>
+          </div>
+        {%- endif -%}
+        {%- if promo_block.settings.secondary_image -%}
+          {%- liquid
+            unless promo_block.settings.image_overlay_color_second.alpha == 0.0 or promo_block.settings.image_overlay_color_second == blank
+              assign overlay_mask_color_second = '--color-page-bg-rgb: ' | append: promo_block.settings.image_overlay_color_second.red | append: ',' | append: promo_block.settings.image_overlay_color_second.green | append: ',' | append: promo_block.settings.image_overlay_color_second.blue | append: ';'
+            endunless
+            unless promo_block.settings.image_content_color_second.alpha == 0.0 or promo_block.settings.image_content_color_second == blank
+              assign overlay_content_color_second = 'color: ' | append: promo_block.settings.image_content_color_second | append: ';'
+            endunless
+          -%}
+          <div class="card__promotion p-relative o-hidden {{ promo_class }} media-hover-zoomed {% if promo_block.settings.image_ratio == 'auto' %}mah-fit-content{% endif %}"
+          style="--overlay: {{ promo_block.settings.image_overlay_opacity_second }};
+                {{- overlay_mask_color_second -}}">
+            <a href="{{ promo_block.settings.secondary_link | default: '#' }}" class="p-absolute top-0 left-0 w-100 h-100 zi-3 hide-no-link" aria-label="{{ promo_block.settings.secondary_heading }}"></a>
+            <div class="card__media">
+              {%- liquid
+                assign secondary_image_media_alt = promo_block.settings.secondary_image.image.alt | default: promo_block.settings.secondary_image.image | split: '/' | last
+                assign secondary_image_media = promo_block.settings.secondary_image | image_url: width: promo_block.settings.secondary_image.width | image_tag: alt: secondary_image_media_alt, class: 'h-100 w-100 of-cover media js-image-lazy '
+                assign ratio = promo_block.settings.image_ratio
+                if promo_block.settings.image_ratio == 'auto'
+                  assign ratio = promo_block.settings.secondary_image.aspect_ratio
+                endif
+                render 'image', image_item: secondary_image_media, ratio: ratio, image_wrap_classes: 'h-100 w-100', image_classes: 'w-100 h-100'
+              -%}
+            </div>
+            <div class="card__content wb-break-word {{ promo_heading_style }} w-100 zi-2 {{ promo_block.settings.secondary_heading | default: 'd-none' | replace: promo_block.settings.secondary_heading, '' }}" style="{{- overlay_content_color_second -}}">
+              <span class="card__title h6">
+                {{- promo_block.settings.secondary_heading -}}
+              </span>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>

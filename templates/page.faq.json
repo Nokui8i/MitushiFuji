@@ -1,0 +1,326 @@
+
+ {
+  "sections": {
+    "590cdb49-7ed6-438e-9b8c-5fb7fc509a41": {
+      "type": "image-banner",
+      "blocks": {
+        "template--16589097074909__590cdb49-7ed6-438e-9b8c-5fb7fc509a41-1666663359f7f603e7-0": {
+          "type": "content",
+          "settings": {
+            "content_position": "center-xs middle-xs ta-center",
+            "subheading": "",
+            "heading": "Frequently Asked Questions",
+            "description": "<p>Got any questions? Find answers for your inquiries from our experts here.</p>",
+            "primary_button_label": "",
+            "primary_button_link": "",
+            "secondary_button_label": "",
+            "secondary_button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--16589097074909__590cdb49-7ed6-438e-9b8c-5fb7fc509a41-1666663359f7f603e7-0"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "enable_large_heading": false,
+        "enable_fullwidth_banner": true,
+        "section_overlay_opacity": 30,
+        "section_mask_overlay_color": "#000000",
+        "section_content_overlay_color": "#FFFFFF",
+        "height_desktop": "70vh",
+        "height_mobile": "70vh",
+        "remove_padding_top": true,
+        "remove_padding_bottom": true,
+        "badge_text": "",
+        "badge_color": "color-accent-1",
+        "badge_position": "p-badge--top-right",
+        "badge_shape": "badge--star",
+        "image_banner_link": ""
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "show_page_title": true,
+        "remove_padding_top": true,
+        "remove_padding_bottom": false
+      }
+    },
+    "b09b41ff-b62f-46ad-a8f4-45de142f8028": {
+      "type": "collapsible-content",
+      "blocks": {
+        "template--16589097074909__b09b41ff-b62f-46ad-a8f4-45de142f8028-1666663011393ebbaf-0": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "How do I make a purchase?",
+            "description": "<p>You can place an order via any of the following 5 methods: We are pleased to offer fast and secure online ordering. Simply search for your collection, choose your favorite item, and click add to cart. Create a login account to save your information for future purchases, or checkout as a guest.</p>",
+            "page": ""
+          }
+        },
+        "template--16589097074909__b09b41ff-b62f-46ad-a8f4-45de142f8028-1666663011393ebbaf-1": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "Do you accept purchase order?",
+            "description": "<p>Yes. Please provide your purchase order number during checkout online, or clearly labelled on your purchase order supplied via email or fax. Please be sure to provide the correct billing email address or mailing address for your accounts payable department so the invoice can be directed to the correct location.</p>",
+            "page": ""
+          }
+        },
+        "template--16589097074909__b09b41ff-b62f-46ad-a8f4-45de142f8028-1666663011393ebbaf-2": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "How can I pay for my order?",
+            "description": "<p>We accept credit card, cheque, bank or wire transfers as forms of payment. Please note that we pass on bank charges for wire transfer fees which will be added to your invoice ($15). This is in addition to the standard $20 handling fee.  </p>",
+            "page": ""
+          }
+        },
+        "template--16589097074909__b09b41ff-b62f-46ad-a8f4-45de142f8028-1666663011393ebbaf-3": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "What are your payment terms?",
+            "description": "<p>Our terms of payment are net 30 days, unless otherwise specified. Pre-payment may be required prior for shipping to certain locations.</p>",
+            "page": ""
+          }
+        },
+        "22cd13ce-4e83-4381-baa4-1f3800d355c6": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "Is the product in stock?",
+            "description": "<p>We strive to maintain sufficient inventory to meet your needs. In the rare case that a product is out of stock, you will be notified at the time of your order. We will then do everything we can to ensure that your order is fulfilled within 30 days. You will not be charged until your order has shipped.</p>",
+            "page": ""
+          }
+        },
+        "744ca570-aac7-4656-a047-88e026b29d4c": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "How do I cancel my order?",
+            "description": "<p>If you need to cancel your order please contact us at 123-4567-89. Please keep in mind that we strive to process and ship orders the same day (if received before 1pm PST), and once the order has shipped you will be subject to our return policy.</p>",
+            "page": ""
+          }
+        },
+        "abefd78d-d221-4f57-8a02-69fe7c1a277b": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "How do I contact customer service?",
+            "description": "<p>You can contact our customer service team via:</p><p>-Email: happytohelp@saleshuntertheme.com </p><p>- Phone: 123-4567-89</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--16589097074909__b09b41ff-b62f-46ad-a8f4-45de142f8028-1666663011393ebbaf-0",
+        "template--16589097074909__b09b41ff-b62f-46ad-a8f4-45de142f8028-1666663011393ebbaf-1",
+        "template--16589097074909__b09b41ff-b62f-46ad-a8f4-45de142f8028-1666663011393ebbaf-2",
+        "template--16589097074909__b09b41ff-b62f-46ad-a8f4-45de142f8028-1666663011393ebbaf-3",
+        "22cd13ce-4e83-4381-baa4-1f3800d355c6",
+        "744ca570-aac7-4656-a047-88e026b29d4c",
+        "abefd78d-d221-4f57-8a02-69fe7c1a277b"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "subheading": "",
+        "heading": "Orders Status And Tracking",
+        "description": "Get your common ordering frequently asked questions answered by our expert operations department",
+        "content_alignment": "ta-center m-auto",
+        "content_ordering": "text_first",
+        "remove_padding_top": false,
+        "remove_padding_bottom": false,
+        "image_ratio": "2/3",
+        "btn_text": "",
+        "btn_link": "",
+        "show_icon": false,
+        "expand_first_item_initially": false
+      }
+    },
+    "4c866430-41c4-4425-b252-56d49eca15cf": {
+      "type": "blog-post-list",
+      "settings": {
+        "color_scheme": "",
+        "subheading": "",
+        "heading": "Our Journey On Social Impact",
+        "description": "Spreading mindful movement, inspiring wellness and creating a healthy community. These goals inspire everything we do.",
+        "blog": "for-a-green-way-of-living",
+        "items_per_row_on_desktop": "4",
+        "content_alignment": "ta-center",
+        "items_to_show": 4,
+        "enable_carousel": false,
+        "show_navigation": false,
+        "remove_padding_top": false,
+        "remove_padding_bottom": false,
+        "show_view_all_button": false,
+        "btn_text": "View all"
+      }
+    },
+    "a8842918-e4d7-4add-93da-d1d739a0f7b9": {
+      "type": "collapsible-content",
+      "blocks": {
+        "template--16589097074909__a8842918-e4d7-4add-93da-d1d739a0f7b9-1666664237cc065c77-0": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "Do you ship internationally?",
+            "description": "<p>Yes, our delivery will need only 1-2 days for national shipping, and 3-4 days worldwide</p>",
+            "page": ""
+          }
+        },
+        "template--16589097074909__a8842918-e4d7-4add-93da-d1d739a0f7b9-1666664237cc065c77-1": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "When will my order be shipped?",
+            "description": "<p>All in-stock orders received by 12pm PST Monday to Thursday will be shipped out the same day. Orders received after 12pm PST Monday to Wednesday, will be shipped out the following day. Orders received after 12pm on Thursday, will be shipped out on Monday.</p>",
+            "page": ""
+          }
+        },
+        "template--16589097074909__a8842918-e4d7-4add-93da-d1d739a0f7b9-1666664237cc065c77-2": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "What is your refund policy",
+            "description": "<p>We guarantee that at the time of shipment that your product is free from defects in materials and workmanship, and that it will meet the specific requirements detailed on the lot specific datasheet provided with the product. Should you have a technical issue with a product, please contact our technical support services:</p><p>- Email: happytohelp@saleshuntertheme.com</p><p>- Phone: 123-4567-89 </p><p>If we determine that the product does not conform to the specifications outlined on the datasheet, then we will replace the product free of charge, or provide a full refund of the invoice price of the product.</p>",
+            "page": ""
+          }
+        },
+        "template--16589097074909__a8842918-e4d7-4add-93da-d1d739a0f7b9-1666664237cc065c77-3": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "I ordered the wrong product, what should I do?",
+            "description": "<p>We will consider taking the product back, subject to a 25% restocking fee on the items plus any shipping & handling charges. The customer is responsible for shipping charges to and from our place for both the returned product and the new replacement product. All returns must have prior authorization from us, and be shipped back to us within 7 working days of receipt of the items. Products must be returned in the same or equivalent packaging (ie. cold and insulated) as originally dispatched by us. Once the item is received by us, we will dispatch the replacement product.</p>",
+            "page": ""
+          }
+        },
+        "3c7795f4-e448-4f36-98cc-277577e9d59e": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "Can I return the product to you?",
+            "description": "<p>All returns must have prior authorization from us, and are subject to a 25% restocking fee on the items plus any shipping & handling charges. Products must be shipped back to us within 7 working days of receipt of the items. Products must be returned in the same or equivalent packaging (ie. cold and insulated) as originally dispatched by us.</p>",
+            "page": ""
+          }
+        },
+        "1558a7c6-79b5-4a09-8a95-63b0b3015baa": {
+          "type": "content",
+          "settings": {
+            "icon_source": "theme_library",
+            "options_icon": "check",
+            "html_code": "",
+            "block_heading": "My item was damaged upon arrival, what should I do?",
+            "description": "<p>We guarantee that at the time of shipment that your product is free from defects in materials and workmanship. This warranty is in lieu of any other warranty expressed or implied, including but not limited to, any implied warranty of merchantability or fitness for a particular purpose. Please notify us within 24 hours of receipt of the product if your shipment is damaged. Unfortunately after this period or if the product was not stored as directed on the datasheet, we are unable to honor a warranty claim. If we determines that there was a defect in the product sold to you, we will replace the product free of charge, or provide a full refund of the invoice price of the product.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--16589097074909__a8842918-e4d7-4add-93da-d1d739a0f7b9-1666664237cc065c77-0",
+        "template--16589097074909__a8842918-e4d7-4add-93da-d1d739a0f7b9-1666664237cc065c77-1",
+        "template--16589097074909__a8842918-e4d7-4add-93da-d1d739a0f7b9-1666664237cc065c77-2",
+        "template--16589097074909__a8842918-e4d7-4add-93da-d1d739a0f7b9-1666664237cc065c77-3",
+        "3c7795f4-e448-4f36-98cc-277577e9d59e",
+        "1558a7c6-79b5-4a09-8a95-63b0b3015baa"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "subheading": "",
+        "heading": "Shipping & Return Policies",
+        "description": "All common questions regarding shipping, return and guarantee answered by our experts delivery department",
+        "content_alignment": "ta-center m-auto",
+        "content_ordering": "text_first",
+        "remove_padding_top": false,
+        "remove_padding_bottom": false,
+        "image_ratio": "2/3",
+        "btn_text": "",
+        "btn_link": "",
+        "show_icon": false,
+        "expand_first_item_initially": false
+      }
+    },
+    "ab839310-d8e7-4281-afa8-2b15982f40b1": {
+      "type": "contact-form",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Have Any Other Questions?",
+        "content_ordering": "text_first",
+        "remove_padding_top": false,
+        "remove_padding_bottom": false,
+        "image_ratio": "auto",
+        "button_label": "Send message"
+      }
+    },
+    "eb3f7f5c-edf6-48d8-b453-b3906c570488": {
+      "type": "running-content",
+        "blocks": {
+          "content_gWRB48": {
+            "type": "content",
+            "settings": {
+              "custom_text_color": "",
+              "custom_icon_color": "",
+              "enable_icon": false,
+              "text": "Visualize The Future",
+              "font_style": "marquee-font--heading",
+              "icon_source": "theme_library",
+              "options_icon": "check",
+              "custom_svg": "",
+              "link": ""
+            }
+          }
+        },
+        "block_order": [
+          "content_gWRB48"
+        ],
+        "settings": {
+          "color_scheme": "scheme-1",
+          "accent_scheme": "color-accent-1",
+          "custom_background_color": "",
+          "speed": "2",
+          "slope_style": "none",
+          "item_size": "h3",
+          "scroll_direction": "left",
+          "remove_padding_top": true,
+          "remove_padding_bottom": true
+        }
+    }
+  },
+  "order": [
+    "590cdb49-7ed6-438e-9b8c-5fb7fc509a41",
+    "main",
+    "b09b41ff-b62f-46ad-a8f4-45de142f8028",
+    "4c866430-41c4-4425-b252-56d49eca15cf",
+    "a8842918-e4d7-4add-93da-d1d739a0f7b9",
+    "ab839310-d8e7-4281-afa8-2b15982f40b1",
+    "eb3f7f5c-edf6-48d8-b453-b3906c570488"
+  ]
+}

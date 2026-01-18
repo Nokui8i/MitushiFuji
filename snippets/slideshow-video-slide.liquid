@@ -1,0 +1,175 @@
+{%- liquid
+  assign loading = "lazy"
+  assign fetchpriority = "auto"
+  assign video_loading = "lazy"
+  assign video_fetchpriority = "low"
+  assign current_item = ''
+  assign loaded_item = 'loaded="true"'
+  if forloop.first
+    assign current_item = ' js-slideshow-image--current'
+    if section.index == 1
+      assign loading = "eager"
+      assign fetchpriority = "high"
+      assign video_loading = "eager"
+      assign video_fetchpriority = "high"
+    endif
+  endif
+
+  assign video_type = block.settings.video_url.type
+  if block.settings.video_source == 'shopify_hosted'
+    assign video_type = 'local_video'
+  endif
+
+  assign video_type_mobile = block.settings.video_url_mobile.type
+  if block.settings.video_source_mobile == 'shopify_hosted'
+    assign video_type_mobile = 'local_video'
+  endif
+
+  assign overlay = block.settings.image_overlay_opacity
+  assign overlay_color = ''
+  unless block.settings.slide_mask_overlay_color.alpha == 0.0 or block.settings.slide_mask_overlay_color == blank
+    assign overlay_color =  '--color-page-bg-rgb:' | append: block.settings.slide_mask_overlay_color.red | append: ',' | append: block.settings.slide_mask_overlay_color.green | append: ',' | append: block.settings.slide_mask_overlay_color.blue
+  endunless
+  unless block.settings.slide_content_overlay_color.alpha == 0.0 or block.settings.slide_content_overlay_color == blank
+    assign content_color =  'color:' | append: block.settings.slide_content_overlay_color
+  endunless
+
+  assign min_height_mobile = section.settings.height_mobile
+  assign min_height_desktop = section.settings.height_desktop
+
+  if min_height_desktop == "adapt_img"
+    assign min_height_desktop = ""
+
+    if video_type == 'local_video'
+      assign min_height_desktop = 100 | divided_by : block.settings.video_hosted.aspect_ratio | append: 'vw'
+    else
+      assign min_height_desktop = 56.25 | append: 'vw'
+    endif
+
+    if block.settings.video_hosted == blank and block.settings.video_url == blank
+      assign min_height_desktop = "400px"
+    endif
+  endif
+
+  if min_height_mobile == "adapt_img"
+    assign min_height_mobile = ""
+
+    if video_type == 'local_video'
+      assign min_height_mobile = 100 | divided_by : block.settings.video_hosted.aspect_ratio | append: 'vw'
+    else
+      assign min_height_mobile = 56.25 | append: 'vw'
+    endif
+
+    if block.settings.video_source_mobile == blank and block.settings.video_url_mobile == blank
+      assign min_height_mobile = "400px"
+    endif
+  endif
+
+  assign show_mobile_video = false
+
+  if block.settings.video_url_mobile != blank and block.settings.video_source_mobile == 'external'
+    assign show_mobile_video = true
+  elsif block.settings.video_hosted_mobile != blank and block.settings.video_source_mobile == 'shopify_hosted'
+    assign show_mobile_video = true
+  endif
+
+-%}
+
+<div role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}" class="{{ fullwidth_banner_class }} d-grid slider-slide slider-slide-{{ forloop.index }} js-slideshow-item scrollable-aln-start miw p-relative" style="--miw:100%; --mh-xs: {{- min_height_mobile -}};--mh-sm: {{- min_height_desktop -}};" aria-hidden="true" {{ block.shopify_attributes }}>
+  <div class="w-100 h-100 p-relative o-hidden">
+    {%- if block.settings.slide_link != blank -%}
+      {%- liquid
+        assign banner_link = 'd-block'
+        if block.settings.primary_button_label != blank and block.settings.primary_button_link != blank
+          assign banner_link = 'd-none-important'
+        endif
+        if block.settings.secondary_button_label != blank and block.settings.secondary_button_link != blank
+          assign banner_link = 'd-none-important'
+        endif
+      -%}
+        <a href="{{- block.settings.slide_link -}}" class="{{ banner_link }} js-slideshow-link p-absolute top-0 right-0 bottom-0 left-0 zi-3" target="_blank" aria-label="{{- block.settings.heading |  escape -}}"></a>
+    {%- endif -%}
+    <div class="js-slideshow-image pe-none o-hidden {{ fullwidth_banner_class }} h-100 p-absolute center-middle sht-mask zi-1 {{ current_item }}" data-slideshow-index="{{ forloop.index }}" style="--overlay: {{ overlay }}; {{ overlay_color }};">
+      <sht-slideshow-load-img data-section-id="{{ section.id }}" class="js-wrap-image-lazy d-block w-100 h-100 no-animation" {{- loaded_item -}}>
+        <div class="d-block w-100 h-100 no-animation">
+          {% if block.settings.video_url_mobile != blank or block.settings.video_hosted_mobile != blank %}
+            <sht-load-video class="{% if show_mobile_video %}d-block{% endif %} d-none-md w-100 h-100 js-animate anm anm-zoomOut" data-video-type="{{ video_type_mobile }}" data-video-id="{{ block.settings.video_url_mobile.id }}-mobile" data-video-loading="{{ video_loading }}" data-video-fetchpriority="{{ video_fetchpriority }}">
+              {% if block.settings.video_source_mobile == 'shopify_hosted' %}
+                {% capture local_video %}
+                  {%- liquid
+                    assign video_preload = 'none'
+                    if forloop.first and section.index == 1
+                      assign video_preload = 'metadata'
+                    endif
+                  -%}
+                  {{- block.settings.video_hosted_mobile | video_tag: autoplay: true, controls: false, loop: enable_video_loop, preload: video_preload, class: 'video-local js-media-item-video of-cover w-100v center-middle p-absolute mih', image_size: '1920x', loading: video_loading, fetchpriority: video_fetchpriority -}}
+                {% endcapture %}
+                {{ local_video | replace: '<source src="', '<source data-src="' }}
+              {% else %}
+                <iframe tabindex="-1" title="{{ block.settings.video_url_mobile.type }}" class="video-iframe {% if block.settings.video_url_mobile.type == 'youtube' %}js-media-item-youtube{% elsif block.settings.video_url_mobile.type == 'vimeo' %}js-media-item-vimeo{% endif %}  w-100v center-middle p-absolute mih miw" allow="autoplay; encrypted-media" loading="{{ video_loading }}" importance="{{ video_fetchpriority }}"
+                  data-src="
+                  {%- if block.settings.video_url_mobile.type == 'youtube' -%}
+                    https://www.youtube.com/embed/{{ block.settings.video_url_mobile.id }}?version=3&enablejsapi=1&mute=1&loop={{ enable_video_loop | default: '0' | replace: 'true', '1' }}&controls=0&rel=0&showinfo=0&autoplay=1&playlist={{ block.settings.video_url_mobile.id }}
+                  {%- elsif block.settings.video_url_mobile.type == 'vimeo' -%}
+                    https://player.vimeo.com/video/{{ block.settings.video_url_mobile.id }}?api=1&background=1&autoplay=1&loop={{ enable_video_loop | default: '0' | replace: 'true', '1' }}&title=0&byline=0&portrait=0&controls=0&muted=1
+                  {%- endif -%}" style="--miw:177.77vh;--h-xs:56.25vw;">
+                </iframe>
+              {% endif %}
+            </sht-load-video>
+          {% endif %}
+
+          <sht-load-video class="{% if show_mobile_video %}d-none{% endif %} d-block-md w-100 h-100 js-animate anm anm-zoomOut" data-video-type="{{ video_type }}" data-video-id="{{ block.settings.video_url.id }}" data-video-loading="{{ video_loading }}" data-video-fetchpriority="{{ video_fetchpriority }}">
+            {% if block.settings.video_source == 'shopify_hosted' %}
+              {% capture local_video %}
+                {%- liquid
+                  assign video_preload = 'none'
+                  if forloop.first and section.index == 1
+                    assign video_preload = 'metadata'
+                  endif
+                -%}
+                {{- block.settings.video_hosted | video_tag: autoplay: true, controls: false, loop: enable_video_loop, preload: video_preload, class: 'video-local js-media-item-video of-cover w-100v center-middle p-absolute mih', image_size: '1920x', loading: video_loading, fetchpriority: video_fetchpriority -}}
+              {% endcapture %}
+              {{ local_video | replace: '<source src="', '<source data-src="' }}
+            {% else %}
+              <iframe tabindex="-1" title="{{ block.settings.video_url.type }}" class="video-iframe {% if block.settings.video_url.type == 'youtube' %}js-media-item-youtube{% elsif block.settings.video_url.type == 'vimeo' %}js-media-item-vimeo{% endif %}  w-100v center-middle p-absolute mih miw" allow="autoplay; encrypted-media" loading="{{ video_loading }}" importance="{{ video_fetchpriority }}"
+                data-src="
+                {%- if block.settings.video_url.type == 'youtube' -%}
+                  https://www.youtube.com/embed/{{ block.settings.video_url.id }}?version=3&enablejsapi=1&mute=1&loop={{ enable_video_loop | default: '0' | replace: 'true', '1' }}&controls=0&rel=0&showinfo=0&autoplay=1&playlist={{ block.settings.video_url.id }}
+                {%- elsif block.settings.video_url.type == 'vimeo' -%}
+                  https://player.vimeo.com/video/{{ block.settings.video_url.id }}?api=1&background=1&autoplay=1&loop={{ enable_video_loop | default: '0' | replace: 'true', '1' }}&title=0&byline=0&portrait=0&controls=0&muted=1
+                {%- endif -%}" style="--miw:177.77vh;--h-xs:56.25vw;">
+              </iframe>
+            {% endif %}
+          </sht-load-video>
+        </div>
+      </sht-slideshow-load-img>
+    </div>
+    <div class="slider__content o-hidden h-100 ctnr d-flex p-relative zi-2 content--special {{ content_classes }} {% if content_position == 'left-bottom' %}content_position{% endif %}" style="{{- content_color -}};">
+      <div class="s-header pb-0" style="--w-xs:12;--w-md:8;">
+        <div class="slider__content-item s-header__sub hide-empty d-inline-block fw-700 tt-up {{ subheading_style }}" style="--delay: .3s">{{- block.settings.sub_heading | escape -}}</div>
+        <h2 class="slider__content-item s-header__title {{ margin_auto }} mb-0 hide-empty {{ heading_style }}" style="--delay: .35s">{{- block.settings.heading | escape -}}</h2>
+        <div class="slider__content-item s-header__desc text-block hide-empty{% if content_position == 'center' %} m-sides{% endif %}" style="--delay: .4s">{{- block.settings.description -}}</div>
+        <sht-slideshow-cta class="slider__content-item s-header__buttons slideshow__buttons d-inline-flex fw-wrap gap-12 gap-md-16{% if content_position == 'center' %} center-xs{% endif %}" style="--delay: .45s">
+          {%- if block.settings.primary_button_label != blank -%}
+          <a href="{{ block.settings.primary_button_link | default: '#' }}" role="link" class="btn btn-primary--animate btn-large js-slideshow-cta hide-empty" tabindex="-1" aria-hidden="true">
+            <span class="d-block o-hidden p-relative">
+              <span class="btn-primary__content">
+                {{- block.settings.primary_button_label | escape -}}
+              </span>
+            </span>
+          </a>
+          {%- endif -%}
+          {%- if block.settings.secondary_button_label != blank -%}
+          <a href="{{ block.settings.secondary_button_link | default: '#' }}" role="link" class="btn btn-secondary--animate btn-large js-slideshow-cta hide-empty" tabindex="-1" aria-hidden="true">
+            <span class="d-block o-hidden p-relative">
+              <span class="btn-secondary__content">
+                {{- block.settings.secondary_button_label | escape -}}
+              </span>
+            </span>
+          </a>
+          {%- endif -%}
+        </sht-slideshow-cta>
+      </div>
+    </div>
+  </div>
+</div>

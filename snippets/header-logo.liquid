@@ -1,0 +1,39 @@
+
+{%- if request.page_type == 'index' and section.settings.enable_transparent and section.settings.logo_transparent != blank -%}
+{%- assign image_size_2x = section.settings.logo_width | times: 2 | at_most: 5760 -%}
+{%- assign header_transparent_logo_css = ' header-logo--transparent' -%}
+  {%- capture logo_transparent -%}
+    {%- assign transparent_width = section.settings.logo_width -%}
+    {%- assign transparent_height = section.settings.logo.height | default: section.settings.logo_transparent.height -%}
+    {%- if section.settings.logo != blank -%}
+      {%- assign aspect_ratio = section.settings.logo.width | divided_by: section.settings.logo.height | times: 1.0 -%}
+      {%- assign transparent_height = transparent_width | divided_by: aspect_ratio | round -%}
+    {%- endif -%}
+    <img srcset="{{ section.settings.logo_transparent | image_url: width: section.settings.logo_width }}, {{ section.settings.logo_transparent | image_url: width: image_size_2x }} 2x" src="{{ section.settings.logo | image_url: width: 400 }}"  class="header__logo-img logo logo--transparent {% if section.settings.logo == blank %}logo--transparent-always{% endif %}" width="{{ transparent_width }}" height="{{ transparent_height }}" alt="{{ section.settings.logo_transparent.alt | default: shop.name | escape }}" loading="eager" fetchpriority="high" decoding="async">
+  {%- endcapture -%}
+{%- endif -%}
+
+{%  liquid
+  assign has_any_logo = false
+  assign has_transparent_logo = false
+  if request.page_type == 'index' and section.settings.enable_transparent and section.settings.logo_transparent != blank
+    assign has_transparent_logo = true
+  endif
+  if section.settings.logo != blank or has_transparent_logo
+    assign has_any_logo = true
+  endif
+%}
+
+<div class="header-logo {{ header_transparent_logo_css }}" style="{{ styles }}">
+  {%- if request.page_type == 'index' -%}
+    <h1 class="header__heading m-zero wb-break-word visually-hidden">{{ section.settings.logo.alt | default: shop.name | escape }}</h1>
+  {%- endif -%}
+    <a href="{{ routes.root_url }}" aria-label="{{ section.settings.logo.alt | default: shop.name | escape }}" class="header__logo-link m-zero js-header-logo-link d-block h4 p-relative wb-break-word">
+      {%- if section.settings.logo != blank -%}
+          <img srcset="{{ section.settings.logo | image_url: width: section.settings.logo_width }}, {{ section.settings.logo | image_url: width: image_size_2x }} 2x" src="{{ section.settings.logo | image_url: width: 400 }}" class="header__logo-img logo__main-logo logo" width="{{ section.settings.logo.width }}" height="{{ section.settings.logo.height }}" alt="{{ section.settings.logo.alt | default: shop.name | escape }}" loading="eager" fetchpriority="high" decoding="async">
+      {%- elsif has_any_logo == false -%}
+        <span class="header__heading m-zero wb-break-word">{{ shop.name }}</span>
+      {%- endif -%}
+      {{ logo_transparent }}
+    </a>
+</div>

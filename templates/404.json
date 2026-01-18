@@ -1,0 +1,18 @@
+ {
+  "sections": {
+    "main": {
+      "type": "main-404",
+      "settings": {
+        "subheading": "Page not found",
+        "heading": "We're sorry, this page is not available",
+        "description": "<p>The page URL might be outdated or contain typo errors</p>",
+        "enable_search": true,
+        "home_page_link_text": "Visit our home page",
+        "catalogue_link_text": "Browse all products"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

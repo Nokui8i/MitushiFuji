@@ -1,0 +1,233 @@
+{% liquid
+
+  assign is_result_matching = false
+  if predictive_search.resources.products.size > 0 or predictive_search.resources.collections.size > 0 or predictive_search.resources.articles.size > 0 or predictive_search.resources.pages.size > 0 or predictive_search.resources.queries.size > 0
+    assign is_result_matching = true
+  endif
+
+  assign clm_right = '--w-xs: 12; --w-sm: 12; --w-lg: 3;'
+  if predictive_search.resources.products.size == nil and predictive_search.resources.collections.size == nil and predictive_search.resources.queries.size == nil
+    assign hidden_left = 'hidden'
+    assign clm_right = '--w-xs: 12; --w-sm: 12; --w-lg: 12;'
+  endif
+
+  assign clm_left = '--w-xs: 12; --w-sm: 12; --w-lg: 9;'
+  if predictive_search.resources.articles.size == nil and predictive_search.resources.pages.size == nil
+    assign hidden_right = 'hidden'
+    assign clm_left = '--w-xs: 12; --w-sm: 12; --w-lg: 12;'
+  endif
+
+%}
+{%- if predictive_search.performed -%}
+  <div class="search__result-contents" id="predictive-search-results-list">
+    <div class="search__result-items js-predictive-search-result-items rw gap-32 gap-md-40">
+      {% capture no_result %}
+        <span class="no-matching-results d-block w-100 ta-center color-light">
+          {{ 'general.search.no_matching_results' | t }}
+        </span>
+      {% endcapture %}
+      {%- if is_result_matching == false -%}
+        {{ no_result }}
+      {%- else -%}
+        <div class="clm {{ hidden_left }}" style="{{ clm_left }}">
+          {%- if predictive_search.resources.queries.size != nil -%}
+            <div class="search__result--suggestions">
+              <div class="d-flex between-xs middle-xs mt-2x">
+                <h2 class="h5 m-zero anm anm-fadeInUp fw-700">
+                  {{ 'general.suggestions' | t }}
+                  <span>({% if predictive_search.resources.queries.size >= 5 %}5{% else %}{{ predictive_search.resources.queries.size | default: 0 }}{% endif %})</span>
+                </h2>
+              </div>
+              {%- if predictive_search.resources.queries.size > 0 -%}
+                <ul class="search__result--list d-flex fw-wrap gap-12 mt-16 ls-none" role="listbox">
+                  {%- for query in predictive_search.resources.queries limit: 5 -%}
+                    <li role="option">
+                      {% render 'mini-card-suggestions',
+                        query: query,
+                      %}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- else -%}
+                <p class="color-light mt-16">
+                  {{ 'general.no_suggestions_found' | t }}
+                </p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if predictive_search.resources.products.size != nil -%}
+            <div class="search__result--products">
+              <div class="d-flex between-xs middle-xs mt-2x">
+                <h2 class="h5 m-zero anm anm-fadeInUp fw-700">
+                  {{ 'general.search.products' | t }}
+                  <span>({{ predictive_search.resources.products.size }})</span>
+                </h2>
+                {% if predictive_search.resources.products.size > 0 %}
+                  <a href="{{ routes.search_url }}?type=product&q={{ predictive_search.terms | escape }}&{{ 'options[prefix]' | url_encode }}=last" class="btn btn-link anm anm-fadeInUp">{{ 'general.search.view_all' | t }}</a>
+                {% endif %}
+              </div>
+              {%- if predictive_search.resources.products.size > 0 -%}
+                <div class="search__result-type search__result--product mt-24">
+                  <ul class="search__result--list r-gap-16 r-gap-sm-24 r-gap-lg-16 ls-none rw" role="listbox">
+                    {%- for product in predictive_search.resources.products limit: limit -%}
+                      <li
+                        id="predictive-search-item-product-{{ forloop.index }}"
+                        class="search__result-item js-predictive-search-item clm anm anm-fadeInUp"
+                        style="--w-xs: var(--products-per-row-mobile); --w-sm: var(--products-per-row-mobile); --w-md: var(--products-per-row-desktop); --delay: {{ forloop.index | times: 0.05 -}}s"
+                        role="option">
+                        {% render 'card-product',
+                          product: product,
+                          show_color_swatch: false,
+                          show_sale_badge: false,
+                          enable_quick_buy: false,
+                          ratio: settings.product_card_image_ratio,
+                          card_content_inner: false,
+                          section: section
+                        %}
+                        {% render 'mini-card-product',
+                          product: product,
+                          ratio: settings.product_card_image_ratio,
+                          show_vendor: true,
+                          show_price: true
+                        %}
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {% else %}
+                <p class="color-light mt-16">
+                  {{ 'general.search.no_product_found' | t }}
+                </p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if predictive_search.resources.collections.size != nil -%}
+            <div class="search__result--collections">
+              <div class="d-flex between-xs middle-xs mt-2x">
+                <h2 class="h5 m-zero anm anm-fadeInUp fw-700">
+                  {{ 'general.collections' | t }}
+                  <span>({{ predictive_search.resources.collections.size | default: 0 }})</span>
+                </h2>
+              </div>
+
+              {%- if predictive_search.resources.collections.size > 0 -%}
+                <ul class="search__result--list r-gap-16 r-gap-sm-24 r-gap-lg-16 ls-none rw mt-24" role="listbox">
+                  {%- for collection in predictive_search.resources.collections -%}
+                    <li class="clm" style="--w-xs: var(--collections-per-row-mobile); --w-sm: var(--collections-per-row-mobile); --w-md: var(--collections-per-row-desktop);" role="option">
+                      {% render 'card-collection',
+                        collection: collection,
+                        media_ratio: settings.collection_image_ratio,
+                      %}
+                      {% render 'mini-card-collection',
+                        collection: collection,
+                        media_ratio: settings.collection_image_ratio,
+                        show_product_count: true
+                      %}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- else -%}
+                <p class="color-light mt-16">
+                  {{ 'general.no_collections_found' | t }}
+                </p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="clm pt-0 {{ hidden_right }}" style="{{ clm_right }}">
+          {% if predictive_search.resources.articles.size != nil %}
+            <div class="search__result--articles">
+              <div class="d-flex between-xs middle-xs mt-2x">
+                <h2 class="h5 m-zero anm anm-fadeInUp fw-700">
+                  {{ 'general.search.articles' | t }}
+                  <span>({% if predictive_search.resources.articles.size >= 5 %}5{% else %}{{ predictive_search.resources.articles.size | default: 0 }}{% endif %})</span>
+                </h2>
+                {% if predictive_search.resources.articles.size > 0 %}
+                  <a href="{{ routes.search_url }}?type=article&q={{ predictive_search.terms | escape }}&{{ 'options[prefix]' | url_encode }}=last" class="btn btn-link anm anm-fadeInUp">{{ 'general.search.view_all' | t }}</a>
+                {% endif %}
+              </div>
+
+              {%- if predictive_search.resources.articles.size != nil -%}
+                <div class="search__result-type mt-24">
+                  <ul class="search__result--list r-gap-16 r-gap-sm-24 r-gap-lg-16 ls-none rw" role="listbox">
+                    {%- for article in predictive_search.resources.articles limit: 5 -%}
+                      <li
+                        id="predictive-search-item-article-{{ forloop.index }}"
+                        class="search__result-item clm anm anm-fadeInUp"
+                        style="--w-xs: 12; --w-sm: 6; --w-lg: 12; --delay: {{ forloop.index | times: 0.05 -}}s"
+                        role="option">
+                        <div class="card__search d-grid gap-8 middle-xs">
+                          {%- liquid
+                          assign ratio = settings.article_card_featured_image_ratio
+                            if settings.article_card_featured_image_ratio == 'auto'
+                              if article.image.aspect_ratio != nil
+                                assign ratio = article.image.aspect_ratio
+                              else
+                                assign ratio = 1
+                              endif
+                            endif
+                          -%}
+                          <a href="{{ article.url }}"
+                            class="d-block p-relative card__media"
+                            aria-label="{{ article.title }}"
+                            style="--ratio: {{ ratio }};">
+                            {%- if article.image -%}
+                              {{ article.image.src | image_url: width: 150 | image_tag: class: 'w-100 h-100 of-cover media', alt: article.featured_image.alt }}
+                            {% else %}
+                              {{ 'blog-apparel-1' | placeholder_svg_tag: 'placeholder w-100 h-100 media' }}
+                            {%- endif -%}
+                          </a>
+                          <a href="{{ article.url }}" class="d-block">{{ article.title }}</a>
+                        </div>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {% else %}
+                <p class="color-light mt-16">
+                  {{ 'general.search.no_blog_posts_found' | t }}
+                </p>
+              {%- endif -%}
+            </div>
+          {% endif %}
+
+          {% if predictive_search.resources.pages.size > 0 %}
+            <div class="search__result--page mt-32 mt-sm-40 mt-lg-32 mt-xl-40">
+              <div class="d-flex between-xs middle-xs mt-2x">
+                <h2 class="h5 m-zero anm anm-fadeInUp fw-700">
+                  {{ 'general.search.pages' | t }}
+                  <span>({% if predictive_search.resources.pages.size >= 5 %}5{% else %}{{ predictive_search.resources.pages.size | default: 0 }}{% endif %})</span>
+                </h2>
+                {% if predictive_search.resources.pages.size > 0 %}
+                  <a href="{{ routes.search_url }}?type=page&q={{ predictive_search.terms | escape }}&{{ 'options[prefix]' | url_encode }}=last" class="btn btn-link anm anm-fadeInUp">{{ 'general.search.view_all' | t }}</a>
+                {% endif %}
+              </div>
+              {%- if predictive_search.resources.pages.size > 0 -%}
+                <div class="search__result-type mt-24">
+                  <ul class="search__result--list r-gap-8 ls-none rw" role="listbox">
+                    {%- for page in predictive_search.resources.pages limit: 5 -%}
+                      <li
+                        id="predictive-search-item-page-{{ forloop.index }}"
+                        class="search__result-item clm anm anm-fadeInUp"
+                        style="--w-xs: 12; --w-sm: 6; --w-lg: 12; --delay: {{ forloop.index | times: 0.05 -}}s"
+                        role="option">
+                        <a href="{{ page.url }}" class="d-block">{{ page.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {% else %}
+                <p class="color-light mt-16">
+                  {{ 'general.search.no_pages_found' | t }}
+                </p>
+              {%- endif -%}
+            </div>
+          {% endif %}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

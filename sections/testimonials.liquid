@@ -1,0 +1,295 @@
+{%- liquid
+  assign md = 12.0 | divided_by : section.settings.items_per_row_on_desktop
+  assign content_align = section.settings.content_align
+  if content_align == 'diagonal d-grid-md'
+    assign md = 6
+  endif
+
+  if section.settings.items_per_row_on_desktop == "1"
+    assign testimonials_class = 'testimonials-full'
+  endif
+
+  assign text_style = 'pr-24 pr-md-40'
+  if content_align == 'ta-center'
+    assign text_style = 'm-auto'
+  endif
+
+  capture icon_quote
+    render 'icon-quote', class: 'd-block', size: 48
+  endcapture
+
+  unless section.settings.section_mask_overlay_color.alpha == 0.0 or section.settings.section_mask_overlay_color == blank
+    assign overlay_color =  '--color-page-bg-rgb:' | append: section.settings.section_mask_overlay_color.red | append: ',' | append: section.settings.section_mask_overlay_color.green | append: ',' | append: section.settings.section_mask_overlay_color.blue
+  endunless
+  if settings.enable_content_max_width
+    assign carousel_class = 'carousel-content-width o-hidden-md'
+  endif
+-%}
+<div class="section color-{{- section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} {% render 'animation-loader', section: section %}" data-ui-component="Testimonials Section" role="region" aria-labelledby="sectionHeading-{{ section.id | md5 | truncate: 12, "" }}">
+  <div class="ctnr {{ content_align }}">
+    {%- render 'section-header',
+      content_align: content_align,
+      subheading: section.settings.subheading,
+      heading: section.settings.heading,
+      description: section.settings.description,
+      badge_text: section.settings.badge_text,
+      badge_position: section.settings.badge_position,
+      badge_shape: section.settings.badge_shape,
+      badge_color: section.settings.badge_color,
+      section: section
+    -%}
+    <div class="s-content miw-100 {{ testimonials_class }}">
+      <sht-carousel class="p-relative d-block {{ carousel_class }}" data-enable="true" data-mobile-enable="{{ section.settings.enable_carousel }}">
+        <div aria-atomic="true" class="rw gap-unequal fw-nowrap-md carousel ox-auto p-relative scrollable scrollable-x disable-scrollbars js-carousel-items m-zero {% if section.settings.enable_carousel %}fw-nowrap{% else %}fw-wrap{% endif %} js-animate">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign loading = "lazy"
+              assign decoding ="async"
+              assign fetchpriority = "auto"
+
+              if section.index == 1 and forloop.first
+                assign loading = "eager"
+                assign fetchpriority = "high"
+              endif
+              assign cover = 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder js-image-lazy of-cover'
+              assign cover = block.settings.avatar | image_url: width: block.settings.avatar.width | image_tag: widths: '352, 550', sizes: '550px', alt: block.settings.name, class: 'js-image-lazy media of-cover', loading: loading, fetchpriority: fetchpriority, decoding: decoding
+            -%}
+            <sht-carousel-itm class="clm carousel__item js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero anm anm-fadeInUp" style="--w-xs:12;--w-sm:6;--w-md:{{- md -}}; --delay: {{ forloop.index | times: 0.05 -}}s; --duration: .6s" role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}" data-item-index="{{ forloop.index }}">
+              <div class="card w-100" {{ block.shopify_attributes }}>
+                <div class="card__avatar sht-mask o-hidden p-relative mb-16 {{ section.settings.image_style }} {{ content_align | replace: 'ta-center', 'm-auto' | replace: 'diagonal d-grid-md', 'ta-left' }}" style="--overlay: {{ section.settings.image_overlay_opacity }}; {{ overlay_color }}; --size: {{ section.settings.image_size }}px">
+                  {% render 'image', image_item: cover, ratio: '1/1' %}
+                  <span class="quote p-absolute zi-1 {{ section.settings.icon_color }} {{ section.settings.show_icon_quote | replace: 'true', '' | replace: 'false', 'd-none' }}">
+                    {{ icon_quote }}
+                  </span>
+                </div>
+                <div class="p-zero card__info {{ text_style }}">
+                  <h3 class="h6 m-zero hide-empty mb-8">{{- block.settings.name | escape -}}</h3>
+                  <p class="m-zero subtext hide-empty color-light mb-16">{{- block.settings.job_title | escape -}}</p>
+                  <p class="m-zero hide-empty">{{- block.settings.text | escape -}}</p>
+                </div>
+              </div>
+            </sht-carousel-itm>
+          {% endfor %}
+        </div>
+        <div class="carousel-pagination middle-y w-100 p-absolute no-js-hidden {% if section.settings.show_navigation == false or section.settings.enable_carousel == false %} d-none {% endif %} d-block-md">
+          <div class="p-absolute left-0">
+            <button type="button" data-step="1" class="js-carousel-prev-btn btn btn-primary--animate rtl-flip-x btn-icon btn-small p-absolute middle-y zi-1 left-0" aria-label="{{ 'accessibility.previous_slide' | t }}" name="previous" disabled>{% render 'icon-chevron-left' %}</button>
+          </div>
+          <div class="p-absolute right-0">
+            <button type="button" data-step="1" class="js-carousel-next-btn btn btn-primary--animate rtl-flip-x btn-icon btn-small p-absolute middle-y zi-1 right-0" aria-label="{{ 'accessibility.next_slide' | t }}" name="next" disabled>{% render 'icon-chevron-right' %}</button>
+          </div>
+        </div>
+      </sht-carousel>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:general.testimonials",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:general.general"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:general.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:general.section_subheading",
+      "default": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:general.section_heading",
+      "default": "Testimonials"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "t:general.section_description"
+    },
+    {
+      "type": "header",
+      "content": "t:general.layout"
+    },
+    {
+      "type": "select",
+      "id": "content_align",
+      "label": "t:general.content_alignment",
+      "default": "ta-left",
+      "options": [
+        { "value": "ta-left", "label": "t:general.left" },
+        { "value": "ta-center", "label": "t:general.center" },
+        { "value": "diagonal d-grid-md", "label": "t:general.diagonal" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "items_per_row_on_desktop",
+      "label": "t:general.items_per_row_on_desktop",
+      "default": "4",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "visible_if": "{{ section.settings.content_align != 'diagonal d-grid-md' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_carousel",
+      "label": "t:general.enable_carousel_on_mobile",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "t:general.show_navigation_on_mobile",
+      "default": true,
+      "visible_if": "{{ section.settings.enable_carousel == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_top",
+      "label": "t:general.remove_padding_top",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_bottom",
+      "label": "t:general.remove_padding_bottom",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:general.testimonial_item"
+    },
+    {
+      "type": "select",
+      "id": "image_style",
+      "label": "t:general.image_style",
+      "options": [
+        { "value": "br-50p bblr-0", "label": "t:general.bubble_style" },
+        { "value": "br-50p", "label": "t:general.circle_style" },
+        { "value": "square", "label": "t:general.square_style" }
+      ],
+      "default": "br-50p bblr-0"
+    },
+    {
+      "type": "range",
+      "id": "image_size",
+      "label": "t:general.image_size",
+      "min": 60,
+      "max": 200,
+      "step": 5,
+      "default": 180,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "section_mask_overlay_color",
+      "label": "t:general.mask_overlay",
+      "info": "t:general.testimonial_mask_overlay_info"
+    },
+    {
+      "type": "range",
+      "unit": "%",
+      "max": 90,
+      "min": 0,
+      "step": 1,
+      "default": 30,
+      "id": "image_overlay_opacity",
+      "label": "t:general.mask_overlay_opacity"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon_quote",
+      "label": "t:general.show_icon_quote",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "icon_color",
+      "label": "t:general.icon_color_scheme",
+      "default": "color-accent-bg-2",
+      "visible_if": "{{ section.settings.show_icon_quote == true }}",
+      "options": [
+        { "value": "color-accent-bg-1", "label": "t:general.main_accent" },
+        { "value": "color-accent-bg-2", "label": "t:general.extra_accent" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:general.prominent_badge"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "t:general.text",
+      "info": "t:general.prominent_badge_text_info",
+      "default": "Get ready"
+    },
+    {
+      "type": "select",
+      "id": "badge_color",
+      "label": "t:general.accent_scheme",
+      "default": "color-accent-1",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        { "value": "color-accent-1", "label": "t:general.main" },
+        { "value": "color-accent-2", "label": "t:general.extra" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "badge_position",
+      "label": "t:general.position",
+      "default": "p-badge--bottom-right",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        { "value": "p-badge--bottom-left", "label": "t:general.left" },
+        { "value": "p-badge--bottom-right", "label": "t:general.right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "badge_shape",
+      "label": "t:general.shape",
+      "default": "badge--star",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        { "value": "badge--star", "label": "t:general.star" },
+        { "value": "badge--diamond", "label": "t:general.diamond" },
+        { "value": "badge--asterisk", "label": "t:general.asterisk" }
+      ]
+    }
+  ],
+  "blocks": [
+    { "type": "testimonial", "name": "t:general.testimonial", "settings": [
+      { "type": "image_picker", "id": "avatar", "label": "t:general.avatar", "info": "t:general.avatar_info" },
+      { "type": "text", "id": "name", "label": "t:general.author", "default": "Author's Name" },
+      { "type": "text", "id": "job_title", "label": "t:general.author_title", "default": "Loyal Customer" },
+      { "type": "textarea", "id": "text", "label": "t:general.testimonial_content", "default": "Add customer reviews and testimonials to showcase your store's happy customers." }
+    ] }
+  ],
+  "presets": [ { "name": "t:general.testimonials", "blocks": [
+    { "type": "testimonial" }, { "type": "testimonial" }, { "type": "testimonial" }, { "type": "testimonial" }, { "type": "testimonial" }
+  ] } ]
+}
+{% endschema %}

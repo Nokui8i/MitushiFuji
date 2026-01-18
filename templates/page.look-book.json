@@ -1,0 +1,48 @@
+
+ {
+  "sections": {
+    "breadcrumb": {
+      "type": "breadcrumb",
+      "settings": {
+        "color_scheme": ""
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "show_page_title": true,
+        "remove_padding_top": true,
+        "remove_padding_bottom": false
+      }
+    },
+    "collection_list_LHXbeg": {
+      "type": "collection-list",
+      "settings": {
+        "color_scheme": "",
+        "subheading": "",
+        "heading": "LOOKBOOKS",
+        "description": "",
+        "items_per_row_on_desktop": "4",
+        "items_per_row_on_mobile": "2",
+        "content_align": "ta-center m-auto",
+        "enable_carousel": false,
+        "show_navigation": false,
+        "remove_padding_top": false,
+        "remove_padding_bottom": false,
+        "enable_view_all": false,
+        "button_main_text": "View all collections",
+        "badge_text": "",
+        "badge_color": "color-accent-1",
+        "badge_position": "p-badge--bottom-right",
+        "badge_shape": "badge--star"
+      }
+    }
+  },
+  "order": [
+    "breadcrumb",
+    "main",
+    "collection_list_LHXbeg"
+  ]
+}

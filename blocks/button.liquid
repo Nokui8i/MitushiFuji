@@ -1,0 +1,51 @@
+
+
+{% render 'button', block: block %}
+
+{% schema %}
+{
+  "name": "t:general.button",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:general.label",
+      "info": "t:general.hide_if_empty",
+      "default": "Shop now"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "t:general.style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:general.primary"
+        },
+        {
+          "value": "secondary",
+          "label": "t:general.secondary"
+        },
+        {
+          "value": "link",
+          "label": "t:general.text_link"
+        }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:general.link",
+      "visible_if": "{{ block.settings.button_label != blank }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.button",
+      "category": "t:general.basic"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,187 @@
+{% liquid
+  assign block_width = block.settings.width
+  assign mobile_block_width = block.settings.mobile_width
+
+  assign desktop_direction_class = 'fd-column-md'
+  if block.settings.desktop_direction == 'horizontal'
+    assign desktop_direction_class = 'fd-row-md'
+  endif
+
+  assign mobile_direction_class = 'fd-column'
+  if block.settings.mobile_direction == 'horizontal'
+    assign mobile_direction_class = 'fd-row'
+  endif
+
+  assign width_class = 'w-100-md'
+  if block_width == 'fit'
+    assign width_class = 'w-auto-md'
+  elsif block_width == 'custom'
+    assign width_class = 'w-custom-md'
+    assign custom_width = block.settings.custom_width | append: '%'
+  endif
+
+  assign mobile_width_class = 'w-100'
+  if mobile_block_width == 'fit'
+    assign mobile_width_class = 'w-auto'
+  elsif mobile_block_width == 'custom'
+    assign mobile_width_class = 'w-custom'
+    assign custom_mobile_width = block.settings.mobile_custom_width | append: '%'
+  endif
+%}
+
+<div
+  class="button-groups fw-wrap d-flex {{ desktop_direction_class }} {{ mobile_direction_class }} {{ width_class }} {{ mobile_width_class }} gap-16 {{ block_width | replace: 'fit', 'button-groups-fit-md' }} {{ mobile_block_width | replace: 'fit', 'button-groups-fit'}}"
+  style="{% if block_width == 'custom' %}--width-md: {{ custom_width }};{% endif %} {% if mobile_block_width == 'custom' %}--width: {{ custom_mobile_width }};{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "t:general.button_group",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "button"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:block.button_group_paragraph"
+    },
+    {
+      "type": "header",
+      "content": "t:general.desktop_layout"
+    },
+    {
+      "type": "select",
+      "id": "desktop_direction",
+      "label": "t:general.direction",
+      "default": "vertical",
+      "options": [
+        {
+          "value": "vertical",
+          "label": "t:general.vertical"
+        },
+        {
+          "value": "horizontal",
+          "label": "t:general.horizontal"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:general.mobile_layout"
+    },
+    {
+      "type": "select",
+      "id": "mobile_direction",
+      "label": "t:general.direction",
+      "default": "vertical",
+      "options": [
+        {
+          "value": "vertical",
+          "label": "t:general.vertical"
+        },
+        {
+          "value": "horizontal",
+          "label": "t:general.horizontal"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:general.size"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:general.width",
+      "default": "fit",
+      "options": [
+        {
+          "value": "fill",
+          "label": "t:general.fill"
+        },
+        {
+          "value": "fit",
+          "label": "t:general.fit"
+        },
+        {
+          "value": "custom",
+          "label": "t:general.custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "custom_width",
+      "label": "t:general.custom_width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100,
+      "visible_if": "{{ block.settings.width == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_width",
+      "label": "t:general.mobile_width",
+      "default": "fit",
+      "options": [
+        {
+          "value": "fill",
+          "label": "t:general.fill"
+        },
+        {
+          "value": "fit",
+          "label": "t:general.fit"
+        },
+        {
+          "value": "custom",
+          "label": "t:general.custom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "mobile_custom_width",
+      "label": "t:general.custom_width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100,
+      "visible_if": "{{ block.settings.mobile_width == 'custom' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.button_group",
+      "category": "t:general.basic",
+      "blocks": [
+        {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop now",
+            "button_style": "primary"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "button_label": "Learn more",
+            "button_style": "secondary"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

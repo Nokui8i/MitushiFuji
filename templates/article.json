@@ -1,0 +1,41 @@
+ {
+  "sections": {
+    "1f8b90b9-00ca-4c8d-aecf-2c692a521d3d": {
+      "type": "breadcrumb",
+      "settings": {}
+    },
+    "main": {
+      "type": "main-article",
+      "blocks": {
+        "baada2a6-fc99-462b-aafc-0a84ac755fc8": {
+          "type": "featured_image",
+          "settings": {}
+        },
+        "5f96aa1a-5963-4a9b-8cff-3c9405f07836": {
+          "type": "title",
+          "settings": {
+            "show_author": true,
+            "show_date": true,
+            "show_share": true
+          }
+        },
+        "35ba53d6-1735-4ebb-bca5-ff1935027917": {
+          "type": "content",
+          "settings": {
+            "show_tag": true
+          }
+        }
+      },
+      "block_order": [
+        "baada2a6-fc99-462b-aafc-0a84ac755fc8",
+        "5f96aa1a-5963-4a9b-8cff-3c9405f07836",
+        "35ba53d6-1735-4ebb-bca5-ff1935027917"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "1f8b90b9-00ca-4c8d-aecf-2c692a521d3d",
+    "main"
+  ]
+}

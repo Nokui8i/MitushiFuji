@@ -1,0 +1,31 @@
+<div class="page-block w-100 h-auto start-xs" {{ block.shopify_attributes }}>
+  {%- if block.settings.page != blank -%}
+    {%- if block.settings.page.title != blank -%}
+      <h2 class="page-title">{{ block.settings.page.title }}</h2>
+    {%- endif -%}
+    {%- if block.settings.page.content != blank -%}
+      <div class="hide-empty rte">
+        {{ block.settings.page.content }}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:general.page",
+  "settings": [
+    {
+      "type": "page",
+      "id": "page",
+      "label": "t:general.page"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.page",
+      "category": "t:general.basic"
+    }
+  ]
+}
+{% endschema %}

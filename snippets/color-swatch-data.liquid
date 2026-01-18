@@ -1,0 +1,40 @@
+{%-liquid
+  assign legal_image_extensions = 'bmp,gif,jpg,png,svg,jpeg,webp,heic' | split: ','
+
+  assign has_variant_swatch_rules = false
+  if settings.variant_swatches_rules != blank
+    assign variant_swatches_rules = settings.variant_swatches_rules | strip | newline_to_br | strip_newlines | split: "<br />"
+    assign key_arr = ''
+    assign val_arr = ''
+    for variant_swatch in variant_swatches_rules
+      if variant_swatch != blank
+        assign key = variant_swatch | split: ':' | first
+        assign value = variant_swatch | split: ':' | last
+        assign file_type = value | split: '.' | last
+
+        if legal_image_extensions contains file_type
+          if file_type == 'png' or file_type == 'jpg' or file_type == 'jpeg' or file_type == 'gif' or file_type == 'svg' or file_type == 'webp'
+            assign value = value | strip | file_img_url
+          else
+            assign value = value | strip | file_url
+          endif
+        endif
+
+        assign key_arr = key_arr | append: ',' | append: key | strip | replace: " ", ""
+        assign val_arr = val_arr | append: ',' | append: value | strip | replace: " ", ""
+        assign has_variant_swatch_rules = true
+      endif
+    endfor
+
+    assign key_arr = key_arr | downcase | remove_first: ',' | split: ','
+    assign val_arr = val_arr | remove_first: ',' | split: ','
+  endif
+-%}
+
+<script id="colorSwatchData" type="application/json">
+  {%- if has_variant_swatch_rules == true -%}
+    {"color_swatch_name": {{ key_arr | json }}, "color_swatch_value": {{ val_arr | json }}}
+  {%- else -%}
+    {"color_swatch_name": [""], "color_swatch_value": [""]}
+  {%- endif -%}
+</script>

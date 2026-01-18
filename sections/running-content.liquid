@@ -1,0 +1,807 @@
+{%- liquid
+  assign rand = section.id | md5 | truncate: 12, ""
+
+  assign loop = 5
+  case section.blocks.size
+    when 1, 2
+      assign loop = 12
+    when 3, 4
+      assign loop = 10
+    when 5, 6
+      assign loop = 7
+  endcase
+
+  assign custom_background_color = 'background-color: var(--color-page-bg);'
+  unless section.settings.custom_background_color.alpha == 0.0 or section.settings.custom_background_color == blank
+    assign custom_background_color = 'background-color: ' | append: section.settings.custom_background_color | append: ';'
+  endunless
+
+  assign content_gap = 'gap-12'
+  assign icon_size = '100%'
+  case section.settings.item_size
+    when 'headline'
+      assign content_gap = 'gap-24'
+      assign icon_size = 'calc(var(--heading-1) * var(--type-scale) * 1.25)'
+    when 'h1'
+      assign icon_size = 'calc(var(--heading-1) * 1.25)'
+    when 'h2'
+      assign icon_size = 'calc(var(--heading-2) * 1.25)'
+    when 'h3'
+      assign icon_size = 'calc(var(--heading-3) * 1.25)'
+    when 'h4'
+      assign icon_size = 'calc(var(--heading-4) * 1.25)'
+  endcase
+  assign icon_size = 'width: ' | append: icon_size | append: '; height: ' | append: icon_size | append: ';'
+-%}
+{%- if section.blocks.size > 0 -%}
+<div class="section color-{{ section.settings.color_scheme }} s-text-pb {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} {% render 'animation-loader', section: section %}" data-ui-component="Running Content Section" role="region" aria-label="Running content">
+  <div id="marquee-{{ rand }}" class="d-flex middle-xs running-content" data-tilt="{{- section.settings.slope_style -}}">
+    <sht-marquee-section
+      class="ws-nowrap o-hidden w-100 p-relative d-flex middle-xs zi-1 {{ section.settings.accent_scheme }} marquee--{{- section.settings.slope_style -}}"
+      normal-speed="{{ section.settings.speed }}"
+      direction="{{ section.settings.scroll_direction | replace: 'right', 'animation-reverse' }}"
+      style="{{ custom_background_color }}"
+    >
+      <div class="marquee-container d-flex js-marquee-container" loop-marquee="{{ loop }}">
+        {%- capture marquee_item -%}
+          <div aria-live="polite" aria-atomic="true" class="js-marquee-list fw-nowrap flex-auto around-xs d-flex fs-0 pt-12 pb-12">
+            {%- for block in section.blocks -%}
+              {%- liquid
+                assign link_tag = 'div'
+                assign link_attributes = ''
+                if block.settings.link != blank
+                  assign link_tag = 'a'
+                  assign link_attributes = 'href="' | append: block.settings.link | append: '" target="_blank"'
+                endif
+
+                assign custom_text_color = 'color: inherit;'
+                unless block.settings.custom_text_color.alpha == 0.0 or block.settings.custom_text_color == blank
+                  assign custom_text_color = 'color: ' | append: block.settings.custom_text_color | append: ';'
+                endunless
+              -%}
+
+              <div class="js-marquee-item marquee-item m-zero p-zero p-relative d-flex middle-xs {{ block.settings.font_style }} {{ section.settings.item_size }}" {{ block.shopify_attributes }}>
+                <{{link_tag}} class="content-item__wrapper d-flex middle-xs {{ content_gap }}" {{ link_attributes }}>
+                  {%- if block.settings.enable_icon -%}
+                    <div class="content-item__icon">
+                      {%- render 'icon',
+                        icon_source: block.settings.icon_source,
+                        options_icon: block.settings.options_icon,
+                        custom_img: block.settings.custom_image,
+                        html_code: block.settings.custom_svg,
+                        icon_color: block.settings.custom_icon_color,
+                        style: icon_size
+                      -%}
+                    </div>
+                  {%- endif -%}
+                  {%- if block.settings.text != blank %}
+                    <span class="content-item__text" style="{{ custom_text_color }}">
+                      {{ block.settings.text }}
+                    </span>
+                  {%- endif -%}
+                </{{ link_tag }}>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endcapture -%}
+        {%- for i in (1..loop) -%}
+          <div class="d-flex fw-nowrap fs-0 marquee__items js-marquee-items middle-xs">
+            {{- marquee_item -}}
+          </div>
+        {%- endfor -%}
+      </div>
+    </sht-marquee-section>
+  </div>
+</div>
+{%- endif -%}
+
+<script data-asset="sht-script">
+  function calSideOppositeAngle{{- rand -}}() {
+    let elm = SHTHelper.qs("#marquee-{{- rand -}}");
+    let degree = (4 * Math.PI) / 180;
+    let height = elm.querySelector('sht-marquee-section').offsetHeight;
+    let cHeight = window.innerWidth * Math.tan(degree) + height;
+    elm.dataset.tilt == 'none' ? elm.style.height = null : elm.style.height = `${cHeight}px`;
+  };
+  window.requestAnimationFrame(() => calSideOppositeAngle{{- rand -}}());
+  window.addEventListener('resize', function(event) {
+    window.requestAnimationFrame(()=> calSideOppositeAngle{{- rand -}}());
+  });
+</script>
+
+{%- schema -%}
+  {
+    "name": "t:general.running_content",
+    "disabled_on": {
+      "groups": [
+        "header",
+        "footer"
+      ]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:general.general"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:general.color_scheme",
+        "default": "scheme-1"
+      },
+      {
+        "type": "select",
+        "id": "accent_scheme",
+        "label": "t:general.accent_scheme",
+        "default": "color-accent-1",
+        "options": [
+          {
+            "value": "color-accent-1",
+            "label": "t:general.main"
+          },
+          {
+            "value": "color-accent-2",
+            "label": "t:general.extra"
+          }
+        ]
+      },
+      {
+        "type": "color",
+        "id": "custom_background_color",
+        "label": "t:general.custom_background_color"
+      },
+      {
+        "type": "select",
+        "id": "speed",
+        "label": "t:general.speed",
+        "default": "6",
+        "options": [
+          {
+            "value": "2",
+            "label": "t:general.very_slow"
+          },
+          {
+            "value": "4",
+            "label": "t:general.slow"
+          },
+          {
+            "value": "6",
+            "label": "t:general.normal"
+          },
+          {
+            "value": "8",
+            "label": "t:general.fast"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "t:general.layout"
+      },
+      {
+        "type": "select",
+        "id": "slope_style",
+        "label": "t:general.tilt_style",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:general.none"
+          },
+          {
+            "value": "up",
+            "label": "t:general.up"
+          },
+          {
+            "value": "down",
+            "label": "t:general.down"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "item_size",
+        "label": "t:general.item_size",
+        "options": [
+          {
+            "value": "h3",
+            "label": "t:general.small"
+          },
+          {
+            "value": "h2",
+            "label": "t:general.medium"
+          },
+          {
+            "value": "h1",
+            "label": "t:general.large"
+          },
+          {
+            "value": "headline",
+            "label": "t:general.xlarge"
+          }
+        ],
+        "default": "h1"
+      },
+      {
+        "type": "select",
+        "id": "scroll_direction",
+        "label": "t:general.scroll_direction",
+        "options": [
+          {
+            "value": "left",
+            "label": "t:general.left"
+          },
+          {
+            "value": "right",
+            "label": "t:general.right"
+          }
+        ],
+        "default": "left"
+      },
+      {
+        "type": "checkbox",
+        "id": "remove_padding_top",
+        "label": "t:general.remove_padding_top",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "remove_padding_bottom",
+        "label": "t:general.remove_padding_bottom",
+        "default": false
+      }
+    ],
+    "blocks": [
+      {
+        "type": "content",
+        "name": "t:general.content",
+        "settings": [
+          {
+            "type": "header",
+            "content": "t:general.general"
+          },
+          {
+            "type": "color",
+            "id": "custom_text_color",
+            "label": "t:general.custom_text_color"
+          },
+          {
+            "type": "color",
+            "id": "custom_icon_color",
+            "label": "t:general.custom_icon_color"
+          },
+          {
+            "type": "checkbox",
+            "id": "enable_icon",
+            "label": "t:general.enable_icon",
+            "default": true
+          },
+          {
+            "type": "header",
+            "content": "t:general.text"
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "t:general.text",
+            "default": "Highlight content"
+          },
+          {
+            "type": "select",
+            "id": "font_style",
+            "label": "t:general.font_style",
+            "options": [
+              {
+                "value": "marquee-font--body",
+                "label": "t:general.body"
+              },
+              {
+                "value": "marquee-font--heading",
+                "label": "t:general.heading"
+              }
+            ],
+            "default": "marquee-font--body",
+            "visible_if": "{{ block.settings.text != blank }}"
+          },
+          {
+            "type": "header",
+            "content": "t:general.icon",
+            "visible_if": "{{ block.settings.enable_icon == true }}"
+          },
+          {
+            "type": "select",
+            "id": "icon_source",
+            "label": "t:general.icon_source",
+            "options": [
+              {
+                "value": "theme_library",
+                "label": "t:general.theme_library"
+              },
+              {
+                "value": "custom_img",
+                "label": "t:general.image"
+              },
+              {
+                "value": "custom_svg",
+                "label": "t:general.svg"
+              }
+            ],
+            "default": "theme_library",
+            "visible_if": "{{ block.settings.enable_icon == true }}"
+          },
+          {
+            "type": "select",
+            "id": "options_icon",
+            "label": "t:general.theme_library",
+            "default": "check",
+            "options": [
+              {
+                "value": "3d-model",
+                "label": "3d model"
+              },
+              {
+                "value": "addresses",
+                "label": "Addresses"
+              },
+              {
+                "value": "arrow-down",
+                "label": "Arrow down"
+              },
+              {
+                "value": "arrow-left",
+                "label": "Arrow left"
+              },
+              {
+                "value": "arrow-right",
+                "label": "Arrow right"
+              },
+              {
+                "value": "arrow-up",
+                "label": "Arrow up"
+              },
+              {
+                "value": "bar-chart",
+                "label": "Bar chart"
+              },
+              {
+                "value": "barcode",
+                "label": "Barcode"
+              },
+              {
+                "value": "bookmark",
+                "label": "Bookmark"
+              },
+              {
+                "value": "box",
+                "label": "Box"
+              },
+              {
+                "value": "building",
+                "label": "Building"
+              },
+              {
+                "value": "calendar",
+                "label": "Calendar"
+              },
+              {
+                "value": "cart",
+                "label": "Cart"
+              },
+              {
+                "value": "chat-bubble",
+                "label": "Chat bubble"
+              },
+              {
+                "value": "check-mark",
+                "label": "Check mark"
+              },
+              {
+                "value": "check",
+                "label": "Check"
+              },
+              {
+                "value": "chevron-down",
+                "label": "Chevron down"
+              },
+              {
+                "value": "chevron-left",
+                "label": "Chevron left"
+              },
+              {
+                "value": "chevron-right",
+                "label": "Chevron right"
+              },
+              {
+                "value": "chevron-up",
+                "label": "Chevron up"
+              },
+              {
+                "value": "clock",
+                "label": "Clock"
+              },
+              {
+                "value": "close",
+                "label": "Close"
+              },
+              {
+                "value": "credit-card",
+                "label": "Credit card"
+              },
+              {
+                "value": "document",
+                "label": "Document"
+              },
+              {
+                "value": "dress",
+                "label": "Dress"
+              },
+              {
+                "value": "edit",
+                "label": "Edit"
+              },
+              {
+                "value": "error",
+                "label": "Error"
+              },
+              {
+                "value": "eye",
+                "label": "Eye"
+              },
+              {
+                "value": "facebook",
+                "label": "Facebook"
+              },
+              {
+                "value": "file",
+                "label": "File"
+              },
+              {
+                "value": "filter",
+                "label": "Filter"
+              },
+              {
+                "value": "fullscreen-exit",
+                "label": "Fullscreen exit"
+              },
+              {
+                "value": "fullscreen",
+                "label": "Fullscreen"
+              },
+              {
+                "value": "gift",
+                "label": "Gift"
+              },
+              {
+                "value": "global",
+                "label": "Global"
+              },
+              {
+                "value": "half-star",
+                "label": "Half star"
+              },
+              {
+                "value": "hamburger-menu",
+                "label": "Hamburger menu"
+              },
+              {
+                "value": "heart",
+                "label": "Heart"
+              },
+              {
+                "value": "home",
+                "label": "Home"
+              },
+              {
+                "value": "info",
+                "label": "Info"
+              },
+              {
+                "value": "instagram",
+                "label": "Instagram"
+              },
+              {
+                "value": "iron",
+                "label": "Iron"
+              },
+              {
+                "value": "leaf",
+                "label": "Leaf"
+              },
+              {
+                "value": "leather",
+                "label": "Leather"
+              },
+              {
+                "value": "link",
+                "label": "Link"
+              },
+              {
+                "value": "lock-on",
+                "label": "Lock on"
+              },
+              {
+                "value": "lock",
+                "label": "Lock"
+              },
+              {
+                "value": "login",
+                "label": "Login"
+              },
+              {
+                "value": "logout",
+                "label": "Logout"
+              },
+              {
+                "value": "mail",
+                "label": "Mail"
+              },
+              {
+                "value": "map-pin-location",
+                "label": "Map pin location"
+              },
+              {
+                "value": "minus",
+                "label": "Minus"
+              },
+              {
+                "value": "money",
+                "label": "Money"
+              },
+              {
+                "value": "newsletter",
+                "label": "Newsletter"
+              },
+              {
+                "value": "order",
+                "label": "Order"
+              },
+              {
+                "value": "page",
+                "label": "Page"
+              },
+              {
+                "value": "pant",
+                "label": "Pant"
+              },
+              {
+                "value": "paper-plan",
+                "label": "Paper plan"
+              },
+              {
+                "value": "pause",
+                "label": "Pause"
+              },
+              {
+                "value": "persons",
+                "label": "Persons"
+              },
+              {
+                "value": "phone",
+                "label": "Phone"
+              },
+              {
+                "value": "pinterest",
+                "label": "Pinterest"
+              },
+              {
+                "value": "play",
+                "label": "Play"
+              },
+              {
+                "value": "plus",
+                "label": "Plus"
+              },
+              {
+                "value": "price-tag",
+                "label": "Price tag"
+              },
+              {
+                "value": "protect",
+                "label": "Protect"
+              },
+              {
+                "value": "question-mark",
+                "label": "Question mark"
+              },
+              {
+                "value": "quick-shop",
+                "label": "Quick shop"
+              },
+              {
+                "value": "quote",
+                "label": "Quote"
+              },
+              {
+                "value": "receipt",
+                "label": "Receipt"
+              },
+              {
+                "value": "remove",
+                "label": "Remove"
+              },
+              {
+                "value": "return",
+                "label": "Return"
+              },
+              {
+                "value": "RSS",
+                "label": "Rss"
+              },
+              {
+                "value": "ruler",
+                "label": "Ruler"
+              },
+              {
+                "value": "sale-off",
+                "label": "Sale off"
+              },
+              {
+                "value": "scan",
+                "label": "Scan"
+              },
+              {
+                "value": "search",
+                "label": "Search"
+              },
+              {
+                "value": "settings",
+                "label": "Settings"
+              },
+              {
+                "value": "share",
+                "label": "Share"
+              },
+              {
+                "value": "shirt",
+                "label": "Shirt"
+              },
+              {
+                "value": "shoe",
+                "label": "Shoe"
+              },
+              {
+                "value": "shop",
+                "label": "Shop"
+              },
+              {
+                "value": "smile",
+                "label": "Smile"
+              },
+              {
+                "value": "snapchat",
+                "label": "Snapchat"
+              },
+              {
+                "value": "sort",
+                "label": "Sort"
+              },
+              {
+                "value": "sport",
+                "label": "Sport"
+              },
+              {
+                "value": "star",
+                "label": "Star"
+              },
+              {
+                "value": "subscription",
+                "label": "Subscription"
+              },
+              {
+                "value": "support",
+                "label": "Support"
+              },
+              {
+                "value": "three-dots",
+                "label": "Three dots"
+              },
+              {
+                "value": "thumb-up",
+                "label": "Thumb up"
+              },
+              {
+                "value": "tiktok",
+                "label": "Tiktok"
+              },
+              {
+                "value": "truck",
+                "label": "Truck"
+              },
+              {
+                "value": "tumblr",
+                "label": "Tumblr"
+              },
+              {
+                "value": "twitter",
+                "label": "Twitter"
+              },
+              {
+                "value": "user",
+                "label": "User"
+              },
+              {
+                "value": "vimeo",
+                "label": "Vimeo"
+              },
+              {
+                "value": "voucher",
+                "label": "Voucher"
+              },
+              {
+                "value": "wallet",
+                "label": "Wallet"
+              },
+              {
+                "value": "washing",
+                "label": "Washing"
+              },
+              {
+                "value": "weather-1",
+                "label": "Weather 1"
+              },
+              {
+                "value": "weather-2",
+                "label": "Weather 2"
+              },
+              {
+                "value": "youtube",
+                "label": "Youtube"
+              },
+              {
+                "value": "zoom-in",
+                "label": "Zoom in"
+              },
+              {
+                "value": "zoom-out",
+                "label": "Zoom out"
+              },
+              {
+                "value": "linkedin",
+                "label": "Linkedin"
+              }
+            ],
+            "visible_if": "{{ block.settings.enable_icon == true and block.settings.icon_source == 'theme_library' }}"
+          },
+          {
+            "type": "image_picker",
+            "id": "custom_image",
+            "label": "t:general.custom_image",
+            "visible_if": "{{ block.settings.enable_icon == true and block.settings.icon_source == 'custom_img' }}"
+          },
+          {
+            "type": "html",
+            "id": "custom_svg",
+            "label": "t:general.custom_svg",
+            "info": "t:general.custom_svg_info",
+            "visible_if": "{{ block.settings.enable_icon == true and block.settings.icon_source == 'custom_svg' }}"
+          },
+          {
+            "type": "header",
+            "content": "t:general.link"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "t:general.link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:general.running_content",
+        "blocks": [
+          {
+            "type": "content"
+          },
+          {
+            "type": "content"
+          },
+          {
+            "type": "content"
+          }
+        ]
+      }
+    ]
+  }
+{%- endschema -%} 

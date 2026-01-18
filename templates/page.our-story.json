@@ -1,0 +1,217 @@
+
+ {
+  "sections": {
+    "breadcrumb": {
+      "type": "breadcrumb",
+      "settings": {
+        "color_scheme": ""
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "show_page_title": true,
+        "remove_padding_top": true,
+        "remove_padding_bottom": false
+      }
+    },
+    "video_banner_9DTPG4": {
+      "type": "video-banner",
+      "settings": {
+        "color_scheme": "",
+        "enable_large_heading": false,
+        "enable_fullwidth_banner": true,
+        "image_overlay_opacity": 30,
+        "section_mask_overlay_color": "#000000",
+        "section_content_overlay_color": "#ffffff",
+        "height_desktop": "50",
+        "height_mobile": "70",
+        "remove_padding_top": true,
+        "remove_padding_bottom": true,
+        "badge_text": "",
+        "badge_color": "color-accent-1",
+        "badge_position": "p-badge--top-right",
+        "badge_shape": "badge--star",
+        "video_banner_link": ""
+      }
+    },
+    "image_with_text_tbzMeY": {
+      "type": "image-with-text",
+      "settings": {
+        "color_scheme": "scheme-3",
+        "enable_large_heading": false,
+        "content_alignment": "ta-center",
+        "remove_padding_top": false,
+        "remove_padding_bottom": false,
+        "primary_image_ratio": "landscape",
+        "secondary_image_ratio": "portrait",
+        "subheading": "",
+        "heading": "創設者",
+        "description": "<p><strong>斎藤健太</strong> は日本の大阪で生まれました。2021年にデザインとスケートカルチャーへの情熱を追求するために東京に移住しました。彼は、都会のエネルギーと高品質なクラフトマンシップを融合させるストリートウェアブランドを作るというビジョンを持って <strong>Fuji</strong> を設立しました。東京の小さなショップから始まった <strong>Fuji</strong> は、大胆なストリート美学と日本のクラフトマンシップを融合させる独自の視点によって、地元で人気のブランドへと急成長しました。</p><p><br/></p><p><strong>Fuji</strong> は限定アイテムを提供するブティックとしてスタートし、スケーターやストリートウェアファンの心をつかみました。時が経つにつれ、<strong>Fuji</strong> はより広範なブランドへと進化し、Leninn Skateboardなどの地元アーティストやスケーターとのコラボレーションでその初期のアイデンティティを確立しました。<strong>Fuji</strong> は現在も東京にある本社からブランドのクリエイティブディレクションを監督し、デザイン、マーケティング、コラボレーション、そして独自の美学を管理しています。</p>",
+        "button_main_text": "",
+        "button_main_link": "",
+        "button_sub_text": "",
+        "button_sub_link": "",
+        "badge_text": "",
+        "badge_color": "color-accent-1",
+        "badge_position": "p-badge--bottom-right",
+        "badge_shape": "badge--star"
+      }
+    },
+    "timeline_9fXgQj": {
+      "type": "timeline",
+      "blocks": {
+        "item_frWCV6": {
+          "type": "item",
+          "settings": {
+            "date": "2021",
+            "heading": "Fujiの創設",
+            "description": "<p>東京の小さなスケートショップとしてスタートしたアリスは、大胆なストリートウェアのアプローチで注目を集め、限定コレクションはスケーターや若者文化の愛好者の間で瞬く間に人気となりました。ストリート美学とスケートボード文化のユニークな融合が、将来の成長の基盤となっています。</p>"
+          }
+        },
+        "item_AH9Enw": {
+          "type": "item",
+          "settings": {
+            "date": "2021",
+            "heading": "最初のFuji店舗オープン",
+            "description": "<p>1995年、アリスは東京中心部に最初の店舗をオープンしました。この場所はスケーターやストリートウェア愛好家のホットスポットへと急成長し、アリスが都市文化の原動力としての地位を確立する上で重要な役割を果たしました。</p>"
+          }
+        },
+        "item_yLDYtn": {
+          "type": "item",
+          "settings": {
+            "date": "2022",
+            "heading": "京都と横浜への拡大",
+            "description": "<p>東京での成功を基盤に、アリスは京都に2店舗目を、横浜に3店舗目をオープンしました。各店舗は、それぞれの都市の文化や雰囲気を反映した独自の店舗体験を提供しています。この拡大により、アリスはより幅広い層にアプローチすることができ、日本のストリートウェアの新興勢力としての地位を確固たるものにしました。</p>"
+          }
+        },
+        "item_qrxCHH": {
+          "type": "item",
+          "settings": {
+            "date": "2023",
+            "heading": "Fuji x Leninn Skateboard コラボレーション",
+            "description": "<p>アリスは、日本の有名なスケートブランドであるLeninn Skateboardと協力し、限定のアパレルやスケートボードデッキのラインを展開しました。このコラボレーションでは、大胆なグラフィックや限定リリースが話題を呼び、アリスは東京のスケーターやストリートカルチャーファンの間で忠実な支持を得ることができました。</p>"
+          }
+        }
+      },
+      "block_order": [
+        "item_frWCV6",
+        "item_AH9Enw",
+        "item_yLDYtn",
+        "item_qrxCHH"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "subheading": "",
+        "heading": "歴史",
+        "description": "",
+        "enable_collapsible": true,
+        "accent_scheme": "color-accent-1",
+        "image_ratio": "auto",
+        "items_per_row_on_desktop": "4",
+        "content_alignment": "ta-center",
+        "remove_padding_top": false,
+        "remove_padding_bottom": false
+      }
+    },
+    "text_UJVqeb": {
+      "type": "text",
+      "settings": {
+        "color_scheme": "",
+        "content_alignment": "ta-center m-auto",
+        "remove_padding_top": true,
+        "remove_padding_bottom": true,
+        "subheading": "",
+        "heading": "とのコラボレーション",
+        "heading_size": "h2",
+        "description": "<p>私たちは様々なブランドとコラボレーションし、双方のビジョンを融合させたユニークなパートナーシップを築いてきました。これらのコラボレーションにより、革新的で魅力的なデザインをお客様にお届けし、私たちのクリエイティブなコミュニティの多様性を示しています。</p>",
+        "button_main_text": "",
+        "button_main_link": "",
+        "button_sub_text": "",
+        "button_sub_link": "",
+        "badge_text": "",
+        "badge_color": "color-accent-1",
+        "badge_position": "p-badge--bottom-right",
+        "badge_shape": "badge--star"
+      }
+    },
+    "logo_list_Vt6Fcf": {
+      "type": "logo-list",
+      "blocks": {
+        "image_zgfBPN": {
+          "type": "image",
+          "settings": {
+            "logo_link": ""
+          }
+        },
+        "image_gPxgYX": {
+          "type": "image",
+          "settings": {
+            "logo_link": ""
+          }
+        },
+        "image_heXVKN": {
+          "type": "image",
+          "settings": {
+            "logo_link": ""
+          }
+        },
+        "image_gzBwnN": {
+          "type": "image",
+          "settings": {
+            "logo_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_zgfBPN",
+        "image_gPxgYX",
+        "image_heXVKN",
+        "image_gzBwnN"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "subheading": "",
+        "heading": "",
+        "description": "",
+        "accent_scheme": "color-accent-1",
+        "items_per_row_on_desktop": "4",
+        "items_per_row_mobile": "6",
+        "remove_padding_top": false,
+        "remove_padding_bottom": false
+      }
+    },
+    "newsletter_GMDngi": {
+      "type": "newsletter",
+      "settings": {
+        "color_scheme": "",
+        "enable_fullwidth_banner": true,
+        "image_overlay_opacity": 30,
+        "section_mask_overlay_color": "#000000",
+        "section_content_overlay_color": "#ffffff",
+        "subheading": "",
+        "heading": "コミュニティに参加しよう",
+        "description": "私たちとつながり、アーバンな情報をすべてお見逃しなく",
+        "content_alignment": "ta-center m-auto",
+        "remove_padding_top": true,
+        "remove_padding_bottom": true,
+        "badge_text": "",
+        "badge_color": "color-accent-1",
+        "badge_position": "p-badge--top-right",
+        "badge_shape": "badge--star"
+      }
+    }
+  },
+  "order": [
+    "breadcrumb",
+    "main",
+    "video_banner_9DTPG4",
+    "image_with_text_tbzMeY",
+    "timeline_9fXgQj",
+    "text_UJVqeb",
+    "logo_list_Vt6Fcf",
+    "newsletter_GMDngi"
+  ]
+}

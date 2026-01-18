@@ -1,0 +1,46 @@
+{% comment %}
+  {% render 'icon',
+    icon_size: icon_size,
+    icon_color: icon_color,
+    options_icon: block.settings.options_icon,
+    icon_source: block.settings.icon_source,
+    custom_img: block.settings.custom_img,
+    html_code: block.settings.html_code,
+    icon_alt: block.settings.heading
+  %}
+ {% endcomment %}
+ {%- liquid
+  assign icon_color = ''
+  assign icon_color_class = ''
+  unless icon_color.alpha == 0.0 or icon_color == blank
+    assign icon_color = 'color: ' | append: icon_color | append: '; --color-normal-text-rgb:' | append: icon_color.red | append: ',' | append: icon_color.green | append: ',' | append: icon_color.blue | append: ';'
+    assign icon_color_class = 'icon-color'
+  endunless
+  unless icon_size == blank
+    assign icon_size = 'width: ' | append: icon_size | append: 'px; height: ' | append: icon_size | append: 'px;'
+  endunless
+-%}
+<div class="icon--custom hide-empty d-flex middle-xs icon fs-0 {{ size }} {{ icon_color_class }}" style="{{ icon_color }}{{ icon_size }}{{ style }}">
+  {%- liquid
+    case icon_source
+      when 'theme_library'
+        render 'icon-loader', icon: options_icon
+      when 'custom_img'
+        assign loading = "lazy"
+        assign decoding ="async"
+        assign fetchpriority = "low"
+
+        if section.index <= 2 and forloop.first
+          assign loading = "eager"
+          assign fetchpriority = "high"
+        endif
+        assign custom_icon = 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder media of-cover h-100 w-100 js-image-lazy'
+        assign image_name = custom_img.src | split: '/' | last | split: '.' | first
+        assign alt_text = custom_img.alt | default: image_name | default: icon_alt
+        assign custom_icon = custom_img | image_url: width: custom_img.width | image_tag: widths: '250', sizes: '500px', alt: alt_text, class: 'media of-cover h-100 w-100', loading: loading, fetchpriority: fetchpriority, decoding: decoding
+        render 'image', image_item: custom_icon, image_wrap_classes: "d-inline-block w-100 h-100", image_classes: "h-100 w-100", ratio: custom_img.aspect_ratio
+      else
+        echo html_code
+    endcase
+  -%}
+</div>

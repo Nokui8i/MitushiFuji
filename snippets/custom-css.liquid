@@ -1,0 +1,125 @@
+<style type="text/css">
+/* Add custom styles to your entire online store */
+
+/* מונע scroll-snap שמזיז thumbnails למרכז - שומר עליהם למעלה */
+.product-slideshow__thumbs.vertical-carousel__container {
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
+}
+
+.product-slideshow__thumb.vertical-carousel__item {
+  scroll-snap-align: none !important;
+}
+
+/* מצמיד את ה-thumbnails למעלה במקום למרכז אנכית - מבטל middle-y */
+.product-slideshow__thumbnail {
+  top: 0 !important;
+  bottom: auto !important;
+  transform: none !important; /* cancels middle-y centering */
+  align-self: flex-start !important;
+  height: 520px !important; /* גובה קבוע ל-wrapper */
+}
+
+/* אם יש wrapper שממרכז, תצמיד למעלה */
+.product-slideshow {
+  align-items: flex-start !important;
+}
+
+/* וודא שה-thumbnails container לא ממורכז */
+.product-slideshow__thumbs {
+  align-self: flex-start !important;
+  justify-content: flex-start !important;
+  scroll-snap-type: none !important;
+}
+
+/* Product thumbnails: fixed height + internal scroll */
+/* קבע גובה קבוע ל-thumbnails כדי שלא ישתנה לפי גובה התמונה הראשית */
+.product-slideshow__thumbs.product-slideshow__thumbs,
+.product-slideshow__thumbs.vertical-carousel__container {
+  height: 520px !important;        /* גובה קבוע - משנה לפי מספר thumbnails שרוצים לראות */
+  max-height: 520px !important;
+  overflow-y: auto !important;     /* גלילה פנימית כשיש הרבה תמונות */
+  overflow-x: hidden !important;
+}
+
+/* override the theme utility that sets height:100% (h-100) */
+.product-slideshow__thumbs.h-100 {
+  height: 520px !important;
+}
+
+/* Prevent product media area from changing height between images */
+/* כפה aspect ratio קבוע על התמונה הראשית כדי שהקונטיינר לא ישנה גובה */
+.product-slideshow__items .product-slideshow__item sht-prd-slideshow-itm {
+  aspect-ratio: 1 / 1 !important;   /* ריבוע - הכי יציב. אפשר לשנות ל-4/5, 3/4 וכו' */
+}
+
+/* Main product image: fit image inside fixed container */
+/* התמונה הראשית - תמיד תראה בשלמותה בלי חיתוך או מתיחה */
+.product-slideshow__item img,
+.product-slideshow__item video,
+.product-slideshow__item sht-prd-slideshow-itm img,
+.product-slideshow__item sht-prd-slideshow-itm video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+/* Thumbnail container adapts to image ratio */
+/* כל thumbnail מתאים את עצמו ליחס האמיתי של התמונה שלו */
+.product-slideshow__thumb .js-slideshow-btn-thumb {
+  width: 100% !important;
+  height: auto !important;
+}
+
+.product-slideshow__thumb .animation,
+.product-slideshow__thumb .js-wrap-image-lazy {
+  aspect-ratio: var(--ratio) !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Image fits inside its own dynamic container */
+/* התמונה בתוך ה-thumbnail - תמיד תראה בשלמותה בלי חיתוך או מתיחה */
+.product-slideshow__thumb img,
+.product-slideshow__thumb button img,
+.product-slideshow__thumb .js-wrap-image-lazy img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+/* אנימציה של slide הצידה - תמונות צמודות אחת לשנייה */
+.product-slideshow__items {
+  position: relative;
+  overflow: hidden;
+}
+
+.js-product-slideshow-item {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* תמונה פעילה - במרכז */
+.js-product-slideshow-item.d-block {
+  transform: translateX(0);
+}
+
+/* תמונה מוסתרת - יוצאת שמאלה */
+.js-product-slideshow-item.d-none {
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+/* אנימציה חלקה ל-thumbnails כשהם פעילים */
+.product-slideshow__thumb.is-active-item {
+  transition: all 0.3s ease-in-out;
+  opacity: 1;
+}
+
+.product-slideshow__thumb:not(.is-active-item) {
+  opacity: 0.6;
+  transition: opacity 0.3s ease-in-out;
+}
+</style>

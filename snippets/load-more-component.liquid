@@ -1,0 +1,8 @@
+<sht-infinity-scroll class="sht-infinity-scroll d-flex center-xs middle-xs"
+  data-next-url="{{ paginate.next.url }}"
+  data-current-page="{{ paginate.current_page }}"
+  data-total-pages="{{ paginate.pages }}">
+  <div class="js-loading-infinity-scroll hidden">
+    {% render 'icon-spinner', size: '24px' %}
+  </div>
+</sht-infinity-scroll>

@@ -1,0 +1,470 @@
+{%- liquid
+  assign video_type = section.settings.video_url.type
+  if section.settings.video_source == 'shopify_hosted'
+    assign video_type = 'local_video'
+  endif
+  assign video_type_mobile = section.settings.video_url_mobile.type
+  if section.settings.video_source_mobile == 'shopify_hosted'
+    assign video_type_mobile = 'local_video'
+  endif
+  
+  unless section.settings.section_mask_overlay_color.alpha == 0.0 or section.settings.section_mask_overlay_color == blank
+    assign overlay_color =  '--color-page-bg-rgb:' | append: section.settings.section_mask_overlay_color.red | append: ',' | append: section.settings.section_mask_overlay_color.green | append: ',' | append: section.settings.section_mask_overlay_color.blue
+  endunless
+  unless section.settings.section_content_overlay_color.alpha == 0.0 or section.settings.section_content_overlay_color == blank
+    assign content_color =  'color:' | append: section.settings.section_content_overlay_color
+  endunless
+  assign fullwidth_banner_class = 'ctnr-banner'
+  assign padding_banner_class = ''
+  if section.settings.enable_fullwidth_banner == true
+    assign fullwidth_banner_class = 'w-100'
+  endif
+  if section.settings.enable_fullwidth_banner == false
+    assign padding_banner_class = 'banner-wrapper'
+  endif
+
+  assign banner_link = 'd-block'
+  if section.blocks[0].settings.primary_button_label != blank and section.blocks[0].settings.primary_button_link != blank
+    assign banner_link = 'd-none-important'
+  endif
+  if section.blocks[0].settings.secondary_button_label != blank and section.blocks[0].settings.secondary_button_link != blank
+    assign banner_link = 'd-none-important'
+  endif
+
+  assign show_mobile_video = false
+
+  if section.settings.video_url_mobile != blank and section.settings.video_source_mobile == 'external'
+    assign show_mobile_video = true
+  elsif section.settings.video_hosted_mobile != blank and section.settings.video_source_mobile == 'shopify_hosted'
+    assign show_mobile_video = true
+  endif
+-%}
+<div class="color-{{- section.settings.color_scheme }} p-relative {% render 'animation-loader', section: section %} content--special section {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }}" data-ui-component="Video Banner Section" style="--mh-xs:{{ section.settings.height_mobile }}vh;--mh-md:{{ section.settings.height_desktop }}vh" role="region" aria-labelledby="sectionHeading-{{ section.id | md5 | truncate: 12, "" }}">
+  <div class="p-relative {{ fullwidth_banner_class }} {{ padding_banner_class }}">
+    {%- if section.settings.video_banner_link != blank -%}
+      <a href="{{- section.settings.video_banner_link -}}" class="{{ banner_link }} p-absolute top-0 right-0 bottom-0 left-0 zi-2" target="_blank" aria-label="{{- section.blocks[0].settings.heading |  escape -}}"></a>
+    {%- endif -%}
+    <div class="p-absolute h-100 w-100 left-0 top-0 {{ padding_banner_class }}">
+      <div class="sht-mask p-relative w-100 h-100 o-hidden" style="--overlay: {{ section.settings.image_overlay_opacity }}; {{ overlay_color }}">
+        {% if section.settings.video_url_mobile != blank or section.settings.video_hosted_mobile != blank %}
+          <sht-load-video class="{% if show_mobile_video %}d-block{% endif %} d-none-md w-100 h-100 js-animate anm anm-zoomOut" data-video-type="{{ video_type_mobile }}" data-video-id="{{ section.settings.video_url.id }}-mobile">
+            {% if section.settings.video_source_mobile == 'shopify_hosted' %}
+              {% capture local_video %}
+                {{- section.settings.video_hosted_mobile | video_tag: autoplay: true, controls: false, loop: true, preload: 'none', class: 'video-local js-media-item-video of-cover w-100v center-middle p-absolute mih', image_size: '1920x' -}}
+              {% endcapture %}
+              {{ local_video | replace: '<img ', '<img alt="' | append: section.blocks[0].settings.heading | append: '" ' | replace: '<source src="', '<source data-src="' }}
+            {% else %}
+              <iframe tabindex="-1" title="{{ section.settings.video_url_mobile.type }}" class="video-iframe {% if section.settings.video_url_mobile.type == 'youtube' %}js-media-item-youtube{% elsif section.settings.video_url_mobile.type == 'vimeo' %}js-media-item-vimeo{% endif %}  w-100v center-middle p-absolute mih miw" allow="autoplay; encrypted-media"
+                data-src="
+                {%- if section.settings.video_url_mobile.type == 'youtube' -%}
+                  https://www.youtube.com/embed/{{ section.settings.video_url_mobile.id }}?version=3&enablejsapi=1&mute=1&loop=1&controls=0&rel=0&showinfo=0&autoplay=1&playlist={{ section.settings.video_url_mobile.id }}
+                {%- elsif section.settings.video_url_mobile.type == 'vimeo' -%}
+                  https://player.vimeo.com/video/{{ section.settings.video_url_mobile.id }}?api=1&background=1&autoplay=1&loop=1&title=0&byline=0&portrait=0&controls=0&muted=1
+                {%- endif -%}" style="--miw:177.77vh;--h-xs:56.25vw;">
+              </iframe>
+            {% endif %}
+          </sht-load-video>
+        {% endif %}
+
+         <sht-load-video class="{% if show_mobile_video %}d-none{% endif %} d-block-md w-100 h-100 js-animate anm anm-zoomOut" data-video-type="{{ video_type }}" data-video-id="{{ section.settings.video_url.id }}">
+          {% if section.settings.video_source == 'shopify_hosted' %}
+            {% capture local_video %}
+              {{- section.settings.video_hosted | video_tag: autoplay: true, controls: false, loop: true, preload: 'none', class: 'video-local js-media-item-video of-cover w-100v center-middle p-absolute mih', image_size: '1920x' -}}
+            {% endcapture %}
+            {{ local_video | replace: '<img ', '<img alt="' | append: section.blocks[0].settings.heading | append: '" ' | replace: '<source src="', '<source data-src="' }}
+          {% else %}
+            <iframe tabindex="-1" title="{{ section.settings.video_url.type }}" class="video-iframe {% if section.settings.video_url.type == 'youtube' %}js-media-item-youtube{% elsif section.settings.video_url.type == 'vimeo' %}js-media-item-vimeo{% endif %}  w-100v center-middle p-absolute mih miw" allow="autoplay; encrypted-media"
+              data-src="
+              {%- if section.settings.video_url.type == 'youtube' -%}
+                https://www.youtube.com/embed/{{ section.settings.video_url.id }}?version=3&enablejsapi=1&mute=1&loop=1&controls=0&rel=0&showinfo=0&autoplay=1&playlist={{ section.settings.video_url.id }}
+              {%- elsif section.settings.video_url.type == 'vimeo' -%}
+                https://player.vimeo.com/video/{{ section.settings.video_url.id }}?api=1&background=1&autoplay=1&loop=1&title=0&byline=0&portrait=0&controls=0&muted=1
+              {%- endif -%}" style="--miw:177.77vh;--h-xs:56.25vw;">
+            </iframe>
+          {% endif %}
+        </sht-load-video>
+      </div>
+    </div>
+    <div class="ctnr zi-1 w-100 h-100 p-relative d-flex fd-column banner-padding {{ section.blocks[0].settings.content_position }}" style="--mh-xs:{{ section.settings.height_mobile }}vh;--mh-md:{{ section.settings.height_desktop }}vh">
+      <div class="w-100 hide-empty" style="{{ content_color }}">
+          {%- assign heading_style = section.settings.enable_large_heading | default: '' | replace: 'true', 'headline' -%}
+          {%- render 'section-header'
+          classes: 's-header pb-0',
+          content_align: section.blocks[0].settings.content_position,
+          subheading: section.blocks[0].settings.subheading,
+          heading: section.blocks[0].settings.heading,
+          heading_classes: heading_style,
+          description: section.blocks[0].settings.description,
+          button_main_text: section.blocks[0].settings.primary_button_label,
+          button_main_link: section.blocks[0].settings.primary_button_link,
+          button_sub_text: section.blocks[0].settings.secondary_button_label,
+          button_sub_link: section.blocks[0].settings.secondary_button_link,
+          badge_text: section.settings.badge_text,
+          badge_position: section.settings.badge_position,
+          badge_shape: section.settings.badge_shape,
+          badge_color: section.settings.badge_color,
+          section: section
+        -%}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:general.video_banner",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:general.general"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:general.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_large_heading",
+      "label": "t:general.enable_large_heading",
+      "info": "t:general.enable_large_heading_info",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_fullwidth_banner",
+      "label": "t:general.enable_fullwidth_banner",
+      "default": true
+    },
+    {
+      "type": "range",
+      "unit": "%",
+      "max": 90,
+      "min": 0,
+      "step": 1,
+      "default": 30,
+      "id": "image_overlay_opacity",
+      "label": "t:general.overlay_opacity"
+    },
+    {
+      "type": "color",
+      "id": "section_mask_overlay_color",
+      "label": "t:general.mask_overlay_banner",
+      "info": "t:general.mask_overlay_banner_info",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "section_content_overlay_color",
+      "label": "t:general.content_overlay",
+      "info": "t:general.content_overlay_info",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "t:general.layout"
+    },
+    {
+      "type": "select",
+      "label": "t:general.section_height_on_large_screen",
+      "info": "t:general.section_height_on_screen_info",
+      "id": "height_desktop",
+      "options": [
+        {
+          "value": "50",
+          "label": "t:general.50_screen_height"
+        },
+        {
+          "value": "70",
+          "label": "t:general.70_screen_height"
+        },
+        {
+          "value": "100",
+          "label": "t:general.fill_screen_height"
+        }
+      ],
+      "default": "70"
+    },
+    {
+      "type": "select",
+      "label": "t:general.section_height_on_small_screen",
+      "info": "t:general.section_height_on_screen_info",
+      "id": "height_mobile",
+      "options": [
+        {
+          "value": "50",
+          "label": "t:general.50_screen_height"
+        },
+        {
+          "value": "70",
+          "label": "t:general.70_screen_height"
+        },
+        {
+          "value": "100",
+          "label": "t:general.fill_screen_height"
+        }
+      ],
+      "default": "70"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_top",
+      "label": "t:general.remove_padding_top",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_bottom",
+      "label": "t:general.remove_padding_bottom",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:general.video"
+    },
+    {
+      "type": "select",
+      "id": "video_source",
+      "label": "t:general.video_source",
+      "default": "external",
+      "options": [
+        {
+          "value": "external",
+          "label": "t:general.external"
+        },
+        {
+          "value": "shopify_hosted",
+          "label": "t:general.shopify_hosted"
+        }
+      ]
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "t:general.external_video",
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "info": "t:general.video_link_info",
+      "visible_if": "{{ section.settings.video_source == 'external' }}"
+    },
+    {
+      "type": "video",
+      "id": "video_hosted",
+      "label": "t:general.shopify_external_video",
+      "visible_if": "{{ section.settings.video_source == 'shopify_hosted' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:general.mobile_video"
+    },
+    {
+      "type": "select",
+      "id": "video_source_mobile",
+      "label": "t:general.video_source",
+      "default": "external",
+      "options": [
+        {
+          "value": "external",
+          "label": "t:general.external"
+        },
+        {
+          "value": "shopify_hosted",
+          "label": "t:general.shopify_hosted"
+        }
+      ]
+    },
+    {
+      "type": "video_url",
+      "id": "video_url_mobile",
+      "label": "t:general.external_video",
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "visible_if": "{{ section.settings.video_source_mobile == 'external' }}"
+    },
+    {
+      "type": "video",
+      "id": "video_hosted_mobile",
+      "label": "t:general.shopify_hosted",
+      "visible_if": "{{ section.settings.video_source_mobile == 'shopify_hosted' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:general.prominent_badge"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "t:general.text",
+      "info": "t:general.prominent_badge_text_info"
+    },
+    {
+      "type": "select",
+      "id": "badge_color",
+      "label": "t:general.accent_scheme",
+      "default": "color-accent-1",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "color-accent-1",
+          "label": "t:general.main"
+        },
+        {
+          "value": "color-accent-2",
+          "label": "t:general.extra"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "badge_position",
+      "label": "t:general.position",
+      "default": "p-badge--top-right",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "p-badge--top-left",
+          "label": "t:general.left"
+        },
+        {
+          "value": "p-badge--top-right",
+          "label": "t:general.right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "badge_shape",
+      "label": "t:general.shape",
+      "default": "badge--star",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "badge--star",
+          "label": "t:general.star"
+        },
+        {
+          "value": "badge--diamond",
+          "label": "t:general.diamond"
+        },
+        {
+          "value": "badge--asterisk",
+          "label": "t:general.asterisk"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:general.link"
+    },
+    {
+      "type": "url",
+      "id": "video_banner_link",
+      "label": "t:general.link",
+      "info": "t:general.link_banner_info"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "content",
+      "name": "t:general.content",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "label": "t:general.content_position",
+          "id": "content_position",
+          "options": [
+            {
+              "value": "center-xs middle-xs ta-center",
+              "label": "t:general.center"
+            },
+            {
+              "value": "center-xs top-xs ta-left",
+              "label": "t:general.left_center"
+            },
+            {
+              "value": "end-xs top-xs ta-left",
+              "label": "t:general.bottom_left"
+            }
+          ],
+          "default": "center-xs middle-xs ta-center"
+        },
+        {
+          "type": "header",
+          "content": "t:general.text"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "t:general.subheading",
+          "default": "Highlight text"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:general.heading",
+          "default": "Video banner"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "t:general.description",
+          "default": "<p>Use this text to share brand information with your customers. Introduce a new product, share an announcement or welcome customers.</p>"
+        },
+        {
+          "type": "header",
+          "content": "t:general.buttons"
+        },
+        {
+          "type": "text",
+          "id": "primary_button_label",
+          "label": "t:general.primary_button_label",
+          "info": "t:general.hide_if_empty",
+          "default": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "primary_button_link",
+          "label": "t:general.primary_button_link",
+          "visible_if": "{{ block.settings.primary_button_label != blank }}"
+        },
+        {
+          "type": "text",
+          "id": "secondary_button_label",
+          "label": "t:general.secondary_button_label",
+          "info": "t:general.hide_if_empty",
+          "default": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "secondary_button_link",
+          "label": "t:general.secondary_button_link",
+          "visible_if": "{{ block.settings.secondary_button_label != blank }}"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.video_banner",
+      "blocks": [
+        {
+          "type": "content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

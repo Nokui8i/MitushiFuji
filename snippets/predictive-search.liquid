@@ -1,0 +1,123 @@
+{% liquid
+
+  assign suggested_link_title = ''
+  if section.settings.suggested_links_heading.size > 0
+    assign suggested_link_title = section.settings.suggested_links_heading
+  else
+    assign suggested_link_title = section.settings.suggested_links.title
+  endif
+
+  assign product_clm_md = 12 | times: 1.0 | divided_by: section.settings.products_per_row_desktop
+  assign product_clm_xs = 12 | times: 1.0 | divided_by: section.settings.products_per_row_mobile
+  assign collection_clm_md = 12 | times: 1.0 | divided_by: section.settings.collections_per_row_desktop
+  assign collection_clm_xs = 12 | times: 1.0 | divided_by: section.settings.collections_per_row_mobile
+
+%}
+<sht-predictive-srch data-enable-predictive="{{ settings.enable_quick_search }}" data-section-id="{{ section.id }}" role="dialog" aria-modal="true" class="js-predictive-search color-{{ section.settings.color_scheme }} {{ class }} {% if section.settings.show_vendor %} card-product--show-vendor{% endif %} {% if section.settings.show_price == false %}card-product--hide-price{% endif %} {% if section.settings.show_collection_count %}card-collection--show-product-count{% endif %} "
+style="--products-per-row-desktop: {{ product_clm_md }}; --products-per-row-mobile: {{ product_clm_xs }}; --collections-per-row-desktop: {{ collection_clm_md }}; --collections-per-row-mobile: {{ collection_clm_xs }};--blog-image-ratio: {{- settings.article_card_featured_image_ratio -}};--show-collection-count: {{- section.settings.show_collection_count -}};"
+>
+  <form action="{{ routes.search_url }}" method="get" role="search" class="predictive-search-form js-predictive-search-form p-relative zi-1">
+    <input name="options[prefix]" type="hidden" value="last">
+    <div class="o-hidden p-sticky top-0 zi-9">
+      <div class="search__field d-flex ctnr gap-md-16">
+        <span class="icon--default d-flex middle-xs center-xs">
+          {% render 'icon-search', size: 24 %}
+        </span>
+        <input id="predictiveSearch_Input" type="search" name="q" aria-label="{{ 'accessibility.search' | t }}" value="" placeholder="{{ 'general.search.input_placeholder' | t }}" role="combobox" aria-expanded="false" aria-owns="predictive-search-results-list" aria-controls="predictive-search-results-list" aria-haspopup="listbox" aria-autocomplete="list" autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false" class="search__field-input js-predictive-search-input w-100 b-zero">
+        <label class="field__label visually-hidden" for="predictiveSearch_Input">{{ 'general.search.search' | t }}</label>
+        <button aria-label="{{ 'accessibility.close' | t }}" class="btn-plain icon--default js-predictive-search-close-trigger c-pointer" type="button">
+          {% render 'icon-close' %}
+        </button>
+      </div>
+    </div>
+    <div class="search__result d-block opacity-0 js-predictive-search-results ctnr pt-24 pb-24" tabindex="-1" hidden>
+      <div class="js-predictive-search-loading ta-center" hidden>
+        {% render 'icon-spinner' %}
+      </div>
+      <div class="search__result-empty d-block js-predictive-search-message-placeholder" hidden>
+        {%- if section.settings.suggested_links.links.size > 0 -%}
+          <div class="d-flex fd-column gap-16 mt-2x">
+            {%- if suggested_link_title -%}
+              <h3 class="h5 hide-empty m-zero fw-700">{{- suggested_link_title -}}</h3>
+            {%- endif -%}
+            <div class="d-flex fw-wrap middle-xs gap-12 hide-empty">
+              {%- for link in section.settings.suggested_links.links -%}
+                <a href="{{ link.url }}" class="tag d-inline-block">{{ link.title }}</a>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.suggested_products.count > 0 -%}
+          <div class="d-flex fd-column gap-16 mt-2x">
+            {%- if section.settings.suggested_products_heading -%}
+              <h3 class="h5 hide-empty m-zero fw-700"> {{- section.settings.suggested_products_heading -}}</h3>
+            {%- endif -%}
+            {%- if section.settings.suggested_products -%}
+              <div class="search__result--list rw hide-empty r-gap-16 r-gap-sm-24 r-gap-lg-16">
+                {%- for product in section.settings.suggested_products -%}
+                  <div class="clm" style="--w-xs: {{- product_clm_xs -}};--w-md:{{ product_clm_md }};">
+                    {% if section.settings.product_card_direction == 'vertical' %}
+                      {% render 'card-product',
+                        product: product,
+                        show_vendor: section.settings.show_vendor,
+                        show_price: section.settings.show_price,
+                        ratio: settings.product_card_image_ratio,
+                        show_vendor: section.settings.show_vendor,
+                        show_price: section.settings.show_price
+                      %}
+                    {% else %}
+                      {% render 'mini-card-product',
+                        product: product,
+                        show_vendor: section.settings.show_vendor,
+                        show_price: section.settings.show_price,
+                        ratio: settings.product_card_image_ratio,
+                        show_vendor: section.settings.show_vendor,
+                        show_price: section.settings.show_price
+                      %}
+                    {% endif %}
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.suggested_collections.count > 0 -%}
+          <div class="d-flex fd-column gap-16 mt-2x">
+            {%- if section.settings.suggested_collections_heading -%}
+              <h3 class="h5 hide-empty m-zero fw-700"> {{- section.settings.suggested_collections_heading -}}</h3>
+            {%- endif -%}
+            <div class="search__result--list rw hide-empty r-gap-16 r-gap-sm-24 r-gap-lg-16">
+              {%- for collection in section.settings.suggested_collections -%}
+                <div class="clm" style="--w-xs: {{- collection_clm_xs -}};--w-md:{{ collection_clm_md }};">
+                  {% if section.settings.collection_card_direction == 'vertical' %}
+                    {% render 'card-collection',
+                      collection: collection,
+                      media_ratio: settings.collection_image_ratio,
+                      show_product_count: section.settings.show_product_count
+                    %}
+                  {% else %}
+                    {% render 'mini-card-collection',
+                      collection: collection,
+                      media_ratio: settings.collection_image_ratio,
+                      show_product_count: section.settings.show_product_count
+                    %}
+                  {% endif %}
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+        {% if section.settings.suggested_links == blank and section.settings.suggested_products == blank and section.settings.suggested_collections == blank %}
+          <p class="ta-center color-light">
+            {{ 'general.search.search_message_placeholder' | t }}
+          </p>
+        {% endif %}
+      </div>
+      <div
+          class="js-predictive-search-results-panel card-product--{{ section.settings.product_card_direction }}
+          card-collection--{{ section.settings.collection_card_direction }}">
+        </div>
+    </div>
+  </form>
+  <div class="predictive-search-results-panel-overlay js-predictive-search-results-panel-overlay"></div>
+</sht-predictive-srch>

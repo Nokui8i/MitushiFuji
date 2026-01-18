@@ -1,0 +1,51 @@
+{% render 'countdown', block: block %}
+
+{% schema %}
+{
+  "name": "t:general.countdown_timer",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:block.countdown_timer_paragraph"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_end",
+      "label": "t:general.hide_on_end_the_countdown",
+      "info": "t:general.hide_on_end_the_countdown_info",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "t:general.end_date",
+      "info": "t:general.end_date_info"
+    },
+    {
+      "type": "text",
+      "id": "end_time",
+      "label": "t:general.end_time",
+      "info": "t:general.end_time_info"
+    },
+    {
+      "type": "richtext",
+      "id": "end_text",
+      "label": "t:general.end_text",
+      "info": "t:general.end_text_info",
+      "default": "<p>Event is finished</p>"
+    },
+    {
+      "type": "color",
+      "id": "color_end_text",
+      "label": "t:general.end_text_color",
+      "default": "#FF0000"
+    },
+  ],
+  "presets": [
+    {
+      "name": "t:general.countdown_timer",
+      "category": "t:general.basic"
+    }
+  ]
+}
+{% endschema %}

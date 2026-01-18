@@ -1,0 +1,38 @@
+
+ {
+  "sections": {
+    "breadcrumb": {
+      "type": "breadcrumb",
+      "settings": {
+        "color_scheme": ""
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "show_page_title": true,
+        "remove_padding_top": true,
+        "remove_padding_bottom": false
+      }
+    },
+    "contact-form": {
+      "type": "contact-form",
+      "settings": {
+        "color_scheme": "",
+        "heading": "CONTACT US",
+        "content_ordering": "text_first",
+        "remove_padding_top": false,
+        "remove_padding_bottom": false,
+        "image_ratio": "auto",
+        "button_label": ""
+      }
+    }
+  },
+  "order": [
+    "breadcrumb",
+    "main",
+    "contact-form"
+  ]
+}

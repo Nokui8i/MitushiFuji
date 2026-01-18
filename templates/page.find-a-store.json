@@ -1,0 +1,92 @@
+ {
+  "sections": {
+    "breadcrumb": {
+      "type": "breadcrumb",
+      "settings": {
+        "color_scheme": ""
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "show_page_title": true,
+        "remove_padding_top": true,
+        "remove_padding_bottom": false
+      }
+    },
+    "address_list_KYQJwh": {
+      "type": "address-list",
+      "blocks": {
+        "address_item_4MFqYe": {
+          "type": "address_item",
+          "settings": {
+            "heading": "東京旗艦店",
+            "address": "日本 〒160-0022 東京都新宿区新宿3丁目31-8",
+            "text": "<p><strong>営業時間:</strong></p><p>月曜日〜土曜日: 午前11時00分〜午後7時30分</p><p>日曜日: 正午12時00分〜午後6時00分</p><p><br/></p><p><strong>お問い合わせ:</strong></p><p>電話: +81 45-123-4567</p><p>メール: @fujitkyo.jp</p>",
+            "button_text": "道順を確認"
+          }
+        },
+        "address_item_34z8AE": {
+          "type": "address_item",
+          "settings": {
+            "heading": "東京の店舗",
+            "address": "〒160-0022 東",
+            "text": "<p>店内に足を踏み入れ、幻想と現代スタイルが融合したファッション、アクセサリー、ホームデコールの厳選コレクションをご覧ください。限定版のアパレルや個性的なアクセサリー、ユニークなコレクターズアイテムなど、東京・アリスは夢見る人や冒険心あふれる方に特別なアイテムをご用意しています。</p>",
+            "button_text": "道順を確認"
+          }
+        },
+        "address_item_DWFJ3R": {
+          "type": "address_item",
+          "settings": {
+            "heading": "京都の店舗",
+            "address": "〒612-8055 京都府京都市伏見区豊後町1丁目7-4 木屋町プラザ",
+            "text": "<p><strong>営業時間:</strong></p><p>月曜日〜土曜日：午前10時30分〜午後7時00分</p><p>日曜日：午前11時00分〜午後6時00分</p><p><br/></p><p><strong>お問い合わせ:</strong></p><p>電話：+81 75-876-4321</p><p>メール：kyoto@fuji.jp</p><p><br/></p><p><strong>本日、富士に足を踏み入れて、伝統とファンタジーが完璧に調和する世界をお楽しみください！</strong></p>",
+            "button_text": "道順を確認"
+          }
+        },
+        "address_item_KMiUyA": {
+          "type": "address_item",
+          "settings": {
+            "heading": "横浜の店舗",
+            "address": "〒231-0005 神奈川県横浜市本町桜通り3丁目14-8 アリス・イン・ヨコハマ",
+            "text": "<p><strong>営業時間:</strong></p><p>月曜日〜土曜日：午前10時30分〜午後7時00分</p><p>日曜日：午前11時00分〜午後6時00分</p><p><br/></p><p><strong>お問い合わせ:</strong></p><p>電話：+81 75-876-4321</p><p>メール：yokohama@fuji.jp</p>",
+            "button_text": "道順を確認"
+          }
+        }
+      },
+      "block_order": [
+        "address_item_4MFqYe",
+        "address_item_34z8AE",
+        "address_item_DWFJ3R",
+        "address_item_KMiUyA"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "subheading": "",
+        "heading": "ストアを探す",
+        "description": "東京、京都、横浜で「Fuji」を発見—ファンタジーとスタイルが出会う場所。各店舗では、その都市の魅力に合わせたユニークで遊び心あふれるファッションやアクセサリーをご用意しています。さあ、魔法のようなショッピング体験に飛び込んでみませんか",
+        "items_per_row_on_desktop": "3",
+        "content_align": "diagonal d-grid-md",
+        "enable_carousel": false,
+        "show_navigation": false,
+        "remove_padding_top": false,
+        "remove_padding_bottom": false,
+        "image_ratio": "2/3",
+        "show_address_description": true,
+        "button_main_text": "",
+        "button_main_link": "",
+        "badge_text": "",
+        "badge_color": "color-accent-1",
+        "badge_position": "p-badge--top-right",
+        "badge_shape": "badge--star"
+      }
+    }
+  },
+  "order": [
+    "breadcrumb",
+    "main",
+    "address_list_KYQJwh"
+  ]
+}

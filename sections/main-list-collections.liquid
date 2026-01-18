@@ -1,0 +1,199 @@
+{%- liquid
+  assign show_product_count = settings.show_product_count
+  assign col_mobile = 12 | divided_by: section.settings.column_mobile
+  assign md = 12.0 | divided_by : section.settings.items_per_row_on_desktop
+  assign page_title =  page.title
+  if section.settings.heading != blank
+    assign page_title = section.settings.heading | escape
+  endif
+
+  -%}
+<div class="section has-animation color-{{ section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }}" data-ui-component="Main List Collections">
+  <div class="ctnr {{ section.settings.content_alignment }}">
+    <div class="s-header">
+      <h1 class="h2 m-zero">
+        {{ page_title }}
+      </h1>
+      <h2 class="visually-hidden">
+        {{ page_title }}
+      </h2>
+
+    </div>
+    {%- paginate collections by section.settings.item_per_page -%}
+    <div class="s-content">
+      <div id="loadMoreContainer" class="rw gap-unequal">
+        {%- for collection in collections -%}
+          <div class="clm js-seq-animate anm anm-fadeInUp" style="--w-xs:{{ col_mobile }};--w-sm:6;--w-md:{{- md -}}; --duration: .6s;">
+            {% render 'card-collection',
+              collection: collection,
+              media_ratio: settings.collection_image_ratio,
+              show_product_count: show_product_count,
+              overlay_opacity: settings.overlay_opacity,
+              section: section,
+              is_first: forloop.first,
+              style_card: section.settings.style_card
+              %}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+    {%- if paginate.pages > 1 -%}
+      {%- if section.settings.products_load_method == 'pagination' -%}
+        <div class="s-footer">
+          {%- render 'pagination', paginate: paginate -%}
+        </div>
+      {%- else -%}
+        {% render 'load-more-component', paginate: paginate %}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endpaginate -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:general.collection_list_page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:general.general"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:general.color_scheme",
+      "default": "accent-1"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:general.section_heading",
+      "default": "Collections"
+    },
+    {
+      "type": "select",
+      "id": "item_per_page",
+      "default": "12",
+      "label": "t:general.items_per_page",
+      "options": [
+        {
+          "value": "12",
+          "label": "12"
+        },
+        {
+          "value": "24",
+          "label": "24"
+        },
+        {
+          "value": "36",
+          "label": "36"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "products_load_method",
+      "label": "t:general.load_product_methods",
+      "default": "pagination",
+      "options": [
+        {
+          "value": "pagination",
+          "label": "t:general.load_product_methods_pagination"
+        },
+        {
+          "value": "infinite_scroll",
+          "label": "t:general.load_product_methods_infinite_scroll"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:general.layout"
+    },
+    {
+      "type": "select",
+      "id": "style_card",
+      "label": "t:general.style",
+      "default": "card",
+      "info": "t:general.mask_overlay",
+      "options": [
+        {
+          "value": "standard",
+          "label": "t:general.standard"
+        },
+        {
+          "value": "card",
+          "label": "t:general.card"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "items_per_row_on_desktop",
+      "label": "t:general.items_per_row_on_desktop",
+      "default": "4",
+      "options": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "column_mobile",
+      "label": "t:general.items_per_row_on_mobile",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "t:general.content_alignment",
+      "default": "ta-left",
+      "options": [
+        {
+          "value": "ta-left",
+          "label": "t:general.left"
+        },
+        {
+          "value": "ta-center",
+          "label": "t:general.center"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_top",
+      "label": "t:general.remove_padding_top",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_bottom",
+      "label": "t:general.remove_padding_bottom",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

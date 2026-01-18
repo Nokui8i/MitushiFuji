@@ -1,0 +1,21 @@
+{%- assign language_code = request.locale.iso_code | split: '-' | first -%}
+{%- assign is_rtl = false -%}
+
+{%- if settings.languages_support_rlt != blank -%}
+  {%- assign custom_rtl_languages = settings.languages_support_rlt | split: ',' -%}
+  {%- for custom_lang in custom_rtl_languages -%}
+    {%- assign trimmed_lang = custom_lang | strip -%}
+    {%- if trimmed_lang == language_code -%}
+      {%- assign is_rtl = true -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- else -%}
+  {%- assign is_rtl = true -%}
+{%- endif -%}
+
+{%- if is_rtl -%}
+  rtl
+{%- else -%}
+  ltr
+{%- endif -%}

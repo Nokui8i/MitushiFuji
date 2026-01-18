@@ -1,0 +1,92 @@
+<div class="product__sticky-info w-100 w-sm-auto p-fixed zi-3 hidden-xs opacity-0 {{ purchasing_bar_position }}" id="productStickyInfo-{{ section.id }}">
+  <sht-prd-frm-sticky class="d-flex fd-column" data-src-frm-selector={{ product_form_id }}>
+    <div class="form--error js-product-form-error-wrapper pt-12 pb-12" data-type="error-wrapper" role="alert" hidden>
+      <span class="d-flex middle-xs">
+        <span class="icon--error icon icon--small mr-8 fs-0">
+        {%- render 'icon-error', size: 16 -%}
+        </span>
+        <span class="js-product-form-error-message" data-type="error-message"></span>
+      </span>
+    </div>
+    <div class="gap-12 d-flex middle-xs">
+      <div class="d-flex gap-16 w-100">
+        {%- liquid
+          assign sticky_media = product.selected_or_first_available_variant.featured_media
+          unless sticky_media
+            assign sticky_media = product.featured_media
+          endunless
+          assign sticky_ratio = sticky_media_ratio | default: section.settings.media_ratio
+          if sticky_ratio == 'auto'
+            assign sticky_ratio = sticky_media.aspect_ratio
+          endif
+          assign place_holder = 'product-apparel-1' | placeholder_svg_tag: 'placeholder w-100 h-100'
+        -%}
+        <div class="product__sticky-info__thumb d-flex middle-xs">
+          <div class="o-hidden p-relative h-100" style="--ratio: {{ sticky_ratio }}; background-color: {{ section.settings.media_background }};">
+            {% if sticky_media != blank %}
+              <img class="js-product-sticky-info-image media d-block of-cover" alt="{{ product.title | escape }}" loading="lazy" decoding="async" width="200" height="200" src="{{ sticky_media | image_url: width: 200 }}" />
+            {% else %}
+              <div class="js-sticky-placeholder d-block w-100 h-100">{{ place_holder }}</div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="d-flex fd-column">
+          <div class="product__sticky-info__title">
+            <span class="d-block fw-700">{{ product.title }}</span>
+          </div>
+          <span class="js-product-sticky-info-price product__sticky-info__price product__variants-and-price hide-empty {% unless section.settings.show_price_sticky_bar %} d-none {% endunless %}">
+            {% render 'product-price', product: product, target: product.selected_or_first_available_variant %}
+          </span>
+          <span class="js-product-sticky-info-variant hide-empty d-block-md subtext color-light td-underline c-pointer {% unless section.settings.show_product_information_on_mobile %} d-none {% endunless %} {% unless section.settings.show_variants_sticky_bar %} d-none-important {% endunless %}"></span>
+        </div>
+      </div>
+      {%- form 'product', product, id: sticky_product_form_id, class: 'form form__fields fs-0', novalidate: 'novalidate', data-type: 'add-to-cart-form-sticky' -%}
+        <div class="form__field">
+          <input type="hidden" class="form__control" name="id" value="{{ product.selected_or_first_available_variant.id }}" disabled>
+        </div>
+        <div class="product-form__buttons d-flex top-xs fd-column">
+          <div class="gap-16 d-flex w-100 {% unless section.settings.sticky_button_type == 'add_to_cart' %} d-none-important {% endunless %}">
+            <div class="product__quantity d-none-important" id="productStickyQuantity-{{ section.id }}">
+              <label class="field__label visually-hidden" for="productStickyQuantityInput-{{ section.id }}">{{ 'products.product.quantity.label' | t }}:</label>
+              <sht-qty-inp-sticky class="field_quantity d-inline-flex middle-xs center-xs" data-src-input-selector="productQuantityInput-{{ section.id }}">
+                <button class="no-js-hidden js-quantity-btn js-quantity-btn-minus btn btn-icon btn-large btn-plain" aria-label="{{ 'accessibility.minus' | t }}" name="minus" data-name="minus" type="button">
+                  {%- render 'icon-minus', size: 20 -%}
+                </button>
+                <input class="js-quantity-input qty-element input-number b-zero ta-center"
+                    type="number"
+                    name="quantity"
+                    aria-label="{{ 'products.product.quantity.input_label' | t: product: product.title | escape }}"
+                    id="productStickyQuantityInput-{{ section.id }}"
+                    min="1"
+                    value="1"
+                    form="{{ sticky_product_form_id }}"/>
+                  <button class="no-js-hidden js-quantity-btn js-quantity-btn-plus btn btn-icon btn-large btn-plain" aria-label="{{ 'accessibility.plus' | t }}" name="plus" data-name="plus" type="button">
+                    {%- render 'icon-plus', size: 20 -%}
+                  </button>
+              </sht-qty-inp-sticky>
+            </div>
+            <button type="submit" name="add" class="js-product-form-submit-btn product-btn-atc btn btn-primary--animate btn-sticky-bar w-100 w-md-auto" {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}>
+              <span class="d-block o-hidden p-relative">
+                <span class="p-relative d-flex middle-xs center-xs ta-center btn-primary__content">
+                  <span class="js-product-form-spinner product-form-spinner icon">
+                    {% render 'icon-spinner' %}
+                  </span>
+                    <span class="js-product-form-submit-btn-text">
+                      {%- if product.selected_or_first_available_variant.available -%}
+                        {{ 'general.add' | t }}
+                      {%- else -%}
+                        {{ 'products.product.sold_out' | t }}
+                      {%- endif -%}
+                  </span>
+                </span>
+              </span>
+            </button>
+          </div>
+          <div class="{% unless section.settings.sticky_button_type == 'dynamic_checkout' %} d-none-important {% endunless %} w-100">
+            {{ form | payment_button }}
+          </div>
+        </div>
+      {%- endform -%}
+    </div>
+  </sht-prd-frm-sticky>
+</div>

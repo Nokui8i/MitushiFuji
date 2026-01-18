@@ -1,0 +1,29 @@
+.section-404__form .field__text {
+  padding-inline-end: 56px;
+}
+.section-404__content {
+  direction: ltr;
+}
+
+.section-404__content:only-child {
+  place-items: center;
+}
+
+[dir=rtl] .section-404__content {
+  direction: rtl;
+}
+[dir=rtl] .section-container.d-rtl {
+  direction: ltr;
+}
+
+@media (min-width: 459px) {
+  .section-404__form {
+    max-width: 400px;
+  }
+}
+@media (min-width: 768px) {
+  .section-404 .section-404__desc {
+    margin-block-start: calc(var(--spacing) * 2);
+    margin-inline-start: 0;
+  }
+}

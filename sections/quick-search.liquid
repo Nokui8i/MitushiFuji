@@ -1,0 +1,203 @@
+
+{%- render 'predictive-search', class: 'header-search o-hidden d-block p-fixed top-0 w-100 left-0 h-100v zi-9' -%}
+
+{% schema %}
+{
+  "name": "t:general.quick_search",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:general.quick_search_paragraph"
+    },
+    {
+      "type": "header",
+      "content": "t:general.general"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:general.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:general.product_results_settings"
+    },
+    {
+      "type": "select",
+      "id": "product_card_direction",
+      "label": "t:general.card_direction",
+      "options": [
+        {
+          "value": "vertical",
+          "label": "t:general.vertical"
+        },
+        {
+          "value": "horizontal",
+          "label": "t:general.horizontal"
+        }
+      ],
+      "default": "vertical"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "t:general.show_vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "t:general.show_price",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "products_per_row_desktop",
+      "label": "t:general.items_per_row_desktop",
+      "options": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "products_per_row_mobile",
+      "label": "t:general.items_per_row_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "header",
+      "content": "t:general.collection_results_settings"
+    },
+    {
+      "type": "select",
+      "id": "collection_card_direction",
+      "label": "t:general.card_direction",
+      "options": [
+        {
+          "value": "vertical",
+          "label": "t:general.vertical"
+        },
+        {
+          "value": "horizontal",
+          "label": "t:general.horizontal"
+        }
+      ],
+      "default": "vertical"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_count",
+      "label": "t:general.show_product_count",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "collections_per_row_desktop",
+      "label": "t:general.items_per_row_desktop",
+      "options": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "collections_per_row_mobile",
+      "label": "t:general.items_per_row_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "header",
+      "content": "t:general.empty_state_settings"
+    },
+    {
+      "type": "link_list",
+      "id": "suggested_links",
+      "label": "t:general.suggested_links"
+    },
+    {
+      "type": "text",
+      "id": "suggested_links_heading",
+      "label": "t:general.suggested_links_heading",
+      "info": "t:general.suggested_links_info",
+      "default": "Popular searches",
+      "visible_if": "{{ section.settings.suggested_links != blank }}"
+    },
+    {
+      "type": "product_list",
+      "id": "suggested_products",
+      "label": "t:general.suggested_products"
+    },
+    {
+      "type": "text",
+      "id": "suggested_products_heading",
+      "label": "t:general.suggested_products_heading",
+      "info": "t:general.suggested_info",
+      "default": "Popular products",
+      "visible_if": "{{ section.settings.suggested_products != blank }}"
+    },
+    {
+      "type": "collection_list",
+      "id": "suggested_collections",
+      "label": "t:general.suggested_collections"
+    },
+    {
+      "type": "text",
+      "id": "suggested_collections_heading",
+      "label": "t:general.suggested_collections_heading",
+      "info": "t:general.suggested_info",
+      "default": "Popular collections",
+      "visible_if": "{{ section.settings.suggested_collections != blank }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.quick_search"
+    }
+  ]
+}
+{% endschema %}

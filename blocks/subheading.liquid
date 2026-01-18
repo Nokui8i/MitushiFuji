@@ -1,0 +1,24 @@
+
+<div class="s-header__sub hide-empty mb-0-important tt-up {{ settings.subheading_style }}" {{ block.shopify_attributes }}>
+  {{- block.settings.subheading | escape -}}
+</div>
+{% schema %}
+  {
+    "name": "t:general.subheading",
+    "settings": [
+      {
+        "type": "text",
+        "id": "subheading",
+        "label": "t:general.text",
+        "default": "Subheading",
+        "info": "t:general.hide_if_empty"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:general.subheading",
+        "category": "t:general.typography"
+      }
+    ]
+  }
+  {% endschema %}

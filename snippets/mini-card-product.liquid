@@ -1,0 +1,42 @@
+
+{% liquid
+  assign widths = '240, 352, 550, 832, 1200, 1600, 1920, 2560, 3840'
+  assign sizes = '(min-width: 769px) ' | append: media_width_desktop | append: ', ' | append: '100vw'
+
+  assign product_placeholder = 'product-apparel-1' | placeholder_svg_tag: 'js-image-lazy placeholder w-100 h-100 media'
+  assign product_image = product_placeholder
+
+  assign product_img_first_classes = 'js-image-lazy media of-cover mini-product-image w-100 h-100'
+
+  if settings.enable_fit_image_to_container
+    assign product_img_first_classes = 'js-image-lazy media of-contain mini-product-image w-100 h-100'
+  endif
+
+  if ratio == 'auto'
+    assign ratio = product.featured_media.aspect_ratio
+  endif
+
+  assign product_image = product.featured_media | image_url: width: product.featured_media.width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_first_classes, loading: loading, fetchpriority: fetchpriority, decoding: decoding
+%}
+
+<div class="card__mini-product d-grid gap-16 middle-xs">
+  <a href="{{- product.url | within: collection | default: '#' -}}" class="d-block w-100 h-100 pe-no-link {{ product_link_class }}" aria-label="{{ product.title | escape }}" tabindex="-1">
+    {% render 'image', image_item: product_image, image_wrap_classes: 'product__image-first', ratio: ratio %}
+  </a>
+  <div class="card__content w-100 wb-break-word">
+    {% if show_vendor %}
+    <div class="card__content-vendor d-none color-light subtext mb-4 {{ show_vendor | default: 'd-none' | replace: 'true', '' }}">
+        <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+        <span>{{ product.vendor }}</span>
+      </div>
+    {% endif %}
+    <h3 class="card__heading h6 mb-4 m-zero">
+      <a href="{{- product.url | within: collection -}}" class="{{ product_link_class }}">{{- product.title -}}</a>
+    </h3>
+    {% if show_price %}
+      {%- liquid
+        render 'product-price' product: product, target: product, price_class: 'd-block mb-8 mb-md-12'
+      -%}
+    {% endif %}
+  </div>
+</div>

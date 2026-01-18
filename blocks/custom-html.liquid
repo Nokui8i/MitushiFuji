@@ -1,0 +1,23 @@
+<div class="block-content block-custom-html hide-empty" {{ block.shopify_attributes }}>
+  {{- block.settings.html_code -}}
+</div>
+{% schema %}
+{
+  "name": "t:general.custom_html",
+  "tag": null,
+  "settings": [
+    {
+      "type": "html",
+      "id": "html_code",
+      "label": "t:general.html_code",
+      "default": "<p style=\"text-align: center;\">Write or copy/paste HTML code</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.custom_html",
+      "category": "t:general.custom"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,201 @@
+{%- liquid
+  assign loading = "lazy"
+  assign decoding = "async"
+  assign fetchpriority = "auto"
+
+  if section.index <= 2
+      assign loading = 'eager'
+      assign fetchpriority = 'high'
+    endif
+
+  assign video_thumbnail = 'hero-apparel-1' | placeholder_svg_tag: 'video-block__placeholder placeholder js-image-lazy media of-cover'
+  assign alt_video_thumbnail = block.settings.video_thumbnail.image.alt | default: block.settings.video_thumbnail.image.src | split: '/' | last | split: '.' | first
+
+  assign widths = '240, 352, 550, 832, 1200, 1600, 1920, 2560, 3840'
+
+  assign media_width_desktop = '100vw'
+  if settings.enable_content_max_width
+    assign media_width_desktop = 'min(100vw, ' | append: settings.content_max_width | append: 'px)'
+  endif
+  assign sizes = '(min-width: 769px)' | append: media_width_desktop | append: ', ' | append: '100vw'
+
+  if block.settings.video_thumbnail
+    assign video_thumbnail = block.settings.video_thumbnail | image_url: width: block.settings.video_thumbnail.width | image_tag: widths: widths, sizes: sizes, alt: alt_video_thumbnail, class: 'js-image-lazy media of-cover w-100', loading: loading, fetchpriority: fetchpriority, decoding: decoding
+    assign video_width = '--video-width: ' | append: block.settings.video_thumbnail.width | append: 'px;'
+  else
+    if block.settings.video_source == 'shopify_hosted'
+      assign video_thumbnail = block.settings.shopify_hosted.preview_image | image_url: width: block.settings.shopify_hosted.preview_image.width | image_tag: widths: widths, sizes: sizes, alt: block.settings.shopify_hosted.alt, class: 'js-image-lazy media of-cover w-100', loading: loading, fetchpriority: fetchpriority, decoding: decoding
+    endif
+  endif
+
+  assign video_ratio = block.settings.aspect_ratio
+  if video_ratio == 'auto'
+    if block.settings.video_source == 'external'
+      assign video_ratio = 1.778
+    else
+      assign video_ratio = block.settings.shopify_hosted.aspect_ratio
+    endif
+  endif
+-%}
+<div class="block-content w-100 block-video hide-empty" {{ block.shopify_attributes }} style="--video-width-xs:{{ block.settings.video_mobile_width }}%;--video-width-md:{{ block.settings.video_width }}%;">
+  {%- if block.settings.video_source == 'shopify_hosted' and block.settings.shopify_hosted -%}
+    {%- comment -%} Shopify Hosted Video {%- endcomment -%}
+    <sht-load-media class="d-block p-relative o-hidden" style="--ratio: {{ video_ratio }}; {{- video_width -}}">
+      <button class="w-100 h-100 b-zero p-zero c-pointer d-block p-relative zi-1 js-load-media-trigger media-hover-zoomed" type="button" aria-label="{{ 'accessibility.load_video' | t: video: 'Video' }}">
+        {%- render 'image', image_item: video_thumbnail, ratio: video_ratio -%}
+        <span class="p-absolute center-middle">
+          <span class="btn btn-secondary--animate btn-large btn-icon js-btn-play">
+            {%- render 'icon-play' -%}
+          </span>
+        </span>
+      </button>
+      <template>
+        {{- block.settings.shopify_hosted | video_tag: autoplay: true, muted: block.settings.enable_video_mute, loop: block.settings.enable_video_loop, controls: true, preload: 'none', class: 'background-video w-100 h-100 media d-block js-media-item-video' -}}
+      </template>
+    </sht-load-media>
+  {%- elsif block.settings.video_source == 'external' and block.settings.external_video -%}
+    <sht-load-media class="d-block p-relative o-hidden" style="--ratio: {{ video_ratio }}; {{- video_width -}}">
+      <button class="w-100 h-100 b-zero p-zero c-pointer d-block p-relative zi-1 js-load-media-trigger media-hover-zoomed" type="button" aria-label="{{ 'accessibility.load_video' | t: video: 'Video' }}">
+        {%- render 'image', image_item: video_thumbnail, ratio: video_ratio -%}
+        <span class="p-absolute center-middle">
+          <span class="btn btn-secondary--animate btn-large btn-icon js-btn-play">
+            {%- render 'icon-play' -%}
+          </span>
+        </span>
+      </button>
+      <template>
+        {%- if block.settings.external_video.type == 'youtube' -%}
+          <iframe title="{{ block.settings.external_video.type }}" class="w-100 h-100 media js-media-item-youtube d-block" allow="autoplay; encrypted-media" src="https://www.youtube.com/embed/{{ block.settings.external_video.id }}?version=3&enablejsapi=1&mute={{ block.settings.enable_video_mute | default: '0' | replace: 'true', '1' }}&autoplay=1&loop={{ block.settings.enable_video_loop | default: '0' | replace: 'true', '1' }}&playlist={{ block.settings.external_video.id }}" style="--ratio: {{ video_ratio }}"></iframe>
+        {%- elsif block.settings.external_video.type == 'vimeo' -%}
+          <iframe title="{{ block.settings.external_video.type }}" class="w-100 h-100 media js-media-item-vimeo background-video d-block" allow="autoplay; encrypted-media" src="https://player.vimeo.com/video/{{ block.settings.external_video.id }}?loop={{ block.settings.enable_video_loop | default: '0' | replace: 'true', '1' }}&autoplay=1&muted={{ block.settings.enable_video_mute | default: '0' | replace: 'true', '1' }}" style="--ratio: {{ video_ratio }}"></iframe>
+        {%- endif -%}
+      </template>
+    </sht-load-media>
+  {%- else -%}
+    {%- comment -%} Fallback when no video is configured {%- endcomment -%}
+    <div class="video-block__placeholder" style="--ratio: {{ video_ratio }};">
+      <div class="p-relative w-100 h-100">
+        {%- if video_thumbnail -%}
+          {%- render 'image', image_item: video_thumbnail, ratio: video_ratio -%}
+        {%- else -%}
+          {{ 'blog-apparel-2' | placeholder_svg_tag: 'video-block__placeholder-image w-100 h-100 media of-cover' }}
+        {%- endif -%}
+        <span class="p-absolute center-middle">
+          <span class="btn btn-secondary--animate btn-large js-btn-play btn-icon">
+            {%- render 'icon-play' -%}
+          </span>
+        </span>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:general.video",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:general.general"
+    },
+    {
+      "type": "select",
+      "id": "video_source",
+      "label": "t:general.video_source",
+      "default": "external",
+      "options": [
+        {
+          "value": "external",
+          "label": "t:general.external"
+        },
+        {
+          "value": "shopify_hosted",
+          "label": "t:general.shopify_hosted"
+        }
+      ]
+    },
+    {
+      "type": "video_url",
+      "id": "external_video",
+      "label": "t:general.external_video",
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+      "accept": ["youtube", "vimeo"],
+      "visible_if": "{{ block.settings.video_source == 'external' }}"
+    },
+    {
+      "type": "video",
+      "id": "shopify_hosted",
+      "label": "t:general.shopify_hosted",
+      "visible_if": "{{ block.settings.video_source == 'shopify_hosted' }}"
+    },
+    {
+      "type": "select",
+      "label": "t:general.aspect_ratio",
+      "id": "aspect_ratio",
+      "default": "1.778",
+      "options": [
+        {
+          "value": "1.778",
+          "label": "16:9"
+        },
+        {
+          "value": "1.333",
+          "label": "4:3"
+        },
+        {
+          "value": "auto",
+          "label": "t:general.original"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "video_thumbnail",
+      "label": "t:general.video_thumbnail"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_mute",
+      "label": "t:general.enable_video_mute",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_loop",
+      "label": "t:general.enable_video_loop",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:general.size"
+    },
+    {
+      "type": "range",
+      "id": "video_width",
+      "label": "t:general.width",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "video_mobile_width",
+      "label": "t:general.mobile_width",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.video",
+      "category": "t:general.media"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,24 @@
+<div class="slideshow__controls bottom-16 p-absolute zi-3 w-100 no-js-hidden gap-12 gap-md-16 ctnr d-flex {{ pagi_classes }} {{ control_width_class }} {{ bth_position_class }}">
+  <button aria-label="{{ 'accessibility.previous_slide' | t }}" aria-controls="slideShow-{{ section.id }}" class="btn {{ btn_class }} rtl-flip-x btn-icon btn-plain js-slideshow-prev-btn {{ show_navigation }} color-light" type="button">
+    {% render 'icon-chevron-left' %}
+  </button>
+  <div class="d-flex">
+    <button aria-label="{{ 'accessibility.start_slideshow' | t }}" aria-controls="slideShow-{{ section.id }}" class="btn {{ btn_class }} btn-icon btn-plain btn-play-stop js-slideshow-start-n-stop-btn p-relative mr-8 {{ show_autoplay }}" type="button">
+      {% liquid
+        render 'icon-pause', class: icon_pause_class
+        render 'icon-play', class: 'js-slideshow-play-icon d-none'
+      %}
+    </button>
+    <div class="slideshow__counter color-light d-flex center-xs middle-xs {{ show_pagination }}">
+      <span class="js-slideshow-current">1</span>
+      <span class="slideshow__counter--separator" aria-hidden="true">
+        {% if settings.enable_right_to_left %} \ {% else %} / {% endif %}
+      </span>
+      <span class="slideshow__counter--separator js-slideshow-separator visually-hidden">{{ 'accessibility.of' | t }}</span>
+      <span class="js-slideshow-total">{{ section.blocks.size }}</span>
+    </div>
+  </div>
+  <button aria-label="{{ 'accessibility.next_slide' | t }}" aria-controls="slideShow-{{ section.id }}" class="btn btn-icon rtl-flip-x {{ btn_class }} btn-plain js-slideshow-next-btn {{ show_navigation }} color-light" type="button">
+    {% render 'icon-chevron-right' %}
+  </button>
+</div>

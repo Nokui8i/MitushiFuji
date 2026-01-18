@@ -1,0 +1,23 @@
+<div class="text-block hide-empty" {{ block.shopify_attributes }}>
+  {{- block.settings.description -}}
+</div>
+
+{% schema %}
+  {
+    "name": "t:general.description",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "t:general.text",
+        "default": "<p>Highlight your new collection or share content related to this image </p>"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:general.description",
+        "category": "t:general.typography"
+      }
+    ]
+  }
+{% endschema %}

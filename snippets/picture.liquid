@@ -1,0 +1,51 @@
+{%- liquid
+  assign slide_desktop_image_alt = settings.desktop_background_image.alt | default: settings.desktop_background_image | split: '/' | last
+  assign slide_mobile_image_alt = settings.mobile_background_image.alt | default: settings.mobile_background_image | split: '/' | last
+  if settings.desktop_background_image != blank or settings.mobile_background_image != blank
+    assign image_loader = 'image-loader'
+  endif
+-%}
+<sht-image-atf class="{{ image_loader }}">
+  <picture class="d-block w-100 h-100">
+    {%- if settings.mobile_background_image != blank -%}
+      <source
+          media="(max-width: 768px)"
+          sizes="100vw"
+          srcset="
+            {{ settings.mobile_background_image | image_url: width: 400 }} 240w,
+            {{ settings.mobile_background_image | image_url: width: 600 }} 352w,
+            {{ settings.mobile_background_image | image_url: width: 800 }} 832w,
+          "
+          width="{{ settings.mobile_background_image.width }}"
+          height="{{ settings.mobile_background_image.height }}"
+      >
+    {%- endif -%}
+
+    {%- if settings.desktop_background_image != blank -%}
+      <source
+        srcset="
+          {{ settings.desktop_background_image | image_url: width: 240 }} 240w,
+          {{ settings.desktop_background_image | image_url: width: 352 }} 352w,
+          {{ settings.desktop_background_image | image_url: width: 832 }} 832w,
+          {{ settings.desktop_background_image | image_url: width: 1200 }} 1200w,
+          {{ settings.desktop_background_image | image_url: width: 1600 }} 1600w,
+          {{ settings.desktop_background_image | image_url: width: 1920 }} 1920w,
+          {{ settings.desktop_background_image | image_url: width: 2560 }} 2560w,
+          {{ settings.desktop_background_image | image_url: width: 3840 }} 3840w
+        "
+        sizes="100vw"
+        media="(min-width: 769px)"
+      >
+    {%- endif -%}
+
+    {%- if settings.desktop_background_image != blank or settings.mobile_background_image != blank -%}
+      {%- liquid
+        assign fallback_image = settings.desktop_background_image | default: settings.mobile_background_image
+        assign fallback_alt = slide_desktop_image_alt | default: slide_mobile_image_alt
+        echo fallback_image | image_url: width: fallback_image.width | image_tag: alt: fallback_alt, class: 'd-block w-100 h-100 of-cover p-absolute center-middle', loading: loading, fetchpriority: fetchpriority, decoding: decoding
+      -%}
+    {%- else -%}
+      {{ 'hero-apparel-1' | placeholder_svg_tag: 'd-block w-100 h-100 bg-light' }}
+    {%- endif -%}
+  </picture>
+</sht-image-atf>

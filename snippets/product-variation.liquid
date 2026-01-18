@@ -1,0 +1,72 @@
+{%- liquid
+  assign option_name = option_name
+  assign variation_selector_style = settings.variation_selector_style
+  assign product_variation_metafield = settings.product_variation_metafield
+  assign namespace = product_variation_metafield | split: '.' | first
+  assign key = product_variation_metafield | split: '.' | last
+  assign variation_products = product.metafields[namespace][key].value
+
+  assign current_variation_title = ''
+  for product_handle in variation_products
+    if product.url == all_products[product_handle.product].url
+      assign title_label = product_handle.single_line_text
+      assign current_variation_title = all_products[product_handle.product].title
+      break
+    endif
+  endfor
+-%}
+{% if variation_products != blank %}
+  <div class="product__info product__block-variation mb-m" {{ block.shopify_attributes }}>
+    <div class="product-variation">
+      <div class="product-variation__header d-flex mb-16 base-line">
+        {% if option_name != blank %}
+          <span class="product-variation__title h6 mb-0 mr-8 flex-auto">{{ option_name }}{{ sign }}</span>
+        {% endif %}
+        <span class="js-product-variation-title color-light {{ subtext_class }} hide-empty">{{ title_label | default: current_variation_title }}</span>
+      </div>
+
+      <sht-variation class="product-variation__options gap-12 {{ class }} js-product-variation d-flex middle-xs fw-wrap" data-section-id="{{ section.id }}">
+        {%- for product_handle in variation_products -%}
+          {% liquid
+            assign has_image = false
+            assign has_product = false
+            assign is_active = false
+            assign variation = all_products[product_handle.product]
+            assign variation_image = variation.featured_media | image_url: width: variation.featured_media.width | image_tag: widths: '352, 550, 832', sizes: '352px', loading: 'lazy', alt: variation.title, class: 'media of-cover h-100 w-100'
+            if variation.featured_media == nil
+              assign has_image = true
+            endif
+            if variation == blank
+              assign has_product = true
+            endif
+            if product.url == all_products[product_handle.product].url
+              assign is_active = true
+            endif
+          %}
+          {% unless has_product %}
+            {%- case variation_selector_style -%}
+              {%- when 'product_images' -%}
+                {%- unless has_image -%}
+                  <button type="button" class="variation__item js-variation-item variation__item--image btn btn-plain {% if is_active %}is_active{% endif %}" data-variation-url="{{ variation.url }}">
+                    {% render 'image', image_item: variation_image, image_wrap_classes: "variation-image d-inline-block h-100 w-100", image_classes: "h-100 w-100" %}
+                  </button>
+                {% else %}
+                  <button type="button" class="variation__item js-variation-item variation__item--button o-hidden p-relative c-pointerbackground {% if is_active %}is_active{% endif %}" data-variation-url="{{ variation.url }}">
+                    <span class="variation__item-text ff-body fs-body">{{ product_handle.single_line_text | default: variation.title }}</span>
+                  </button>
+                {%- endunless -%}
+              {%- when 'color' -%}
+                <button type="button" class="variation__item js-variation-item variation__item--color d-flex middle-xs center-xs background {% if is_active %}is_active{% endif %}" data-variation-url="{{ variation.url }}" style="background: {{ product_handle.color }}">
+                  <span class="variation-color"></span>
+                </button>
+              {%- when 'buttons' -%}
+                <button type="button" class="variation__item js-variation-item variation__item--button o-hidden p-relative c-pointerbackground {% if is_active %}is_active{% endif %}" data-variation-url="{{ variation.url }}">
+                  <span class="variation__item-text ff-body fs-body">{{ product_handle.single_line_text | default: variation.title }}</span>
+                </button>
+            {%- endcase -%}
+          {%- endunless -%}
+        {%- endfor -%}
+      </sht-variation>
+    </div>
+  </div>
+{% endif %}

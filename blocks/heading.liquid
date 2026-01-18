@@ -1,0 +1,45 @@
+<h2 class="mb-0 wb-break-word hide-empty" {{ block.shopify_attributes }}
+  style="font-size: calc(var(--font-body-size) * var(--type-scale) * var(--type-scale) * var(--type-scale) * var(--type-scale) * {{- block.settings.heading_size -}} * {{- block.settings.heading_size -}} * {{- block.settings.heading_size -}} * {{- block.settings.heading_size -}});">
+  {{- block.settings.heading | escape -}}
+</h2>
+
+{% schema %}
+  {
+    "name": "t:general.heading",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "t:general.text",
+        "default": "This is a heading",
+        "info": "t:general.hide_if_empty"
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "t:general.heading_size",
+        "options": [
+          {
+            "value": "1",
+            "label": "t:general.small"
+          },
+          {
+            "value": "1.05",
+            "label": "t:general.medium"
+          },
+          {
+            "value": "1.1",
+            "label": "t:general.large"
+          }
+        ],
+        "default": "1"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:general.heading",
+        "category": "t:general.typography"
+      }
+    ]
+  }
+{% endschema %}

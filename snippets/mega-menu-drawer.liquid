@@ -1,0 +1,698 @@
+{%- liquid
+  capture icon_chevron_down
+    render 'icon-arrow-animation', class: ''
+  endcapture
+-%}
+<sht-menu-drwer aria-hidden="true" id="menuDrawer" class="js-menu-drawer mega-menu-drawer drawer drawer--left no-focus-visible" style="--logo-width-desktop: {{ section.settings.logo_width | append: 'px' }}; --logo-width-mobile: {{ section.settings.logo_width_mobile | append: 'px' }};" hidden tabindex="-1">
+  <div class="drawer__overlay js-menu-drawer-overlay js-drawer-overlay"></div>
+  <div class="drawer__wrapper js-menu-drawer-wrapper js-drawer-wrapper drawer__wrapper--{{ section.settings.drawer_style }}">
+    <div class="drawer__header d-flex middle-xs between-xs p-sticky top-0 zi-2">
+      <div class="mega-menu__header-logo drawer__header-logo">
+        {%- render 'header-logo', section: section -%}
+      </div>
+      <button class="drawer__btn-close js-menu-drawer-btn-close js-drawer-btn-close btn btn-plain btn-small btn-icon" type="button" aria-label="{{ 'accessibility.close' | t }}">
+        {%- render 'icon-close' -%}
+      </button>
+    </div>
+    <div class="drawer__body oy-auto flex-1 ox-hidden">
+      <div class="d-flex mega-menu mega-menu--drawer disable-scrollbars mega-menu--drawer__{{ section.settings.drawer_style }} {{ settings.apply_font_weight }} {% if section.settings.enable_collapsible_menu %}mega-menu--drawer__collapsible{% endif %}" style="--font-weight-level: {{ settings.font_weight }};">
+        {%- if section.settings.drawer_style == 'dropdown' -%}
+          <ul class="m-zero ls-none d-flex fd-column pl-0 w-100">
+            {% for block in section.blocks %}
+              {%- case block.type -%}
+                {%- when 'collections_menu' -%}
+                  {%- liquid
+                    assign lg = 12.0 | divided_by : block.settings.items_per_row_on_desktop
+                    if section.settings.enable_drawer == true
+                      assign lg = 6
+                    endif
+                  -%}
+                  {%- if block.settings.header_collection_title != blank -%}
+                    <li class="p-relative" style="--delay: {{ forloop.index | times: 0.05 }}s;">
+                      <sht-menu-header>
+                        <details data-level="1">
+                          <summary class="menu__link menu__link-lv1 h4 m-zero d-flex between-xs middle-xs" aria-expanded="false" aria-controls="menuHeaderCollection">
+                            {{ block.settings.header_collection_title | escape }}
+                            {{ icon_chevron_down }}
+                          </summary>
+                          <div class="menu-dropdown mega-menu-wrapper  w-100 oy-scroll disable-scrollbars">
+                            <ul class="menu-collection__list {{ settings.enable_content_max_width | replace: true, 'ctnr' | replace: false, '' }} rw ls-none pt-12 pb-16 p-zero r-gap-2x" id="menuHeaderCollection">
+                              {% for collection in block.settings.collection_list %}
+                                <li class="clm o-hidden" style="--w-xs:6;--w-lg:{{- lg -}};">
+                                  {% render 'card-collection', collection: collection, media_ratio: settings.collection_image_ratio, show_product_count: settings.show_product_count, overlay_opacity: settings.overlay_opacity, section: section, is_first: false, style_card: block.settings.style_card %}
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </div>
+                        </details>
+                      </sht-menu-header>
+                    </li>
+                  {%- endif -%}
+              {%- endcase -%}
+            {%- endfor -%}
+            {% for link in section.settings.menu.links %}
+              {% assign mega_menu = false %}
+              {% for block in section.blocks %}
+                {% case block.type %}
+                  {% when 'mega_menu' %}
+                    {% liquid
+                      assign mega_menu_name = block.settings.menu_item_name | downcase | strip
+                      assign link_anchor_name = link.title | downcase | strip
+                      if mega_menu_name == link_anchor_name and section.settings.enable_drawer == false
+                        assign mega_menu = true
+                        assign promo_block = block
+                      endif
+                    %}
+                  {% endcase %}
+              {% endfor %}
+              <li class="menu__item{{ mega_menu | default: '' | replace: 'true', ' menu__item-megamenu' }} p-relative" style="--delay: {{ forloop.index | plus: 1 | times: 0.05 }}s;">
+                {%- if link.links.size > 0 -%}
+                  <sht-menu-header>
+                    <details data-level="1">
+                      <summary class="menu__link menu__link-lv1 h4 m-zero d-flex between-xs middle-xs" aria-expanded="false" aria-controls="menuHeaderMenuList-{{ promo_block.id }}">
+                        {{ link.title }}
+                        {{ icon_chevron_down }}
+                      </summary>
+                      {%- if mega_menu -%}
+                        {%- render 'mega-menu', link: link, promo_block: promo_block, section: section, open_external_link: open_external_link -%}
+                      {% else %}
+                        <ul class="menu-dropdown m-zero ls-none d-flex fd-column" id="menuHeaderMenuList-{{ promo_block.id }}">
+                          {%- for child_link in link.links -%}
+                            <li class="submenu__item p-relative" style="--delay: {{ forloop.index | times: 0.05 }}s;">
+                              {%- if child_link.links != blank -%}
+                                <details data-level="2">
+                                  <summary class="menu__link menu__link-lv2 between-xs d-flex middle-xs p-relative" aria-expanded="false" aria-controls="menuHeaderSubMenuList-{{ forloop.index }}">
+                                    {{ child_link.title }}
+                                    {{ icon_chevron_down }}
+                                  </summary>
+                                  <ul class="menu-dropdown__grandchild m-zero p-zero-md ls-none d-flex fd-column">
+                                    {%- for grandchild_link in child_link.links -%}
+                                      {%- liquid
+                                        assign is_external_link = false
+                                        assign link_url = grandchild_link.url
+                                        if link_url contains 'http://' or link_url contains 'https://'
+                                          unless link_url contains request.origin
+                                            assign is_external_link = true
+                                          endunless
+                                        endif
+
+                                        assign target_blank_lv3 = ''
+                                        if is_external_link and open_external_link
+                                          assign target_blank_lv3 = 'target = "_blank"'
+                                        endif
+                                      -%}
+                                      <li class="submenu__item menu__item__grandchild {{ grandchild_link.current | default: '' | replace: 'true', 'menu__item--current' }}"  style="--delay: {{ forloop.index | times: 0.05 }}s;">
+                                        <a href="{{ grandchild_link.url }}" {{ target_blank_lv3 }} class="menu__link d-block {{ grandchild_link.current | default: '' | replace: 'true', 'menu__link--active' }}">{{ grandchild_link.title }}</a>
+                                      </li>
+                                    {%- endfor -%}
+                                  </ul>
+                                </details>
+                              {%- else -%}
+                                {%- liquid
+                                  assign is_external_link = false
+                                  assign link_url = child_link.url
+                                  if link_url contains 'http://' or link_url contains 'https://'
+                                    unless link_url contains request.origin
+                                      assign is_external_link = true
+                                    endunless
+                                  endif
+
+                                  assign target_blank_lv2 = ''
+                                  if is_external_link and open_external_link
+                                    assign target_blank_lv2 = 'target = "_blank"'
+                                  endif
+                                -%}
+                                <a href="{{ child_link.url }}" {{ target_blank_lv2 }} class="menu__link menu__link-lv2 d-block {{ child_link.current | default: '' | replace: 'true', 'menu__link--active' }}">{{ child_link.title }}</a>
+                              {%- endif -%}
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </details>
+                  </sht-menu-header>
+                {%- else -%}
+                  {%- liquid
+                    assign is_external_link = false
+                    assign link_url = link.url
+                    if link_url contains 'http://' or link_url contains 'https://'
+                      unless link_url contains request.origin
+                        assign is_external_link = true
+                      endunless
+                    endif
+
+                    assign target_blank_lv1 = ''
+                    if is_external_link and open_external_link
+                      assign target_blank_lv1 = 'target = "_blank"'
+                    endif
+                  -%}
+                  <a href="{{ link.url }}" {{ target_blank_lv1 }} class="menu__link menu__link-lv1 h4 m-zero d-block {{ link.current | default: '' | replace: 'true', 'menu__link--active' }}">{{ link.title }}</a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- else -%}
+          <sht-tabs class="d-block mega-menu--drawer__tabs js-mega-menu-drawer-tabs">
+            <div class="mega-menu--drawer__tab-header-wrap js-drawer-tabs-header p-relative">
+              <span class="tab-header__mask tab-header__mask--prev" aria-hidden="true"></span>
+              <span class="tab-header__mask tab-header__mask--next" aria-hidden="true"></span>
+              <ul class="p-relative ox-auto disable-scrollbars ls-none pl-0 mega-menu--drawer__tab-header js-mega-menu-drawer-tabs-header ws-nowrap d-flex" role="tablist">
+              {%- liquid
+                assign first_collections_menu_found = false
+                assign collections_menu_count = 0
+                for check_block in section.blocks
+                  if check_block.type == 'collections_menu' and check_block.settings.header_collection_title != blank
+                    assign collections_menu_count = collections_menu_count | plus: 1
+                  endif
+                endfor
+              -%}
+              {% for block in section.blocks %}
+                {%- case block.type -%}
+                  {%- when 'collections_menu' -%}
+                    {%- if block.settings.header_collection_title != blank -%}
+                      {%- liquid
+                        assign is_first_collections_menu = false
+                        if first_collections_menu_found == false
+                          assign is_first_collections_menu = true
+                          assign first_collections_menu_found = true
+                        endif
+                      -%}
+                      <li class="d-inline-block menu__item-lv1 mega-menu--drawer__tab-item" role="presentation">
+                        <a class="menu__link menu__link-lv1 mb-0 d-flex middle-xs h-100 gap-12 p-relative {% if is_first_collections_menu %}tab__link--active{% endif %} js-tab-link" role="tab" id="drawer-{{ block.id }}-{{ forloop.index }}" href="#drawer-{{ block.id }}-{{ forloop.index }}" aria-controls="drawer-{{ block.id }}-{{ forloop.index }}">
+                          {{- block.settings.header_collection_title | escape -}}
+                        </a>
+                      </li>
+                    {%- endif -%}
+                  {%- endcase -%}
+              {%- endfor -%}
+
+              {%- for link in section.settings.menu.links -%}
+                {%- assign mega_menu = false -%}
+                {%- for block in section.blocks -%}
+                  {%- case block.type -%}
+                    {%- when 'mega_menu' -%}
+                      {% liquid
+                        assign mega_menu_name = block.settings.menu_item_name | downcase | strip
+                        assign link_anchor_name = link.title | downcase | strip
+                        if mega_menu_name == link_anchor_name and section.settings.enable_drawer == false
+                          assign mega_menu = true
+                          assign promo_block = block
+                        endif
+                      %}
+                  {%- endcase -%}
+                {%- endfor -%}
+
+                {%- liquid
+                  assign should_be_active_link = false
+                  if forloop.first and collections_menu_count == 0
+                    assign should_be_active_link = true
+                  endif
+                -%}
+                {%- liquid
+                  assign link_tab_id = 'drawer-link-' | append: forloop.index
+                -%}
+                <li class="d-inline-block menu__item-lv1 mega-menu--drawer__tab-item" role="presentation">
+                  {%- if link.links.size > 0 -%}
+                    <a class="menu__link menu__link-lv1 mb-0 d-flex middle-xs h-100 gap-12 p-relative {% if should_be_active_link %}tab__link--active{% endif %} js-tab-link" role="tab" id="{{ link_tab_id }}" href="#{{ link_tab_id }}" aria-controls="{{ link_tab_id }}">
+                      {{- link.title | escape -}}
+                    </a>
+                  {%- else -%}
+                    {%- liquid
+                      assign is_external_link = false
+                      assign link_url = link.url
+                      if link_url contains 'http://' or link_url contains 'https://'
+                        unless link_url contains request.origin
+                          assign is_external_link = true
+                        endunless
+                      endif
+
+                      assign target_blank_lv1 = ''
+                      if is_external_link and open_external_link
+                        assign target_blank_lv1 = 'target = "_blank"'
+                      endif
+                    -%}
+                    <a href="{{ link.url }}" {{ target_blank_lv1 }} class="menu__link menu__link-lv1 mb-0 d-flex middle-xs h-100 gap-12 p-relative {% if should_be_active_link %}tab__link--active{% endif %} js-tab-link" id="{{ link_tab_id }}">{{ link.title | escape }}</a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+              </ul>
+            </div>
+            <div class="tab__content">
+              {%- liquid
+                assign first_collections_panel_found = false
+              -%}
+              {%- for block in section.blocks -%}
+                {%- case block.type -%}
+                  {%- when 'collections_menu' -%}
+                    {%- liquid
+                      assign lg = 12.0 | divided_by : block.settings.items_per_row_on_desktop
+                      if section.settings.enable_drawer == true
+                        assign lg = 6
+                      endif
+
+                      assign is_first_collections_panel = false
+                      if first_collections_panel_found == false and block.settings.header_collection_title != blank
+                        assign is_first_collections_panel = true
+                        assign first_collections_panel_found = true
+                      endif
+                    -%}
+                      <ul class="tab__panel collections-menu {% if is_first_collections_panel %} tab__panel--active d-block {% else %} d-none {% endif %} js-tab-panel ls-none pl-0 js-animate" data-tab-content-id="drawer-{{ block.id }}-{{ forloop.index }}" aria-labelledby="drawer-{{ block.id }}-{{ forloop.index }}" role="tabpanel" data-mega-menu-promotion="false">
+                        {%- for collection in block.settings.collection_list -%}
+                          <li class="clm o-hidden" style="--w-xs:6;--w-lg:{{- lg -}};">
+                            {% render 'card-collection', collection: collection, media_ratio: settings.collection_image_ratio, show_product_count: settings.show_product_count, overlay_opacity: settings.overlay_opacity, section: section, is_first: false, style_card: block.settings.style_card %}
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                {%- endcase -%}
+              {%- endfor -%}
+              {%- for link in section.settings.menu.links -%}
+                {%- liquid
+                  assign mega_menu = false
+                  assign mega_menu_block = blank
+                  assign link_tab_id = 'drawer-link-' | append: forloop.index
+                -%}
+                {% for block in section.blocks %}
+                  {%- case block.type -%}
+                    {%- when 'mega_menu' -%}
+                      {%- liquid
+                        assign mega_menu_name = block.settings.menu_item_name | downcase | strip
+                        assign link_anchor_name = link.title | downcase | strip
+                        if mega_menu_name == link_anchor_name
+                          assign mega_menu_block = block
+                        endif
+                      -%}
+                  {%- endcase -%}
+                {%- endfor -%}
+                {%- liquid
+                  if mega_menu_block != blank
+                    assign mega_menu = true
+                  endif
+                  assign menu_apply_image = mega_menu_block.settings.apply_menu_image_to
+                  assign menu_level_2_image_size = mega_menu_block.settings.menu_level_2_image_size
+                  assign menu_level_3_image_size = mega_menu_block.settings.menu_level_3_image_size
+                  assign mega_menu_promotion_block = false
+                  if mega_menu_block.settings.primary_image or mega_menu_block.settings.secondary_image
+                    assign mega_menu_promotion_block = true
+                  endif
+
+                  assign should_be_active = false
+                  assign should_be_active_fallback = false
+                  if forloop.first and collections_menu_count == 0
+                    assign should_be_active = true
+                    assign should_be_active_fallback = true
+                  endif
+
+                  assign promo_heading_style = ''
+                  assign promo_class = 'promotion-standard'
+                  if mega_menu_block.settings.promotion_card_style == 'card'
+                    assign promo_heading_style = 'p-absolute bottom-0'
+                    assign promo_class = 'sht-mask color-inverse'
+                  endif
+                -%}
+                {% if mega_menu %}
+                  <div class="tab__panel {% if should_be_active %} tab__panel--active {% else %} d-none {% endif %} js-tab-panel js-animate" data-tab-content-id="{{ link_tab_id }}" aria-labelledby="{{ link_tab_id }}" role="tabpanel" data-mega-menu-promotion="{{ mega_menu_promotion_block }}">
+                    <ul class="ls-none pl-0 mega-menu--drawer__menu w-100">
+                      {%- for child_link in link.links -%}
+                        {%- liquid
+                          if menu_apply_image == 'level_2'
+                            assign enable_menu_image_lv2 = true
+                          endif
+                          if menu_apply_image == 'level_3'
+                            assign enable_menu_image_lv3 = true
+                          endif
+                          if menu_apply_image == 'level_2_and_3'
+                            assign enable_menu_image_lv2 = true
+                            assign enable_menu_image_lv3 = true
+                          endif
+                        -%}
+                        <li class="menu__item menu__item-lv2 mt-24 mega-menu--drawer__tab-item {{ child_link.current | default: '' | replace: 'true', 'menu__item--current' }}">
+                          {%- liquid
+                            assign is_external_link = false
+                            assign link_url = child_link.url
+                            if link_url contains 'http://' or link_url contains 'https://'
+                              unless link_url contains request.origin
+                                assign is_external_link = true
+                              endunless
+                            endif
+                            assign target_blank_lv2 = ''
+                            if is_external_link and open_external_link
+                              assign target_blank_lv2 = 'target = "_blank"'
+                            endif
+                          -%}
+                          {%- if child_link.links != blank -%}
+                            {%- if section.settings.enable_collapsible_menu -%}
+                              <sht-menu-header data-menu-type="drawer">
+                                <details data-level="2" class="filter-form__details">
+                                  <summary class="menu__link menu__link-lv2 between-xs d-flex middle-xs p-relative" aria-expanded="false" aria-controls="drawerSubMenuList-{{ block.id }}-{{ forloop.index }}">
+                                    {{ child_link.title }}
+                                    <span class="accordion__toggle zi-1 d-flex">
+                                      <span class="zi-1 btn btn-icon">
+                                        {% render 'icon-plus', class: 'accordion__icon--plus p-absolute', size: 18 %}
+                                        {% render 'icon-minus', class: 'accordion__icon--minus p-absolute', size: 18 %}
+                                      </span>
+                                    </span>
+                                  </summary>
+                                  <ul class="menu-dropdown__grandchild m-zero p-zero-md ls-none d-flex fd-column" id="drawerSubMenuList-{{ block.id }}-{{ forloop.index }}">
+                                    {%- for grandchild_link in child_link.links -%}
+                                      {%- liquid
+                                        assign is_external_link = false
+                                        assign link_url = grandchild_link.url
+                                        if link_url contains 'http://' or link_url contains 'https://'
+                                          unless link_url contains request.origin
+                                            assign is_external_link = true
+                                          endunless
+                                        endif
+                                        assign target_blank_lv3 = ''
+                                        if is_external_link and open_external_link
+                                          assign target_blank_lv3 = 'target = "_blank"'
+                                        endif
+                                      -%}
+                                      <li class="menu__item menu__item-lv3 mega-menu--drawer__tab-item {{ grandchild_link.current | default: '' | replace: 'true', 'menu__item--current' }}" style="--delay: {{ forloop.index | times: 0.05 }}s;">
+                                        <a href="{{ grandchild_link.url }}" {{ target_blank_lv3 }} class="menu__link d-flex gap-12 middle-xs {{ grandchild_link.current | default: '' | replace: 'true', 'menu__link--active' }}">
+                                          {%- if enable_menu_image_lv3 and grandchild_link.object.featured_image -%}
+                                            {%- liquid
+                                              assign image_class_lv3 = 'menu-item-media--' | append: menu_level_3_image_size
+                                              assign image_lv3 = grandchild_link.object.featured_image | image_url: width: 200 | image_tag: alt: grandchild_link.object.featured_image.alt, class: 'w-100 h-100 of-cover', loading: 'lazy', fetchpriority: 'low', decoding: 'async'
+                                            -%}
+                                            {%- render 'image', image_item: image_lv3, ratio: '1/1', image_wrap_classes: image_class_lv3, image_classes: image_class_lv3 -%}
+                                          {%- endif -%}
+                                          <div class="menu-item-title menu-title-lv3">{{- grandchild_link.title -}}</div>
+                                        </a>
+                                      </li>
+                                    {%- endfor -%}
+                                  </ul>
+                                </details>
+                              </sht-menu-header>
+                            {%- else -%}
+                              <a class="menu__link menu__link-lv2 mb-0 d-flex middle-xs h-100 gap-12 p-relative aaaa-mega-menu" id="drawer-{{ block.id }}-{{ forloop.index }}" href="{{ child_link.url }}" {{ target_blank_lv2 }}>
+                                {%- if enable_menu_image_lv2 and child_link.object.featured_image -%}
+                                  {%- liquid
+                                    assign image_class_lv2 = 'w-100 h-100 menu-item-media--' | append: menu_level_2_image_size
+                                    assign image_lv2 = child_link.object.featured_image | image_url: width: 200 | image_tag: alt: child_link.object.featured_image.alt, class: 'w-100 h-100 of-cover', loading: 'lazy', fetchpriority: 'low', decoding: 'async'
+                                  -%}
+                                  {%- render 'image', image_item: image_lv2, ratio: '1/1', image_wrap_classes: image_class_lv2, image_classes: image_class_lv2 -%}
+                                {%- endif -%}
+                                <div class="menu-item-title menu-title-lv2">{{- child_link.title -}}</div>
+                              </a>
+                              <ul class="menu-dropdown__grandchild m-zero p-zero-md ls-none d-flex fd-column" id="drawerSubMenuList-{{ block.id }}-{{ forloop.index }}">
+                                {%- for grandchild_link in child_link.links -%}
+                                  {%- liquid
+                                    assign is_external_link = false
+                                    assign link_url = grandchild_link.url
+                                    if link_url contains 'http://' or link_url contains 'https://'
+                                      unless link_url contains request.origin
+                                        assign is_external_link = true
+                                      endunless
+                                    endif
+                                    assign target_blank_lv3 = ''
+                                    if is_external_link and open_external_link
+                                      assign target_blank_lv3 = 'target = "_blank"'
+                                    endif
+                                  -%}
+                                  <li class="menu__item menu__item-lv3 mega-menu--drawer__tab-item {{ grandchild_link.current | default: '' | replace: 'true', 'menu__item--current' }}" style="--delay: {{ forloop.index | times: 0.05 }}s;">
+                                    <a href="{{ grandchild_link.url }}" {{ target_blank_lv3 }} class="menu__link d-flex gap-12 middle-xs {{ grandchild_link.current | default: '' | replace: 'true', 'menu__link--active' }}">
+                                      {%- if enable_menu_image_lv3 and grandchild_link.object.featured_image -%}
+                                        {%- liquid
+                                          assign image_class_lv3 = 'menu-item-media--' | append: menu_level_3_image_size
+                                          assign image_lv3 = grandchild_link.object.featured_image | image_url: width: 200 | image_tag: alt: grandchild_link.object.featured_image.alt, class: 'w-100 h-100 of-cover', loading: 'lazy', fetchpriority: 'low', decoding: 'async'
+                                        -%}
+                                        {%- render 'image', image_item: image_lv3, ratio: '1/1', image_wrap_classes: image_class_lv3, image_classes: image_class_lv3 -%}
+                                      {%- endif -%}
+                                      <div class="menu-item-title menu-title-lv3">{{- grandchild_link.title -}}</div>
+                                    </a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            {%- endif -%}
+                          {%- else -%}
+                            <a class="menu__link menu__link-lv2 mb-0 d-flex middle-xs h-100 gap-12 p-relative aaaa-mega-menu" id="drawer-{{ block.id }}-{{ forloop.index }}" href="{{ child_link.url }}" {{ target_blank_lv2 }}>
+                              {%- if enable_menu_image_lv2 and child_link.object.featured_image -%}
+                                {%- liquid
+                                  assign image_class_lv2 = 'w-100 h-100 menu-item-media--' | append: menu_level_2_image_size
+                                  assign image_lv2 = child_link.object.featured_image | image_url: width: 200 | image_tag: alt: child_link.object.featured_image.alt, class: 'w-100 h-100 of-cover', loading: 'lazy', fetchpriority: 'low', decoding: 'async'
+                                -%}
+                                {%- render 'image', image_item: image_lv2, ratio: '1/1', image_wrap_classes: image_class_lv2, image_classes: image_class_lv2 -%}
+                              {%- endif -%}
+                              <div class="menu-item-title menu-title-lv2">{{- child_link.title -}}</div>
+                            </a>
+                          {%- endif -%}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                    {%- if mega_menu_block.settings.primary_image and mega_menu_block.settings.secondary_image -%}
+                      <div class="mega-menu-promotions-wrapper">
+                        <div class="mega-menu-promotions w-100 d-none hide-empty mega-menu--drawer__promotions">
+                          <sht-carousel class="p-relative d-block">
+                            <div aria-atomic="true" class="d-flex fw-nowrap carousel ox-auto p-relative scrollable scrollable-x disable-scrollbars js-carousel-items js-animate">
+                              <sht-carousel-itm tabindex="0" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero anm anm-fadeInUp" aria-roledescription="Slide" data-item-index="1" style="--w-xs:12; --w-sm: 12">
+                                {%- liquid
+                                unless mega_menu_block.settings.image_overlay_color_first.alpha == 0.0 or mega_menu_block.settings.image_overlay_color_first == blank
+                                  assign overlay_mask_color_first = '--color-page-bg-rgb: ' | append: mega_menu_block.settings.image_overlay_color_first.red | append: ',' | append: mega_menu_block.settings.image_overlay_color_first.green | append: ',' | append: mega_menu_block.settings.image_overlay_color_first.blue | append: ';'
+                                endunless
+                                unless mega_menu_block.settings.image_content_color_first.alpha == 0.0 or mega_menu_block.settings.image_content_color_first == blank
+                                  assign overlay_content_color_first = 'color: ' | append: mega_menu_block.settings.image_content_color_first | append: ';'
+                                endunless
+                                -%}
+                                <div class="card__promotion p-relative o-hidden {{ promo_class }} media-hover-zoomed {% if mega_menu_block.settings.image_ratio == 'auto' %}mah-fit-content{% endif %}" 
+                                style="--overlay: {{ mega_menu_block.settings.image_overlay_opacity_first }};
+                                      {{- overlay_mask_color_first -}}">
+                                  <a href="{{ mega_menu_block.settings.primary_link | default: '#' }}" class="p-absolute top-0 left-0 w-100 h-100 zi-3 hide-no-link" aria-label="{{ mega_menu_block.settings.primary_heading }}"></a>
+                                  <div class="card__media">
+                                    {%- liquid
+                                      assign primary_image_alt = mega_menu_block.settings.primary_image.image.alt | default: mega_menu_block.settings.primary_image.image | split: '/' | last
+                                      assign primary_image_media = mega_menu_block.settings.primary_image | image_url: width: mega_menu_block.settings.primary_image.width | image_tag: alt: primary_image_alt, class: 'h-100 w-100 of-cover media js-image-lazy '
+                                      assign ratio = mega_menu_block.settings.image_ratio
+                                      if mega_menu_block.settings.image_ratio == 'auto'
+                                        assign ratio = mega_menu_block.settings.primary_image.aspect_ratio
+                                      endif
+                                      render 'image', image_item: primary_image_media, ratio: ratio, image_wrap_classes: 'h-100 w-100', image_classes: 'w-100 h-100'
+                                    -%}
+                                  </div>
+                                  <div class="card__content wb-break-word {{ promo_heading_style }} w-100 zi-2 {{ mega_menu_block.settings.primary_heading | default: 'd-none' | replace: mega_menu_block.settings.primary_heading, '' }}" style="{{- overlay_content_color_first -}}">
+                                    <span class="card__title h6">
+                                      {{- mega_menu_block.settings.primary_heading -}}
+                                    </span>
+                                  </div>
+                                </div>
+                              </sht-carousel-itm>
+                              <sht-carousel-itm tabindex="1" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero anm anm-fadeInUp" aria-roledescription="Slide" data-item-index="2" style="--w-xs:12; --w-sm: 12">
+                                {%- liquid
+                                  unless mega_menu_block.settings.image_overlay_color_second.alpha == 0.0 or mega_menu_block.settings.image_overlay_color_second == blank
+                                    assign overlay_mask_color_second = '--color-page-bg-rgb: ' | append: mega_menu_block.settings.image_overlay_color_second.red | append: ',' | append: mega_menu_block.settings.image_overlay_color_second.green | append: ',' | append: mega_menu_block.settings.image_overlay_color_second.blue | append: ';'
+                                  endunless
+                                  unless mega_menu_block.settings.image_content_color_second.alpha == 0.0 or mega_menu_block.settings.image_content_color_second == blank
+                                    assign overlay_content_color_second = 'color: ' | append: mega_menu_block.settings.image_content_color_second | append: ';'
+                                  endunless
+                                -%}
+                                <div class="card__promotion p-relative o-hidden {{ promo_class }} media-hover-zoomed {% if mega_menu_block.settings.image_ratio == 'auto' %}mah-fit-content{% endif %}" 
+                                style="--overlay: {{ mega_menu_block.settings.image_overlay_opacity_second }};
+                                      {{- overlay_mask_color_second -}}">
+                                  <a href="{{ mega_menu_block.settings.secondary_link | default: '#' }}" class="p-absolute top-0 left-0 w-100 h-100 zi-3 hide-no-link" aria-label="{{ mega_menu_block.settings.secondary_heading }}"></a>
+                                  <div class="card__media">
+                                    {%- liquid
+                                      assign secondary_image_media_alt = mega_menu_block.settings.secondary_image.image.alt | default: mega_menu_block.settings.secondary_image.image | split: '/' | last
+                                      assign secondary_image_media = mega_menu_block.settings.secondary_image | image_url: width: mega_menu_block.settings.secondary_image.width | image_tag: alt: secondary_image_media_alt, class: 'h-100 w-100 of-cover media js-image-lazy '
+                                      assign ratio = mega_menu_block.settings.image_ratio
+                                      if mega_menu_block.settings.image_ratio == 'auto'
+                                        assign ratio = mega_menu_block.settings.secondary_image.aspect_ratio
+                                      endif
+                                      render 'image', image_item: secondary_image_media, ratio: ratio, image_wrap_classes: 'h-100 w-100', image_classes: 'w-100 h-100'
+                                    -%}
+                                  </div>
+                                  <div class="card__content wb-break-word {{ promo_heading_style }} w-100 zi-2 {{ mega_menu_block.settings.secondary_heading | default: 'd-none' | replace: mega_menu_block.settings.secondary_heading, '' }}" style="{{- overlay_content_color_second -}}">
+                                    <span class="card__title h6">
+                                      {{- mega_menu_block.settings.secondary_heading -}}
+                                    </span>
+                                  </div>
+                                </div>
+                              </sht-carousel-itm>
+                            </div>
+                            <div class="carousel-pagination zi-1 middle-y w-100 p-absolute no-js-hidden">
+                              <div class="p-absolute left-0">
+                                <button type="button" data-step="1" class="js-carousel-prev-btn btn btn-primary--animate btn-icon btn-small p-absolute middle-y left-0" aria-label="{{ 'accessibility.previous_slide' | t }}" name="previous" disabled>{% render 'icon-chevron-left' %}</button>
+                              </div>
+                              <div class="p-absolute right-0">
+                                <button type="button" data-step="1" class="js-carousel-next-btn btn btn-primary--animate btn-icon btn-small p-absolute middle-y right-0" aria-label="{{ 'accessibility.next_slide' | t }}" name="next" disabled>{% render 'icon-chevron-right' %}</button>
+                              </div>
+                            </div>
+                          </sht-carousel>
+                        </div>
+                      </div>
+                    {% elsif mega_menu_block.settings.primary_image %}
+                      {%- liquid
+                        unless mega_menu_block.settings.image_overlay_color_first.alpha == 0.0 or mega_menu_block.settings.image_overlay_color_first == blank
+                          assign overlay_mask_color_first = '--color-page-bg-rgb: ' | append: mega_menu_block.settings.image_overlay_color_first.red | append: ',' | append: mega_menu_block.settings.image_overlay_color_first.green | append: ',' | append: mega_menu_block.settings.image_overlay_color_first.blue | append: ';'
+                        endunless
+                        unless mega_menu_block.settings.image_content_color_first.alpha == 0.0 or mega_menu_block.settings.image_content_color_first == blank
+                          assign overlay_content_color_first = 'color: ' | append: mega_menu_block.settings.image_content_color_first | append: ';'
+                        endunless
+                        -%}
+                      <div class="card-promotion--primary">
+                        <div class="card__promotion p-relative o-hidden {{ promo_class }} media-hover-zoomed {% if mega_menu_block.settings.image_ratio == 'auto' %}mah-fit-content{% endif %}" 
+                        style="--overlay: {{ mega_menu_block.settings.image_overlay_opacity_first }};
+                              {{- overlay_mask_color_first -}}">
+                          <a href="{{ mega_menu_block.settings.primary_link | default: '#' }}" class="p-absolute top-0 left-0 w-100 h-100 zi-3 hide-no-link" aria-label="{{ mega_menu_block.settings.primary_heading }}"></a>
+                          <div class="card__media">
+                            {%- liquid
+                              assign primary_image_alt = mega_menu_block.settings.primary_image.image.alt | default: mega_menu_block.settings.primary_image.image | split: '/' | last
+                              assign primary_image_media = mega_menu_block.settings.primary_image | image_url: width: mega_menu_block.settings.primary_image.width | image_tag: alt: primary_image_alt, class: 'h-100 w-100 of-cover media js-image-lazy '
+                              assign ratio = mega_menu_block.settings.image_ratio
+                              if mega_menu_block.settings.image_ratio == 'auto'
+                                assign ratio = mega_menu_block.settings.primary_image.aspect_ratio
+                              endif
+                              render 'image', image_item: primary_image_media, ratio: ratio, image_wrap_classes: 'h-100 w-100', image_classes: 'w-100 h-100'
+                            -%}
+                          </div>
+                          <div class="card__content wb-break-word {{ promo_heading_style }} w-100 zi-2 {{ mega_menu_block.settings.primary_heading | default: 'd-none' | replace: mega_menu_block.settings.primary_heading, '' }}" style="{{- overlay_content_color_first -}}">
+                            <span class="card__title h6">
+                              {{- mega_menu_block.settings.primary_heading -}}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    {% elsif mega_menu_block.settings.secondary_image %}
+                      {%- liquid
+                        unless mega_menu_block.settings.image_overlay_color_second.alpha == 0.0 or mega_menu_block.settings.image_overlay_color_second == blank
+                          assign overlay_mask_color_second = '--color-page-bg-rgb: ' | append: mega_menu_block.settings.image_overlay_color_second.red | append: ',' | append: mega_menu_block.settings.image_overlay_color_second.green | append: ',' | append: mega_menu_block.settings.image_overlay_color_second.blue | append: ';'
+                        endunless
+                        unless mega_menu_block.settings.image_content_color_second.alpha == 0.0 or mega_menu_block.settings.image_content_color_second == blank
+                          assign overlay_content_color_second = 'color: ' | append: mega_menu_block.settings.image_content_color_second | append: ';'
+                        endunless
+                      -%}
+                      <div class="card-promotion--secondary">
+                        <div class="card__promotion p-relative o-hidden {{ promo_class }} media-hover-zoomed {% if mega_menu_block.settings.image_ratio == 'auto' %}mah-fit-content{% endif %}" 
+                          style="--overlay: {{ mega_menu_block.settings.image_overlay_opacity_second }};
+                                {{- overlay_mask_color_second -}}">
+                            <a href="{{ mega_menu_block.settings.secondary_link | default: '#' }}" class="p-absolute top-0 left-0 w-100 h-100 zi-3 hide-no-link" aria-label="{{ mega_menu_block.settings.secondary_heading }}"></a>
+                            <div class="card__media">
+                              {%- liquid
+                                assign secondary_image_media_alt = mega_menu_block.settings.secondary_image.image.alt | default: mega_menu_block.settings.secondary_image.image | split: '/' | last
+                                assign secondary_image_media = mega_menu_block.settings.secondary_image | image_url: width: mega_menu_block.settings.secondary_image.width | image_tag: alt: secondary_image_media_alt, class: 'h-100 w-100 of-cover media js-image-lazy '
+                                assign ratio = mega_menu_block.settings.image_ratio
+                                if mega_menu_block.settings.image_ratio == 'auto'
+                                  assign ratio = mega_menu_block.settings.secondary_image.aspect_ratio
+                                endif
+                                render 'image', image_item: secondary_image_media, ratio: ratio, image_wrap_classes: 'h-100 w-100', image_classes: 'w-100 h-100'
+                              -%}
+                            </div>
+                            <div class="card__content wb-break-word {{ promo_heading_style }} w-100 zi-2 {{ mega_menu_block.settings.secondary_heading | default: 'd-none' | replace: mega_menu_block.settings.secondary_heading, '' }}" style="{{- overlay_content_color_second -}}">
+                              <span class="card__title h6">
+                                {{- mega_menu_block.settings.secondary_heading -}}
+                              </span>
+                            </div>
+                          </div>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                {% else %}
+                  <div class="tab__panel {% if should_be_active_fallback %} tab__panel--active {% else %} d-none {% endif %} js-tab-panel js-animate" data-tab-content-id="{{ link_tab_id }}" aria-labelledby="{{ link_tab_id }}" role="tabpanel" data-mega-menu-promotion="{{ mega_menu_promotion_block }}">
+                    <ul class="ls-none pl-0 mega-menu--drawer__menu w-100">
+                      {%- for child_link in link.links -%}
+                        <li class="menu__item menu__item-lv2 mt-24 mega-menu--drawer__tab-item {{ child_link.current | default: '' | replace: 'true', 'menu__item--current' }}">
+                          {%- liquid
+                            assign is_external_link = false
+                            assign link_url = child_link.url
+                            if link_url contains 'http://' or link_url contains 'https://'
+                              unless link_url contains request.origin
+                                assign is_external_link = true
+                              endunless
+                            endif
+                            assign target_blank_lv2 = ''
+                            if is_external_link and open_external_link
+                              assign target_blank_lv2 = 'target = "_blank"'
+                            endif
+                          -%}
+                          {%- if child_link.links != blank -%}
+                            {%- if section.settings.enable_collapsible_menu -%}
+                              <sht-menu-header data-menu-type="drawer">
+                                <details data-level="2" class="filter-form__details">
+                                  <summary class="menu__link menu__link-lv2 between-xs d-flex middle-xs p-relative" aria-expanded="false" aria-controls="drawerSubMenuList-{{ block.id }}-{{ forloop.index }}">
+                                    {{ child_link.title }}
+                                    <span class="accordion__toggle zi-1 d-flex">
+                                      <span class="zi-1 btn btn-icon">
+                                        {% render 'icon-plus', class: 'accordion__icon--plus p-absolute', size: 18 %}
+                                        {% render 'icon-minus', class: 'accordion__icon--minus p-absolute', size: 18 %}
+                                      </span>
+                                    </span>
+                                  </summary>
+                                  <ul class="menu-dropdown__grandchild m-zero p-zero-md ls-none d-flex fd-column" id="drawerSubMenuList-{{ block.id }}-{{ forloop.index }}">
+                                    {%- for grandchild_link in child_link.links -%}
+                                      {%- liquid
+                                        assign is_external_link = false
+                                        assign link_url = grandchild_link.url
+                                        if link_url contains 'http://' or link_url contains 'https://'
+                                          unless link_url contains request.origin
+                                            assign is_external_link = true
+                                          endunless
+                                        endif
+                                        assign target_blank_lv3 = ''
+                                        if is_external_link and open_external_link
+                                          assign target_blank_lv3 = 'target = "_blank"'
+                                        endif
+                                      -%}
+                                      <li class="menu__item menu__item-lv3 mega-menu--drawer__tab-item {{ grandchild_link.current | default: '' | replace: 'true', 'menu__item--current' }}" style="--delay: {{ forloop.index | times: 0.05 }}s;">
+                                        <a href="{{ grandchild_link.url }}" {{ target_blank_lv3 }} class="menu__link d-flex gap-12 middle-xs {{ grandchild_link.current | default: '' | replace: 'true', 'menu__link--active' }}">
+                                          <div class="menu-item-title menu-title-lv3">{{- grandchild_link.title -}}</div>
+                                        </a>
+                                      </li>
+                                    {%- endfor -%}
+                                  </ul>
+                                </details>
+                              </sht-menu-header>
+                            {%- else -%}
+                              <a class="menu__link menu__link-lv2 mb-0 d-flex middle-xs h-100 gap-12 p-relative bbb-menu-normal" id="drawer-{{ block.id }}-{{ forloop.index }}" href="{{ child_link.url }}" {{ target_blank_lv2 }}>
+                                <div class="menu-item-title menu-title-lv2">{{- child_link.title -}}</div>
+                              </a>
+                              <ul class="menu-dropdown__grandchild m-zero p-zero-md ls-none d-flex fd-column" id="drawerSubMenuList-{{ block.id }}-{{ forloop.index }}">
+                                {%- for grandchild_link in child_link.links -%}
+                                  {%- liquid
+                                    assign is_external_link = false
+                                    assign link_url = grandchild_link.url
+                                    if link_url contains 'http://' or link_url contains 'https://'
+                                      unless link_url contains request.origin
+                                        assign is_external_link = true
+                                      endunless
+                                    endif
+                                    assign target_blank_lv3 = ''
+                                    if is_external_link and open_external_link
+                                      assign target_blank_lv3 = 'target = "_blank"'
+                                    endif
+                                  -%}
+                                  <li class="menu__item menu__item-lv3 mega-menu--drawer__tab-item {{ grandchild_link.current | default: '' | replace: 'true', 'menu__item--current' }}" style="--delay: {{ forloop.index | times: 0.05 }}s;">
+                                    <a href="{{ grandchild_link.url }}" {{ target_blank_lv3 }} class="menu__link d-flex gap-12 middle-xs {{ grandchild_link.current | default: '' | replace: 'true', 'menu__link--active' }}">
+                                      <div class="menu-item-title menu-title-lv3">{{- grandchild_link.title -}}</div>
+                                    </a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            {%- endif -%}
+                          {%- else -%}
+                            <a class="menu__link menu__link-lv2 mb-0 d-flex middle-xs h-100 gap-12 p-relative bbb-menu-normal" id="drawer-{{ block.id }}-{{ forloop.index }}" href="{{ child_link.url }}" {{ target_blank_lv2 }}>
+                              <div class="menu-item-title menu-title-lv2">{{- child_link.title -}}</div>
+                            </a>
+                          {%- endif -%}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                {% endif %}
+
+              {%- endfor -%}
+            </div>
+          </sht-tabs>
+        {%- endif -%}
+      </div>
+      <div class="header-extra-info mt-24 hide-empty p-relative zi-1" style="--delay: .7s;">
+        {%- if section.settings.enable_contact %}
+          {% render 'contact', classes: 'header__contact pt-16 mt-16 pb-32', header_style: 'mb-16 mb-sm-24', contact_class: 'r-gap-12' %}
+        {%- endif -%}
+        <div class="hidden-empty pt-16 mt-12">
+          {{ user_account_drawer }}
+          {{ header_localization | replace: 'header__localization d-none d-flex-lg', 'header__localization d-flex' }}
+          {%- if section.settings.enable_social -%}
+            {% render 'socials', classes: 'header__social-list mt-24 gap-16' %}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</sht-menu-drwer>

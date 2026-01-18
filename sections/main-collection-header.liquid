@@ -1,0 +1,155 @@
+{% liquid
+  assign loading = "lazy"
+  assign decoding ="async"
+  assign fetchpriority = "auto"
+
+  if section.index <= 2
+    assign loading = "eager"
+    assign fetchpriority = "high"
+  endif
+
+  assign height_media_style = '--h-xs:30vh; --h-md:50vh;'
+
+  if section.settings.content_position == 'text-below'
+    assign grid_media = '1/13'
+  elsif section.settings.content_position == 'text-left'
+    assign grid_media = '7/13'
+  else
+    assign height_media_style = '--mh-xs:30vh; --mh-md:50vh;'
+    assign sht_mask_class = 'sht-mask'
+    unless section.settings.section_mask_overlay_color.alpha == 0.0 or section.settings.section_mask_overlay_color == blank
+      assign overlay_color =  '--color-page-bg-rgb:' | append: section.settings.section_mask_overlay_color.red | append: ',' | append: section.settings.section_mask_overlay_color.green | append: ',' | append: section.settings.section_mask_overlay_color.blue
+    endunless
+    unless section.settings.section_content_overlay_color.alpha == 0.0 or section.settings.section_content_overlay_color == blank
+      assign content_color =  'color:' | append: section.settings.section_content_overlay_color
+    endunless
+  endif
+%}
+<div class="section has-animation color-{{ section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }}" data-ui-component="Main Collection Header">
+  <div class="collection__header collection__header--{{ section.settings.content_position }} ctnr d-grid gap-md-64" style="--gtc-equal-md: 12; {% if section.settings.content_position == 'banner-layout' %}{{ height_media_style }}{% endif %}">
+    {%- if section.settings.show_collection_image and collection.image -%}
+      {% liquid
+        assign widths = '240, 352, 550, 832, 1200, 1600, 1920, 2560, 3840'
+        assign media_width_desktop = '100vw'
+
+        if settings.enable_content_max_width
+          assign media_width_desktop = 'calc(min(100vw, ' | append: settings.content_max_width | append: 'px))'
+        endif
+
+        if section.settings.content_position == 'text-left'
+          assign media_width_desktop = 'calc(100vw / 2)'
+          if settings.enable_content_max_width
+            assign media_width_desktop = 'calc(min(100vw, ' | append: settings.content_max_width | append: 'px) / 2)'
+          endif
+        endif
+
+        assign sizes = '(min-width: 769px) ' | append: media_width_desktop | append: ', ' | append: '100vw'
+
+        assign collection_image = collection.image.src | image_url: width: collection.image.width | image_tag: widths: widths, sizes: sizes, alt: collection.title, class: 'js-image-lazy media h-100 w-100 of-cover', loading: loading, fetchpriority: fetchpriority, decoding: decoding
+        %}
+      <div class="collection-media {{ sht_mask_class }} p-relative ml-md-0 mr-minus ml-minus" style="--gc-md: {{ grid_media }}; --gr-md: 1/3; {% unless section.settings.content_position == 'banner-layout' %}{{ height_media_style }}{% endunless %};--overlay: {{ section.settings.section_overlay_opacity }}; {{ overlay_color }}; ">
+        {% render 'image', image_item: collection_image, image_wrap_classes: 'h-100', image_classes: 'h-100 js-animate anm anm-zoomOut', media_wrap_style: '--duration: .6s;' %}
+      </div>
+    {%- endif -%}
+    <div class="collection-content p-relative-md disable-scrollbars oy-auto m-zero" style="--gc-md: 1/9; --gr-md: 2; {{ content_color }}">
+      <div class="s-header s-header--special ta-center ta-left-md">
+        <h1 class="collection-content__title ts-default h2 m-zero tt-cap">
+          {{- collection.title | escape -}}
+        </h1>
+        {%- if section.settings.show_description and collection.description != blank -%}
+          <div class="s-header__desc m-sides text-block">{{- collection.description -}}</div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:general.collection_header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:general.general"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:general.color_scheme",
+      "default": "accent-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "t:general.show_collection_image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "t:general.show_collection_description",
+      "info": "t:general.show_description_info",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:general.layout"
+    },
+    {
+      "type": "select",
+      "label": "t:general.layout",
+      "id": "content_position",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:general.text_left"
+        },
+        {
+          "value": "text-below",
+          "label": "t:general.text_below_image"
+        },
+        {
+          "value": "banner-layout",
+          "label": "t:general.text_overlay_on_image"
+        }
+      ],
+      "visible_if": "{{ section.settings.show_collection_image == true }}",
+      "default": "text-left"
+    },
+    {
+      "type": "range",
+      "id": "section_overlay_opacity",
+      "label": "t:general.overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "default": 30,
+      "visible_if": "{{ section.settings.content_position == 'banner-layout' }}"
+    },
+    {
+      "type": "color",
+      "id": "section_mask_overlay_color",
+      "label": "t:general.custom_mask_overlay_color",
+      "visible_if": "{{ section.settings.content_position == 'banner-layout' }}"
+    },
+    {
+      "type": "color",
+      "id": "section_content_overlay_color",
+      "label": "t:general.custom_content_overlay_color",
+      "visible_if": "{{ section.settings.content_position == 'banner-layout' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_top",
+      "label": "t:general.remove_padding_top",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_bottom",
+      "label": "t:general.remove_padding_bottom",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

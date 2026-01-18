@@ -1,0 +1,189 @@
+
+{%- if section.settings.show_popup -%}
+  {%- unless section.settings.show_only_on_index and template != 'index' -%}
+    {%- unless section.settings.show_only_for_visitors and customer -%}
+      {%- liquid
+        assign media_alt = section.settings.image.alt | default: section.settings.image.image | split: '/' | last
+        assign media_image = section.settings.image | image_url: width: section.settings.image.width | image_tag: widths: '832', sizes: '(min-width: 769px) 832px, 100vw', class: 'w-100 h-100 of-cover js-image-lazy media' , alt: media_alt
+      -%}
+      {% assign section_id = section.id | md5 | truncate: 12, "" %}
+      {% assign frm_id = section_id | prepend: 'newsletterPopupForm-' %}
+      <sht-popup class="popup zi-6 hidden-xs opacity-0 p-fixed no-js-hidden d-none no-focus-visible color-{{ section.settings.color_scheme }}" data-props='{"triggerOn":"{{ section.settings.trigger }}"}' tabindex="-1" data-ui-component="Popup Section">
+        {% if section.settings.image %}
+          <div class="p-relative">
+            {% render 'image', image_item: media_image, ratio: '16/9' %}
+          </div>
+        {% endif %}
+        <div class="p-absolute zi-1 popup__close-btn">
+          <button class="btn btn-small btn-icon btn-secondary--animate js-popup-close-btn" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
+            {%- render 'icon-close' -%}
+          </button>
+        </div>
+        <div class="pr-20 pl-20 pt-20 pb-20">
+          {% render 'section-header'
+            classes: 's-header pb-0'
+            subheading: section.settings.subheading,
+            heading: section.settings.heading,
+            description: section.settings.text,
+            description_extra_class: 'popup__description',
+            heading_classes: 'h5 mt-8',
+            section: section
+          %}
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'button' -%}
+                  <a target="_blank" href="{{ block.settings.button_link | default: '#' }}" class="btn btn-primary--animate btn-large w-100 mt-16 hide-no-link hide-empty" {{ block.shopify_attributes }}>
+                    <span class="d-block o-hidden p-relative">
+                      <span class="btn-primary__content">
+                        {{- block.settings.button_title | escape -}}
+                      </span>
+                    </span>
+                  </a>
+              {%- when 'newsletter' -%}
+                <div class="mt-16" {{ block.shopify_attributes }}>
+                  {%- render 'newsletter-form', form_name: 'contactPopup', form_id: frm_id, classes: 'fd-column-sm' -%}
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </sht-popup>
+    {%- endunless -%}
+  {%- endunless -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:general.popup",
+  "max_blocks": 1,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:general.popup_info"
+    },
+    {
+      "type": "header",
+      "content": "t:general.general"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_popup",
+      "label": "t:general.enable_popup",
+      "info": "t:general.popup_info",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:general.color_scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "t:general.image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:general.image",
+      "info": "t:general.popup_image_info"
+    },
+    {
+      "type": "header",
+      "content": "t:general.text"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:general.subheading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:general.heading",
+      "default": "Subscribe"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:general.description",
+      "default": "<p>Promotions, new products and sales. Directly to your inbox.</p>"
+    },
+    {
+      "type": "header",
+      "content": "t:general.trigger"
+    },
+    {
+      "type": "select",
+      "id": "trigger",
+      "label": "t:general.when_to_show",
+      "options": [
+        {
+          "value": "reaching-to-footer",
+          "label": "t:general.reaching_footer"
+        },
+        {
+          "value": "after-closing-cart-notification",
+          "label": "t:general.after_add_to_cart"
+        }
+      ],
+      "default": "reaching-to-footer",
+      "info": "t:general.when_to_show_info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_only_on_index",
+      "label": "t:general.show_on_home_page",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_only_for_visitors",
+      "label": "t:general.show_non_login_visitors",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "t:general.call_to_action",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_title",
+          "label": "t:general.button_text",
+          "info": "t:general.hide_if_empty_info"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "t:general.button_link",
+          "visible_if": "{{ block.settings.button_text != blank }}"
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "t:general.newsletter_form",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:general.newsletter_paragraph_info"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:general.newsletter_note_info"
+        }
+      ],
+      "limit": 1
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "newsletter"
+      }
+    ]
+  }
+}
+{% endschema %}

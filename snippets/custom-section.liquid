@@ -1,0 +1,182 @@
+{% doc %}
+  Renders a wrapper section
+
+  @param {section} section - The section object
+  @param {string} children - The children of the section
+{% enddoc %}
+
+{%- liquid
+  assign loading = 'lazy'
+  assign fetchpriority = 'low'
+  assign decoding = 'async'
+
+  if section.index <= 2
+    assign loading = 'eager'
+    assign fetchpriority = 'high'
+  endif
+
+  assign size = '100vw'
+  if settings.enable_content_max_width
+    assign size = '(min-width: 1024px) calc(' | append: settings.content_max_width | append: 'px), 100vw'
+  endif
+
+  if section.settings.background_media == 'image'
+    assign desktop_bg_image = 'hero-apparel-1' | placeholder_svg_tag: 'placeholder w-100 h-100 of-cover'
+  endif
+
+  assign widths = '832, 1200, 1600, 1920, 2560, 3840'
+  assign mobile_widths = '240, 352, 550, 832'
+  assign media_width_desktop = '100vw'
+  if settings.enable_content_max_width
+    assign media_width_desktop = 'min(100vw, ' | append: settings.content_max_width | append: 'px)'
+  endif
+  assign sizes = '(min-width: 769px)' | append: media_width_desktop | append: ', ' | append: '100vw'
+  assign mobile_sizes = '100vw'
+
+  if section.settings.mobile_background_image and section.settings.background_media == 'image'
+    assign mobile_image_alt = section.settings.mobile_background_image.alt | default: section.settings.mobile_background_image.image | split: '/' | last
+    assign mobile_bg_image = section.settings.mobile_background_image | image_url: width: section.settings.mobile_background_image.width | image_tag: widths: mobile_widths, sizes: mobile_sizes, alt: mobile_image_alt, class: 'js-image-lazy-mobile d-none-md d-block w-100 h-100 of-cover p-absolute top-0', loading: loading, fetchpriority: fetchpriority, decoding: decoding
+  endif
+
+  if section.settings.desktop_background_image and section.settings.background_media == 'image'
+    assign desktop_image_alt = section.settings.desktop_background_image.alt | default: section.settings.desktop_background_image.image | split: '/' | last
+    assign desktop_bg_image = section.settings.desktop_background_image | image_url: width: section.settings.desktop_background_image.width | image_tag: widths: widths, sizes: sizes, alt: desktop_image_alt, class: 'js-image-lazy w-100 h-100 of-cover', loading: loading, fetchpriority: fetchpriority, decoding: decoding
+  endif
+
+  assign overlay_opacity = section.settings.section_overlay_opacity
+  unless section.settings.section_mask_overlay_color.alpha == 0.0 or section.settings.section_mask_overlay_color == blank
+    assign overlay_mask_color = '--color-page-bg-rgb: ' | append: section.settings.section_mask_overlay_color.red | append: ',' | append: section.settings.section_mask_overlay_color.green | append: ',' | append: section.settings.section_mask_overlay_color.blue
+  endunless
+  unless section.settings.section_content_overlay_color.alpha == 0.0 or section.settings.section_content_overlay_color == blank
+    assign overlay_content_color = section.settings.section_content_overlay_color
+  endunless
+
+  if section.settings.desktop_height == 'auto' or section.settings.desktop_height == 'adapt_img'
+    assign desktop_content_height = 'unset'
+  else
+    assign desktop_content_height = 'calc(' | append: section.settings.desktop_height | append: ' - var(--padding-top) - var(--padding-bottom))'
+  endif
+
+  if section.settings.mobile_height == 'auto' or section.settings.mobile_height == 'adapt_img'
+    assign mobile_content_height = 'unset'
+  else
+    assign mobile_content_height = 'calc(' | append: section.settings.mobile_height | append: ' - var(--padding-top) - var(--padding-bottom))'
+  endif
+
+  if section.settings.desktop_direction == 'fd-column-md'
+    assign desktop_direction_vertical = section.settings.desktop_direction | append: ' ' | append: section.settings.content_alignment_desktop_vertical | append: ' ' | append: section.settings.content_position_desktop_vertical
+  endif
+
+  if section.settings.mobile_direction == 'fd-column'
+    assign mobile_direction_vertical = section.settings.mobile_direction | append: ' ' | append: section.settings.content_alignment_mobile_vertical | append: ' ' | append: section.settings.content_position_mobile_vertical
+  endif
+
+  if section.settings.desktop_direction == 'fd-row-md'
+    assign desktop_direction_horizontal = section.settings.desktop_direction | append: ' ' | append: section.settings.content_alignment_desktop_horizontal | append: ' ' | append: section.settings.content_position_desktop_horizontal
+  endif
+
+  if section.settings.mobile_direction == 'fd-row'
+    assign mobile_direction_horizontal = section.settings.mobile_direction | append: ' ' | append: section.settings.content_alignment_mobile_horizontal | append: ' ' | append: section.settings.content_position_mobile_horizontal
+  endif
+
+  assign min_height_mobile = section.settings.mobile_height
+  assign min_height_desktop = section.settings.desktop_height
+
+  if min_height_mobile == 'adapt_img'
+    assign min_height_mobile = 100 | divided_by : section.settings.mobile_background_image.aspect_ratio | append: 'vw'
+    if section.settings.mobile_background_image == blank
+      assign min_height_mobile = 100 | divided_by : section.settings.desktop_background_image.aspect_ratio | append: 'vw'
+    endif
+    if section.settings.mobile_background_image == blank and section.settings.desktop_background_image == blank
+      assign min_height_mobile = '500px'
+    endif
+  endif
+
+  if min_height_desktop == 'adapt_img'
+    assign min_height_desktop = ''
+    if settings.enable_content_max_width
+      assign min_height_desktop = settings.content_max_width | divided_by: section.settings.desktop_background_image.aspect_ratio | append: 'px'
+    else
+      assign min_height_desktop = 100 | divided_by : section.settings.desktop_background_image.aspect_ratio | append: 'vw'
+    endif
+    if section.settings.desktop_background_image == blank
+      assign min_height_desktop = '500px'
+    endif
+  endif
+
+  assign video_type = section.settings.external_video.type
+  if section.settings.video_source == 'shopify_hosted'
+    assign video_type = 'local_video'
+  endif
+
+  assign video_loop = section.settings.enable_video_loop
+-%}
+<div class="p-relative section content--special sht-mask color-{{- section.settings.color_scheme }} {% render 'animation-loader', section: section %}" role="region" data-ui-component="Custom Section"
+      style="--overlay: {{ overlay_opacity }}; 
+            {{ overlay_mask_color }};
+            color: {{ overlay_content_color | default: 'var(--color-normal-text)' }};
+            --padding-top: {{- section.settings.padding_top -}}px;
+            --padding-bottom: {{- section.settings.padding_bottom -}}px;
+            --mh-xs: {{- min_height_mobile -}};
+            --mh-md: {{- min_height_desktop -}};"
+>
+  <div class="p-absolute h-100 w-100 left-0 top-0 o-hidden">
+    {%- if section.settings.background_media == 'image' -%}
+      {% render 'picture', settings: section.settings, loading: loading, fetchpriority: fetchpriority, decoding: decoding %}
+    {%- elsif section.settings.background_media == 'video' -%}
+      <sht-load-video class="d-block w-100 h-100 js-animate anm anm-zoomOut" data-video-type="{{ video_type }}" data-video-id="{{ section.settings.external_video.id }}">
+          {% if section.settings.video_source == 'shopify_hosted' %}
+            {% capture local_video %}
+              {{- section.settings.shopify_hosted | video_tag: autoplay: true, controls: false, loop: video_loop, muted: true, preload: 'none', class: 'video-local js-media-item-video of-cover w-100v center-middle p-absolute mih', image_size: '1920x' -}}
+            {% endcapture %}
+            {{ local_video | replace: '<source src="', '<source data-src="' }}
+          {% else %}
+            <iframe tabindex="-1" title="{{ section.settings.external_video.type }}" class="video-iframe {% if section.settings.external_video.type == 'youtube' %}js-media-item-youtube{% elsif section.settings.external_video.type == 'vimeo' %}js-media-item-vimeo{% endif %}  w-100v center-middle p-absolute mih miw" allow="autoplay; encrypted-media"
+              data-src="
+              {%- if section.settings.external_video.type == 'youtube' -%}
+                https://www.youtube.com/embed/{{ section.settings.external_video.id }}?version=3&enablejsapi=1&mute=1&loop={% if video_loop %}1{% else %}0{% endif %}&controls=0&rel=0&showinfo=0&autoplay=1{% if video_loop %}&playlist={{ section.settings.external_video.id }}{% endif %}
+              {%- elsif section.settings.external_video.type == 'vimeo' -%}
+                https://player.vimeo.com/video/{{ section.settings.external_video.id }}?api=1&background=1&autoplay=1&loop={% if video_loop %}1{% else %}0{% endif %}&title=0&byline=0&portrait=0&controls=0&muted=1
+              {%- endif -%}" style="--miw:177.77vh;--h-xs:56.25vw;">
+            </iframe>
+          {% endif %}
+        </sht-load-video>
+    {%- endif -%}
+  </div>
+  <div class=" {% unless section.settings.enable_fullwidth %} ctnr {% else %} section-fullwidth {% endunless %} zi-1 w-100 h-100 p-relative">
+    {%- if section.settings.badge_text != blank and section.settings.badge_position contains 'top' -%}
+      <sht-shape-parallax class="d-block p-relative p-badge-wrap" data-enable-parallax-scrolling="{{ settings.enable_parallax_scrolling_prominent_badge }}" data-content-transform="rotate(-4deg) translate(-50%, -50%)">
+        <div class="js-shape-parallax-shape {{ section.settings.badge_position }} p-absolute zi-2 o-hidden">
+          <div class="js-shape-parallax-rotation p-badge {{ section.settings.badge_shape }} {{ section.settings.badge_color }}">
+            <span class="js-shape-parallax-content p-badge__content h6 ta-center p-absolute center-middle">{{ section.settings.badge_text }}</span>
+          </div>
+        </div>
+      </sht-shape-parallax>
+    {%- endif -%}
+    {%  liquid
+      assign grid_column = 1
+      if settings.enable_content_max_width
+        assign grid_column = 2
+      endif
+    %}
+    <div class="section-content__inner-wrapper" 
+        style="--mh-xs: {{- mobile_content_height -}};
+              --mh-md: {{- desktop_content_height -}};">
+      <div class="section-content__inner zi-1 w-100 h-100 p-relative d-flex {{ desktop_direction_vertical }} {{ mobile_direction_vertical }} {{ desktop_direction_horizontal }} {{ mobile_direction_horizontal }}"
+           style="--gap-md: {{- section.settings.desktop_gap -}}px;
+                --gap: {{- section.settings.mobile_gap -}}px;
+                --grid-column: {{- grid_column -}}">
+        {{ children }}
+      </div>
+    </div>
+    {%- if section.settings.badge_text != blank and section.settings.badge_position contains 'bottom' -%}
+      <sht-shape-parallax class="d-block p-relative p-badge-wrap" data-enable-parallax-scrolling="{{ settings.enable_parallax_scrolling_prominent_badge }}" data-content-transform="rotate(4deg) translate(-50%, -50%)">
+        <div class="js-shape-parallax-shape {{ section.settings.badge_position }} p-absolute zi-2 o-hidden">
+          <div class="js-shape-parallax-rotation p-badge {{ section.settings.badge_shape }} {{ section.settings.badge_color }}">
+            <span class="js-shape-parallax-content p-badge__content h6 ta-center p-absolute center-middle">{{ section.settings.badge_text }}</span>
+          </div>
+        </div>
+      </sht-shape-parallax>
+    {%- endif -%}
+  </div>
+</div>

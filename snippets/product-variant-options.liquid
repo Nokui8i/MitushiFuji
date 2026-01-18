@@ -1,0 +1,20 @@
+{%- for value in option.values -%}
+  {%- liquid
+    assign option_disabled = true
+    if value.available
+      assign option_disabled = false
+    endif
+  -%}
+  <option class="js-variant-item"
+    data-variant-value="{{ value | escape }}-{{ index }}"
+    data-variant-name="{{ option.name | escape }}"
+    value="{{ value | escape }}"
+    data-option-value-id="{{ value.id }}"
+    {% if option.selected_value == value %} selected="selected" {% endif %}>
+    {% if option_disabled -%}
+      {{ value }} - {{ 'products.product.unavailable' | t }}
+    {%- else -%}
+      {{- value -}}
+    {%- endif %}
+  </option>
+{%- endfor -%}

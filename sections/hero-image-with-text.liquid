@@ -1,0 +1,404 @@
+{%- liquid
+  assign loading = "lazy"
+  assign decoding ="async"
+  assign fetchpriority = "auto"
+
+  if section.index == 1
+    assign loading = "eager"
+    assign fetchpriority = "high"
+  endif
+
+  assign md = 12.0 | divided_by : section.settings.items_per_row_on_desktop
+
+  assign media_width_desktop = 'calc(100vw / 2)'
+
+  if settings.enable_content_max_width
+    assign media_width_desktop = 'calc(min(100vw, ' | append: settings.content_max_width | append: 'px) / 2)'
+  endif
+
+  assign sizes = '(min-width: 769px) ' | append: media_width_desktop | append: ', ' | append: '100vw'
+  assign widths = '240, 352, 550, 832, 1200, 1600, 1920, 2560, 3840'
+
+  assign form_image = 'hero-apparel-1' | placeholder_svg_tag: 'placeholder media of-cover js-image-lazy w-100 h-100'
+  assign form_image_alt = section.settings.hero_image.alt | default: section.settings.hero_image.image | split: '/' | last
+	assign form_image = section.settings.hero_image | image_url: width: section.settings.hero_image.width | image_tag: widths: widths, sizes: sizes, alt: form_image_alt , class: 'js-image-lazy media w-100 h-100 of-cover', loading: loading, fetchpriority: fetchpriority, decoding: decoding
+
+  assign classes = 's-header s-header--special pt-zero-mb zi-1'
+  assign header_style = '--gc-md:3/11;--gc-xs:1/13'
+  assign content_style = '--gc-xs:1/13;--gc-md:3/11'
+
+  if section.settings.content_align == 'ta-left'
+    assign header_style = '--gc-xs:1/13;--gc-md:1/ span 8;--gr-xs:1'
+    assign content_style = '--gc-xs:1/13;--gc-md:7/13;--gr-xs:2;--gr-md:1'
+  else
+    assign image_style = 'mr-md-0'
+    assign description_extra_class = ' m-sides'
+    assign btn_position = 'center-xs'
+    assign classes = classes | replace: 's-header--special', ''
+  endif
+  assign content_class = ''
+  assign carousel_class = ''
+  if settings.enable_content_max_width
+    assign content_class = 'w-100 h-100'
+    assign carousel_class = 'carousel-content-width o-hidden-md'
+  else
+    assign content_class = 'ml-md-0 mr-minus ml-minus'
+  endif
+
+  assign ratio = section.settings.image_ratio
+  if section.settings.image_ratio == 'auto'
+    assign ratio = section.settings.hero_image.aspect_ratio
+  endif
+-%}
+<div class="section color-{{- section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} {% render 'animation-loader', section: section %}" data-ui-component="Hero Image With Text Section" role="region" aria-labelledby="sectionHeading-{{ section.id | md5 | truncate: 12, "" }}">
+  <div class="ctnr d-grid c-gap {{ section.settings.content_align }}" style="--gtc-equal:12">
+    {% render 'section-header',
+      btn_position: btn_position,
+      classes: classes,
+      content_align: section.settings.content_align,
+      header_style: header_style,
+      heading_classes: 'headline ts-default',
+      subheading: section.settings.subheading,
+      heading: section.settings.heading,
+      description: section.settings.description,
+      description_extra_class: description_extra_class,
+      button_main_text: section.settings.button_main_text,
+      button_main_link: section.settings.button_main_link,
+      button_sub_text: section.settings.button_sub_text,
+      button_sub_link: section.settings.button_sub_link,
+      badge_text: section.settings.badge_text,
+      badge_position: section.settings.badge_position,
+      badge_shape: section.settings.badge_shape,
+      badge_color: section.settings.badge_color,
+      section: section
+    %}
+    <div class="s-content w-100" style="{{ content_style }}">
+      <div class="m-zero o-hidden {{ image_style }} {{ content_class }}">
+        {% render 'image', image_item: form_image, ratio: ratio, image_wrap_classes: 'h-100', image_classes: 'h-100 w-100 js-animate anm anm-zoomOut', media_wrap_style: '--delay: .6s' %}
+      </div>
+    </div>
+    {% if section.settings.enable_collections %}
+      <div class="s-footer" style="--gc-xs:1/13">
+        <h3 class="s-text-mb s-header__title m-zero ta-left hide-empty">{{ section.settings.heading_collections | escape }}</h3>
+        <sht-carousel class="p-relative d-block {{ carousel_class }}">
+          <div aria-atomic="true" class="d-flex fw-nowrap carousel ox-auto p-relative scrollable scrollable-x disable-scrollbars js-carousel-items js-animate">
+            {% for collection in section.settings.collection_list %}
+              <sht-carousel-itm role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero anm anm-fadeInUp" style="--w-xs:6;--w-sm:3;--w-md:{{ md }}; --duration: .6s; --delay: {{ forloop.index | times: 0.05 -}}s" data-item-index="{{ forloop.index }}">
+                {% render 'card-collection', collection: collection, media_ratio: settings.collection_image_ratio, show_product_count: settings.show_product_count, overlay_opacity: settings.overlay_opacity, section: section, is_first: false, style_card: section.settings.style_card %}
+              </sht-carousel-itm>
+            {% else %}
+              {%- for i in (1..8) -%}
+                {%- liquid
+                  assign placeholder_index = forloop.index | modulo: 4
+                  if placeholder_index == 0
+                    assign placeholder_index = 4
+                  endif
+                -%}
+                <sht-carousel-itm role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero anm anm-fadeInUp" style="--w-xs:6;--w-sm:3;--w-md:{{ md }};  --duration: .6s; --delay: {{ forloop.index | times: 0.05 -}}s" data-item-index="{{ forloop.index }}">
+                  {% render 'card-collection-placeholder', media_ratio: settings.collection_image_ratio, show_product_count: settings.show_product_count, overlay_opacity: settings.overlay_opacity, style_card: section.settings.style_card, collection_placeholder: placeholder_index %}
+                </sht-carousel-itm>
+              {%- endfor -%}
+            {% endfor %}
+          </div>
+          <div class="carousel-pagination middle-y w-100 p-absolute no-js-hidden zi-1 {{ section.settings.show_navigation | default: 'd-none d-block-sm' | replace: 'true', '' }}">
+            <div class="p-absolute left-0">
+              <button type="button" data-step="1" class="js-carousel-prev-btn btn btn-primary--animate rtl-flip-x btn-icon btn-small p-absolute middle-y left-0 zi-1" aria-label="{{ 'accessibility.previous_slide' | t }}" name="previous" disabled>{% render 'icon-chevron-left' %}</button>
+            </div>
+            <div class="p-absolute right-0">
+              <button type="button" data-step="1" class="js-carousel-next-btn btn btn-primary--animate rtl-flip-x btn-icon btn-small p-absolute middle-y right-0 zi-1" aria-label="{{ 'accessibility.next_slide' | t }}" name="next" disabled>{% render 'icon-chevron-right' %}</button>
+            </div>
+          </div>
+        </sht-carousel>
+        <a href="{{ routes.collections_url }}" class="s-text-mt hide-empty btn btn-link padding--start padding--end{{ section.settings.enable_view_all | default: ' d-none-important' | replace: 'true', '' }}">{{ section.settings.button_text | default: 'View all' }}</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:general.hero_image_with_text",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:general.general"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:general.color_scheme",
+      "default": "accent-1"
+    },
+    {
+      "type": "header",
+      "content": "t:general.layout"
+    },
+    {
+      "type": "select",
+      "id": "content_align",
+      "label": "t:general.content_alignment",
+      "default": "ta-left",
+      "options": [
+        {
+          "value": "ta-left",
+          "label": "t:general.left"
+        },
+        {
+          "value": "ta-center m-auto",
+          "label": "t:general.center"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_top",
+      "label": "t:general.remove_padding_top",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_bottom",
+      "label": "t:general.remove_padding_bottom",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:general.text"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:general.subheading",
+      "default": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:general.heading",
+      "default": "Hero image with text"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:general.description",
+      "default": "<p>Use this text to share brand information with your customers. Introduce a new product, share an announcement or welcome customers.</p>"
+    },
+    {
+      "type": "header",
+      "content": "t:general.image"
+    },
+    {
+      "type": "image_picker",
+      "label": "t:general.image",
+      "id": "hero_image"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:general.image_ratio",
+      "default": "auto",
+      "options": [
+        {
+          "value": "1/1",
+          "label": "t:general.square"
+        },
+        {
+          "value": "2/3",
+          "label": "t:general.portrait"
+        },
+        {
+          "value": "3/2",
+          "label": "t:general.landscape"
+        },
+        {
+          "value": "auto",
+          "label": "t:general.adapt_to_image"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:general.buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_main_text",
+      "label": "t:general.primary_button_label",
+      "info": "t:general.hide_if_empty_info",
+      "default": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_main_link",
+      "label": "t:general.primary_button_link",
+      "visible_if": "{{ section.settings.button_main_text != blank }}"
+    },
+    {
+      "type": "text",
+      "id": "button_sub_text",
+      "label": "t:general.secondary_button_label",
+      "info": "t:general.hide_if_empty_info",
+      "default": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_sub_link",
+      "label": "t:general.secondary_button_link",
+      "visible_if": "{{ section.settings.button_sub_text != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "t:general.highlighted_collections"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_collections",
+      "label": "t:general.enable_highlighted_collections",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "style_card",
+      "label": "t:general.style",
+      "default": "card",
+      "info": "t:general.mask_overlay",
+      "options": [
+        {
+          "value": "standard",
+          "label": "t:general.standard"
+        },
+        {
+          "value": "card",
+          "label": "t:general.card"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "heading_collections",
+      "label": "t:general.heading",
+      "default": "Our collections"
+    },
+    {
+      "type": "collection_list",
+      "id": "collection_list",
+      "label": "t:general.collections",
+      "info": "t:general.selected_collections_info"
+    },
+    {
+      "type": "select",
+      "id": "items_per_row_on_desktop",
+      "label": "t:general.items_per_row_on_desktop",
+      "default": "5",
+      "options": [
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_view_all",
+      "label": "t:general.show_view_all_button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "t:general.view_all_button_label",
+      "default": "See all collections"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "t:general.show_navigation_on_mobile",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:general.prominent_badge"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "t:general.text",
+      "info": "t:general.prominent_badge_text_info",
+      "default": "Your text"
+    },
+    {
+      "type": "select",
+      "id": "badge_color",
+      "label": "t:general.accent_scheme",
+      "default": "color-accent-2",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "color-accent-1",
+          "label": "t:general.main"
+        },
+        {
+          "value": "color-accent-2",
+          "label": "t:general.extra"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "badge_position",
+      "label": "t:general.position",
+      "default": "p-badge--bottom-right",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "p-badge--bottom-left",
+          "label": "t:general.left"
+        },
+        {
+          "value": "p-badge--bottom-right",
+          "label": "t:general.right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "badge_shape",
+      "label": "t:general.shape",
+      "default": "badge--star",
+      "visible_if": "{{ section.settings.badge_text != blank }}",
+      "options": [
+        {
+          "value": "badge--star",
+          "label": "t:general.star"
+        },
+        {
+          "value": "badge--diamond",
+          "label": "t:general.diamond"
+        },
+        {
+          "value": "badge--asterisk",
+          "label": "t:general.asterisk"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.hero_image_with_text"
+    }
+  ]
+}
+{% endschema %}

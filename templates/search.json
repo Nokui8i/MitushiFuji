@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "breadcrumb": {
+      "type": "breadcrumb",
+      "settings": {}
+    },
+    "main": {
+      "type": "main-search",
+      "settings": {
+        "item_per_page": "24",
+        "items_per_row_on_mobile": "2",
+        "enable_filtering": true,
+        "desktop_filter_and_sort_layout": "vertical"
+      }
+    }
+  },
+  "order": [
+    "breadcrumb",
+    "main"
+  ]
+}

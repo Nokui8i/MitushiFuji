@@ -1,0 +1,54 @@
+{% comment %}
+	Accepts:
+    - paginate: {Object} Paginate object.
+    - anchor: {String} custom ID.
+
+Example usage:
+	{% render 'pagination',
+		paginate: paginate,
+		anchor: '#yourID'
+	%}
+{% endcomment %}
+
+{%- if paginate.parts.size > 0 -%}
+<div class="d-flex fw-wrap center-xs gap-12 gap-md-16" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+	{%- if paginate.previous -%}
+		<a href="{{ paginate.previous.url }}{{ anchor }}" rel="prev" class="btn btn-icon btn-large btn-secondary--animate rtl-flip-x" aria-label="{{ 'general.pagination.previous' | t }}">
+				{%- render 'icon-arrow-left' -%}
+		</a>
+	{%- else -%}
+		<span class="btn btn-icon btn-large btn-secondary--animate rtl-flip-x" disabled>
+				{%- render 'icon-arrow-left' -%}
+		</span>
+	{%- endif -%}
+	{%- for part in paginate.parts -%}
+		{%- if part.is_link -%}
+		  <a href="{{ part.url }}{{ anchor }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}" class="btn btn-icon btn-secondary--animate btn-large fw-700">
+				<span class="icon-animate">
+					{{ part.title }}
+				</span>
+			</a>
+		{%- else -%}
+      {%- if part.title == paginate.current_page -%}
+        <span aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}" class="btn btn-icon btn-large btn-primary--animate btn-unlink fw-700">
+					<span class="icon-animate">
+						{{ part.title }}
+					</span>
+				</span>
+      {%- else -%}
+        <span class="btn btn-icon btn-large fw-700 c-default">{{ part.title }}</span>
+      {%- endif -%}
+		{%- endif -%}
+	{%- endfor -%}
+
+	{%- if paginate.next -%}
+		<a href="{{ paginate.next.url }}{{ anchor }}" rel="next" class="btn btn-icon btn-large btn-secondary--animate rtl-flip-x" aria-label="{{ 'general.pagination.next' | t }}">
+			{%- render 'icon-arrow-right' -%}
+		</a>
+	{%- else -%}
+		<span class="btn btn-icon btn-large btn-secondary--animate rtl-flip-x" disabled>
+    {%- render 'icon-arrow-right' -%}
+		</span>
+	{%- endif -%}
+</div>
+{%- endif -%}
