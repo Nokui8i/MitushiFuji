@@ -59,7 +59,7 @@
       "settings": {
         "color_scheme": "",
         "subheading": "",
-        "heading": "HOT NOW",
+        "heading": "Best sellers",
         "description": "",
         "style_card": "standard",
         "items_per_row_on_desktop": "4",
@@ -75,7 +75,7 @@
         "ranking_badge_shape": "rectangle",
         "ranking_badge_color": "color-accent-2",
         "image_ratio": "auto",
-        "image_overlay_opacity": 32,
+        "image_overlay_opacity": 34,
         "section_mask_overlay_color": "",
         "section_content_overlay_color": "",
         "star_rating_overlay": "",
@@ -115,48 +115,10 @@
         "badge_shape": "badge--star"
       }
     },
-    "video_banner_xE4peK": {
-      "type": "video-banner",
-      "blocks": {
-        "content_nzUy7K": {
-          "type": "content",
-          "settings": {
-            "content_position": "center-xs middle-xs ta-center",
-            "subheading": "",
-            "heading": "「GREAT MINDS THINK ALIKE」コレクション",
-            "description": "<p>「Great Minds Think Alike」は、2つのファッションブランドの初めてのコラボレーションです。このキャンペーンは、偉大な精神が交わり、互いに協力する重要な節目とも言えます。</p>",
-            "primary_button_label": "コレクションをご覧ください",
-            "primary_button_link": "",
-            "secondary_button_label": "",
-            "secondary_button_link": ""
-          }
-        }
-      },
-      "block_order": [
-        "content_nzUy7K"
-      ],
+    "17687530853fdb3082": {
+      "type": "_blocks",
       "disabled": true,
-      "settings": {
-        "color_scheme": "",
-        "enable_large_heading": false,
-        "enable_fullwidth_banner": true,
-        "image_overlay_opacity": 13,
-        "section_mask_overlay_color": "#000000",
-        "section_content_overlay_color": "#ffffff",
-        "height_desktop": "50",
-        "height_mobile": "50",
-        "remove_padding_top": true,
-        "remove_padding_bottom": true,
-        "video_source": "external",
-        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "video_source_mobile": "external",
-        "video_url_mobile": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--top-right",
-        "badge_shape": "badge--star",
-        "video_banner_link": ""
-      }
+      "settings": {}
     },
     "product_hotspots_znJJMA": {
       "type": "product-hotspots",
@@ -209,17 +171,55 @@
         "badge_shape": "badge--star"
       }
     },
-    "17687530853fdb3082": {
-      "type": "_blocks",
-      "settings": {}
+    "video_banner_xE4peK": {
+      "type": "video-banner",
+      "blocks": {
+        "content_nzUy7K": {
+          "type": "content",
+          "settings": {
+            "content_position": "center-xs middle-xs ta-center",
+            "subheading": "",
+            "heading": "「GREAT MINDS THINK ALIKE」コレクション",
+            "description": "<p>「Great Minds Think Alike」は、2つのファッションブランドの初めてのコラボレーションです。このキャンペーンは、偉大な精神が交わり、互いに協力する重要な節目とも言えます。</p>",
+            "primary_button_label": "コレクションをご覧ください",
+            "primary_button_link": "",
+            "secondary_button_label": "",
+            "secondary_button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "content_nzUy7K"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "enable_large_heading": false,
+        "enable_fullwidth_banner": true,
+        "image_overlay_opacity": 13,
+        "section_mask_overlay_color": "#000000",
+        "section_content_overlay_color": "#ffffff",
+        "height_desktop": "50",
+        "height_mobile": "50",
+        "remove_padding_top": true,
+        "remove_padding_bottom": true,
+        "video_source": "external",
+        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "video_source_mobile": "external",
+        "video_url_mobile": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "badge_text": "",
+        "badge_color": "color-accent-1",
+        "badge_position": "p-badge--top-right",
+        "badge_shape": "badge--star",
+        "video_banner_link": ""
+      }
     }
   },
   "order": [
     "image_banner_TnVcW9",
     "featured_product_carousel_EaipjV",
     "collection-list",
-    "video_banner_xE4peK",
+    "17687530853fdb3082",
     "product_hotspots_znJJMA",
-    "17687530853fdb3082"
+    "video_banner_xE4peK"
   ]
 }

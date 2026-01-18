@@ -1,1 +1,65 @@
-{"type":"footer","name":"Footer Group","sections":{"footer":{"type":"footer","blocks":{"menu_YTbhz7":{"type":"menu","settings":{"heading":"About us","menu":"footer"}},"menu_6JWmmT":{"type":"menu","settings":{"heading":"User Guide","menu":"footer"}}},"block_order":["menu_YTbhz7","menu_6JWmmT"],"settings":{"color_scheme":"scheme-2","enable_back_to_top":true,"enable_collapse":false,"remove_padding_top":false,"remove_padding_bottom":false,"logo":"shopify:\/\/shop_images\/mitushi_logo_transparent_trimmed_2000w.png","logo_width":140,"heading":"","description":"","show_follow_on_shop":true,"contact_heading":"Contact","show_info":true,"enable_newsletter":true,"newsletter_heading":"Newsletter","newsletter_description":"<p>Subscribe now to get the latest news, exclusive offers, and helpful tips every week!<\/p>","newsletter_color_background":"#ffffff","newsletter_color":"#121212","show_currency_selector":true,"show_language_selector":true,"social_heading":"Follow us","show_socical_icons":true,"show_payment_methods":true}}},"order":["footer"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer Group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu_YTbhz7": {
+          "type": "menu",
+          "settings": {
+            "heading": "About us",
+            "menu": "footer"
+          }
+        },
+        "menu_6JWmmT": {
+          "type": "menu",
+          "settings": {
+            "heading": "User Guide",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": [
+        "menu_YTbhz7",
+        "menu_6JWmmT"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "enable_back_to_top": true,
+        "enable_collapse": false,
+        "remove_padding_top": false,
+        "remove_padding_bottom": false,
+        "logo": "shopify://shop_images/mitushi_logo_transparent_trimmed_2000w.png",
+        "logo_width": 150,
+        "heading": "",
+        "description": "",
+        "show_follow_on_shop": true,
+        "contact_heading": "Contact",
+        "show_info": true,
+        "enable_newsletter": true,
+        "newsletter_heading": "Newsletter",
+        "newsletter_description": "<p>Subscribe now to get the latest news, exclusive offers, and helpful tips every week!</p>",
+        "newsletter_color_background": "#ffffff",
+        "newsletter_color": "#121212",
+        "show_currency_selector": true,
+        "show_language_selector": true,
+        "social_heading": "Follow us",
+        "show_socical_icons": true,
+        "show_payment_methods": true
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}
