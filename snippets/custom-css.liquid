@@ -344,4 +344,174 @@
 /* .variant-selector--scroll fieldset.form__fields.product-option.js-variant-radio-container::-webkit-scrollbar {
   display: none !important;
 } */
+
+/* ===== SIZE CHART MODAL - Premium AINIQI Style ===== */
+/* עיצוב מודאל Size Chart כמו AINIQI - ממורכז, נקי, פרימיום */
+
+/* Overlay/Backdrop */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] {
+  background: rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(2px) !important;
+}
+
+/* Modal Panel - ממורכז, רוחב מוגבל */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog {
+  max-width: 760px !important;
+  width: calc(100% - 48px) !important;
+  max-height: 90vh !important;
+  margin: auto !important;
+  border-radius: 16px !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Modal Content */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__content {
+  padding: 28px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  max-height: 90vh !important;
+}
+
+/* Header - כותרת גדולה */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__header {
+  padding: 0 0 20px 0 !important;
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__header h3 {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+/* Close Button - עגול, נקי */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__header .js-dialog-close-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(0, 0, 0, 0.05) !important;
+  transition: background 0.2s ease !important;
+}
+
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__header .js-dialog-close-btn:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Body - Scrollable content area */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding: 20px 0 0 0 !important;
+  margin: 0 !important;
+  max-height: calc(90vh - 100px) !important;
+}
+
+/* Scrollbar styling for body */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-radius: 3px !important;
+}
+
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border-radius: 3px !important;
+}
+
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Content (RTE) */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body .rte {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* ===== TABLE STYLING (Size Chart) - AINIQI Style ===== */
+/* עיצוב טבלאות כמו AINIQI - קווים דקים, מרווחים יפים */
+
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-size: 14px !important;
+  margin: 0 !important;
+}
+
+/* Table Headers */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] th {
+  text-transform: none !important;
+  font-weight: 700 !important;
+  padding: 14px 10px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+  text-align: left !important;
+  background: transparent !important;
+  color: #000000 !important;
+}
+
+/* Table Cells */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] td {
+  padding: 16px 10px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.10) !important;
+  vertical-align: middle !important;
+  color: #000000 !important;
+}
+
+/* First Column (Size) - בולט יותר */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] td:first-child {
+  font-weight: 600 !important;
+}
+
+/* Last row - no border */
+sht-dialog.sht-dialog[id*="dialogSizeGuide"] tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* ===== MOBILE: Horizontal Scroll for Wide Tables ===== */
+/* במובייל - גלילה אופקית אם הטבלה רחבה */
+
+@media (max-width: 768px) {
+  /* Modal smaller on mobile */
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog {
+    width: calc(100% - 24px) !important;
+    max-height: 85vh !important;
+    border-radius: 12px !important;
+  }
+
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__content {
+    padding: 20px !important;
+  }
+
+  /* Allow horizontal scroll for wide tables */
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__body {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] table {
+    min-width: 560px !important;
+  }
+
+  /* Header smaller on mobile */
+  sht-dialog.sht-dialog[id*="dialogSizeGuide"] .dialog__header h3 {
+    font-size: 18px !important;
+  }
+}
 </style>
