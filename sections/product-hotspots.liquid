@@ -84,11 +84,7 @@
                         <div class="statistics-item ta-center">
                           {% if block.settings.number != blank %}
                             <div class="statistics-number">
-                              <span class="js-number-animate" data-target="{{ block.settings.number }}" data-duration="{{ section.settings.animation_duration | default: 1000 }}" data-suffix="{{ block.settings.suffix | default: '' }}">0</span>{% if block.settings.suffix != blank %}<span class="statistics-suffix" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; font-size: 120px !important; font-weight: 900 !important; background: linear-gradient(to right, #8B0000, #000000) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important; margin-left: 6px !important;">{{ block.settings.suffix }}</span>{% endif %}
-                            </div>
-                          {% elsif block.settings.suffix != blank %}
-                            <div class="statistics-number">
-                              <span class="statistics-suffix" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; font-size: 120px !important; font-weight: 900 !important; background: linear-gradient(to right, #8B0000, #000000) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important;">{{ block.settings.suffix }}</span>
+                              <span class="js-number-animate" data-target="{{ block.settings.number }}" data-duration="{{ section.settings.animation_duration | default: 1000 }}" data-auto-plus="true">0</span><span class="statistics-suffix statistics-suffix-auto" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; font-size: 120px !important; font-weight: 900 !important; background: linear-gradient(to right, #8B0000, #000000) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important; margin-left: 4px !important;">+</span>
                             </div>
                           {% endif %}
                           
@@ -151,19 +147,26 @@
     letter-spacing: -2px;
   }
   
-  .product-hotspots-with-statistics .statistics-suffix {
+  .product-hotspots-with-statistics .statistics-number .js-number-animate {
+    display: inline-block;
+    line-height: 1.1;
+  }
+  
+  .product-hotspots-with-statistics .statistics-suffix,
+  .product-hotspots-with-statistics .statistics-suffix-auto {
     font-size: 120px !important;
     font-weight: 900 !important;
     background: linear-gradient(to right, #8B0000, #000000) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     background-clip: text !important;
-    margin-left: 6px !important;
+    margin-left: 4px !important;
     display: inline-block !important;
     visibility: visible !important;
     opacity: 1 !important;
     position: relative !important;
     z-index: 1 !important;
+    line-height: 1.1 !important;
   }
   
   .product-hotspots-with-statistics .statistics-label {
@@ -196,19 +199,21 @@
       display: inline-block !important;
     }
     
-    .product-hotspots-with-statistics .statistics-suffix {
+    .product-hotspots-with-statistics .statistics-suffix,
+    .product-hotspots-with-statistics .statistics-suffix-auto {
       font-size: 80px !important;
       font-weight: 900 !important;
       background: linear-gradient(to right, #8B0000, #000000) !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
-      margin-left: 6px !important;
+      margin-left: 4px !important;
       display: inline-block !important;
       visibility: visible !important;
       opacity: 1 !important;
       position: relative !important;
       z-index: 1 !important;
+      line-height: 1.1 !important;
     }
     
     .product-hotspots-with-statistics .statistics-item {
