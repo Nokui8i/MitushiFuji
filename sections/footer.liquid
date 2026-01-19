@@ -137,8 +137,8 @@
         {%- endif -%}
         {%- if section.settings.show_socical_icons -%}
           <div class="footer__socials maw-lg-100 m-auto mb-32">
-            <span class="h6 pt-16 pb-16 m-zero d-block ta-center ta-left-lg hide-empty">{{- section.settings.social_heading | escape -}}</span>
-            {% render 'socials', classes: 'center-xs start-lg gap-16' %}
+            <span class="h6 pt-16 pb-16 m-zero d-block ta-center hide-empty">{{- section.settings.social_heading | escape -}}</span>
+            {% render 'socials', classes: 'center-xs gap-16' %}
           </div>
         {%- endif -%}
       </div>
