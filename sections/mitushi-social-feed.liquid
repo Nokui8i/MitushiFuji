@@ -1,6 +1,7 @@
 {% comment %}
   MITUSHI - Social Feed (Instagram / TikTok embeds)
   Paste official embed codes into blocks via Theme Editor.
+  Shows thumbnail with play button, opens modal on click.
 {% endcomment %}
 
 <section class="mitushi-social section color-{{ section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: false, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: false, '' }}" data-ui-component="Section Social Feed" style="--ms-gap: {{ section.settings.gap | default: 18 }}px;">
@@ -16,8 +17,65 @@
         {% for block in section.blocks %}
           <div class="mitushi-social__card" {{ block.shopify_attributes }}>
             {% if block.settings.embed_code != blank %}
-              <div class="mitushi-social__embed">
-                {{ block.settings.embed_code }}
+              <button 
+                type="button" 
+                class="mitushi-social__thumbnail-btn" 
+                data-modal-trigger="mitushi-modal-{{ block.id }}"
+                aria-label="Open Instagram post"
+              >
+                {% if block.settings.thumbnail_image != blank %}
+                  <div class="mitushi-social__thumbnail">
+                    <img 
+                      src="{{ block.settings.thumbnail_image | image_url: width: 400 }}"
+                      srcset="{{ block.settings.thumbnail_image | image_url: width: 400 }} 1x, {{ block.settings.thumbnail_image | image_url: width: 800 }} 2x"
+                      alt="{{ block.settings.caption | default: 'Instagram post' }}"
+                      loading="lazy"
+                      width="{{ block.settings.thumbnail_image.width }}"
+                      height="{{ block.settings.thumbnail_image.height }}"
+                    >
+                    <div class="mitushi-social__play-overlay">
+                      <svg class="mitushi-social__play-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.5)"/>
+                        <path d="M10 8L16 12L10 16V8Z" fill="white"/>
+                      </svg>
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="mitushi-social__thumbnail-placeholder">
+                    <svg class="mitushi-social__play-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.3)"/>
+                      <path d="M10 8L16 12L10 16V8Z" fill="white"/>
+                    </svg>
+                    <p>Add thumbnail image</p>
+                  </div>
+                {% endif %}
+              </button>
+
+              <!-- Modal -->
+              <div 
+                class="mitushi-social__modal" 
+                id="mitushi-modal-{{ block.id }}"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="modal-title-{{ block.id }}"
+                hidden
+              >
+                <div class="mitushi-social__modal-overlay" data-modal-close="mitushi-modal-{{ block.id }}"></div>
+                <div class="mitushi-social__modal-content">
+                  <button 
+                    class="mitushi-social__modal-close" 
+                    type="button"
+                    data-modal-close="mitushi-modal-{{ block.id }}"
+                    aria-label="Close modal"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                  <div class="mitushi-social__modal-embed">
+                    {{ block.settings.embed_code }}
+                  </div>
+                </div>
               </div>
             {% else %}
               <div class="mitushi-social__empty">
@@ -87,22 +145,189 @@
     scroll-snap-align: start;
   }
 
-  .mitushi-social__embed {
+  /* Thumbnail Button */
+  .mitushi-social__thumbnail-btn {
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
     border-radius: 14px;
     overflow: hidden;
-    background: rgba(var(--color-normal-text-rgb), 0.04);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .mitushi-social__embed:hover {
+  .mitushi-social__thumbnail-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
 
+  .mitushi-social__thumbnail {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 14px;
+  }
+
+  .mitushi-social__thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .mitushi-social__play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease;
+  }
+
+  .mitushi-social__thumbnail-btn:hover .mitushi-social__play-overlay {
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .mitushi-social__play-icon {
+    width: 64px;
+    height: 64px;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+  }
+
+  .mitushi-social__thumbnail-btn:hover .mitushi-social__play-icon {
+    transform: scale(1.1);
+  }
+
+  .mitushi-social__thumbnail-placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: rgba(var(--color-normal-text-rgb), 0.04);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: rgba(var(--color-normal-text-rgb), 0.6);
+  }
+
+  .mitushi-social__thumbnail-placeholder .mitushi-social__play-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .mitushi-social__thumbnail-placeholder p {
+    margin: 0;
+    font-size: 12px;
+  }
+
+  /* Modal */
+  .mitushi-social__modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .mitushi-social__modal[hidden] {
+    display: none;
+  }
+
+  .mitushi-social__modal:not([hidden]) {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mitushi-social__modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+  }
+
+  .mitushi-social__modal-content {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    max-width: 540px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+    animation: modalSlideIn 0.3s ease;
+  }
+
+  @keyframes modalSlideIn {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .mitushi-social__modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .mitushi-social__modal-close:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: rotate(90deg);
+  }
+
+  .mitushi-social__modal-close svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+  }
+
+  .mitushi-social__modal-embed {
+    padding: 20px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
   /* Make embedded iframes responsive */
-  .mitushi-social__embed iframe,
-  .mitushi-social__embed blockquote {
+  .mitushi-social__modal-embed iframe,
+  .mitushi-social__modal-embed blockquote {
     width: 100% !important;
     max-width: 100% !important;
     border: none !important;
@@ -150,8 +375,62 @@
       font-size: var(--heading-3);
       margin-bottom: 24px;
     }
+
+    .mitushi-social__modal-content {
+      max-width: 95vw;
+      max-height: 95vh;
+    }
+
+    .mitushi-social__play-icon {
+      width: 48px;
+      height: 48px;
+    }
   }
 </style>
+
+<script>
+  (function() {
+    // Modal functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const triggers = document.querySelectorAll('[data-modal-trigger]');
+      const closes = document.querySelectorAll('[data-modal-close]');
+
+      triggers.forEach(trigger => {
+        trigger.addEventListener('click', function(e) {
+          e.preventDefault();
+          const modalId = this.getAttribute('data-modal-trigger');
+          const modal = document.getElementById(modalId);
+          if (modal) {
+            modal.removeAttribute('hidden');
+            document.body.style.overflow = 'hidden';
+          }
+        });
+      });
+
+      closes.forEach(close => {
+        close.addEventListener('click', function() {
+          const modalId = this.getAttribute('data-modal-close');
+          const modal = document.getElementById(modalId);
+          if (modal) {
+            modal.setAttribute('hidden', '');
+            document.body.style.overflow = '';
+          }
+        });
+      });
+
+      // Close on ESC key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          const openModal = document.querySelector('.mitushi-social__modal:not([hidden])');
+          if (openModal) {
+            openModal.setAttribute('hidden', '');
+            document.body.style.overflow = '';
+          }
+        }
+      });
+    });
+  })();
+</script>
 
 {% schema %}
 {
@@ -208,16 +487,22 @@
       "name": "Post (IG / TikTok)",
       "settings": [
         {
+          "type": "image_picker",
+          "id": "thumbnail_image",
+          "label": "Thumbnail image",
+          "info": "Image that will be shown with play button. Should be square (1:1 ratio) for best results."
+        },
+        {
           "type": "textarea",
           "id": "embed_code",
           "label": "Embed code (paste here)",
-          "info": "Paste the official embed code from Instagram or TikTok. Get it from the post → three dots (⋯) → Embed"
+          "info": "Paste the official embed code from Instagram or TikTok. Get it from the post → three dots (⋯) → Embed. This will be shown in the modal when clicked."
         },
         {
           "type": "text",
           "id": "caption",
           "label": "Caption (optional)",
-          "info": "Optional text below the post"
+          "info": "Optional text below the thumbnail"
         }
       ]
     }
