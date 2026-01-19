@@ -11,6 +11,7 @@
   "sections": {
     "breadcrumb": {
       "type": "breadcrumb",
+      "disabled": true,
       "settings": {
         "color_scheme": ""
       }
