@@ -277,6 +277,69 @@
         "remove_padding_top": true,
         "remove_padding_bottom": true
       }
+    },
+    "mitushi_social_feed_9nMweU": {
+      "type": "mitushi-social-feed",
+      "blocks": {
+        "post_4Jedah": {
+          "type": "post",
+          "settings": {
+            "embed_code": "https://www.instagram.com/reel/DTsos8iDaiy/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+            "caption": ""
+          }
+        },
+        "post_7K4hqK": {
+          "type": "post",
+          "settings": {
+            "embed_code": "",
+            "caption": ""
+          }
+        },
+        "post_CXhTUG": {
+          "type": "post",
+          "settings": {
+            "embed_code": "",
+            "caption": ""
+          }
+        },
+        "post_AVtyrR": {
+          "type": "post",
+          "settings": {
+            "embed_code": "",
+            "caption": ""
+          }
+        },
+        "post_8Cypzf": {
+          "type": "post",
+          "settings": {
+            "embed_code": "",
+            "caption": ""
+          }
+        },
+        "post_JHfFz7": {
+          "type": "post",
+          "settings": {
+            "embed_code": "",
+            "caption": ""
+          }
+        }
+      },
+      "block_order": [
+        "post_4Jedah",
+        "post_7K4hqK",
+        "post_CXhTUG",
+        "post_AVtyrR",
+        "post_8Cypzf",
+        "post_JHfFz7"
+      ],
+      "name": "MITUSHI - Social Feed",
+      "settings": {
+        "color_scheme": "",
+        "heading": "INSTAGRAM POSTS",
+        "gap": 14,
+        "remove_padding_top": false,
+        "remove_padding_bottom": false
+      }
     }
   },
   "order": [
@@ -286,6 +349,7 @@
     "17687530853fdb3082",
     "product_hotspots_znJJMA",
     "video_banner_xE4peK",
-    "running_content_WeVz9x"
+    "running_content_WeVz9x",
+    "mitushi_social_feed_9nMweU"
   ]
 }
