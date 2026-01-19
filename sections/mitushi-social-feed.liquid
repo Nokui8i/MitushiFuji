@@ -17,14 +17,43 @@
         {% for block in section.blocks %}
           <div class="mitushi-social__card" {{ block.shopify_attributes }}>
             {% if block.settings.embed_code != blank %}
+              {%- liquid
+                assign embed_code = block.settings.embed_code
+                assign post_url = ''
+                
+                comment
+                  Extract Instagram URL from embed code
+                endcomment
+                
+                if embed_code contains 'data-instgrm-permalink='
+                  assign permalink_match = embed_code | split: 'data-instgrm-permalink="'
+                  if permalink_match.size > 1
+                    assign post_url = permalink_match[1] | split: '"' | first
+                  endif
+                elsif embed_code contains 'instagram.com/p/'
+                  assign url_parts = embed_code | split: 'instagram.com/p/'
+                  if url_parts.size > 1
+                    assign post_id = url_parts[1] | split: '/' | first | split: '?' | first
+                    assign post_url = 'https://www.instagram.com/p/' | append: post_id | append: '/'
+                  endif
+                elsif embed_code contains 'instagram.com/reel/'
+                  assign url_parts = embed_code | split: 'instagram.com/reel/'
+                  if url_parts.size > 1
+                    assign post_id = url_parts[1] | split: '/' | first | split: '?' | first
+                    assign post_url = 'https://www.instagram.com/reel/' | append: post_id | append: '/'
+                  endif
+                endif
+              -%}
+              
               <button 
                 type="button" 
                 class="mitushi-social__thumbnail-btn" 
                 data-modal-trigger="mitushi-modal-{{ block.id }}"
+                data-post-url="{{ post_url }}"
                 aria-label="Open Instagram post"
               >
-                {% if block.settings.thumbnail_image != blank %}
-                  <div class="mitushi-social__thumbnail">
+                <div class="mitushi-social__thumbnail" data-thumbnail-container="{{ block.id }}">
+                  {% if block.settings.thumbnail_image != blank %}
                     <img 
                       src="{{ block.settings.thumbnail_image | image_url: width: 400 }}"
                       srcset="{{ block.settings.thumbnail_image | image_url: width: 400 }} 1x, {{ block.settings.thumbnail_image | image_url: width: 800 }} 2x"
@@ -32,23 +61,23 @@
                       loading="lazy"
                       width="{{ block.settings.thumbnail_image.width }}"
                       height="{{ block.settings.thumbnail_image.height }}"
+                      class="mitushi-social__thumbnail-img"
                     >
-                    <div class="mitushi-social__play-overlay">
+                  {% else %}
+                    <div class="mitushi-social__thumbnail-loading">
                       <svg class="mitushi-social__play-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.5)"/>
+                        <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.3)"/>
                         <path d="M10 8L16 12L10 16V8Z" fill="white"/>
                       </svg>
                     </div>
-                  </div>
-                {% else %}
-                  <div class="mitushi-social__thumbnail-placeholder">
+                  {% endif %}
+                  <div class="mitushi-social__play-overlay">
                     <svg class="mitushi-social__play-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.3)"/>
+                      <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.5)"/>
                       <path d="M10 8L16 12L10 16V8Z" fill="white"/>
                     </svg>
-                    <p>Add thumbnail image</p>
                   </div>
-                {% endif %}
+                </div>
               </button>
 
               <!-- Template for embed code (hidden, loaded only when modal opens) -->
@@ -223,27 +252,31 @@
     transform: scale(1.1);
   }
 
-  .mitushi-social__thumbnail-placeholder {
+  .mitushi-social__thumbnail-loading {
     width: 100%;
     aspect-ratio: 1 / 1;
     background: rgba(var(--color-normal-text-rgb), 0.04);
     border-radius: 14px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    color: rgba(var(--color-normal-text-rgb), 0.6);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 
-  .mitushi-social__thumbnail-placeholder .mitushi-social__play-icon {
+  .mitushi-social__thumbnail-loading .mitushi-social__play-icon {
     width: 48px;
     height: 48px;
   }
 
-  .mitushi-social__thumbnail-placeholder p {
-    margin: 0;
-    font-size: 12px;
+  .mitushi-social__thumbnail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   /* Modal */
@@ -340,6 +373,10 @@
     padding: 20px;
     border-radius: 16px;
     overflow: hidden;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Make embedded iframes responsive - ONLY in modal */
@@ -354,6 +391,19 @@
     visibility: visible !important;
     opacity: 1 !important;
     height: auto !important;
+    min-width: 326px !important;
+  }
+
+  .mitushi-social__modal-embed .instagram-media {
+    background: #fff !important;
+    border: 0 !important;
+    border-radius: 3px !important;
+    box-shadow: 0 0 1px 0 rgba(0,0,0,0.5), 0 1px 10px 0 rgba(0,0,0,0.15) !important;
+    margin: 1px !important;
+    max-width: 540px !important;
+    min-width: 326px !important;
+    padding: 0 !important;
+    width: calc(100% - 2px) !important;
   }
 
   .mitushi-social__caption {
@@ -412,10 +462,77 @@
 
 <script>
   (function() {
+    // Extract thumbnail from Instagram URL using oEmbed API
+    // Note: Instagram oEmbed API requires CORS, so we use a CORS proxy
+    function extractInstagramThumbnail(postUrl, container) {
+      if (!postUrl || !container) return;
+      
+      // Use CORS proxy to bypass CORS restrictions
+      // You can replace this with your own proxy server if needed
+      const proxyUrl = 'https://api.allorigins.win/raw?url=';
+      const oembedUrl = `https://api.instagram.com/oembed/?url=${encodeURIComponent(postUrl)}&omitscript=true`;
+      const fullUrl = proxyUrl + encodeURIComponent(oembedUrl);
+      
+      // Try to fetch thumbnail
+      fetch(fullUrl)
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then(data => {
+          if (data && data.thumbnail_url) {
+            const img = document.createElement('img');
+            img.src = data.thumbnail_url;
+            img.alt = data.title || 'Instagram post';
+            img.loading = 'lazy';
+            img.className = 'mitushi-social__thumbnail-img';
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            img.style.display = 'block';
+            
+            img.onerror = function() {
+              // If thumbnail fails to load, keep loading state
+              this.remove();
+            };
+            
+            const loadingDiv = container.querySelector('.mitushi-social__thumbnail-loading');
+            if (loadingDiv) {
+              loadingDiv.remove();
+            }
+            
+            // Remove any existing image first
+            const existingImg = container.querySelector('.mitushi-social__thumbnail-img');
+            if (existingImg) {
+              existingImg.remove();
+            }
+            
+            container.appendChild(img);
+          }
+        })
+        .catch(error => {
+          // CORS error or API failure - keep loading state
+          console.log('Could not fetch Instagram thumbnail:', error);
+          // The loading placeholder will remain visible
+        });
+    }
+
     // Modal functionality
     document.addEventListener('DOMContentLoaded', function() {
       const triggers = document.querySelectorAll('[data-modal-trigger]');
       const closes = document.querySelectorAll('[data-modal-close]');
+
+      // Load thumbnails for all posts
+      triggers.forEach(trigger => {
+        const postUrl = trigger.getAttribute('data-post-url');
+        const container = trigger.querySelector('[data-thumbnail-container]');
+        const existingImg = container?.querySelector('.mitushi-social__thumbnail-img');
+        
+        // Only load thumbnail if no image exists
+        if (postUrl && container && !existingImg) {
+          extractInstagramThumbnail(postUrl, container);
+        }
+      });
 
       triggers.forEach(trigger => {
         trigger.addEventListener('click', function(e) {
@@ -432,6 +549,22 @@
               if (template) {
                 const embedContent = template.content.cloneNode(true);
                 embedContainer.appendChild(embedContent);
+                
+                // Load Instagram embed script if not already loaded
+                if (!window.instgrm) {
+                  const script = document.createElement('script');
+                  script.src = '//www.instagram.com/embed.js';
+                  script.async = true;
+                  script.onload = function() {
+                    if (window.instgrm && window.instgrm.Embeds) {
+                      window.instgrm.Embeds.process();
+                    }
+                  };
+                  document.body.appendChild(script);
+                } else if (window.instgrm.Embeds) {
+                  // Re-initialize Instagram embeds
+                  window.instgrm.Embeds.process();
+                }
               }
             }
             
