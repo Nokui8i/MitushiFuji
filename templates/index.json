@@ -367,6 +367,11 @@
       "block_order": [
         "instafeed_app_block_pMmqrN"
       ],
+      "custom_css": [
+        ".mitushi-faq,.mitushi-faq * {font-family: var(--font-body-family), system-ui !important;}",
+        ".mitushi-faq .mitushi-faq__title,.mitushi-faq .mitushi-faq__q,.mitushi-faq summary {font-family: var(--font-heading-family), inherit !important; font-weight: 800 !important;}",
+        ".mitushi-faq .mitushi-faq__a,.mitushi-faq p {font-weight: 400 !important; line-height: 1.75 !important;}"
+      ],
       "settings": {
         "color_scheme": "",
         "enable_content_fullwidth": false,
