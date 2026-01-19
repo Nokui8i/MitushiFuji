@@ -1,0 +1,26 @@
+{
+  "name": "mitushi-ig-proxy",
+  "version": "1.0.0",
+  "description": "Serverless proxy for Instagram Graph API - MITUSHI Shopify Theme",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step required'",
+    "start": "vercel dev"
+  },
+  "keywords": [
+    "instagram",
+    "shopify",
+    "vercel",
+    "api"
+  ],
+  "author": "MITUSHI",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "vercel": "^34.0.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}

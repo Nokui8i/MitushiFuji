@@ -1,0 +1,18 @@
+MITUSHI Instagram Feed Proxy - Deployed URL
+============================================
+
+Production URL:
+https://mitushi-ig-proxy.vercel.app
+
+Endpoints:
+----------
+Health Check: https://mitushi-ig-proxy.vercel.app/api/health
+Feed API:     https://mitushi-ig-proxy.vercel.app/api/ig-feed
+
+For Shopify:
+------------
+Use this URL in Theme Editor → Feed API URL:
+https://mitushi-ig-proxy.vercel.app/api/ig-feed
+
+Deployed: January 2026
+Status: Production
