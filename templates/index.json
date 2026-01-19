@@ -308,29 +308,13 @@
             "embed_code": "",
             "caption": ""
           }
-        },
-        "post_8Cypzf": {
-          "type": "post",
-          "settings": {
-            "embed_code": "",
-            "caption": ""
-          }
-        },
-        "post_JHfFz7": {
-          "type": "post",
-          "settings": {
-            "embed_code": "",
-            "caption": ""
-          }
         }
       },
       "block_order": [
         "post_4Jedah",
         "post_7K4hqK",
         "post_CXhTUG",
-        "post_AVtyrR",
-        "post_8Cypzf",
-        "post_JHfFz7"
+        "post_AVtyrR"
       ],
       "name": "MITUSHI - Social Feed",
       "settings": {
