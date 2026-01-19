@@ -22,25 +22,60 @@
                 assign post_url = ''
                 
                 comment
-                  Extract Instagram URL from embed code
+                  Extract Instagram/TikTok URL from embed code (multiple methods)
                 endcomment
                 
+                comment
+                  Method 1: Extract from data-instgrm-permalink attribute
+                endcomment
                 if embed_code contains 'data-instgrm-permalink='
                   assign permalink_match = embed_code | split: 'data-instgrm-permalink="'
                   if permalink_match.size > 1
-                    assign post_url = permalink_match[1] | split: '"' | first
+                    assign post_url = permalink_match[1] | split: '"' | first | split: '?' | first
                   endif
-                elsif embed_code contains 'instagram.com/p/'
-                  assign url_parts = embed_code | split: 'instagram.com/p/'
-                  if url_parts.size > 1
-                    assign post_id = url_parts[1] | split: '/' | first | split: '?' | first
-                    assign post_url = 'https://www.instagram.com/p/' | append: post_id | append: '/'
+                endif
+                
+                comment
+                  Method 2: Extract from href in anchor tag
+                endcomment
+                if post_url == blank and embed_code contains 'href='
+                  assign href_parts = embed_code | split: 'href="'
+                  if href_parts.size > 1
+                    assign href_url = href_parts[1] | split: '"' | first
+                    if href_url contains 'instagram.com' or href_url contains 'tiktok.com'
+                      assign post_url = href_url | split: '?' | first
+                    endif
                   endif
-                elsif embed_code contains 'instagram.com/reel/'
-                  assign url_parts = embed_code | split: 'instagram.com/reel/'
-                  if url_parts.size > 1
-                    assign post_id = url_parts[1] | split: '/' | first | split: '?' | first
-                    assign post_url = 'https://www.instagram.com/reel/' | append: post_id | append: '/'
+                endif
+                
+                comment
+                  Method 3: Extract Instagram post/reel/tv ID from URL patterns
+                endcomment
+                if post_url == blank
+                  if embed_code contains 'instagram.com/p/'
+                    assign url_parts = embed_code | split: 'instagram.com/p/'
+                    if url_parts.size > 1
+                      assign post_id = url_parts[1] | split: '/' | first | split: '?' | first | split: '"' | first
+                      assign post_url = 'https://www.instagram.com/p/' | append: post_id | append: '/'
+                    endif
+                  elsif embed_code contains 'instagram.com/reel/'
+                    assign url_parts = embed_code | split: 'instagram.com/reel/'
+                    if url_parts.size > 1
+                      assign post_id = url_parts[1] | split: '/' | first | split: '?' | first | split: '"' | first
+                      assign post_url = 'https://www.instagram.com/reel/' | append: post_id | append: '/'
+                    endif
+                  elsif embed_code contains 'instagram.com/tv/'
+                    assign url_parts = embed_code | split: 'instagram.com/tv/'
+                    if url_parts.size > 1
+                      assign post_id = url_parts[1] | split: '/' | first | split: '?' | first | split: '"' | first
+                      assign post_url = 'https://www.instagram.com/tv/' | append: post_id | append: '/'
+                    endif
+                  elsif embed_code contains 'tiktok.com'
+                    assign url_parts = embed_code | split: 'tiktok.com'
+                    if url_parts.size > 1
+                      assign tiktok_path = url_parts[1] | split: '"' | first | split: "'" | first | split: '?' | first
+                      assign post_url = 'https://www.tiktok.com' | append: tiktok_path
+                    endif
                   endif
                 endif
               -%}
@@ -53,13 +88,25 @@
                 aria-label="Open Instagram post"
               >
                 <div class="mitushi-social__thumbnail" data-thumbnail-container="{{ block.id }}">
-                  <!-- Thumbnail will be loaded automatically from the video/post -->
-                  <div class="mitushi-social__thumbnail-loading">
-                    <svg class="mitushi-social__play-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.3)"/>
-                      <path d="M10 8L16 12L10 16V8Z" fill="white"/>
-                    </svg>
-                  </div>
+                  {% if block.settings.thumbnail_url != blank %}
+                    {% assign thumbnail_img = block.settings.thumbnail_url %}
+                    <img 
+                      src="{{ thumbnail_img | image_url: width: 600 }}" 
+                      srcset="{{ thumbnail_img | image_url: width: 300 }} 300w, {{ thumbnail_img | image_url: width: 600 }} 600w, {{ thumbnail_img | image_url: width: 900 }} 900w"
+                      sizes="(max-width: 480px) 50vw, (max-width: 768px) 33vw, 300px"
+                      alt="Instagram post" 
+                      class="mitushi-social__thumbnail-img"
+                      loading="lazy"
+                    />
+                  {% else %}
+                    <!-- Thumbnail will be extracted from embed code or show placeholder -->
+                    <div class="mitushi-social__thumbnail-loading">
+                      <svg class="mitushi-social__play-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.3)"/>
+                        <path d="M10 8L16 12L10 16V8Z" fill="white"/>
+                      </svg>
+                    </div>
+                  {% endif %}
                   <div class="mitushi-social__play-overlay">
                     <svg class="mitushi-social__play-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.5)"/>
@@ -484,124 +531,65 @@
 
 <script>
   (function() {
-    // Extract thumbnail from Instagram/TikTok automatically (like Instafeed App)
-    function extractInstagramThumbnail(postUrl, container, blockId) {
-      if (!postUrl || !container) return;
+    // Extract thumbnail from embed code (simple method, no API calls)
+    function extractThumbnailFromEmbed(container, blockId) {
+      if (!container) return;
       
-      // Check if it's TikTok or Instagram
-      const isTikTok = postUrl.includes('tiktok.com') || postUrl.includes('vm.tiktok.com');
-      const isInstagram = postUrl.includes('instagram.com');
+      // Check if thumbnail already exists (from manual image picker)
+      const existingImg = container.querySelector('.mitushi-social__thumbnail-img');
+      if (existingImg && existingImg.src && !existingImg.src.includes('data:')) {
+        // Thumbnail already loaded from manual image picker
+        const loadingDiv = container.querySelector('.mitushi-social__thumbnail-loading');
+        if (loadingDiv) {
+          loadingDiv.remove();
+        }
+        return;
+      }
       
-      // Method 1: Try to extract from embed code if available
+      // Try to extract from embed code
       const embedTemplate = document.getElementById('embed-template-' + blockId);
-      if (embedTemplate) {
-        const embedContent = embedTemplate.content.textContent || embedTemplate.content.innerHTML;
-        // Try to extract handle from embed code (multiple patterns)
-        const handlePatterns = [
-          /@([a-zA-Z0-9_.]+)/g,
-          /data-instgrm-permalink="[^"]*\/\/([^\/]+)\/([^\/]+)\//,
-          /instagram\.com\/([a-zA-Z0-9_.]+)/,
-          /tiktok\.com\/@([a-zA-Z0-9_.]+)/,
-          /by\s+([a-zA-Z0-9_.]+)/i
-        ];
-        
-        for (let pattern of handlePatterns) {
-          const match = embedContent.match(pattern);
-          if (match) {
-            const handle = match[1] || match[2];
-            if (handle && !handle.includes('instagram.com') && !handle.includes('tiktok.com') && !handle.includes('http')) {
-              displayInstagramHandle('@' + handle, blockId);
-              break;
-            }
-          }
-        }
-        
-        // Try multiple patterns to find thumbnail in embed code
-        const thumbnailPatterns = [
-          /thumbnail_url["\s:=]+([^"'\s>]+)/i,
-          /poster=["']([^"']+)/i,
-          /src=["']([^"']*\.(jpg|jpeg|png|webp)[^"']*)/i,
-          /background-image:\s*url\(["']?([^"')]+\.(jpg|jpeg|png|webp)[^"')]*)/i
-        ];
-        
-        for (let pattern of thumbnailPatterns) {
-          const match = embedContent.match(pattern);
-          if (match && match[1]) {
-            loadThumbnailImage(match[1], container);
-            return;
+      if (!embedTemplate) return;
+      
+      const embedContent = embedTemplate.content.textContent || embedTemplate.content.innerHTML;
+      
+      // Try to extract handle from embed code
+      const handlePatterns = [
+        /@([a-zA-Z0-9_.]+)/g,
+        /data-instgrm-permalink="[^"]*\/\/([^\/]+)\/([^\/]+)\//,
+        /instagram\.com\/([a-zA-Z0-9_.]+)/,
+        /tiktok\.com\/@([a-zA-Z0-9_.]+)/,
+        /by\s+([a-zA-Z0-9_.]+)/i
+      ];
+      
+      for (let pattern of handlePatterns) {
+        const match = embedContent.match(pattern);
+        if (match) {
+          const handle = match[1] || match[2];
+          if (handle && !handle.includes('instagram.com') && !handle.includes('tiktok.com') && !handle.includes('http')) {
+            displayInstagramHandle('@' + handle, blockId);
+            break;
           }
         }
       }
       
-      // Method 2: Use oEmbed API with CORS proxy
-      const proxyUrl = 'https://api.allorigins.win/raw?url=';
-      let oembedUrl;
+      // Try to find thumbnail URL in embed code (if Instagram/TikTok includes it)
+      const thumbnailPatterns = [
+        /thumbnail_url["\s:=]+([^"'\s>]+)/i,
+        /poster=["']([^"']+)/i,
+        /src=["']([^"']*\.(jpg|jpeg|png|webp)[^"']*)/i,
+        /background-image:\s*url\(["']?([^"')]+\.(jpg|jpeg|png|webp)[^"')]*)/i
+      ];
       
-      if (isTikTok) {
-        // TikTok oEmbed
-        oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(postUrl)}`;
-      } else if (isInstagram) {
-        // Instagram oEmbed
-        oembedUrl = `https://api.instagram.com/oembed/?url=${encodeURIComponent(postUrl)}&omitscript=true`;
-      } else {
-        // Try fallback
-        tryFallbackThumbnail(postUrl, container);
-        return;
+      for (let pattern of thumbnailPatterns) {
+        const match = embedContent.match(pattern);
+        if (match && match[1]) {
+          loadThumbnailImage(match[1], container);
+          return;
+        }
       }
       
-      const fullUrl = proxyUrl + encodeURIComponent(oembedUrl);
-      
-      fetch(fullUrl)
-        .then(response => {
-          if (!response.ok) throw new Error('Network response was not ok');
-          return response.json();
-        })
-        .then(data => {
-          if (data && data.thumbnail_url) {
-            loadThumbnailImage(data.thumbnail_url, container);
-          }
-          // Extract and display handle from oEmbed response
-          if (data) {
-            if (data.author_name) {
-              displayInstagramHandle(data.author_name, blockId);
-            } else if (data.author_url) {
-              // Extract handle from author_url (Instagram or TikTok)
-              const urlMatch = data.author_url.match(/(instagram|tiktok)\.com\/([^\/\?]+)/);
-              if (urlMatch && urlMatch[2]) {
-                displayInstagramHandle('@' + urlMatch[2], blockId);
-              }
-            }
-          }
-          if (!data || !data.thumbnail_url) {
-            // Fallback: try to get from post ID
-            tryFallbackThumbnail(postUrl, container);
-          }
-        })
-        .catch(error => {
-          console.log('Could not fetch thumbnail via oEmbed:', error);
-          tryFallbackThumbnail(postUrl, container);
-        });
-    }
-
-    function tryFallbackThumbnail(postUrl, container) {
-      // Try Instagram fallback
-      const instagramMatch = postUrl.match(/instagram\.com\/(p|reel)\/([^\/\?]+)/);
-      if (instagramMatch) {
-        const postId = instagramMatch[2];
-        // Try Instagram's media endpoint
-        const fallbackUrl = `https://instagram.com/p/${postId}/media/?size=m`;
-        loadThumbnailImage(fallbackUrl, container);
-        return;
-      }
-      
-      // Try TikTok fallback
-      const tiktokMatch = postUrl.match(/tiktok\.com\/@[^\/]+\/video\/(\d+)/);
-      if (tiktokMatch) {
-        const videoId = tiktokMatch[1];
-        // TikTok doesn't have a direct thumbnail API, but we can try
-        // The embed code should have the thumbnail
-        console.log('TikTok video ID found:', videoId);
-      }
+      // If no thumbnail found in embed code, keep the loading placeholder
+      // User can add thumbnail URL manually in settings
     }
 
     function displayInstagramHandle(authorName, blockId) {
@@ -621,6 +609,17 @@
     }
 
     function loadThumbnailImage(thumbnailUrl, container) {
+      if (!thumbnailUrl || !container) return;
+      
+      // Remove any existing image first (only if it's from embed code extraction)
+      const existingImg = container.querySelector('.mitushi-social__thumbnail-img');
+      if (existingImg && (!existingImg.src || existingImg.src.includes('data:'))) {
+        existingImg.remove();
+      } else if (existingImg) {
+        // Manual image already exists, don't replace it
+        return;
+      }
+      
       const img = document.createElement('img');
       img.src = thumbnailUrl;
       img.alt = 'Instagram post';
@@ -633,20 +632,19 @@
       
       img.onerror = function() {
         this.remove();
+        console.log('Failed to load thumbnail from embed code:', thumbnailUrl);
       };
       
       img.onload = function() {
         const loadingDiv = container.querySelector('.mitushi-social__thumbnail-loading');
         if (loadingDiv) {
-          loadingDiv.remove();
+          loadingDiv.style.opacity = '0';
+          loadingDiv.style.transition = 'opacity 0.3s ease';
+          setTimeout(() => {
+            loadingDiv.remove();
+          }, 300);
         }
       };
-      
-      // Remove any existing image first
-      const existingImg = container.querySelector('.mitushi-social__thumbnail-img');
-      if (existingImg) {
-        existingImg.remove();
-      }
       
       container.appendChild(img);
     }
@@ -656,15 +654,16 @@
       const triggers = document.querySelectorAll('[data-modal-trigger]');
       const closes = document.querySelectorAll('[data-modal-close]');
 
-      // Load thumbnails for all posts automatically (like Instafeed App)
+      // Try to extract thumbnails from embed code (if not manually set)
       triggers.forEach(trigger => {
-        const postUrl = trigger.getAttribute('data-post-url');
         const container = trigger.querySelector('[data-thumbnail-container]');
         const blockId = container?.getAttribute('data-thumbnail-container');
         
-        // Always try to load thumbnail automatically from the video/post
-        if (postUrl && container && blockId) {
-          extractInstagramThumbnail(postUrl, container, blockId);
+        if (container && blockId) {
+          // Small delay to ensure DOM is ready
+          setTimeout(() => {
+            extractThumbnailFromEmbed(container, blockId);
+          }, 100);
         }
       });
 
@@ -791,7 +790,13 @@
           "type": "textarea",
           "id": "embed_code",
           "label": "Embed code (paste here)",
-          "info": "Paste the official embed code from Instagram or TikTok. Get it from the post → three dots (⋯) → Embed. The thumbnail will be loaded automatically from the video/post."
+          "info": "Paste the official embed code from Instagram or TikTok. Get it from the post → three dots (⋯) → Embed."
+        },
+        {
+          "type": "image_picker",
+          "id": "thumbnail_url",
+          "label": "Thumbnail image (optional)",
+          "info": "Upload or select a thumbnail image. If not set, the system will try to extract it from the embed code."
         },
         {
           "type": "text",
