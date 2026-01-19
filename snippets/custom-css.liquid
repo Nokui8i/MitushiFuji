@@ -1711,6 +1711,7 @@ section[data-ui-component="Running Content Section"] {
   cursor: pointer;
   transition: all 0.3s;
   text-decoration: none;
+  overflow: visible;
 }
 
 .footer-social-buttons .svgContainerstock,
@@ -1721,12 +1722,14 @@ section[data-ui-component="Running Content Section"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
+  background-color: transparent !important;
   backdrop-filter: blur(0px);
   letter-spacing: 0.8px;
   border-radius: 10px;
   transition: all 0.3s;
   border: 1px solid rgba(156, 156, 156, 0.466);
+  position: relative;
+  z-index: 2;
 }
 
 .footer-social-buttons .BGstock,
@@ -1736,10 +1739,17 @@ section[data-ui-component="Running Content Section"] {
   content: "";
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: 0;
   border-radius: 10px;
   pointer-events: none;
   transition: all 0.3s;
+  top: 0;
+  left: 0;
+  opacity: 1 !important;
+  display: block !important;
+  visibility: visible !important;
+  background-size: cover !important;
+  background-position: center !important;
 }
 
 /* Facebook */
@@ -1796,5 +1806,133 @@ section[data-ui-component="Running Content Section"] {
   background-color: rgba(156, 156, 156, 0.466);
   backdrop-filter: blur(4px);
   border: 1px solid rgba(226, 226, 226, 0.466);
+}
+
+/* וידוא שהצבעים מוצגים תמיד */
+.footer-social-buttons .Btnstock .BGstock,
+.footer-social-buttons .Btninsta .BGinsta,
+.footer-social-buttons .Btntiktok .BGtiktok {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+/* וידוא שה-SVG לבן */
+.footer-social-buttons svg,
+.footer-social-buttons svg path {
+  fill: white !important;
+  color: white !important;
+}
+
+/* Footer Newsletter - From Uiverse.io by R1SH4BH81 */
+.footer-newsletter.card,
+.js-footer .footer-newsletter.card,
+.footer-newsletter,
+.clm .footer-newsletter {
+  width: 100% !important;
+  max-width: 340px !important;
+  height: auto !important;
+  min-height: 254px !important;
+  padding: 30px 15px !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  background: #fff !important;
+  border-radius: 20px !important;
+  margin: 0 auto !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.footer-newsletter.card > *,
+.js-footer .footer-newsletter.card > * {
+  margin: 0 !important;
+}
+
+.footer-newsletter .card__title,
+.js-footer .footer-newsletter .card__title {
+  font-size: 23px !important;
+  font-weight: 900 !important;
+  color: #333 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  margin: 0 !important;
+}
+
+.footer-newsletter .card__title svg,
+.js-footer .footer-newsletter .card__title svg {
+  width: 40px !important;
+  height: 40px !important;
+  flex-shrink: 0 !important;
+}
+
+.footer-newsletter .card__content,
+.js-footer .footer-newsletter .card__content {
+  font-size: 13px !important;
+  line-height: 18px !important;
+  color: #333 !important;
+  margin: 10px !important;
+}
+
+.footer-newsletter .card__form,
+.js-footer .footer-newsletter .card__form {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+.footer-newsletter .card__form input,
+.js-footer .footer-newsletter .card__form input {
+  outline: 0 !important;
+  margin-left: 10px !important;
+  background: rgb(255, 255, 255) !important;
+  box-shadow: transparent 0px 0px 0px 1px inset !important;
+  padding: 0.6em !important;
+  border-radius: 14px !important;
+  border: 1px solid #333 !important;
+  color: black !important;
+  flex: 1 !important;
+  font-size: 14px !important;
+}
+
+.footer-newsletter .card__form input::placeholder,
+.js-footer .footer-newsletter .card__form input::placeholder {
+  color: #999 !important;
+}
+
+.footer-newsletter .card__form .sign-up,
+.js-footer .footer-newsletter .card__form .sign-up {
+  border: 0 !important;
+  background: #111 !important;
+  color: #fff !important;
+  padding: 0.68em !important;
+  border-radius: 14px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 48px !important;
+  transition: opacity 0.3s !important;
+}
+
+.footer-newsletter .card__form .sign-up:hover,
+.js-footer .footer-newsletter .card__form .sign-up:hover {
+  opacity: 0.9 !important;
+}
+
+.footer-newsletter .card__form .sign-up svg,
+.js-footer .footer-newsletter .card__form .sign-up svg {
+  width: 24px !important;
+  height: 24px !important;
 }
 </style>

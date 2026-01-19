@@ -88,56 +88,50 @@
       {%- endif -%}
       <div class="clm hide-empty" style="--w-xs: 12; --w-sm: 10; --w-lg: 3;">
         {%- if section.settings.enable_newsletter -%}
-          <div class="footer-newsletter mt-24 mb-64 pt-32 pr-24 pb-40 pl-24 mt-lg-0 mb-lg-32 color-inverse style--paper-note p-relative text-block"
-            style="
-              {%- unless section.settings.newsletter_color_background.alpha == 0.0 or section.settings.newsletter_color_background == blank -%}
-                --color-page-bg: {{- section.settings.newsletter_color_background -}};
-              {%- endunless -%}
-              {%- unless section.settings.newsletter_color.alpha == 0.0 or section.settings.newsletter_color == blank -%}
-                --color-normal-text: {{- section.settings.newsletter_color -}};
-              {%- endunless -%}
-            "
-          >
-            <span class="h6 mb-16 d-block hide-empty">{{- section.settings.newsletter_heading | escape -}}</span>
-            <div class="text-block mb-16 hide-empty">{{- section.settings.newsletter_description -}}</div>
-            {%- form 'customer', id: 'footerNewsletterForm', class: 'footer-newsletter-form' -%}
+          <div class="footer-newsletter card mt-24 mb-64 mt-lg-0 mb-lg-32">
+            <span class="card__title">
+              {{ section.settings.newsletter_heading | default: 'Subscribe' | escape }}
+              <svg fill="#333" width="40px" viewBox="0 -960 960 960" height="40px" xmlns="http://www.w3.org/2000/svg">
+                <path d="M106.67-564q0-93.33 41.5-171.17 41.5-77.83 111.16-129.5L299-811.33q-57.33 42.66-91.5 106.66T173.33-564h-66.66Zm680 0q0-76.67-34.17-140.67-34.17-64-91.5-106.66l39.67-53.34q69.66 51.67 111.16 129.5 41.5 77.84 41.5 171.17h-66.66ZM160-200v-66.67h80v-296q0-83.66 49.67-149.5Q339.33-778 420-796v-24q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v24q80.67 18 130.33 83.83Q720-646.33 720-562.67v296h80V-200H160Zm320-301.33ZM480-80q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM306.67-266.67h346.66v-296q0-72-50.66-122.66Q552-736 480-736t-122.67 50.67q-50.66 50.66-50.66 122.66v296Z"></path>
+              </svg>
+            </span>
+            {%- if section.settings.newsletter_description != blank -%}
+              <p class="card__content">{{ section.settings.newsletter_description | strip_html }}</p>
+            {%- else -%}
+              <p class="card__content">Get fresh web design resources delivered straight to your inbox every week.</p>
+            {%- endif -%}
+            {%- form 'customer', id: 'footerNewsletterForm', class: 'card__form' -%}
               <input type="hidden" name="contact[tags]" value="newsletter">
-              <div class="form__field d-flex fd-column fd-row-sm fd-column-lg gap-16">
-                <label class="field__label visually-hidden" for="newsletterForm-{{- section_id -}}">
-                  {{ 'general.newsletter.label' | t }}
-                </label>
-                <div class="field--animation">
-                  <input id="newsletterForm-{{- section_id -}}" type="email" name="contact[email]" class="footer-newsletter-form__input field__text fg-1" value="{{ form.email }}" aria-required="true" autocorrect="off" autocapitalize="off" autocomplete="email" {% if form.errors %} autofocus aria-invalid="true" aria-describedby="NewsletterFooter-error" {% elsif form.posted_successfully? %} aria-describedby="NewsletterFooter-success" {% endif %} placeholder="{{ 'general.newsletter.email_placeholder' | t }}" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" required>
-                </div>
-                <button type="submit" class="btn btn-secondary--animate btn-large" name="commit" id="subscribe" aria-label="{{ 'general.newsletter.button_label' | t }}">
-                  <span class="d-block o-hidden p-relative">
-                    <span class="btn-secondary__content">
-                      {{ 'general.newsletter.button_label' | t }}
-                    </span>
+              <label class="visually-hidden" for="newsletterForm-{{- section_id -}}">
+                {{ 'general.newsletter.label' | t }}
+              </label>
+              <input id="newsletterForm-{{- section_id -}}" type="email" name="contact[email]" value="{{ form.email }}" aria-required="true" autocorrect="off" autocapitalize="off" autocomplete="email" {% if form.errors %} autofocus aria-invalid="true" aria-describedby="NewsletterFooter-error" {% elsif form.posted_successfully? %} aria-describedby="NewsletterFooter-success" {% endif %} placeholder="{{ 'general.newsletter.email_placeholder' | t | default: 'Your Email' }}" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" required>
+              <button type="submit" title="SignUp" class="sign-up" name="commit" id="subscribe" aria-label="{{ 'general.newsletter.button_label' | t }}">
+                <svg fill="#e8eaed" width="24px" viewBox="0 -960 960 960" height="24px" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"></path>
+                </svg>
+              </button>
+              {%- if form.errors -%}
+                <div class="d-flex middle-xs center-xs mt-16" style="width: 100%;">
+                  <div class="icon icon--small icon--error fs-0">
+                    {% render 'icon-error', size: 16 %}
+                  </div>
+                  <span class="ml-8 subtext">
+                    {{ form.errors.translated_fields.email | capitalize }}
+                    {{ form.errors.messages.email }}
                   </span>
-                </button>
-                {%- if form.errors -%}
-                  <div class="d-flex middle-xs center-xs mt-16 mt-lg-24">
-                    <div class="icon icon--small icon--error fs-0">
-                      {% render 'icon-error', size: 16 %}
-                    </div>
-                    <span class="ml-8 subtext">
-                      {{ form.errors.translated_fields.email | capitalize }}
-                      {{ form.errors.messages.email }}
-                    </span>
+                </div>
+              {%- endif -%}
+              {%- if form.posted_successfully? -%}
+                <div class="d-flex middle-xs center-xs mt-16" style="width: 100%;">
+                  <div class="icon icon--small icon--success fs-0">
+                    {% render 'icon-check-mark', size: 16 %}
                   </div>
-                {%- endif -%}
-                {%- if form.posted_successfully? -%}
-                  <div class="d-flex middle-xs center-xs mt-16 mt-lg-24">
-                    <div class="icon icon--small icon--success fs-0">
-                      {% render 'icon-check-mark', size: 16 %}
-                    </div>
-                    <span class="ml-8 subtext">
-                      {{ 'general.newsletter.success' | t }}
-                    </span>
-                  </div>
-                {%- endif -%}
-              </div>
+                  <span class="ml-8 subtext">
+                    {{ 'general.newsletter.success' | t }}
+                  </span>
+                </div>
+              {%- endif -%}
             {%- endform -%}
           </div>
         {%- endif -%}
