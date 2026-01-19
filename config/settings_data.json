@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "current": {
     "type_body_font": "arial_n7",
@@ -1896,11 +1887,11 @@
   },
   "platform_customizations": {
     "custom_css": [
-      "/* Force rounded corners on ALL product image elements */.product__media-wrapper,.product__media-wrapper *,.product__media-item,.product__media-item *,.product__thumbnail,.product__thumbnail *,.product__media-wrapper img,.product__media-item img,.product__thumbnail img,.product__media-container,.product__media-container *,.product__media,.product__media *,deferred-media,deferred-media *,.product-media-modal__content img,.thumbnail-list__item,.thumbnail-list__item *,.thumbnail img,img[data-media-id] {border-radius: 12px !important; overflow: hidden !important;}",
-      " /* Size constraints for main product image */.product__media-wrapper,.product__media-container {max-width: 700px !important; max-height: 700px !important; margin: 0 auto !important;}",
-      " /* Image fitting and scaling */.product__media img {width: 100% !important; height: auto !important; object-fit: contain !important; border-radius: 12px !important; display: block !important;}",
-      " /* Thumbnail auto-resize to fit container */.thumbnail-list__item,.product__thumbnail {width: 100% !important; height: 100% !important; display: block !important;}",
-      " /* Force thumbnails to crop from top */.thumbnail img,.product__thumbnail img,.thumbnail-list__item img,li[data-target] img {width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: top !important; display: block !important;}"
+      ".product__media-wrapper,.product__media-wrapper *,.product__media-item,.product__media-item *,.product__thumbnail,.product__thumbnail *,.product__media-wrapper img,.product__media-item img,.product__thumbnail img,.product__media-container,.product__media-container *,.product__media,.product__media *,deferred-media,deferred-media *,.product-media-modal__content img,.thumbnail-list__item,.thumbnail-list__item *,.thumbnail img,img[data-media-id] {border-radius: 12px !important; overflow: hidden !important;}",
+      " .product__media-wrapper,.product__media-container {max-width: 700px !important; max-height: 700px !important; margin: 0 auto !important;}",
+      " .product__media img {width: 100% !important; height: auto !important; object-fit: contain !important; border-radius: 12px !important; display: block !important;}",
+      " .thumbnail-list__item,.product__thumbnail {width: 100% !important; height: 100% !important; display: block !important;}",
+      " .thumbnail img,.product__thumbnail img,.thumbnail-list__item img,li[data-target] img {width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: top !important; display: block !important;}"
     ]
   }
 }
