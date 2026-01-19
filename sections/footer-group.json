@@ -46,7 +46,7 @@
         "show_follow_on_shop": true,
         "contact_heading": "Contact",
         "show_info": true,
-        "enable_newsletter": true,
+        "enable_newsletter": false,
         "newsletter_heading": "Newsletter",
         "newsletter_description": "<p>Subscribe now to get the latest news, exclusive offers, and helpful tips every week!</p>",
         "newsletter_color_background": "#ffffff",
