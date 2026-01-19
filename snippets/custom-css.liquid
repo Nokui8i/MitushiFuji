@@ -1687,4 +1687,104 @@ section[data-ui-component="Running Content Section"] {
   animation-duration: 120s !important;
   animation-timing-function: linear !important;
 }
+
+/* Footer Social Media Buttons - From Uiverse.io by GigioBagigi0 */
+.footer__socials .card {
+  display: flex;
+  width: 220px;
+  height: 50px;
+  background-color: whitesmoke;
+  border-radius: 115px;
+  padding-inline: 15px;
+  position: relative;
+  justify-content: space-around;
+  margin: 0 auto;
+}
+
+.footer__socials .social-icons {
+  cursor: pointer;
+  display: flex;
+  transition: all 0.5s;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: white;
+  font-weight: bold;
+  font-size: small;
+}
+
+.footer__socials .social-icons > p {
+  --var: -0%;
+  position: absolute;
+  top: var(--var);
+  transition: all 0.7s;
+  background-color: dodgerblue;
+  border-radius: 7px;
+  opacity: 0;
+  padding-inline: 7px;
+  padding-block: 3px;
+  width: max-content;
+  color: white;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.footer__socials .social-icons > p::after {
+  content: "";
+  position: absolute;
+  border-top: 10px solid dodgerblue;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.footer__socials .social-icons > a {
+  --var: -0%;
+  position: absolute;
+  bottom: var(--var);
+  width: max-content;
+  transition: all 0.7s;
+  opacity: 0;
+  padding-inline: 7px;
+  padding-block: 3px;
+  background-color: crimson;
+  border-radius: 7px;
+  color: white;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.footer__socials .social-icons > a::after {
+  content: "";
+  position: absolute;
+  border-bottom: 10px solid crimson;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.footer__socials .social-icons:hover > a,
+.footer__socials .social-icons:hover > p {
+  --var: -65%;
+  opacity: 1;
+}
+
+.footer__socials .social-icons:hover {
+  z-index: 15;
+}
+
+.footer__socials .card:hover > .social-icons:not(:hover) {
+  filter: blur(3px);
+  transform: scale(0.8);
+}
+
+.footer__socials .card svg {
+  height: 30px;
+  width: 30px;
+  fill: currentColor;
+}
 </style>
