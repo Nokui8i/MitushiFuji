@@ -27,27 +27,23 @@
         innerClickable = newInner;
       }
       
-      // Add click handler - רק אם לחיצה על החלק השחור
-      innerClickable.addEventListener('click', function(e) {
-        // עצור את ה-event כדי שלא יעבור לכפתור
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        
-        // עכשיו מטפלים בלחיצה על החלק השחור
+      // Add click handler לכפתור עצמו - עובד גם על החלק השחור וגם על הכפתור
+      // משתמש ב-capture phase כדי לעבוד לפני כל ה-handlers האחרים
+      button.addEventListener('click', function(e) {
         // בדסקטופ - מעביר ישר לעמוד המוצר
         if (!isMobile()) {
           e.preventDefault();
           e.stopPropagation();
-          setTimeout(function() {
-            if (productUrl) {
-              window.location.href = productUrl;
-            }
-          }, 100);
-          return;
+          e.stopImmediatePropagation();
+          window.location.href = productUrl;
+          return false;
         }
         
         // במובייל - לחיצה ראשונה מציגה פרטים, שנייה מעבירה
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        
         clickCount++;
         
         // איפוס מונה אחרי 2 שניות
@@ -58,9 +54,6 @@
         
         if (clickCount === 1) {
           // לחיצה ראשונה - מציגה פרטים (tooltip), לא מעבירה ולא מפעילה carousel
-          e.preventDefault();
-          e.stopPropagation();
-          e.stopImmediatePropagation();
           
           // סגור כל ה-tooltips (גם של FUJI theme וגם שלנו) לפני הצגת אחד חדש
           const currentTooltip = button.querySelector('.js-tooltip-content');
@@ -176,14 +169,10 @@
           }
         } else if (clickCount === 2) {
           // לחיצה שנייה - מעבירה לעמוד המוצר
-          e.preventDefault();
-          e.stopPropagation();
           clickCount = 0;
-          setTimeout(function() {
-            if (productUrl) {
-              window.location.href = productUrl;
-            }
-          }, 100);
+          if (productUrl) {
+            window.location.href = productUrl;
+          }
         }
       }, true); // useCapture = true כדי לעצור לפני handlers אחרים
     });
