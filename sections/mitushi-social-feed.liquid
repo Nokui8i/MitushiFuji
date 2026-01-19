@@ -51,6 +51,11 @@
                 {% endif %}
               </button>
 
+              <!-- Template for embed code (hidden, loaded only when modal opens) -->
+              <template id="embed-template-{{ block.id }}" style="display: none !important; visibility: hidden !important;">
+                {{ block.settings.embed_code }}
+              </template>
+
               <!-- Modal -->
               <div 
                 class="mitushi-social__modal" 
@@ -59,6 +64,7 @@
                 aria-modal="true"
                 aria-labelledby="modal-title-{{ block.id }}"
                 hidden
+                data-embed-template="embed-template-{{ block.id }}"
               >
                 <div class="mitushi-social__modal-overlay" data-modal-close="mitushi-modal-{{ block.id }}"></div>
                 <div class="mitushi-social__modal-content">
@@ -72,8 +78,8 @@
                       <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>
                   </button>
-                  <div class="mitushi-social__modal-embed">
-                    {{ block.settings.embed_code }}
+                  <div class="mitushi-social__modal-embed" id="modal-embed-{{ block.id }}">
+                    <!-- Embed code will be loaded here when modal opens -->
                   </div>
                 </div>
               </div>
@@ -143,6 +149,17 @@
     flex: 0 0 auto;
     width: min(320px, 78vw);
     scroll-snap-align: start;
+  }
+
+  /* Hide template elements completely */
+  template {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Hide any embed code that might render in the card (shouldn't happen, but just in case) */
+  .mitushi-social__card > *:not(.mitushi-social__thumbnail-btn):not(.mitushi-social__modal):not(.mitushi-social__caption):not(.mitushi-social__empty):not(template) {
+    display: none !important;
   }
 
   /* Thumbnail Button */
@@ -247,7 +264,7 @@
   }
 
   .mitushi-social__modal[hidden] {
-    display: none;
+    display: none !important;
   }
 
   .mitushi-social__modal:not([hidden]) {
@@ -325,13 +342,18 @@
     overflow: hidden;
   }
 
-  /* Make embedded iframes responsive */
+  /* Make embedded iframes responsive - ONLY in modal */
   .mitushi-social__modal-embed iframe,
-  .mitushi-social__modal-embed blockquote {
+  .mitushi-social__modal-embed blockquote,
+  .mitushi-social__modal-embed .instagram-media {
     width: 100% !important;
     max-width: 100% !important;
     border: none !important;
     margin: 0 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
   }
 
   .mitushi-social__caption {
@@ -401,6 +423,18 @@
           const modalId = this.getAttribute('data-modal-trigger');
           const modal = document.getElementById(modalId);
           if (modal) {
+            // Load embed code from template only when modal opens
+            const embedContainer = modal.querySelector('.mitushi-social__modal-embed');
+            const templateId = modal.getAttribute('data-embed-template');
+            
+            if (embedContainer && templateId && embedContainer.children.length === 0) {
+              const template = document.getElementById(templateId);
+              if (template) {
+                const embedContent = template.content.cloneNode(true);
+                embedContainer.appendChild(embedContent);
+              }
+            }
+            
             modal.removeAttribute('hidden');
             document.body.style.overflow = 'hidden';
           }
