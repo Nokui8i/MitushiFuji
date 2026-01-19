@@ -107,7 +107,7 @@
               </label>
               <input id="newsletterForm-{{- section_id -}}" type="email" name="contact[email]" value="{{ form.email }}" aria-required="true" autocorrect="off" autocapitalize="off" autocomplete="email" {% if form.errors %} autofocus aria-invalid="true" aria-describedby="NewsletterFooter-error" {% elsif form.posted_successfully? %} aria-describedby="NewsletterFooter-success" {% endif %} placeholder="{{ 'general.newsletter.email_placeholder' | t | default: 'Your Email' }}" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" required>
               <button type="submit" title="SignUp" class="sign-up" name="commit" id="subscribe" aria-label="{{ 'general.newsletter.button_label' | t }}">
-                <svg fill="#e8eaed" width="24px" viewBox="0 -960 960 960" height="24px" xmlns="http://www.w3.org/2000/svg">
+                <svg fill="#000" width="24px" viewBox="0 -960 960 960" height="24px" xmlns="http://www.w3.org/2000/svg">
                   <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"></path>
                 </svg>
               </button>
