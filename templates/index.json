@@ -38,7 +38,7 @@
         "section_mask_overlay_color": "#000000",
         "section_content_overlay_color": "#ffffff",
         "height_desktop": "50vh",
-        "height_mobile": "adapt_img",
+        "height_mobile": "50vh",
         "remove_padding_top": true,
         "remove_padding_bottom": true,
         "desktop_background_image": "shopify://shop_images/ChatGPT_Image_Jan_14_2026_01_23_59_PM_9de56559-3831-4ad9-88e5-c083b4238ba3.png",
