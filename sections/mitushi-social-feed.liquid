@@ -121,6 +121,7 @@
             {% if block.settings.caption != blank %}
               <p class="mitushi-social__caption">{{ block.settings.caption }}</p>
             {% endif %}
+            <div class="mitushi-social__handle" data-handle-container="{{ block.id }}"></div>
           </div>
         {% endfor %}
       </div>
@@ -145,39 +146,38 @@
     font-weight: 800;
   }
 
-  /* Horizontal "feed" scrollable rail */
+  /* Grid layout like Instafeed App */
   .mitushi-social__rail {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--ms-gap, 18px);
-    overflow-x: auto;
-    padding: 10px 2px 6px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(var(--color-normal-text-rgb), 0.2) transparent;
+    padding: 10px 0;
+    max-width: 100%;
   }
 
-  .mitushi-social__rail::-webkit-scrollbar {
-    height: 10px;
+  @media (min-width: 1200px) {
+    .mitushi-social__rail {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
   }
 
-  .mitushi-social__rail::-webkit-scrollbar-track {
-    background: transparent;
+  @media (max-width: 768px) {
+    .mitushi-social__rail {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: calc(var(--ms-gap, 18px) * 0.7);
+    }
   }
 
-  .mitushi-social__rail::-webkit-scrollbar-thumb {
-    background: rgba(var(--color-normal-text-rgb), 0.2);
-    border-radius: 999px;
-  }
-
-  .mitushi-social__rail::-webkit-scrollbar-thumb:hover {
-    background: rgba(var(--color-normal-text-rgb), 0.3);
+  @media (max-width: 480px) {
+    .mitushi-social__rail {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
   }
 
   .mitushi-social__card {
-    flex: 0 0 auto;
-    width: min(320px, 78vw);
-    scroll-snap-align: start;
+    width: 100%;
+    position: relative;
   }
 
   /* Hide template elements completely */
@@ -187,7 +187,7 @@
   }
 
   /* Hide any embed code that might render in the card (shouldn't happen, but just in case) */
-  .mitushi-social__card > *:not(.mitushi-social__thumbnail-btn):not(.mitushi-social__modal):not(.mitushi-social__caption):not(.mitushi-social__empty):not(template) {
+  .mitushi-social__card > *:not(.mitushi-social__thumbnail-btn):not(.mitushi-social__modal):not(.mitushi-social__caption):not(.mitushi-social__handle):not(.mitushi-social__empty):not(template) {
     display: none !important;
   }
 
@@ -199,14 +199,14 @@
     background: transparent;
     cursor: pointer;
     position: relative;
-    border-radius: 14px;
+    border-radius: 8px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .mitushi-social__thumbnail-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
 
   .mitushi-social__thumbnail {
@@ -214,7 +214,8 @@
     width: 100%;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    border-radius: 14px;
+    border-radius: 8px;
+    background: #f5f5f5;
   }
 
   .mitushi-social__thumbnail img {
@@ -222,6 +223,11 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .mitushi-social__thumbnail-btn:hover .mitushi-social__thumbnail img {
+    transform: scale(1.05);
   }
 
   .mitushi-social__play-overlay {
@@ -233,30 +239,34 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.2);
-    transition: background 0.3s ease;
+    background: rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
   }
 
   .mitushi-social__thumbnail-btn:hover .mitushi-social__play-overlay {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 1;
   }
 
   .mitushi-social__play-icon {
-    width: 64px;
-    height: 64px;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
-    transition: transform 0.3s ease;
+    width: 48px;
+    height: 48px;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.9;
   }
 
   .mitushi-social__thumbnail-btn:hover .mitushi-social__play-icon {
-    transform: scale(1.1);
+    transform: scale(1.15);
+    opacity: 1;
   }
 
   .mitushi-social__thumbnail-loading {
     width: 100%;
     aspect-ratio: 1 / 1;
-    background: rgba(var(--color-normal-text-rgb), 0.04);
-    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(var(--color-normal-text-rgb), 0.05) 0%, rgba(var(--color-normal-text-rgb), 0.02) 100%);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -265,6 +275,16 @@
     left: 0;
     right: 0;
     bottom: 0;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
   }
 
   .mitushi-social__thumbnail-loading .mitushi-social__play-icon {
@@ -414,6 +434,19 @@
     line-height: 1.5;
   }
 
+  .mitushi-social__handle {
+    margin-top: 6px;
+    font-size: 11px;
+    color: rgba(var(--color-normal-text-rgb), 0.6);
+    text-align: left;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .mitushi-social__handle:empty {
+    display: none;
+  }
+
   .mitushi-social__empty {
     border-radius: 14px;
     padding: 48px 18px;
@@ -462,18 +495,54 @@
 
 <script>
   (function() {
-    // Extract thumbnail from Instagram URL using oEmbed API
-    // Note: Instagram oEmbed API requires CORS, so we use a CORS proxy
-    function extractInstagramThumbnail(postUrl, container) {
+    // Extract thumbnail from Instagram (like Instafeed App)
+    function extractInstagramThumbnail(postUrl, container, blockId) {
       if (!postUrl || !container) return;
       
-      // Use CORS proxy to bypass CORS restrictions
-      // You can replace this with your own proxy server if needed
+      // Method 1: Try to extract from embed code if available
+      const embedTemplate = document.getElementById('embed-template-' + blockId);
+      if (embedTemplate) {
+        const embedContent = embedTemplate.content.textContent || embedTemplate.content.innerHTML;
+        // Try to extract handle from embed code (multiple patterns)
+        const handlePatterns = [
+          /@([a-zA-Z0-9_.]+)/g,
+          /data-instgrm-permalink="[^"]*\/\/([^\/]+)\/([^\/]+)\//,
+          /instagram\.com\/([a-zA-Z0-9_.]+)/,
+          /by\s+([a-zA-Z0-9_.]+)/i
+        ];
+        
+        for (let pattern of handlePatterns) {
+          const match = embedContent.match(pattern);
+          if (match) {
+            const handle = match[1] || match[2];
+            if (handle && !handle.includes('instagram.com') && !handle.includes('http')) {
+              displayInstagramHandle('@' + handle, blockId);
+              break;
+            }
+          }
+        }
+        
+        // Try multiple patterns to find thumbnail in embed code
+        const thumbnailPatterns = [
+          /thumbnail_url["\s:=]+([^"'\s>]+)/i,
+          /src=["']([^"']*instagram[^"']*\.(jpg|jpeg|png|webp)[^"']*)/i,
+          /background-image:\s*url\(["']?([^"')]+instagram[^"')]+\.(jpg|jpeg|png|webp)[^"')]*)/i
+        ];
+        
+        for (let pattern of thumbnailPatterns) {
+          const match = embedContent.match(pattern);
+          if (match && match[1]) {
+            loadThumbnailImage(match[1], container);
+            return;
+          }
+        }
+      }
+      
+      // Method 2: Use Instagram oEmbed API with CORS proxy
       const proxyUrl = 'https://api.allorigins.win/raw?url=';
       const oembedUrl = `https://api.instagram.com/oembed/?url=${encodeURIComponent(postUrl)}&omitscript=true`;
       const fullUrl = proxyUrl + encodeURIComponent(oembedUrl);
       
-      // Try to fetch thumbnail
       fetch(fullUrl)
         .then(response => {
           if (!response.ok) throw new Error('Network response was not ok');
@@ -481,40 +550,86 @@
         })
         .then(data => {
           if (data && data.thumbnail_url) {
-            const img = document.createElement('img');
-            img.src = data.thumbnail_url;
-            img.alt = data.title || 'Instagram post';
-            img.loading = 'lazy';
-            img.className = 'mitushi-social__thumbnail-img';
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
-            img.style.display = 'block';
-            
-            img.onerror = function() {
-              // If thumbnail fails to load, keep loading state
-              this.remove();
-            };
-            
-            const loadingDiv = container.querySelector('.mitushi-social__thumbnail-loading');
-            if (loadingDiv) {
-              loadingDiv.remove();
+            loadThumbnailImage(data.thumbnail_url, container);
+          }
+          // Extract and display Instagram handle from oEmbed response
+          if (data) {
+            if (data.author_name) {
+              displayInstagramHandle(data.author_name, blockId);
+            } else if (data.author_url) {
+              // Extract handle from author_url
+              const urlMatch = data.author_url.match(/instagram\.com\/([^\/\?]+)/);
+              if (urlMatch && urlMatch[1]) {
+                displayInstagramHandle('@' + urlMatch[1], blockId);
+              }
             }
-            
-            // Remove any existing image first
-            const existingImg = container.querySelector('.mitushi-social__thumbnail-img');
-            if (existingImg) {
-              existingImg.remove();
-            }
-            
-            container.appendChild(img);
+          }
+          if (!data || !data.thumbnail_url) {
+            // Fallback: try to get from post ID
+            tryFallbackThumbnail(postUrl, container);
           }
         })
         .catch(error => {
-          // CORS error or API failure - keep loading state
-          console.log('Could not fetch Instagram thumbnail:', error);
-          // The loading placeholder will remain visible
+          console.log('Could not fetch Instagram thumbnail via oEmbed:', error);
+          tryFallbackThumbnail(postUrl, container);
         });
+    }
+
+    function tryFallbackThumbnail(postUrl, container) {
+      const postIdMatch = postUrl.match(/instagram\.com\/(p|reel)\/([^\/\?]+)/);
+      if (postIdMatch) {
+        const postId = postIdMatch[2];
+        // Try Instagram's media endpoint
+        const fallbackUrl = `https://instagram.com/p/${postId}/media/?size=m`;
+        loadThumbnailImage(fallbackUrl, container);
+      }
+    }
+
+    function displayInstagramHandle(authorName, blockId) {
+      const handleContainer = document.querySelector(`[data-handle-container="${blockId}"]`);
+      if (handleContainer && authorName) {
+        // Extract handle from author name or URL
+        let handle = authorName.trim();
+        if (!handle.startsWith('@')) {
+          handle = '@' + handle;
+        }
+        // Clean up handle (remove spaces, keep only valid characters)
+        handle = handle.replace(/\s+/g, '').replace(/[^@a-zA-Z0-9_.]/g, '');
+        if (handle && handle.length > 1) {
+          handleContainer.textContent = handle;
+        }
+      }
+    }
+
+    function loadThumbnailImage(thumbnailUrl, container) {
+      const img = document.createElement('img');
+      img.src = thumbnailUrl;
+      img.alt = 'Instagram post';
+      img.loading = 'lazy';
+      img.className = 'mitushi-social__thumbnail-img';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      img.style.display = 'block';
+      
+      img.onerror = function() {
+        this.remove();
+      };
+      
+      img.onload = function() {
+        const loadingDiv = container.querySelector('.mitushi-social__thumbnail-loading');
+        if (loadingDiv) {
+          loadingDiv.remove();
+        }
+      };
+      
+      // Remove any existing image first
+      const existingImg = container.querySelector('.mitushi-social__thumbnail-img');
+      if (existingImg) {
+        existingImg.remove();
+      }
+      
+      container.appendChild(img);
     }
 
     // Modal functionality
@@ -522,15 +637,16 @@
       const triggers = document.querySelectorAll('[data-modal-trigger]');
       const closes = document.querySelectorAll('[data-modal-close]');
 
-      // Load thumbnails for all posts
+      // Load thumbnails for all posts (like Instafeed App)
       triggers.forEach(trigger => {
         const postUrl = trigger.getAttribute('data-post-url');
         const container = trigger.querySelector('[data-thumbnail-container]');
         const existingImg = container?.querySelector('.mitushi-social__thumbnail-img');
+        const blockId = container?.getAttribute('data-thumbnail-container');
         
         // Only load thumbnail if no image exists
-        if (postUrl && container && !existingImg) {
-          extractInstagramThumbnail(postUrl, container);
+        if (postUrl && container && !existingImg && blockId) {
+          extractInstagramThumbnail(postUrl, container, blockId);
         }
       });
 
