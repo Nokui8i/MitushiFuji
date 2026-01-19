@@ -52,11 +52,11 @@
             "link": ""
           },
           "blocks": {
-            "image_n9V7wB": {
+            "image_aNmmUf": {
               "type": "image",
               "name": "t:general.image",
               "settings": {
-                "image_ratio": "1/1",
+                "image_ratio": "original",
                 "desktop_width": 100,
                 "mobile_width": 100,
                 "height": "fill",
@@ -66,7 +66,7 @@
             }
           },
           "block_order": [
-            "image_n9V7wB"
+            "image_aNmmUf"
           ]
         },
         "group_pEqw8R": {
