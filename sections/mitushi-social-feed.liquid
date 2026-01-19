@@ -53,24 +53,13 @@
                 aria-label="Open Instagram post"
               >
                 <div class="mitushi-social__thumbnail" data-thumbnail-container="{{ block.id }}">
-                  {% if block.settings.thumbnail_image != blank %}
-                    <img 
-                      src="{{ block.settings.thumbnail_image | image_url: width: 400 }}"
-                      srcset="{{ block.settings.thumbnail_image | image_url: width: 400 }} 1x, {{ block.settings.thumbnail_image | image_url: width: 800 }} 2x"
-                      alt="{{ block.settings.caption | default: 'Instagram post' }}"
-                      loading="lazy"
-                      width="{{ block.settings.thumbnail_image.width }}"
-                      height="{{ block.settings.thumbnail_image.height }}"
-                      class="mitushi-social__thumbnail-img"
-                    >
-                  {% else %}
-                    <div class="mitushi-social__thumbnail-loading">
-                      <svg class="mitushi-social__play-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.3)"/>
-                        <path d="M10 8L16 12L10 16V8Z" fill="white"/>
-                      </svg>
-                    </div>
-                  {% endif %}
+                  <!-- Thumbnail will be loaded automatically from the video/post -->
+                  <div class="mitushi-social__thumbnail-loading">
+                    <svg class="mitushi-social__play-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.3)"/>
+                      <path d="M10 8L16 12L10 16V8Z" fill="white"/>
+                    </svg>
+                  </div>
                   <div class="mitushi-social__play-overlay">
                     <svg class="mitushi-social__play-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="12" cy="12" r="10" fill="rgba(0, 0, 0, 0.5)"/>
@@ -495,9 +484,13 @@
 
 <script>
   (function() {
-    // Extract thumbnail from Instagram (like Instafeed App)
+    // Extract thumbnail from Instagram/TikTok automatically (like Instafeed App)
     function extractInstagramThumbnail(postUrl, container, blockId) {
       if (!postUrl || !container) return;
+      
+      // Check if it's TikTok or Instagram
+      const isTikTok = postUrl.includes('tiktok.com') || postUrl.includes('vm.tiktok.com');
+      const isInstagram = postUrl.includes('instagram.com');
       
       // Method 1: Try to extract from embed code if available
       const embedTemplate = document.getElementById('embed-template-' + blockId);
@@ -508,6 +501,7 @@
           /@([a-zA-Z0-9_.]+)/g,
           /data-instgrm-permalink="[^"]*\/\/([^\/]+)\/([^\/]+)\//,
           /instagram\.com\/([a-zA-Z0-9_.]+)/,
+          /tiktok\.com\/@([a-zA-Z0-9_.]+)/,
           /by\s+([a-zA-Z0-9_.]+)/i
         ];
         
@@ -515,7 +509,7 @@
           const match = embedContent.match(pattern);
           if (match) {
             const handle = match[1] || match[2];
-            if (handle && !handle.includes('instagram.com') && !handle.includes('http')) {
+            if (handle && !handle.includes('instagram.com') && !handle.includes('tiktok.com') && !handle.includes('http')) {
               displayInstagramHandle('@' + handle, blockId);
               break;
             }
@@ -525,8 +519,9 @@
         // Try multiple patterns to find thumbnail in embed code
         const thumbnailPatterns = [
           /thumbnail_url["\s:=]+([^"'\s>]+)/i,
-          /src=["']([^"']*instagram[^"']*\.(jpg|jpeg|png|webp)[^"']*)/i,
-          /background-image:\s*url\(["']?([^"')]+instagram[^"')]+\.(jpg|jpeg|png|webp)[^"')]*)/i
+          /poster=["']([^"']+)/i,
+          /src=["']([^"']*\.(jpg|jpeg|png|webp)[^"']*)/i,
+          /background-image:\s*url\(["']?([^"')]+\.(jpg|jpeg|png|webp)[^"')]*)/i
         ];
         
         for (let pattern of thumbnailPatterns) {
@@ -538,9 +533,22 @@
         }
       }
       
-      // Method 2: Use Instagram oEmbed API with CORS proxy
+      // Method 2: Use oEmbed API with CORS proxy
       const proxyUrl = 'https://api.allorigins.win/raw?url=';
-      const oembedUrl = `https://api.instagram.com/oembed/?url=${encodeURIComponent(postUrl)}&omitscript=true`;
+      let oembedUrl;
+      
+      if (isTikTok) {
+        // TikTok oEmbed
+        oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(postUrl)}`;
+      } else if (isInstagram) {
+        // Instagram oEmbed
+        oembedUrl = `https://api.instagram.com/oembed/?url=${encodeURIComponent(postUrl)}&omitscript=true`;
+      } else {
+        // Try fallback
+        tryFallbackThumbnail(postUrl, container);
+        return;
+      }
+      
       const fullUrl = proxyUrl + encodeURIComponent(oembedUrl);
       
       fetch(fullUrl)
@@ -552,15 +560,15 @@
           if (data && data.thumbnail_url) {
             loadThumbnailImage(data.thumbnail_url, container);
           }
-          // Extract and display Instagram handle from oEmbed response
+          // Extract and display handle from oEmbed response
           if (data) {
             if (data.author_name) {
               displayInstagramHandle(data.author_name, blockId);
             } else if (data.author_url) {
-              // Extract handle from author_url
-              const urlMatch = data.author_url.match(/instagram\.com\/([^\/\?]+)/);
-              if (urlMatch && urlMatch[1]) {
-                displayInstagramHandle('@' + urlMatch[1], blockId);
+              // Extract handle from author_url (Instagram or TikTok)
+              const urlMatch = data.author_url.match(/(instagram|tiktok)\.com\/([^\/\?]+)/);
+              if (urlMatch && urlMatch[2]) {
+                displayInstagramHandle('@' + urlMatch[2], blockId);
               }
             }
           }
@@ -570,18 +578,29 @@
           }
         })
         .catch(error => {
-          console.log('Could not fetch Instagram thumbnail via oEmbed:', error);
+          console.log('Could not fetch thumbnail via oEmbed:', error);
           tryFallbackThumbnail(postUrl, container);
         });
     }
 
     function tryFallbackThumbnail(postUrl, container) {
-      const postIdMatch = postUrl.match(/instagram\.com\/(p|reel)\/([^\/\?]+)/);
-      if (postIdMatch) {
-        const postId = postIdMatch[2];
+      // Try Instagram fallback
+      const instagramMatch = postUrl.match(/instagram\.com\/(p|reel)\/([^\/\?]+)/);
+      if (instagramMatch) {
+        const postId = instagramMatch[2];
         // Try Instagram's media endpoint
         const fallbackUrl = `https://instagram.com/p/${postId}/media/?size=m`;
         loadThumbnailImage(fallbackUrl, container);
+        return;
+      }
+      
+      // Try TikTok fallback
+      const tiktokMatch = postUrl.match(/tiktok\.com\/@[^\/]+\/video\/(\d+)/);
+      if (tiktokMatch) {
+        const videoId = tiktokMatch[1];
+        // TikTok doesn't have a direct thumbnail API, but we can try
+        // The embed code should have the thumbnail
+        console.log('TikTok video ID found:', videoId);
       }
     }
 
@@ -637,15 +656,14 @@
       const triggers = document.querySelectorAll('[data-modal-trigger]');
       const closes = document.querySelectorAll('[data-modal-close]');
 
-      // Load thumbnails for all posts (like Instafeed App)
+      // Load thumbnails for all posts automatically (like Instafeed App)
       triggers.forEach(trigger => {
         const postUrl = trigger.getAttribute('data-post-url');
         const container = trigger.querySelector('[data-thumbnail-container]');
-        const existingImg = container?.querySelector('.mitushi-social__thumbnail-img');
         const blockId = container?.getAttribute('data-thumbnail-container');
         
-        // Only load thumbnail if no image exists
-        if (postUrl && container && !existingImg && blockId) {
+        // Always try to load thumbnail automatically from the video/post
+        if (postUrl && container && blockId) {
           extractInstagramThumbnail(postUrl, container, blockId);
         }
       });
@@ -770,16 +788,10 @@
       "name": "Post (IG / TikTok)",
       "settings": [
         {
-          "type": "image_picker",
-          "id": "thumbnail_image",
-          "label": "Thumbnail image",
-          "info": "Image that will be shown with play button. Should be square (1:1 ratio) for best results."
-        },
-        {
           "type": "textarea",
           "id": "embed_code",
           "label": "Embed code (paste here)",
-          "info": "Paste the official embed code from Instagram or TikTok. Get it from the post → three dots (⋯) → Embed. This will be shown in the modal when clicked."
+          "info": "Paste the official embed code from Instagram or TikTok. Get it from the post → three dots (⋯) → Embed. The thumbnail will be loaded automatically from the video/post."
         },
         {
           "type": "text",
