@@ -69,6 +69,22 @@
 
       <!-- Feed Items Container (populated by JS) -->
       <div class="mitushi-ig-feed__items" style="display: none;"></div>
+
+      <!-- Placeholder Items (Theme Editor Only) -->
+      {% if request.design_mode %}
+        <div class="mitushi-ig-feed__placeholders" style="display: grid;">
+          {% for i in (1..post_limit) %}
+            <div class="mitushi-ig-feed__placeholder-item">
+              <div class="mitushi-ig-feed__placeholder-content">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM12 6C9.79 6 8 7.79 8 10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10C16 7.79 14.21 6 12 6ZM12 12C10.9 12 10 11.1 10 10C10 8.9 10.9 8 12 8C13.1 8 14 8.9 14 10C14 11.1 13.1 12 12 12Z" fill="#999"/>
+                </svg>
+                <span>Preview</span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
   </div>
 </div>
@@ -250,6 +266,80 @@
     display: flex !important;
   }
 
+  /* Placeholder Items (Theme Editor Only) */
+  .mitushi-ig-feed__placeholders {
+    display: none; /* Hidden by default, shown only in Theme Editor via Liquid */
+    grid-template-columns: repeat(var(--ig-columns-mobile), 1fr);
+    gap: var(--ig-gap);
+  }
+
+  /* Show placeholders in Theme Editor */
+  body.shopify-design-mode .mitushi-ig-feed__placeholders,
+  [data-shopify-editor-section] .mitushi-ig-feed__placeholders {
+    display: grid !important;
+  }
+
+  body.shopify-design-mode .mitushi-ig-feed__container--slider .mitushi-ig-feed__placeholders,
+  [data-shopify-editor-section] .mitushi-ig-feed__container--slider .mitushi-ig-feed__placeholders {
+    display: flex !important;
+  }
+
+  @media (min-width: 769px) {
+    .mitushi-ig-feed__placeholders {
+      grid-template-columns: repeat(var(--ig-columns-desktop), 1fr);
+    }
+  }
+
+  .mitushi-ig-feed__container--slider .mitushi-ig-feed__placeholders {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: var(--ig-gap);
+  }
+
+  .mitushi-ig-feed__placeholder-item {
+    aspect-ratio: 1;
+    background: #e5e5e5;
+    border-radius: var(--ig-border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  .mitushi-ig-feed__container--slider .mitushi-ig-feed__placeholder-item {
+    flex: 0 0 calc((100% - (var(--ig-columns-mobile) - 1) * var(--ig-gap)) / var(--ig-columns-mobile));
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 769px) {
+    .mitushi-ig-feed__container--slider .mitushi-ig-feed__placeholder-item {
+      flex: 0 0 calc((100% - (var(--ig-columns-desktop) - 1) * var(--ig-gap)) / var(--ig-columns-desktop));
+    }
+  }
+
+  .mitushi-ig-feed__placeholder-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #999;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .mitushi-ig-feed__placeholder-content svg {
+    opacity: 0.5;
+  }
+
+  /* Hide placeholders when feed loads or in live site */
+  .mitushi-ig-feed__container.loaded .mitushi-ig-feed__placeholders,
+  .mitushi-ig-feed__items:not([style*="display: none"]) ~ .mitushi-ig-feed__placeholders {
+    display: none !important;
+  }
+
   /* Slider scrollbar styling */
   .mitushi-ig-feed__container--slider .mitushi-ig-feed__items::-webkit-scrollbar {
     height: 6px;
@@ -374,8 +464,10 @@
           }
         });
         
-        // Show items, hide skeleton
+        // Show items, hide skeleton and placeholders
         if (skeleton) skeleton.style.display = 'none';
+        const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
+        if (placeholders) placeholders.style.display = 'none';
         itemsContainer.style.display = '';
         container.classList.add('loaded');
         
@@ -385,17 +477,45 @@
         // Show error state
         if (skeleton) skeleton.style.display = 'none';
         if (itemsContainer) itemsContainer.style.display = 'none';
+        const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
+        // Keep placeholders visible in Theme Editor even on error
+        const isThemeEditor = window.Shopify && window.Shopify.designMode;
+        if (placeholders && !isThemeEditor) {
+          placeholders.style.display = 'none';
+        }
         if (errorContainer) {
           errorContainer.style.display = 'block';
         }
       }
     }
     
-    // Load feed when DOM is ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', loadFeed);
+    // Only load feed if not in Theme Editor
+    // In Theme Editor, show placeholders instead
+    const isThemeEditor = window.Shopify && window.Shopify.designMode;
+    
+    if (!isThemeEditor) {
+    // Only load feed if not in Theme Editor
+    // In Theme Editor, show placeholders instead
+    const isThemeEditor = window.Shopify && window.Shopify.designMode;
+    
+    if (!isThemeEditor) {
+      // Load feed when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadFeed);
+      } else {
+        loadFeed();
+      }
     } else {
-      loadFeed();
+      // In Theme Editor: hide skeleton, show placeholders
+      if (skeleton) skeleton.style.display = 'none';
+      const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
+      if (placeholders) placeholders.style.display = '';
+    }
+    } else {
+      // In Theme Editor: hide skeleton, show placeholders
+      if (skeleton) skeleton.style.display = 'none';
+      const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
+      if (placeholders) placeholders.style.display = '';
     }
   })();
 </script>

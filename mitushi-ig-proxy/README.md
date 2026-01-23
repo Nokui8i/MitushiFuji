@@ -31,20 +31,23 @@ mitushi-ig-proxy/
 2. **Vercel account** (free tier is fine)
 3. **Vercel CLI** installed globally: `npm install -g vercel`
 4. **Instagram Business/Creator Account** connected to a Facebook Page
-5. **Instagram Graph API Access Token** and **User ID**
+5. **Meta App** with Facebook Login enabled
 
-### Step 1: Get Instagram API Credentials
+### Step 1: Configure Meta App (One-Time Setup)
 
 1. Go to [Facebook Developers](https://developers.facebook.com/)
-2. Create a new App (or use existing)
-3. Add "Instagram Graph API" product
-4. Get a **User Access Token** with permissions:
-   - `instagram_basic`
-   - `pages_read_engagement`
-   - `pages_show_list`
-5. Get your **Instagram Business Account ID** (User ID)
-   - Use [Graph API Explorer](https://developers.facebook.com/tools/explorer/)
-   - Query: `me/accounts` → find your page → get `instagram_business_account.id`
+2. Select your App (or create new "Business" type app)
+3. Add **"Facebook Login"** product
+4. Go to **Facebook Login → Settings**
+5. Add **Valid OAuth Redirect URIs**:
+   ```
+   https://YOUR-VERCEL-DOMAIN.vercel.app/api/callback
+   ```
+   (You'll update this after first deployment)
+6. Go to **Settings → Basic**
+7. Copy:
+   - **App ID**
+   - **App Secret** (click "Show")
 
 ### Step 2: Deploy to Vercel
 
@@ -60,12 +63,16 @@ vercel login
 # Deploy (follow prompts)
 vercel
 
-# Set environment variables
-vercel env add IG_ACCESS_TOKEN
-# Paste your Instagram access token when prompted
+# Set environment variables (BEFORE connecting)
+vercel env add META_APP_ID
+# Paste your Meta App ID
 
-vercel env add IG_USER_ID
-# Paste your Instagram User ID when prompted
+vercel env add META_APP_SECRET
+# Paste your Meta App Secret
+
+vercel env add META_REDIRECT_URI
+# Paste: https://YOUR-VERCEL-DOMAIN.vercel.app/api/callback
+# (Replace YOUR-VERCEL-DOMAIN with your actual Vercel domain)
 
 # Redeploy to apply env vars
 vercel --prod
@@ -77,12 +84,33 @@ vercel --prod
 2. Click "Add New Project"
 3. Import your Git repository (or upload the `mitushi-ig-proxy` folder)
 4. Go to **Settings → Environment Variables**
-5. Add:
-   - `IG_ACCESS_TOKEN` = Your Instagram access token
-   - `IG_USER_ID` = Your Instagram User ID
+5. Add (BEFORE connecting):
+   - `META_APP_ID` = Your Meta App ID
+   - `META_APP_SECRET` = Your Meta App Secret
+   - `META_REDIRECT_URI` = `https://YOUR-VERCEL-DOMAIN.vercel.app/api/callback`
 6. Deploy
 
-### Step 3: Get Your API Endpoint URL
+### Step 3: Connect Instagram (OAuth Flow - Like Instafeed!)
+
+1. **Update Meta App Redirect URI** (if not done):
+   - Go to Meta App → Facebook Login → Settings
+   - Add: `https://YOUR-VERCEL-DOMAIN.vercel.app/api/callback`
+
+2. **Connect Instagram**:
+   - Open: `https://YOUR-VERCEL-DOMAIN.vercel.app/api/connect`
+   - Click "Connect with Facebook"
+   - Login and approve permissions
+   - You'll see a page with tokens
+
+3. **Add Tokens to Vercel**:
+   - Copy `IG_BUSINESS_ID` and `IG_PAGE_ACCESS_TOKEN` from the success page
+   - Go to Vercel → Settings → Environment Variables
+   - Add:
+     - `IG_BUSINESS_ID` = (from success page)
+     - `IG_PAGE_ACCESS_TOKEN` = (from success page)
+   - Redeploy: `vercel --prod`
+
+### Step 4: Get Your API Endpoint URL
 
 After deployment, Vercel will provide a URL like:
 ```
@@ -95,14 +123,29 @@ https://mitushi-ig-proxy.vercel.app
 ```
 
 Your endpoints will be:
-- Health: `https://mitushi-ig-proxy.vercel.app/api/health`
-- Feed: `https://mitushi-ig-proxy.vercel.app/api/ig-feed`
+- **Connect**: `https://mitushi-ig-proxy.vercel.app/api/connect` (one-time setup)
+- **Callback**: `https://mitushi-ig-proxy.vercel.app/api/callback` (OAuth callback)
+- **Health**: `https://mitushi-ig-proxy.vercel.app/api/health`
+- **Feed (OAuth)**: `https://mitushi-ig-proxy.vercel.app/api/feed` ⭐ **Use this one!**
+- **Feed (Legacy)**: `https://mitushi-ig-proxy.vercel.app/api/ig-feed` (old manual method)
 
 **📝 Note:** This URL is also saved in `DEPLOYED_URL.txt` for quick reference.
 
 ## 🔧 Environment Variables
 
 Set these in Vercel Dashboard → Settings → Environment Variables:
+
+### Required for OAuth Flow (New Method - Recommended)
+
+| Variable | Description | How to Get |
+|----------|-------------|------------|
+| `META_APP_ID` | Meta App ID | Meta App Dashboard → Settings → Basic |
+| `META_APP_SECRET` | Meta App Secret | Meta App Dashboard → Settings → Basic |
+| `META_REDIRECT_URI` | OAuth callback URL | `https://YOUR-DOMAIN.vercel.app/api/callback` |
+| `IG_BUSINESS_ID` | Instagram Business Account ID | Auto-generated after `/api/connect` |
+| `IG_PAGE_ACCESS_TOKEN` | Page Access Token (long-lived) | Auto-generated after `/api/connect` |
+
+### Legacy Method (Manual Tokens)
 
 | Variable | Description | Example |
 |----------|-------------|---------|
@@ -128,7 +171,16 @@ Instagram tokens expire. For production:
 
 ## 🧪 Testing
 
-### 1. Test Health Endpoint
+### 1. Test Connect Endpoint
+
+Open in browser:
+```
+https://mitushi-ig-proxy.vercel.app/api/connect
+```
+
+You should see a "Connect with Facebook" button.
+
+### 2. Test Health Endpoint
 
 ```bash
 curl https://mitushi-ig-proxy.vercel.app/api/health
@@ -144,8 +196,13 @@ Expected response:
 }
 ```
 
-### 2. Test Instagram Feed Endpoint
+### 3. Test Instagram Feed Endpoint (OAuth Method)
 
+```bash
+curl https://mitushi-ig-proxy.vercel.app/api/feed?limit=6
+```
+
+**Or test legacy endpoint:**
 ```bash
 curl https://mitushi-ig-proxy.vercel.app/api/ig-feed?limit=6
 ```
@@ -169,9 +226,14 @@ Expected response:
 }
 ```
 
-### 3. Test in Browser
+### 4. Test in Browser
 
-Open in browser:
+Open in browser (OAuth method):
+```
+https://mitushi-ig-proxy.vercel.app/api/feed?limit=12
+```
+
+**Or legacy method:**
 ```
 https://mitushi-ig-proxy.vercel.app/api/ig-feed?limit=12
 ```
@@ -182,14 +244,14 @@ You should see JSON with `items` array. Check:
 - ✅ Videos/Reels use `thumbnail_url` (check `media_type`)
 - ✅ `permalink` links are valid
 
-### 4. Test Reels/Video Thumbnails
+### 5. Test Reels/Video Thumbnails
 
 1. Ensure your Instagram account has at least one Reel or Video post
 2. Call the API and check response
 3. Verify `media_type` is `"VIDEO"` or `"REELS"`
 4. Verify `image` field contains a thumbnail URL (not video URL)
 
-### 5. Debug Common Issues
+### 6. Debug Common Issues
 
 **Issue: 401 Unauthorized**
 - Token expired or invalid
@@ -224,9 +286,35 @@ Health check endpoint.
 }
 ```
 
-### GET `/api/ig-feed`
+### GET `/api/feed` ⭐ (OAuth Method - Recommended)
 
-Fetches Instagram media feed.
+Fetches Instagram media feed using OAuth tokens.
+
+**Query Parameters:**
+- `limit` (optional): Number of posts to return (default: 12, max: 24)
+
+**Response:**
+```json
+{
+  "items": [
+    {
+      "id": "string",
+      "image": "string (URL)",
+      "permalink": "string (URL)",
+      "media_type": "IMAGE|VIDEO|CAROUSEL_ALBUM",
+      "caption": "string",
+      "timestamp": "string (ISO 8601)"
+    }
+  ],
+  "cached_at": "string (ISO 8601)",
+  "source": "instagram_graph_oauth",
+  "count": number
+}
+```
+
+### GET `/api/ig-feed` (Legacy Method)
+
+Fetches Instagram media feed using manual tokens.
 
 **Query Parameters:**
 - `limit` (optional): Number of posts to return (default: 12, max: 25)
