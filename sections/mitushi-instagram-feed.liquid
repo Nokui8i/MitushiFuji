@@ -598,6 +598,7 @@
       // Store item data for lightbox
       itemEl.dataset.itemId = item.id;
       itemEl.dataset.itemImage = imageUrl;
+      itemEl.dataset.itemVideoUrl = item.video_url || '';
       itemEl.dataset.itemPermalink = item.permalink || '#';
       itemEl.dataset.itemCaption = item.caption || '';
       itemEl.dataset.itemMediaType = item.media_type || 'IMAGE';
@@ -886,9 +887,12 @@
       if (mediaType === 'VIDEO') {
         const video = document.createElement('video');
         video.className = 'mitushi-ig-feed__lightbox-video';
-        video.src = imageUrl.replace(/\.jpg$/, '.mp4').replace(/thumbnail/, 'media');
+        // Use video_url if available, otherwise try to construct from imageUrl
+        const videoUrl = item.dataset.itemVideoUrl || imageUrl.replace(/\.jpg$/, '.mp4').replace(/thumbnail/, 'media');
+        video.src = videoUrl;
         video.controls = true;
         video.autoplay = true;
+        video.playsInline = true;
         content.insertBefore(video, link);
       } else {
         const img = document.createElement('img');

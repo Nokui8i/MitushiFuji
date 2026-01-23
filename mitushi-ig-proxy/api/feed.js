@@ -71,19 +71,28 @@ module.exports = async (req, res) => {
 
     // Normalize items (use thumbnail_url for videos)
     const items = (j.data || []).map(x => {
+      // For videos, prioritize thumbnail_url for display, but keep original media_url for playback
       let imageUrl = x.media_url;
-      if (x.media_type === 'VIDEO' && x.thumbnail_url) {
-        imageUrl = x.thumbnail_url;
-      }
+      let videoUrl = null;
       
-      // Skip videos without thumbnails
-      if (x.media_type === 'VIDEO' && !x.thumbnail_url && x.media_url && x.media_url.toLowerCase().endsWith('.mp4')) {
-        return null;
+      if (x.media_type === 'VIDEO') {
+        // Use thumbnail_url if available, otherwise try to use media_url (might be a frame)
+        if (x.thumbnail_url) {
+          imageUrl = x.thumbnail_url;
+          videoUrl = x.media_url; // Keep original video URL for lightbox
+        } else if (x.media_url && !x.media_url.toLowerCase().endsWith('.mp4')) {
+          // If media_url is not MP4, it might be a thumbnail/frame
+          imageUrl = x.media_url;
+        } else {
+          // Skip videos without thumbnails and with MP4 media_url (can't display as image)
+          return null;
+        }
       }
 
       return {
         id: x.id,
         image: imageUrl,
+        video_url: videoUrl || (x.media_type === 'VIDEO' ? x.media_url : null),
         permalink: x.permalink,
         media_type: x.media_type || 'IMAGE',
         caption: x.caption || '',
