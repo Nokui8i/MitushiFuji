@@ -406,7 +406,11 @@
     
     if (!container) return;
     
-    const feedUrl = container.dataset.feedUrl;
+    let feedUrl = container.dataset.feedUrl;
+    // Use default URL if feed_url is empty
+    if (!feedUrl || feedUrl.trim() === '') {
+      feedUrl = 'https://mitushi-ig-proxy.vercel.app/api/feed';
+    }
     const postLimit = parseInt(container.dataset.postLimit) || 12;
     const itemsContainer = container.querySelector('.mitushi-ig-feed__items');
     const skeleton = container.querySelector('.mitushi-ig-feed__skeleton');
@@ -414,16 +418,6 @@
     
     // Get ratio mode from container style
     const ratioMode = getComputedStyle(container).getPropertyValue('--ig-ratio-mode').trim();
-    
-    if (!feedUrl || feedUrl.trim() === '') {
-      console.warn('MITUSHI IG Feed: No feed URL configured');
-      if (skeleton) skeleton.style.display = 'none';
-      if (errorContainer) {
-        errorContainer.style.display = 'block';
-        errorContainer.querySelector('p').textContent = 'Instagram feed URL not configured. Please set it in Theme Editor.';
-      }
-      return;
-    }
     
     /**
      * Creates a feed item element
@@ -661,7 +655,7 @@
       "type": "url",
       "id": "feed_url",
       "label": "Feed API URL",
-      "default": "https://mitushi-ig-proxy.vercel.app/api/feed",
+      "default": "",
       "info": "Enter your Vercel API endpoint URL. Must start with https:// (e.g., https://mitushi-ig-proxy.vercel.app/api/feed)"
     },
     {
