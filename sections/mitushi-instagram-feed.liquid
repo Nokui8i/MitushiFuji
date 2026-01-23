@@ -485,7 +485,10 @@
      */
     async function loadFeed() {
       try {
+        console.log('MITUSHI IG Feed: Loading feed from', feedUrl);
         const url = `${feedUrl}${feedUrl.includes('?') ? '&' : '?'}limit=${postLimit}`;
+        console.log('MITUSHI IG Feed: Fetching URL', url);
+        
         const response = await fetch(url);
         
         if (!response.ok) {
@@ -493,8 +496,10 @@
         }
         
         const data = await response.json();
+        console.log('MITUSHI IG Feed: Received data', data);
         
         if (!data.items || !Array.isArray(data.items) || data.items.length === 0) {
+          console.warn('MITUSHI IG Feed: No items in response', data);
           throw new Error('No items in feed response');
         }
         
@@ -532,13 +537,15 @@
         }
         
         // Hide placeholders container (not used anymore)
-        const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
-        if (placeholders) placeholders.style.display = 'none';
+        const placeholdersContainer = container.querySelector('.mitushi-ig-feed__placeholders');
+        if (placeholdersContainer) placeholdersContainer.style.display = 'none';
         
         // Show items, hide skeleton
         if (skeleton) skeleton.style.display = 'none';
         itemsContainer.style.display = '';
         container.classList.add('loaded');
+        
+        console.log('MITUSHI IG Feed: Loaded', validItems.length, 'posts');
         
       } catch (error) {
         console.error('MITUSHI IG Feed Error:', error);
@@ -546,7 +553,6 @@
         // Show error state
         if (skeleton) skeleton.style.display = 'none';
         if (itemsContainer) itemsContainer.style.display = 'none';
-        const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
         
         // In Theme Editor: show placeholders on error (to show layout)
         const isThemeEditor = window.Shopify && window.Shopify.designMode;
@@ -570,8 +576,8 @@
         }
         
         // Hide placeholders container (not used anymore)
-        const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
-        if (placeholders) placeholders.style.display = 'none';
+        const placeholdersContainer = container.querySelector('.mitushi-ig-feed__placeholders');
+        if (placeholdersContainer) placeholdersContainer.style.display = 'none';
         
         if (errorContainer) {
           errorContainer.style.display = 'block';
@@ -584,18 +590,39 @@
     // Always load feed, even in Theme Editor, to show real posts
     const isThemeEditor = window.Shopify && window.Shopify.designMode;
     
+    console.log('MITUSHI IG Feed: Initializing, isThemeEditor:', isThemeEditor, 'feedUrl:', feedUrl);
+    
+    // Load feed immediately
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', loadFeed);
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('MITUSHI IG Feed: DOM loaded, calling loadFeed');
+        loadFeed();
+      });
     } else {
+      console.log('MITUSHI IG Feed: DOM ready, calling loadFeed');
       loadFeed();
     }
     
     // In Theme Editor, reload feed when settings change
-    if (isThemeEditor && window.Shopify && window.Shopify.designMode) {
+    if (isThemeEditor) {
       // Listen for section reload events
       document.addEventListener('shopify:section:load', function(event) {
+        console.log('MITUSHI IG Feed: Section load event', event.detail);
         if (event.detail && event.detail.sectionId === '{{ section.id }}') {
-          setTimeout(loadFeed, 100);
+          setTimeout(function() {
+            console.log('MITUSHI IG Feed: Reloading feed after section load');
+            loadFeed();
+          }, 100);
+        }
+      });
+      
+      // Also listen for section select events
+      document.addEventListener('shopify:section:select', function(event) {
+        if (event.detail && event.detail.sectionId === '{{ section.id }}') {
+          setTimeout(function() {
+            console.log('MITUSHI IG Feed: Reloading feed after section select');
+            loadFeed();
+          }, 100);
         }
       });
     }
