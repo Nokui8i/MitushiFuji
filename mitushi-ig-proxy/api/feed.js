@@ -7,20 +7,12 @@
  */
 
 module.exports = async (req, res) => {
-  // CORS: Allow Shopify domains (storefront, editor, preview)
-  const origin = req.headers.origin || '';
-  
-  // Set CORS headers - MUST be set before any response
-  if (origin && origin.endsWith('.myshopify.com')) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
-  
+  // CORS: Always allow all origins for now (to ensure it works)
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Max-Age', '86400');
+  res.setHeader('Vary', 'Origin');
 
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {

@@ -677,7 +677,7 @@
      * Creates a feed item element
      * Returns null if item cannot be displayed (e.g., MP4 without thumbnail)
      */
-    function createFeedItem(item) {
+    function createFeedItem(item, index) {
       // Validate item.image is a non-empty string
       const imageUrl = (item && item.image) ? String(item.image).trim() : '';
       
@@ -688,14 +688,7 @@
       
       const itemEl = document.createElement('div');
       itemEl.className = 'mitushi-ig-feed__item';
-      
-      // Store item data for lightbox
-      itemEl.dataset.itemId = item.id;
-      itemEl.dataset.itemImage = imageUrl;
-      itemEl.dataset.itemVideoUrl = item.video_url || '';
-      itemEl.dataset.itemPermalink = item.permalink || '#';
-      itemEl.dataset.itemCaption = item.caption || '';
-      itemEl.dataset.itemMediaType = item.media_type || 'IMAGE';
+      itemEl.dataset.index = String(index);
       
       // Remove link - we'll handle click with lightbox
       const link = document.createElement('div');
@@ -741,6 +734,12 @@
         link.appendChild(playIcon);
       }
       
+      // Add click handler
+      itemEl.addEventListener('click', function(e) {
+        e.preventDefault();
+        openLightbox(index);
+      });
+      
       itemEl.appendChild(link);
       return itemEl;
     }
@@ -775,12 +774,14 @@
         
         // Create and append items (only non-null items)
         const validItems = [];
-        allFeedItems = []; // Reset for navigation
-        data.items.slice(0, postLimit).forEach(item => {
-          const itemEl = createFeedItem(item);
+        allFeedData = []; // Reset for navigation - store DATA, not DOM elements!
+        data.items.slice(0, postLimit).forEach((item, idx) => {
+          // Store data first
+          allFeedData.push(item);
+          
+          const itemEl = createFeedItem(item, idx);
           if (itemEl) {
             validItems.push(itemEl);
-            allFeedItems.push(itemEl); // Store for lightbox navigation
             itemsContainer.appendChild(itemEl);
           }
         });
@@ -919,28 +920,81 @@
       setTimeout(updateButtons, 100);
     }
     
-    // Store all feed items for navigation
-    let allFeedItems = [];
+    // Store all feed data for navigation (not DOM elements!)
+    let allFeedData = [];
     let currentLightboxIndex = -1;
     
     /**
      * Navigate lightbox to next/previous item
      */
     function navigateLightbox(direction) {
-      if (allFeedItems.length === 0) return;
+      if (allFeedData.length === 0) return;
       
-      currentLightboxIndex += direction;
+      currentLightboxIndex = (currentLightboxIndex + direction + allFeedData.length) % allFeedData.length;
+      renderLightbox();
+      updateNavButtons();
+    }
+    
+    /**
+     * Update navigation buttons state
+     */
+    function updateNavButtons() {
+      const lightbox = document.querySelector('.mitushi-ig-feed__lightbox');
+      if (!lightbox) return;
       
-      // Wrap around
-      if (currentLightboxIndex < 0) {
-        currentLightboxIndex = allFeedItems.length - 1;
-      } else if (currentLightboxIndex >= allFeedItems.length) {
-        currentLightboxIndex = 0;
+      const prevBtn = lightbox.querySelector('.mitushi-ig-feed__lightbox-nav--prev');
+      const nextBtn = lightbox.querySelector('.mitushi-ig-feed__lightbox-nav--next');
+      
+      if (allFeedData.length <= 1) {
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+      } else {
+        if (prevBtn) prevBtn.style.display = 'flex';
+        if (nextBtn) nextBtn.style.display = 'flex';
+      }
+    }
+    
+    /**
+     * Render lightbox content based on current index
+     */
+    function renderLightbox() {
+      if (currentLightboxIndex < 0 || currentLightboxIndex >= allFeedData.length) return;
+      
+      const item = allFeedData[currentLightboxIndex];
+      const lightbox = document.querySelector('.mitushi-ig-feed__lightbox');
+      if (!lightbox) return;
+      
+      const content = lightbox.querySelector('.mitushi-ig-feed__lightbox-content');
+      const link = lightbox.querySelector('.mitushi-ig-feed__lightbox-link');
+      if (!content) return;
+      
+      // Clear previous content
+      const existingMedia = content.querySelector('.mitushi-ig-feed__lightbox-image, .mitushi-ig-feed__lightbox-video');
+      if (existingMedia) existingMedia.remove();
+      
+      // Create media element based on type
+      if (item.media_type === 'VIDEO' && item.video_url) {
+        const video = document.createElement('video');
+        video.className = 'mitushi-ig-feed__lightbox-video';
+        video.src = item.video_url;
+        video.controls = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        content.insertBefore(video, link);
+      } else {
+        const img = document.createElement('img');
+        img.className = 'mitushi-ig-feed__lightbox-image';
+        img.src = item.image;
+        img.alt = item.caption || 'Instagram post';
+        content.insertBefore(img, link);
       }
       
-      const item = allFeedItems[currentLightboxIndex];
-      if (item) {
-        openLightbox(item);
+      // Update link
+      if (item.permalink && item.permalink !== '#') {
+        link.href = item.permalink;
+        link.style.display = 'block';
+      } else {
+        link.style.display = 'none';
       }
     }
     
@@ -1012,76 +1066,21 @@
         });
       }
       
-      // Add click handlers to all feed items
-      itemsContainer.addEventListener('click', function(e) {
-        const item = e.target.closest('.mitushi-ig-feed__item');
-        if (!item) return;
-        
-        e.preventDefault();
-        openLightbox(item);
-      });
+      // Click handlers are now attached in createFeedItem() - no need for delegation here
     }
     
     /**
-     * Open lightbox with item
+     * Open lightbox with item index
      */
-    function openLightbox(item) {
+    function openLightbox(index) {
+      if (index < 0 || index >= allFeedData.length) return;
+      
+      currentLightboxIndex = index;
       const lightbox = document.querySelector('.mitushi-ig-feed__lightbox');
       if (!lightbox) return;
       
-      // Find current index for navigation
-      currentLightboxIndex = allFeedItems.indexOf(item);
-      if (currentLightboxIndex === -1) {
-        currentLightboxIndex = 0;
-      }
-      
-      const imageUrl = item.dataset.itemImage;
-      const permalink = item.dataset.itemPermalink;
-      const mediaType = item.dataset.itemMediaType;
-      const content = lightbox.querySelector('.mitushi-ig-feed__lightbox-content');
-      const link = lightbox.querySelector('.mitushi-ig-feed__lightbox-link');
-      const prevBtn = lightbox.querySelector('.mitushi-ig-feed__lightbox-nav--prev');
-      const nextBtn = lightbox.querySelector('.mitushi-ig-feed__lightbox-nav--next');
-      
-      // Update navigation buttons
-      if (allFeedItems.length <= 1) {
-        if (prevBtn) prevBtn.style.display = 'none';
-        if (nextBtn) nextBtn.style.display = 'none';
-      } else {
-        if (prevBtn) prevBtn.style.display = 'flex';
-        if (nextBtn) nextBtn.style.display = 'flex';
-      }
-      
-      // Clear previous content
-      const existingMedia = content.querySelector('.mitushi-ig-feed__lightbox-image, .mitushi-ig-feed__lightbox-video');
-      if (existingMedia) existingMedia.remove();
-      
-      // Create media element
-      if (mediaType === 'VIDEO') {
-        const video = document.createElement('video');
-        video.className = 'mitushi-ig-feed__lightbox-video';
-        // Use video_url if available, otherwise try to construct from imageUrl
-        const videoUrl = item.dataset.itemVideoUrl || imageUrl.replace(/\.jpg$/, '.mp4').replace(/thumbnail/, 'media');
-        video.src = videoUrl;
-        video.controls = true;
-        video.autoplay = true;
-        video.playsInline = true;
-        content.insertBefore(video, link);
-      } else {
-        const img = document.createElement('img');
-        img.className = 'mitushi-ig-feed__lightbox-image';
-        img.src = imageUrl;
-        img.alt = item.dataset.itemCaption || 'Instagram post';
-        content.insertBefore(img, link);
-      }
-      
-      // Update link
-      if (permalink && permalink !== '#') {
-        link.href = permalink;
-        link.style.display = 'block';
-      } else {
-        link.style.display = 'none';
-      }
+      renderLightbox();
+      updateNavButtons();
       
       // Show lightbox
       lightbox.classList.add('active');
