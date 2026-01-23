@@ -1,6 +1,11 @@
 {
   "buildCommand": "echo 'No build required'",
   "outputDirectory": ".",
+  "functions": {
+    "api/feed.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "headers": [
     {
       "source": "/api/(.*)",
