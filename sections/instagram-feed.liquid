@@ -1,6 +1,6 @@
 {%- liquid
   assign section_id = 'instagram-feed-' | append: section.id
-  assign feed_url = section.settings.feed_url | default: 'https://mitushi-ig-proxy.vercel.app/api/feed'
+  assign feed_url = section.settings.feed_url | default: 'https://mitushi-ig-proxy.vercel.app/api/ig-feed'
   assign heading = section.settings.heading | default: 'Follow Us @mitushi'
   assign layout_mode = section.settings.layout_mode | default: 'grid'
   assign columns_desktop = section.settings.columns_desktop | default: 4
@@ -256,7 +256,7 @@
   
   if (!container) return;
   
-  const feedUrl = container.dataset.feedUrl || 'https://mitushi-ig-proxy.vercel.app/api/feed';
+  let feedUrl = container.dataset.feedUrl || 'https://mitushi-ig-proxy.vercel.app/api/ig-feed';
   const postLimit = parseInt(container.dataset.postLimit) || 12;
   const itemsContainer = container.querySelector('.instagram-feed__items');
   const skeleton = container.querySelector('.instagram-feed__skeleton');
@@ -454,7 +454,7 @@
       "type": "text",
       "id": "feed_url",
       "label": "Feed API URL",
-      "default": "https://mitushi-ig-proxy.vercel.app/api/feed"
+      "default": "https://mitushi-ig-proxy.vercel.app/api/ig-feed"
     },
     {
       "type": "select",
