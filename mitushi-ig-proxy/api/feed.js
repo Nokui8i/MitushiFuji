@@ -9,30 +9,22 @@
 module.exports = async (req, res) => {
   // CORS: Allow Shopify domains (storefront, editor, preview)
   const origin = req.headers.origin || '';
-  let allowedOrigin = '*';
-  
-  // If origin is from Shopify, use it; otherwise allow all (for testing)
-  if (origin && origin.endsWith('.myshopify.com')) {
-    allowedOrigin = origin;
-  } else if (origin) {
-    // Allow any origin for now (can restrict later)
-    allowedOrigin = origin;
-  }
   
   // Set CORS headers - MUST be set before any response
-  res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+  if (origin && origin.endsWith('.myshopify.com')) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+  
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Max-Age', '86400');
-  
-  // Only set credentials if not using wildcard
-  if (allowedOrigin !== '*') {
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  }
 
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
-    res.status(204).end();
+    res.status(200).end();
     return;
   }
 
@@ -58,7 +50,7 @@ module.exports = async (req, res) => {
     }
 
     const limit = Math.min(parseInt(req.query.limit || '12', 10), 24);
-    const fields = 'id,caption,media_type,media_url,permalink,thumbnail_url,timestamp';
+    const fields = 'id,caption,media_type,media_url,permalink,thumbnail_url,product_type,timestamp';
 
     const url =
       `https://graph.facebook.com/v24.0/${encodeURIComponent(IG_BUSINESS_ID)}/media` +
@@ -79,20 +71,21 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // Normalize items (use thumbnail_url for videos)
+    // Normalize items (use thumbnail_url for videos/reels)
     const items = (j.data || []).map(x => {
-      // For videos, prioritize thumbnail_url for display, but keep original media_url for playback
+      // For videos/reels, use thumbnail_url for display, media_url for playback
       let imageUrl = x.media_url;
       let videoUrl = null;
       
       if (x.media_type === 'VIDEO') {
-        // Use thumbnail_url if available, otherwise try to use media_url (might be a frame)
+        // Always use thumbnail_url for videos if available
         if (x.thumbnail_url) {
           imageUrl = x.thumbnail_url;
           videoUrl = x.media_url; // Keep original video URL for lightbox
         } else if (x.media_url && !x.media_url.toLowerCase().endsWith('.mp4')) {
           // If media_url is not MP4, it might be a thumbnail/frame
           imageUrl = x.media_url;
+          videoUrl = x.media_url; // Same URL for both
         } else {
           // Skip videos without thumbnails and with MP4 media_url (can't display as image)
           return null;
@@ -105,6 +98,7 @@ module.exports = async (req, res) => {
         video_url: videoUrl || (x.media_type === 'VIDEO' ? x.media_url : null),
         permalink: x.permalink,
         media_type: x.media_type || 'IMAGE',
+        product_type: x.product_type || null,
         caption: x.caption || '',
         timestamp: x.timestamp || null
       };
