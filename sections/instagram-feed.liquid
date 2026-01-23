@@ -44,14 +44,14 @@
 
     {% if show_follow_button %}
       <div class="instagram-feed__follow" style="text-align: {{ section.settings.heading_alignment }}; margin-bottom: 2rem; --button-font-size: {{ button_font_size }}%;">
-        <a 
-          href="https://instagram.com/{{ instagram_handle }}" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="instagram-feed__follow-btn"
-        >
-          {{ follow_button_text }}
-        </a>
+                    <a 
+                      href="https://www.instagram.com/{{ instagram_handle }}/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="instagram-feed__follow-btn"
+                    >
+                      {{ follow_button_text }}
+                    </a>
       </div>
     {% endif %}
 
@@ -297,11 +297,21 @@
       link.appendChild(playIcon);
     }
     
-    itemEl.addEventListener('click', function() {
-      if (item.permalink) {
-        window.open(item.permalink, '_blank');
-      }
-    });
+    if (item.permalink) {
+      const linkEl = document.createElement('a');
+      linkEl.href = item.permalink;
+      linkEl.target = '_blank';
+      linkEl.rel = 'noopener noreferrer';
+      linkEl.style.textDecoration = 'none';
+      linkEl.style.color = 'inherit';
+      linkEl.style.display = 'block';
+      linkEl.style.width = '100%';
+      linkEl.style.height = '100%';
+      linkEl.appendChild(link);
+      itemEl.appendChild(linkEl);
+    } else {
+      itemEl.appendChild(link);
+    }
     
     itemEl.appendChild(link);
     return itemEl;
