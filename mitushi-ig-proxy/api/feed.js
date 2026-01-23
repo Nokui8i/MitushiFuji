@@ -9,16 +9,26 @@
 module.exports = async (req, res) => {
   // CORS: Allow Shopify domains (storefront, editor, preview)
   const origin = req.headers.origin || '';
-  const allowedOrigin = origin && origin.endsWith('.myshopify.com') 
-    ? origin 
-    : 'https://mitushii.myshopify.com';
+  let allowedOrigin = '*';
+  
+  // If origin is from Shopify, use it; otherwise allow all (for testing)
+  if (origin && origin.endsWith('.myshopify.com')) {
+    allowedOrigin = origin;
+  } else if (origin) {
+    // Allow any origin for now (can restrict later)
+    allowedOrigin = origin;
+  }
   
   // Set CORS headers - MUST be set before any response
   res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Max-Age', '86400');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  
+  // Only set credentials if not using wildcard
+  if (allowedOrigin !== '*') {
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
 
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
