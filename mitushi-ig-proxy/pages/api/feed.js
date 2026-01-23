@@ -92,6 +92,18 @@ module.exports = async (req, res) => {
         else if (x.media_url && !x.media_url.toLowerCase().endsWith('.mp4')) {
           imageUrl = x.media_url;
           videoUrl = x.media_url;
+        }
+        // Priority 4: For Reels, try to construct thumbnail URL from video URL
+        else if (x.media_url && x.media_url.includes('cdninstagram.com')) {
+          // Sometimes Instagram CDN URLs can be converted to thumbnail URLs
+          // But if it's MP4, we can't use it as image
+          if (x.media_url.toLowerCase().endsWith('.mp4')) {
+            // Skip videos without thumbnails
+            return null;
+          } else {
+            imageUrl = x.media_url;
+            videoUrl = x.media_url;
+          }
         } else {
           // Skip videos without thumbnails and with MP4 media_url (can't display as image)
           return null;
