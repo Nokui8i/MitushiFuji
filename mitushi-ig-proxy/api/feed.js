@@ -7,10 +7,11 @@
  */
 
 module.exports = async (req, res) => {
-  // Set CORS headers
+  // Set CORS headers - MUST be set before any response
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Max-Age', '86400');
 
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -20,7 +21,8 @@ module.exports = async (req, res) => {
 
   // Only allow GET
   if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
   }
 
   try {
@@ -29,11 +31,12 @@ module.exports = async (req, res) => {
     const PAGE_TOKEN = (process.env.IG_PAGE_ACCESS_TOKEN || '').trim();
 
     if (!IG_BUSINESS_ID || !PAGE_TOKEN) {
-      return res.status(500).json({
+      res.status(500).json({
         error: 'Missing environment variables',
         required: ['IG_BUSINESS_ID', 'IG_PAGE_ACCESS_TOKEN'],
         message: 'Please run /api/connect first to set up tokens'
       });
+      return;
     }
 
     const limit = Math.min(parseInt(req.query.limit || '12', 10), 24);
@@ -49,11 +52,12 @@ module.exports = async (req, res) => {
     const j = await r.json();
     
     if (!r.ok) {
-      return res.status(r.status).json({ 
+      res.status(r.status).json({ 
         error: 'Instagram API error', 
         details: j,
         message: j.error?.message || 'Unknown error'
       });
+      return;
     }
 
     // Normalize items (use thumbnail_url for videos)
@@ -82,17 +86,20 @@ module.exports = async (req, res) => {
     res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
     res.setHeader('Content-Type', 'application/json');
     
-    return res.status(200).json({
+    res.status(200).json({
       items,
       cached_at: new Date().toISOString(),
       source: 'instagram_graph_oauth',
       count: items.length
     });
+    return;
   } catch (e) {
     console.error('Feed error:', e);
-    return res.status(500).json({ 
+    // CORS headers already set at the top
+    res.status(500).json({ 
       error: 'Server error', 
       details: String(e) 
     });
+    return;
   }
 };
