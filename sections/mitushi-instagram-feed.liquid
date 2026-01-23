@@ -713,10 +713,20 @@
         };
       }
       
-      // Handle image load error
+      // Handle image load error - try to load with different approach
       img.onerror = function() {
-        this.style.display = 'none';
-        itemEl.style.background = '#f0f0f0';
+        console.warn('MITUSHI IG Feed: Image failed to load:', imageUrl);
+        // For videos, try to show placeholder instead of hiding
+        if (item.media_type === 'VIDEO' || item.product_type === 'REELS') {
+          this.style.display = 'none';
+          itemEl.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+          itemEl.style.display = 'flex';
+          itemEl.style.alignItems = 'center';
+          itemEl.style.justifyContent = 'center';
+        } else {
+          this.style.display = 'none';
+          itemEl.style.background = '#f0f0f0';
+        }
       };
       
       link.appendChild(img);
@@ -749,13 +759,37 @@
      */
     async function loadFeed() {
       // Define url outside try block so it's available in catch
-      const url = `${feedUrl}${feedUrl.includes('?') ? '&' : '?'}limit=${postLimit}`;
+      let url = `${feedUrl}${feedUrl.includes('?') ? '&' : '?'}limit=${postLimit}`;
       
       try {
         console.log('MITUSHI IG Feed: Loading feed from', feedUrl);
         console.log('MITUSHI IG Feed: Fetching URL', url);
         
-        const response = await fetch(url);
+        let response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          mode: 'cors',
+          credentials: 'omit'
+        });
+        
+        // If 404, try fallback endpoint
+        if (response.status === 404 && feedUrl.includes('/api/feed')) {
+          const fallbackUrl = feedUrl.replace('/api/feed', '/api/ig-feed');
+          console.log('MITUSHI IG Feed: 404 error, trying fallback:', fallbackUrl);
+          url = `${fallbackUrl}${fallbackUrl.includes('?') ? '&' : '?'}limit=${postLimit}`;
+          response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            mode: 'cors',
+            credentials: 'omit'
+          });
+        }
         
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -829,8 +863,14 @@
           message: error.message,
           stack: error.stack,
           feedUrl: feedUrl,
-          url: url
+          url: url,
+          errorType: error.name || 'Unknown'
         });
+        
+        // Check if it's a CORS error
+        if (error.message && (error.message.includes('CORS') || error.message.includes('Failed to fetch') || error.message.includes('blocked'))) {
+          console.error('MITUSHI IG Feed: CORS error detected. Please check API CORS configuration.');
+        }
         
         // Show error state
         if (skeleton) skeleton.style.display = 'none';
@@ -1151,7 +1191,7 @@
 
 {% schema %}
 {
-  "name": "MITUSHI Instagram Feed",
+  "name": "Instagram Feed",
   "tag": "section",
   "class": "mitushi-instagram-feed-section",
   "settings": [
@@ -1368,7 +1408,7 @@
   ],
   "presets": [
     {
-      "name": "MITUSHI Instagram Feed"
+      "name": "Instagram Feed"
     }
   ]
 }
