@@ -1,4 +1,6 @@
 {
+  "buildCommand": "echo 'No build required'",
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "/api/(.*)",
@@ -16,6 +18,12 @@
           "value": "Content-Type"
         }
       ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/feed",
+      "destination": "/api/feed.js"
     }
   ]
 }
