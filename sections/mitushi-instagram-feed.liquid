@@ -13,6 +13,20 @@
   assign instagram_handle = section.settings.instagram_handle | default: 'mitushi'
   assign heading_font_size = section.settings.heading_font_size | default: 100
   assign button_font_size = section.settings.button_font_size | default: 100
+  assign media_ratio = section.settings.media_ratio | default: '1/1'
+  
+  # Calculate ratio value for CSS
+  assign ratio_value = '1'
+  case media_ratio
+    when '1/1'
+      assign ratio_value = '1'
+    when '2/3'
+      assign ratio_value = '0.667'
+    when '3/2'
+      assign ratio_value = '1.5'
+    when 'auto'
+      assign ratio_value = 'auto'
+  endcase
 -%}
 
 <div 
@@ -57,6 +71,8 @@
         --ig-border-radius: {{ border_radius }}px;
         --ig-columns-desktop: {{ columns_desktop }};
         --ig-columns-mobile: {{ columns_mobile }};
+        --ig-ratio: {{ ratio_value }};
+        --ig-ratio-mode: {{ media_ratio }};
       "
     >
       <!-- Skeleton Loading State -->
@@ -155,13 +171,25 @@
   /* Feed Item */
   .mitushi-ig-feed__item {
     position: relative;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: var(--ig-ratio);
     border-radius: var(--ig-border-radius);
     overflow: hidden;
     background: #f5f5f5;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     will-change: transform;
+  }
+
+  /* Auto ratio - use image's natural aspect ratio */
+  .mitushi-ig-feed__item[data-ratio-auto="true"] {
+    aspect-ratio: var(--item-aspect-ratio, 1);
+    height: auto;
+  }
+
+  .mitushi-ig-feed__item[data-ratio-auto="true"] .mitushi-ig-feed__item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Show full image without cropping */
   }
 
   .mitushi-ig-feed__item:hover {
@@ -229,7 +257,7 @@
   }
 
   .mitushi-ig-feed__skeleton-item {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: var(--ig-ratio);
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s ease-in-out infinite;
@@ -303,7 +331,7 @@
 
   /* Placeholder Items (Theme Editor Only - added directly to itemsContainer) */
   .mitushi-ig-feed__placeholder-item {
-    aspect-ratio: 1;
+    aspect-ratio: var(--ig-ratio);
     background: #e5e5e5;
     border-radius: var(--ig-border-radius);
     display: flex;
@@ -384,6 +412,9 @@
     const skeleton = container.querySelector('.mitushi-ig-feed__skeleton');
     const errorContainer = container.querySelector('.mitushi-ig-feed__error');
     
+    // Get ratio mode from container style
+    const ratioMode = getComputedStyle(container).getPropertyValue('--ig-ratio-mode').trim();
+    
     if (!feedUrl || feedUrl.trim() === '') {
       console.warn('MITUSHI IG Feed: No feed URL configured');
       if (skeleton) skeleton.style.display = 'none';
@@ -423,6 +454,17 @@
       img.className = 'mitushi-ig-feed__item-image';
       img.loading = 'lazy';
       img.decoding = 'async';
+      
+      // Handle auto ratio - use image's natural aspect ratio
+      if (ratioMode === 'auto') {
+        itemEl.setAttribute('data-ratio-auto', 'true');
+        img.onload = function() {
+          if (this.naturalWidth && this.naturalHeight) {
+            const aspectRatio = this.naturalWidth / this.naturalHeight;
+            itemEl.style.setProperty('--item-aspect-ratio', aspectRatio);
+          }
+        };
+      }
       
       // Handle image load error
       img.onerror = function() {
@@ -545,10 +587,23 @@
     
     // Load feed in both Theme Editor and live site
     // In Theme Editor, placeholders will be added dynamically if needed
+    // Always load feed, even in Theme Editor, to show real posts
+    const isThemeEditor = window.Shopify && window.Shopify.designMode;
+    
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', loadFeed);
     } else {
       loadFeed();
+    }
+    
+    // In Theme Editor, reload feed when settings change
+    if (isThemeEditor && window.Shopify && window.Shopify.designMode) {
+      // Listen for section reload events
+      document.addEventListener('shopify:section:load', function(event) {
+        if (event.detail && event.detail.sectionId === '{{ section.id }}') {
+          setTimeout(loadFeed, 100);
+        }
+      });
     }
   })();
 </script>
@@ -662,6 +717,30 @@
       "step": 2,
       "unit": "px",
       "default": 12
+    },
+    {
+      "type": "select",
+      "id": "media_ratio",
+      "label": "Media ratio",
+      "default": "1/1",
+      "options": [
+        {
+          "value": "1/1",
+          "label": "Square"
+        },
+        {
+          "value": "2/3",
+          "label": "Portrait 2:3"
+        },
+        {
+          "value": "3/2",
+          "label": "Landscape 3:2"
+        },
+        {
+          "value": "auto",
+          "label": "Adapt to image"
+        }
+      ]
     },
     {
       "type": "range",
