@@ -641,9 +641,11 @@
      * Fetches and renders the Instagram feed
      */
     async function loadFeed() {
+      // Define url outside try block so it's available in catch
+      const url = `${feedUrl}${feedUrl.includes('?') ? '&' : '?'}limit=${postLimit}`;
+      
       try {
         console.log('MITUSHI IG Feed: Loading feed from', feedUrl);
-        const url = `${feedUrl}${feedUrl.includes('?') ? '&' : '?'}limit=${postLimit}`;
         console.log('MITUSHI IG Feed: Fetching URL', url);
         
         const response = await fetch(url);
