@@ -174,7 +174,7 @@
         "desktop_position": "bottom-xs",
         "desktop_position_vertical": "center-xs",
         "desktop_gap": 12,
-        "width": 50,
+        "width": 37,
         "enable_sticky_popup": false,
         "sticky_popup_text": "Get 20% off",
         "sticky_popup_alignment": "right",
