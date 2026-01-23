@@ -314,32 +314,6 @@
         "remove_padding_top": false,
         "remove_padding_bottom": false
       }
-    },
-    "instagram_feed_edkAjk": {
-      "type": "instagram-feed",
-      "name": "Instagram Feed",
-      "settings": {
-        "heading": "Follow Us @mitushi.studios",
-        "heading_font_size": 100,
-        "heading_alignment": "center",
-        "description": "",
-        "feed_url": "https://mitushi-ig-proxy.vercel.app/api/feed",
-        "layout_mode": "grid",
-        "columns_desktop": 4,
-        "columns_mobile": 2,
-        "gap_size": 16,
-        "border_radius": 12,
-        "media_ratio": "1/1",
-        "post_limit": 12,
-        "show_follow_button": true,
-        "follow_button_text": "Follow @mitushi.studios",
-        "button_font_size": 85,
-        "instagram_handle": "mitushi.studios",
-        "error_message": "Unable to load Instagram feed. Please try again later.",
-        "color_scheme": "default",
-        "remove_padding_top": false,
-        "remove_padding_bottom": false
-      }
     }
   },
   "order": [
@@ -350,7 +324,6 @@
     "product_hotspots_znJJMA",
     "video_banner_xE4peK",
     "running_content_WeVz9x",
-    "1768841045d7c09c5d",
-    "instagram_feed_edkAjk"
+    "1768841045d7c09c5d"
   ]
 }

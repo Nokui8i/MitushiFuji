@@ -27,3 +27,6 @@ node_modules/
 # Environment files
 .env
 .env.local
+
+# GitHub Actions secrets (keep this file, but secrets are in GitHub)
+# .github/workflows/shopify-deploy.yml
