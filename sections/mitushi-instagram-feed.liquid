@@ -547,6 +547,100 @@
     background: rgba(255, 255, 255, 0.3);
     transform: translateX(-50%) translateY(-2px);
   }
+
+  /* Play icon for videos/reels */
+  .mitushi-ig-feed__item-play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.9;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .mitushi-ig-feed__item:hover .mitushi-ig-feed__item-play-icon {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .mitushi-ig-feed__item-play-icon svg {
+    width: 48px;
+    height: 48px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+
+  @media (max-width: 768px) {
+    .mitushi-ig-feed__item-play-icon svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  /* Lightbox navigation buttons */
+  .mitushi-ig-feed__lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10001;
+    backdrop-filter: blur(10px);
+  }
+
+  .mitushi-ig-feed__lightbox-nav:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .mitushi-ig-feed__lightbox-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .mitushi-ig-feed__lightbox-nav--prev {
+    left: 20px;
+  }
+
+  .mitushi-ig-feed__lightbox-nav--next {
+    right: 20px;
+  }
+
+  .mitushi-ig-feed__lightbox-nav svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .mitushi-ig-feed__lightbox-nav {
+      width: 40px;
+      height: 40px;
+    }
+
+    .mitushi-ig-feed__lightbox-nav--prev {
+      left: 10px;
+    }
+
+    .mitushi-ig-feed__lightbox-nav--next {
+      right: 10px;
+    }
+
+    .mitushi-ig-feed__lightbox-nav svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
 </style>
 
 <script>
@@ -634,12 +728,17 @@
       
       link.appendChild(img);
       
-      // Optional: Add media type badge for videos
-      if (item.media_type === 'VIDEO') {
-        const badge = document.createElement('span');
-        badge.className = 'mitushi-ig-feed__item-badge';
-        badge.textContent = 'Video';
-        itemEl.appendChild(badge);
+      // Add play icon for videos/reels
+      if (item.media_type === 'VIDEO' || item.product_type === 'REELS') {
+        const playIcon = document.createElement('div');
+        playIcon.className = 'mitushi-ig-feed__item-play-icon';
+        playIcon.innerHTML = `
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="24" fill="rgba(0, 0, 0, 0.6)"/>
+            <path d="M18 16L32 24L18 32V16Z" fill="white"/>
+          </svg>
+        `;
+        link.appendChild(playIcon);
       }
       
       itemEl.appendChild(link);
@@ -676,10 +775,12 @@
         
         // Create and append items (only non-null items)
         const validItems = [];
+        allFeedItems = []; // Reset for navigation
         data.items.slice(0, postLimit).forEach(item => {
           const itemEl = createFeedItem(item);
           if (itemEl) {
             validItems.push(itemEl);
+            allFeedItems.push(itemEl); // Store for lightbox navigation
             itemsContainer.appendChild(itemEl);
           }
         });
@@ -818,6 +919,31 @@
       setTimeout(updateButtons, 100);
     }
     
+    // Store all feed items for navigation
+    let allFeedItems = [];
+    let currentLightboxIndex = -1;
+    
+    /**
+     * Navigate lightbox to next/previous item
+     */
+    function navigateLightbox(direction) {
+      if (allFeedItems.length === 0) return;
+      
+      currentLightboxIndex += direction;
+      
+      // Wrap around
+      if (currentLightboxIndex < 0) {
+        currentLightboxIndex = allFeedItems.length - 1;
+      } else if (currentLightboxIndex >= allFeedItems.length) {
+        currentLightboxIndex = 0;
+      }
+      
+      const item = allFeedItems[currentLightboxIndex];
+      if (item) {
+        openLightbox(item);
+      }
+    }
+    
     /**
      * Initialize lightbox modal
      */
@@ -828,6 +954,16 @@
         lightbox = document.createElement('div');
         lightbox.className = 'mitushi-ig-feed__lightbox';
         lightbox.innerHTML = `
+          <button class="mitushi-ig-feed__lightbox-nav mitushi-ig-feed__lightbox-nav--prev" aria-label="Previous">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="mitushi-ig-feed__lightbox-nav mitushi-ig-feed__lightbox-nav--next" aria-label="Next">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
           <div class="mitushi-ig-feed__lightbox-content">
             <button class="mitushi-ig-feed__lightbox-close" aria-label="Close">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -848,10 +984,30 @@
           }
         });
         
-        // Close on Escape key
+        // Navigation buttons
+        const prevBtn = lightbox.querySelector('.mitushi-ig-feed__lightbox-nav--prev');
+        const nextBtn = lightbox.querySelector('.mitushi-ig-feed__lightbox-nav--next');
+        
+        prevBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          navigateLightbox(-1);
+        });
+        
+        nextBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          navigateLightbox(1);
+        });
+        
+        // Keyboard navigation
         document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+          if (!lightbox.classList.contains('active')) return;
+          
+          if (e.key === 'Escape') {
             closeLightbox();
+          } else if (e.key === 'ArrowLeft') {
+            navigateLightbox(-1);
+          } else if (e.key === 'ArrowRight') {
+            navigateLightbox(1);
           }
         });
       }
@@ -873,11 +1029,28 @@
       const lightbox = document.querySelector('.mitushi-ig-feed__lightbox');
       if (!lightbox) return;
       
+      // Find current index for navigation
+      currentLightboxIndex = allFeedItems.indexOf(item);
+      if (currentLightboxIndex === -1) {
+        currentLightboxIndex = 0;
+      }
+      
       const imageUrl = item.dataset.itemImage;
       const permalink = item.dataset.itemPermalink;
       const mediaType = item.dataset.itemMediaType;
       const content = lightbox.querySelector('.mitushi-ig-feed__lightbox-content');
       const link = lightbox.querySelector('.mitushi-ig-feed__lightbox-link');
+      const prevBtn = lightbox.querySelector('.mitushi-ig-feed__lightbox-nav--prev');
+      const nextBtn = lightbox.querySelector('.mitushi-ig-feed__lightbox-nav--next');
+      
+      // Update navigation buttons
+      if (allFeedItems.length <= 1) {
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+      } else {
+        if (prevBtn) prevBtn.style.display = 'flex';
+        if (nextBtn) nextBtn.style.display = 'flex';
+      }
       
       // Clear previous content
       const existingMedia = content.querySelector('.mitushi-ig-feed__lightbox-image, .mitushi-ig-feed__lightbox-video');
