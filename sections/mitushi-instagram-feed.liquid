@@ -549,6 +549,12 @@
         
       } catch (error) {
         console.error('MITUSHI IG Feed Error:', error);
+        console.error('MITUSHI IG Feed Error Details:', {
+          message: error.message,
+          stack: error.stack,
+          feedUrl: feedUrl,
+          url: url
+        });
         
         // Show error state
         if (skeleton) skeleton.style.display = 'none';
