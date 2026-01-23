@@ -7,12 +7,14 @@ https://mitushi-ig-proxy.vercel.app
 Endpoints:
 ----------
 Health Check: https://mitushi-ig-proxy.vercel.app/api/health
-Feed API:     https://mitushi-ig-proxy.vercel.app/api/ig-feed
+Feed API (OAuth): https://mitushi-ig-proxy.vercel.app/api/feed
+Feed API (Legacy): https://mitushi-ig-proxy.vercel.app/api/ig-feed
+Connect: https://mitushi-ig-proxy.vercel.app/api/connect
 
 For Shopify:
 ------------
 Use this URL in Theme Editor → Feed API URL:
-https://mitushi-ig-proxy.vercel.app/api/ig-feed
+https://mitushi-ig-proxy.vercel.app/api/feed
 
 Deployed: January 2026
 Status: Production

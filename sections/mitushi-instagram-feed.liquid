@@ -11,6 +11,8 @@
   assign show_follow_button = section.settings.show_follow_button
   assign follow_button_text = section.settings.follow_button_text | default: 'Follow @mitushi'
   assign instagram_handle = section.settings.instagram_handle | default: 'mitushi'
+  assign heading_font_size = section.settings.heading_font_size | default: 100
+  assign button_font_size = section.settings.button_font_size | default: 100
 -%}
 
 <div 
@@ -22,16 +24,18 @@
 >
   <div class="ctnr">
     {% if heading != blank %}
-      {% render 'section-header', 
-        content_align: section.settings.heading_alignment, 
-        heading: heading, 
-        description: section.settings.description, 
-        section: section 
-      %}
+      <div class="mitushi-ig-feed__heading-wrapper" style="--heading-font-size: {{ heading_font_size }}%;">
+        {% render 'section-header', 
+          content_align: section.settings.heading_alignment, 
+          heading: heading, 
+          description: section.settings.description, 
+          section: section 
+        %}
+      </div>
     {% endif %}
 
     {% if show_follow_button %}
-      <div class="mitushi-ig-feed__follow-wrapper" style="text-align: {{ section.settings.heading_alignment }}; margin-bottom: 2rem;">
+      <div class="mitushi-ig-feed__follow-wrapper" style="text-align: {{ section.settings.heading_alignment }}; margin-bottom: 2rem; --button-font-size: {{ button_font_size }}%;">
         <a 
           href="https://instagram.com/{{ instagram_handle }}" 
           target="_blank" 
@@ -70,20 +74,9 @@
       <!-- Feed Items Container (populated by JS) -->
       <div class="mitushi-ig-feed__items" style="display: none;"></div>
 
-      <!-- Placeholder Items (Theme Editor Only) -->
+      <!-- Placeholder Items Container (Theme Editor Only - populated dynamically) -->
       {% if request.design_mode %}
-        <div class="mitushi-ig-feed__placeholders" style="display: grid;">
-          {% for i in (1..post_limit) %}
-            <div class="mitushi-ig-feed__placeholder-item">
-              <div class="mitushi-ig-feed__placeholder-content">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM12 6C9.79 6 8 7.79 8 10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10C16 7.79 14.21 6 12 6ZM12 12C10.9 12 10 11.1 10 10C10 8.9 10.9 8 12 8C13.1 8 14 8.9 14 10C14 11.1 13.1 12 12 12Z" fill="#999"/>
-                </svg>
-                <span>Preview</span>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
+        <div class="mitushi-ig-feed__placeholders" style="display: none;"></div>
       {% endif %}
     </div>
   </div>
@@ -96,11 +89,38 @@
     min-height: 200px;
   }
 
+  /* Grid Layout - prevent scrollbar on hover */
+  .mitushi-ig-feed__container--grid {
+    overflow: hidden; /* Prevent scrollbar from hover scale */
+    padding: 4px; /* Small padding to prevent hover scale from causing overflow */
+  }
+
+  /* Slider Layout - allow horizontal scroll only */
+  .mitushi-ig-feed__container--slider {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px; /* Space for scrollbar if needed */
+  }
+
+  /* Heading Font Size Control */
+  .mitushi-ig-feed__heading-wrapper h2,
+  .mitushi-ig-feed__heading-wrapper .section-header__heading {
+    font-size: calc(var(--heading-font-size, 100%) * 1em);
+  }
+
+  @media (max-width: 768px) {
+    .mitushi-ig-feed__heading-wrapper h2,
+    .mitushi-ig-feed__heading-wrapper .section-header__heading {
+      font-size: calc(var(--heading-font-size, 100%) * 0.85em);
+    }
+  }
+
   /* Grid Layout */
   .mitushi-ig-feed__container--grid .mitushi-ig-feed__items {
     display: grid;
     grid-template-columns: repeat(var(--ig-columns-mobile), 1fr);
     gap: var(--ig-gap);
+    overflow: visible; /* Allow hover scale to work without scrollbar */
   }
 
   @media (min-width: 769px) {
@@ -113,6 +133,7 @@
   .mitushi-ig-feed__container--slider .mitushi-ig-feed__items {
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden; /* Prevent vertical scrollbar */
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     gap: var(--ig-gap);
@@ -140,11 +161,13 @@
     background: #f5f5f5;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    will-change: transform;
   }
 
   .mitushi-ig-feed__item:hover {
     transform: scale(1.02);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    z-index: 1;
   }
 
   .mitushi-ig-feed__item-link {
@@ -159,8 +182,12 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     display: block;
     transition: opacity 0.3s ease;
+    /* Ensure image fits perfectly in square container */
+    min-width: 100%;
+    min-height: 100%;
   }
 
   .mitushi-ig-feed__item:hover .mitushi-ig-feed__item-image {
@@ -239,9 +266,17 @@
     text-decoration: none;
     border-radius: 8px;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: calc(var(--button-font-size, 100%) * 0.95rem);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 2px 8px rgba(188, 24, 136, 0.3);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .mitushi-ig-feed__follow-btn {
+      font-size: calc(var(--button-font-size, 100%) * 0.85rem);
+      padding: 10px 20px;
+    }
   }
 
   .mitushi-ig-feed__follow-btn:hover {
@@ -266,37 +301,7 @@
     display: flex !important;
   }
 
-  /* Placeholder Items (Theme Editor Only) */
-  .mitushi-ig-feed__placeholders {
-    display: none; /* Hidden by default, shown only in Theme Editor via Liquid */
-    grid-template-columns: repeat(var(--ig-columns-mobile), 1fr);
-    gap: var(--ig-gap);
-  }
-
-  /* Show placeholders in Theme Editor */
-  body.shopify-design-mode .mitushi-ig-feed__placeholders,
-  [data-shopify-editor-section] .mitushi-ig-feed__placeholders {
-    display: grid !important;
-  }
-
-  body.shopify-design-mode .mitushi-ig-feed__container--slider .mitushi-ig-feed__placeholders,
-  [data-shopify-editor-section] .mitushi-ig-feed__container--slider .mitushi-ig-feed__placeholders {
-    display: flex !important;
-  }
-
-  @media (min-width: 769px) {
-    .mitushi-ig-feed__placeholders {
-      grid-template-columns: repeat(var(--ig-columns-desktop), 1fr);
-    }
-  }
-
-  .mitushi-ig-feed__container--slider .mitushi-ig-feed__placeholders {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: var(--ig-gap);
-  }
-
+  /* Placeholder Items (Theme Editor Only - added directly to itemsContainer) */
   .mitushi-ig-feed__placeholder-item {
     aspect-ratio: 1;
     background: #e5e5e5;
@@ -312,6 +317,7 @@
   .mitushi-ig-feed__container--slider .mitushi-ig-feed__placeholder-item {
     flex: 0 0 calc((100% - (var(--ig-columns-mobile) - 1) * var(--ig-gap)) / var(--ig-columns-mobile));
     scroll-snap-align: start;
+    min-width: 0;
   }
 
   @media (min-width: 769px) {
@@ -334,10 +340,13 @@
     opacity: 0.5;
   }
 
-  /* Hide placeholders when feed loads or in live site */
-  .mitushi-ig-feed__container.loaded .mitushi-ig-feed__placeholders,
-  .mitushi-ig-feed__items:not([style*="display: none"]) ~ .mitushi-ig-feed__placeholders {
-    display: none !important;
+  /* Items and placeholders appear together in Theme Editor (both in itemsContainer) */
+  .mitushi-ig-feed__container.loaded .mitushi-ig-feed__items {
+    display: grid !important;
+  }
+
+  .mitushi-ig-feed__container--slider.loaded .mitushi-ig-feed__items {
+    display: flex !important;
   }
 
   /* Slider scrollbar styling */
@@ -457,17 +466,41 @@
         itemsContainer.innerHTML = '';
         
         // Create and append items (only non-null items)
+        const validItems = [];
         data.items.slice(0, postLimit).forEach(item => {
           const itemEl = createFeedItem(item);
           if (itemEl) {
+            validItems.push(itemEl);
             itemsContainer.appendChild(itemEl);
           }
         });
         
-        // Show items, hide skeleton and placeholders
-        if (skeleton) skeleton.style.display = 'none';
+        // In Theme Editor: add placeholder boxes for missing posts directly to itemsContainer
+        const isThemeEditor = window.Shopify && window.Shopify.designMode;
+        if (isThemeEditor && validItems.length < postLimit) {
+          const missingCount = postLimit - validItems.length;
+          
+          for (let i = 0; i < missingCount; i++) {
+            const placeholderEl = document.createElement('div');
+            placeholderEl.className = 'mitushi-ig-feed__placeholder-item';
+            placeholderEl.innerHTML = `
+              <div class="mitushi-ig-feed__placeholder-content">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM12 6C9.79 6 8 7.79 8 10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10C16 7.79 14.21 6 12 6ZM12 12C10.9 12 10 11.1 10 10C10 8.9 10.9 8 12 8C13.1 8 14 8.9 14 10C14 11.1 13.1 12 12 12Z" fill="#999"/>
+                </svg>
+                <span>Preview</span>
+              </div>
+            `;
+            itemsContainer.appendChild(placeholderEl);
+          }
+        }
+        
+        // Hide placeholders container (not used anymore)
         const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
         if (placeholders) placeholders.style.display = 'none';
+        
+        // Show items, hide skeleton
+        if (skeleton) skeleton.style.display = 'none';
         itemsContainer.style.display = '';
         container.classList.add('loaded');
         
@@ -478,44 +511,44 @@
         if (skeleton) skeleton.style.display = 'none';
         if (itemsContainer) itemsContainer.style.display = 'none';
         const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
-        // Keep placeholders visible in Theme Editor even on error
+        
+        // In Theme Editor: show placeholders on error (to show layout)
         const isThemeEditor = window.Shopify && window.Shopify.designMode;
-        if (placeholders && !isThemeEditor) {
-          placeholders.style.display = 'none';
+        if (isThemeEditor && itemsContainer) {
+          // Show all placeholders if error (to show full layout)
+          itemsContainer.innerHTML = '';
+          itemsContainer.style.display = '';
+          for (let i = 0; i < postLimit; i++) {
+            const placeholderEl = document.createElement('div');
+            placeholderEl.className = 'mitushi-ig-feed__placeholder-item';
+            placeholderEl.innerHTML = `
+              <div class="mitushi-ig-feed__placeholder-content">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM12 6C9.79 6 8 7.79 8 10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10C16 7.79 14.21 6 12 6ZM12 12C10.9 12 10 11.1 10 10C10 8.9 10.9 8 12 8C13.1 8 14 8.9 14 10C14 11.1 13.1 12 12 12Z" fill="#999"/>
+                </svg>
+                <span>Preview</span>
+              </div>
+            `;
+            itemsContainer.appendChild(placeholderEl);
+          }
         }
+        
+        // Hide placeholders container (not used anymore)
+        const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
+        if (placeholders) placeholders.style.display = 'none';
+        
         if (errorContainer) {
           errorContainer.style.display = 'block';
         }
       }
     }
     
-    // Only load feed if not in Theme Editor
-    // In Theme Editor, show placeholders instead
-    const isThemeEditor = window.Shopify && window.Shopify.designMode;
-    
-    if (!isThemeEditor) {
-    // Only load feed if not in Theme Editor
-    // In Theme Editor, show placeholders instead
-    const isThemeEditor = window.Shopify && window.Shopify.designMode;
-    
-    if (!isThemeEditor) {
-      // Load feed when DOM is ready
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadFeed);
-      } else {
-        loadFeed();
-      }
+    // Load feed in both Theme Editor and live site
+    // In Theme Editor, placeholders will be added dynamically if needed
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadFeed);
     } else {
-      // In Theme Editor: hide skeleton, show placeholders
-      if (skeleton) skeleton.style.display = 'none';
-      const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
-      if (placeholders) placeholders.style.display = '';
-    }
-    } else {
-      // In Theme Editor: hide skeleton, show placeholders
-      if (skeleton) skeleton.style.display = 'none';
-      const placeholders = container.querySelector('.mitushi-ig-feed__placeholders');
-      if (placeholders) placeholders.style.display = '';
+      loadFeed();
     }
   })();
 </script>
@@ -531,6 +564,17 @@
       "id": "heading",
       "label": "Heading",
       "default": "Follow Us @mitushi"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Heading Font Size",
+      "min": 50,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 100,
+      "info": "Adjust heading text size (50% - 200%)"
     },
     {
       "type": "select",
@@ -562,7 +606,8 @@
       "type": "url",
       "id": "feed_url",
       "label": "Feed API URL",
-      "info": "Enter your Vercel API endpoint URL (e.g., https://your-project.vercel.app/api/ig-feed)"
+      "default": "https://mitushi-ig-proxy.vercel.app/api/feed",
+      "info": "Enter your Vercel API endpoint URL. Must start with https:// (e.g., https://mitushi-ig-proxy.vercel.app/api/feed)"
     },
     {
       "type": "select",
@@ -638,6 +683,17 @@
       "id": "follow_button_text",
       "label": "Follow Button Text",
       "default": "Follow @mitushi"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button Font Size",
+      "min": 50,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 100,
+      "info": "Adjust button text size (50% - 200%)"
     },
     {
       "type": "text",
