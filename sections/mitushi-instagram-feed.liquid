@@ -90,6 +90,20 @@
       <!-- Feed Items Container (populated by JS) -->
       <div class="mitushi-ig-feed__items" style="display: none;"></div>
 
+      <!-- Navigation Buttons (Slider Only) -->
+      {% if layout_mode == 'slider' %}
+        <button class="mitushi-ig-feed__nav-btn mitushi-ig-feed__nav-btn--prev" aria-label="Previous" style="display: none;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="mitushi-ig-feed__nav-btn mitushi-ig-feed__nav-btn--next" aria-label="Next" style="display: none;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      {% endif %}
+
       <!-- Placeholder Items Container (Theme Editor Only - populated dynamically) -->
       {% if request.design_mode %}
         <div class="mitushi-ig-feed__placeholders" style="display: none;"></div>
@@ -111,11 +125,10 @@
     padding: 4px; /* Small padding to prevent hover scale from causing overflow */
   }
 
-  /* Slider Layout - allow horizontal scroll only */
+  /* Slider Layout - hide scrollbar, use navigation buttons */
   .mitushi-ig-feed__container--slider {
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: 4px; /* Space for scrollbar if needed */
+    overflow: hidden; /* Hide scrollbar completely */
+    position: relative;
   }
 
   /* Heading Font Size Control */
@@ -154,7 +167,13 @@
     scroll-behavior: smooth;
     gap: var(--ig-gap);
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+    scrollbar-width: none; /* Hide scrollbar */
+    -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
+  }
+
+  /* Hide scrollbar in WebKit browsers */
+  .mitushi-ig-feed__container--slider .mitushi-ig-feed__items::-webkit-scrollbar {
+    display: none;
   }
 
   .mitushi-ig-feed__container--slider .mitushi-ig-feed__item {
@@ -377,23 +396,156 @@
     display: flex !important;
   }
 
-  /* Slider scrollbar styling */
-  .mitushi-ig-feed__container--slider .mitushi-ig-feed__items::-webkit-scrollbar {
-    height: 6px;
+  /* Navigation Buttons (Slider Only) */
+  .mitushi-ig-feed__nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 0;
   }
 
-  .mitushi-ig-feed__container--slider .mitushi-ig-feed__items::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
+  .mitushi-ig-feed__nav-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-50%) scale(1.05);
   }
 
-  .mitushi-ig-feed__container--slider .mitushi-ig-feed__items::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 3px;
+  .mitushi-ig-feed__nav-btn:active {
+    transform: translateY(-50%) scale(0.95);
   }
 
-  .mitushi-ig-feed__container--slider .mitushi-ig-feed__items::-webkit-scrollbar-thumb:hover {
-    background: #555;
+  .mitushi-ig-feed__nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .mitushi-ig-feed__nav-btn--prev {
+    left: 12px;
+  }
+
+  .mitushi-ig-feed__nav-btn--next {
+    right: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .mitushi-ig-feed__nav-btn {
+      width: 40px;
+      height: 40px;
+    }
+
+    .mitushi-ig-feed__nav-btn--prev {
+      left: 8px;
+    }
+
+    .mitushi-ig-feed__nav-btn--next {
+      right: 8px;
+    }
+
+    .mitushi-ig-feed__nav-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  /* Lightbox Modal */
+  .mitushi-ig-feed__lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .mitushi-ig-feed__lightbox.active {
+    display: flex;
+    opacity: 1;
+  }
+
+  .mitushi-ig-feed__lightbox-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mitushi-ig-feed__lightbox-image,
+  .mitushi-ig-feed__lightbox-video {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+
+  .mitushi-ig-feed__lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10000;
+  }
+
+  .mitushi-ig-feed__lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+  }
+
+  .mitushi-ig-feed__lightbox-close svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .mitushi-ig-feed__lightbox-link {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .mitushi-ig-feed__lightbox-link:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-50%) translateY(-2px);
   }
 </style>
 
@@ -435,10 +587,15 @@
       const itemEl = document.createElement('div');
       itemEl.className = 'mitushi-ig-feed__item';
       
-      const link = document.createElement('a');
-      link.href = item.permalink || '#';
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
+      // Store item data for lightbox
+      itemEl.dataset.itemId = item.id;
+      itemEl.dataset.itemImage = imageUrl;
+      itemEl.dataset.itemPermalink = item.permalink || '#';
+      itemEl.dataset.itemCaption = item.caption || '';
+      itemEl.dataset.itemMediaType = item.media_type || 'IMAGE';
+      
+      // Remove link - we'll handle click with lightbox
+      const link = document.createElement('div');
       link.className = 'mitushi-ig-feed__item-link';
       link.setAttribute('aria-label', item.caption ? item.caption.substring(0, 100) : 'View Instagram post');
       
@@ -545,6 +702,12 @@
         itemsContainer.style.display = '';
         container.classList.add('loaded');
         
+        // Initialize slider navigation and lightbox
+        if (container.classList.contains('mitushi-ig-feed__container--slider')) {
+          initSliderNavigation();
+        }
+        initLightbox();
+        
         console.log('MITUSHI IG Feed: Loaded', validItems.length, 'posts');
         
       } catch (error) {
@@ -588,6 +751,171 @@
         if (errorContainer) {
           errorContainer.style.display = 'block';
         }
+      }
+    }
+    
+    /**
+     * Initialize slider navigation buttons
+     */
+    function initSliderNavigation() {
+      const prevBtn = container.querySelector('.mitushi-ig-feed__nav-btn--prev');
+      const nextBtn = container.querySelector('.mitushi-ig-feed__nav-btn--next');
+      
+      if (!prevBtn || !nextBtn || !itemsContainer) return;
+      
+      function updateButtons() {
+        const scrollLeft = itemsContainer.scrollLeft;
+        const scrollWidth = itemsContainer.scrollWidth;
+        const clientWidth = itemsContainer.clientWidth;
+        const maxScroll = scrollWidth - clientWidth;
+        
+        prevBtn.disabled = scrollLeft <= 0;
+        nextBtn.disabled = scrollLeft >= maxScroll - 1; // -1 for rounding errors
+        
+        // Show buttons only if there's overflow
+        if (scrollWidth > clientWidth) {
+          prevBtn.style.display = 'flex';
+          nextBtn.style.display = 'flex';
+        } else {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+        }
+      }
+      
+      prevBtn.addEventListener('click', function() {
+        const itemWidth = itemsContainer.querySelector('.mitushi-ig-feed__item')?.offsetWidth || 0;
+        const gap = parseInt(getComputedStyle(itemsContainer).gap) || 0;
+        itemsContainer.scrollBy({
+          left: -(itemWidth + gap),
+          behavior: 'smooth'
+        });
+      });
+      
+      nextBtn.addEventListener('click', function() {
+        const itemWidth = itemsContainer.querySelector('.mitushi-ig-feed__item')?.offsetWidth || 0;
+        const gap = parseInt(getComputedStyle(itemsContainer).gap) || 0;
+        itemsContainer.scrollBy({
+          left: itemWidth + gap,
+          behavior: 'smooth'
+        });
+      });
+      
+      itemsContainer.addEventListener('scroll', updateButtons);
+      window.addEventListener('resize', updateButtons);
+      
+      // Initial update
+      setTimeout(updateButtons, 100);
+    }
+    
+    /**
+     * Initialize lightbox modal
+     */
+    function initLightbox() {
+      // Create lightbox if it doesn't exist
+      let lightbox = document.querySelector('.mitushi-ig-feed__lightbox');
+      if (!lightbox) {
+        lightbox = document.createElement('div');
+        lightbox.className = 'mitushi-ig-feed__lightbox';
+        lightbox.innerHTML = `
+          <div class="mitushi-ig-feed__lightbox-content">
+            <button class="mitushi-ig-feed__lightbox-close" aria-label="Close">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <a class="mitushi-ig-feed__lightbox-link" href="#" target="_blank" rel="noopener noreferrer" style="display: none;">
+              View on Instagram
+            </a>
+          </div>
+        `;
+        document.body.appendChild(lightbox);
+        
+        // Close on click outside or close button
+        lightbox.addEventListener('click', function(e) {
+          if (e.target === lightbox || e.target.closest('.mitushi-ig-feed__lightbox-close')) {
+            closeLightbox();
+          }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeLightbox();
+          }
+        });
+      }
+      
+      // Add click handlers to all feed items
+      itemsContainer.addEventListener('click', function(e) {
+        const item = e.target.closest('.mitushi-ig-feed__item');
+        if (!item) return;
+        
+        e.preventDefault();
+        openLightbox(item);
+      });
+    }
+    
+    /**
+     * Open lightbox with item
+     */
+    function openLightbox(item) {
+      const lightbox = document.querySelector('.mitushi-ig-feed__lightbox');
+      if (!lightbox) return;
+      
+      const imageUrl = item.dataset.itemImage;
+      const permalink = item.dataset.itemPermalink;
+      const mediaType = item.dataset.itemMediaType;
+      const content = lightbox.querySelector('.mitushi-ig-feed__lightbox-content');
+      const link = lightbox.querySelector('.mitushi-ig-feed__lightbox-link');
+      
+      // Clear previous content
+      const existingMedia = content.querySelector('.mitushi-ig-feed__lightbox-image, .mitushi-ig-feed__lightbox-video');
+      if (existingMedia) existingMedia.remove();
+      
+      // Create media element
+      if (mediaType === 'VIDEO') {
+        const video = document.createElement('video');
+        video.className = 'mitushi-ig-feed__lightbox-video';
+        video.src = imageUrl.replace(/\.jpg$/, '.mp4').replace(/thumbnail/, 'media');
+        video.controls = true;
+        video.autoplay = true;
+        content.insertBefore(video, link);
+      } else {
+        const img = document.createElement('img');
+        img.className = 'mitushi-ig-feed__lightbox-image';
+        img.src = imageUrl;
+        img.alt = item.dataset.itemCaption || 'Instagram post';
+        content.insertBefore(img, link);
+      }
+      
+      // Update link
+      if (permalink && permalink !== '#') {
+        link.href = permalink;
+        link.style.display = 'block';
+      } else {
+        link.style.display = 'none';
+      }
+      
+      // Show lightbox
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent body scroll
+    }
+    
+    /**
+     * Close lightbox
+     */
+    function closeLightbox() {
+      const lightbox = document.querySelector('.mitushi-ig-feed__lightbox');
+      if (!lightbox) return;
+      
+      lightbox.classList.remove('active');
+      document.body.style.overflow = ''; // Restore body scroll
+      
+      // Stop video if playing
+      const video = lightbox.querySelector('.mitushi-ig-feed__lightbox-video');
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
       }
     }
     
