@@ -7,11 +7,18 @@
  */
 
 module.exports = async (req, res) => {
+  // CORS: Allow Shopify domains (storefront, editor, preview)
+  const origin = req.headers.origin || '';
+  const allowedOrigin = origin && origin.endsWith('.myshopify.com') 
+    ? origin 
+    : 'https://mitushii.myshopify.com';
+  
   // Set CORS headers - MUST be set before any response
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Max-Age', '86400');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -31,6 +38,7 @@ module.exports = async (req, res) => {
     const PAGE_TOKEN = (process.env.IG_PAGE_ACCESS_TOKEN || '').trim();
 
     if (!IG_BUSINESS_ID || !PAGE_TOKEN) {
+      // CORS headers already set at the top
       res.status(500).json({
         error: 'Missing environment variables',
         required: ['IG_BUSINESS_ID', 'IG_PAGE_ACCESS_TOKEN'],
@@ -52,6 +60,7 @@ module.exports = async (req, res) => {
     const j = await r.json();
     
     if (!r.ok) {
+      // CORS headers already set at the top
       res.status(r.status).json({ 
         error: 'Instagram API error', 
         details: j,
