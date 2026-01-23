@@ -314,6 +314,29 @@
         "remove_padding_top": false,
         "remove_padding_bottom": false
       }
+    },
+    "mitushi_instagram_feed_kknKac": {
+      "type": "mitushi-instagram-feed",
+      "name": "MITUSHI Instagram Feed",
+      "settings": {
+        "heading": "Follow Us @mitushi",
+        "heading_alignment": "ta-center",
+        "description": "",
+        "feed_url": "https://mitushi-ig-proxy.vercel.app/api/feed",
+        "layout_mode": "slider",
+        "columns_desktop": 6,
+        "columns_mobile": 3,
+        "gap_size": 16,
+        "border_radius": 12,
+        "post_limit": 12,
+        "show_follow_button": true,
+        "follow_button_text": "Follow @mitushi",
+        "instagram_handle": "mitushi",
+        "error_message": "Unable to load Instagram feed. Please try again later.",
+        "color_scheme": "default",
+        "remove_padding_top": false,
+        "remove_padding_bottom": false
+      }
     }
   },
   "order": [
@@ -324,6 +347,7 @@
     "product_hotspots_znJJMA",
     "video_banner_xE4peK",
     "running_content_WeVz9x",
-    "1768841045d7c09c5d"
+    "1768841045d7c09c5d",
+    "mitushi_instagram_feed_kknKac"
   ]
 }
