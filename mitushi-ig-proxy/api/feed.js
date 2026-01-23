@@ -7,7 +7,7 @@
  */
 
 module.exports = async (req, res) => {
-  // CORS: Always allow all origins for now (to ensure it works)
+  // CORS: Always allow all origins - MUST be set before any response
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -16,14 +16,12 @@ module.exports = async (req, res) => {
 
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
 
   // Only allow GET
   if (req.method !== 'GET') {
-    res.status(405).json({ error: 'Method not allowed' });
-    return;
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
