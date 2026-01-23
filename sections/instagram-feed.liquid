@@ -313,7 +313,6 @@
       itemEl.appendChild(link);
     }
     
-    itemEl.appendChild(link);
     return itemEl;
   }
   
@@ -321,11 +320,21 @@
     const url = `${feedUrl}${feedUrl.includes('?') ? '&' : '?'}limit=${postLimit}`;
     
     try {
-      let response = await fetch(url, {
-        method: 'GET',
-        headers: { 'Accept': 'application/json' },
-        mode: 'cors'
-      });
+      let response;
+      try {
+        response = await fetch(url, {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' },
+          mode: 'cors',
+          credentials: 'omit'
+        });
+      } catch (fetchError) {
+        console.error('Instagram Feed: Fetch error:', fetchError);
+        if (fetchError.message && fetchError.message.includes('CORS')) {
+          console.error('Instagram Feed: CORS error detected. Check API CORS configuration.');
+        }
+        throw fetchError;
+      }
       
       if (response.status === 404 && feedUrl.includes('/api/feed')) {
         const fallbackUrl = feedUrl.replace('/api/feed', '/api/ig-feed');
@@ -333,25 +342,39 @@
         response = await fetch(`${fallbackUrl}${fallbackUrl.includes('?') ? '&' : '?'}limit=${postLimit}`, {
           method: 'GET',
           headers: { 'Accept': 'application/json' },
-          mode: 'cors'
+          mode: 'cors',
+          credentials: 'omit'
         });
       }
       
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Instagram Feed: API error:', response.status, errorText);
+        throw new Error(`HTTP ${response.status}: ${errorText.substring(0, 100)}`);
+      }
       
       const data = await response.json();
+      console.log('Instagram Feed: Received data:', data);
+      
       if (!data.items || !Array.isArray(data.items) || data.items.length === 0) {
+        console.warn('Instagram Feed: No items in response', data);
         throw new Error('No items in feed');
       }
       
       itemsContainer.innerHTML = '';
       allFeedData = [];
       
+      let itemsAdded = 0;
       data.items.slice(0, postLimit).forEach((item, idx) => {
         allFeedData.push(item);
         const itemEl = createFeedItem(item, idx);
-        if (itemEl) itemsContainer.appendChild(itemEl);
+        if (itemEl) {
+          itemsContainer.appendChild(itemEl);
+          itemsAdded++;
+        }
       });
+      
+      console.log(`Instagram Feed: Added ${itemsAdded} items to feed`);
       
       if (skeleton) skeleton.style.display = 'none';
       itemsContainer.style.display = '';
@@ -363,9 +386,21 @@
       
     } catch (error) {
       console.error('Instagram Feed Error:', error);
+      console.error('Instagram Feed Error Details:', {
+        message: error.message,
+        stack: error.stack,
+        feedUrl: feedUrl,
+        postLimit: postLimit
+      });
       if (skeleton) skeleton.style.display = 'none';
       if (itemsContainer) itemsContainer.style.display = 'none';
-      if (errorContainer) errorContainer.style.display = 'block';
+      if (errorContainer) {
+        errorContainer.style.display = 'block';
+        const errorText = errorContainer.querySelector('p');
+        if (errorText && error.message) {
+          errorText.textContent = `Error: ${error.message}`;
+        }
+      }
     }
   }
   
