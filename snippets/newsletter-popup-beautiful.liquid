@@ -8,7 +8,7 @@ Two-column layout: Left (black content), Right (white image)
   assign logo_image = section.settings.logo_image
   assign logo_text = section.settings.logo_text | default: shop.name
   assign headline_main = section.settings.headline_main | default: 'EXCLUSIVE DISCOUNT'
-  assign headline_sub = section.settings.headline_sub | default: 'ON YOUR FIRST ORDER'
+  assign headline_sub = section.settings.headline_sub
   assign description_text = section.settings.description_text | default: 'Join the family and get exclusive email-only offers by signing up.'
   assign email_label = section.settings.email_label | default: 'ENTER YOUR EMAIL'
   assign button_text = section.settings.button_text | default: 'UNLOCK YOUR OFFER'
@@ -72,7 +72,7 @@ Two-column layout: Left (black content), Right (white image)
   .beautiful-newsletter-popup__left {
     background: #000000;
     color: #ffffff;
-    padding: clamp(20px, 8%, 60px) clamp(20px, 6%, 50px);
+    padding: clamp(20px, 4vh, 60px) clamp(20px, 3vw, 50px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -82,11 +82,12 @@ Two-column layout: Left (black content), Right (white image)
     flex: 1;
     min-height: 100%;
     height: 100%;
+    overflow-y: auto;
   }
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__left {
-      padding: clamp(20px, 6%, 40px) clamp(15px, 5%, 30px);
+      padding: clamp(15px, 3vh, 40px) clamp(15px, 4vw, 30px);
       min-height: 100%;
     }
   }
@@ -116,10 +117,10 @@ Two-column layout: Left (black content), Right (white image)
   }
   
   .beautiful-newsletter-popup__logo {
-    font-size: {{ logo_size }}px;
+    font-size: clamp({{ logo_size | times: 0.5 | round }}px, {{ logo_size | divided_by: 10.0 }}vw, {{ logo_size }}px);
     font-weight: 700;
     letter-spacing: 2px;
-    margin-bottom: clamp(20px, 5%, 40px);
+    margin-bottom: clamp(15px, 3vh, 40px);
     color: #ffffff;
     text-transform: uppercase;
   }
@@ -131,39 +132,39 @@ Two-column layout: Left (black content), Right (white image)
   .beautiful-newsletter-popup__logo img {
     max-width: 100%;
     height: auto;
-    max-height: {{ logo_size | times: 2 }}px;
+    max-height: clamp({{ logo_size }}px, {{ logo_size | times: 2 | divided_by: 10.0 }}vw, {{ logo_size | times: 2 }}px);
     display: block;
   }
   
   .beautiful-newsletter-popup__headline-main {
-    font-size: {{ headline_main_size }}px;
+    font-size: clamp({{ headline_main_size | times: 0.4 | round }}px, {{ headline_main_size | divided_by: 10.0 }}vw, {{ headline_main_size }}px);
     font-weight: 900;
     color: #ff0000;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: clamp(5px, 1.25%, 10px);
+    margin-bottom: clamp(5px, 1vh, 10px);
     line-height: 1.1;
   }
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__headline-main {
-      font-size: {{ headline_main_size | times: 0.67 | round }}px;
+      font-size: clamp({{ headline_main_size | times: 0.3 | round }}px, {{ headline_main_size | times: 0.67 | divided_by: 10.0 }}vw, {{ headline_main_size | times: 0.67 | round }}px);
     }
   }
   
   .beautiful-newsletter-popup__headline-sub {
-    font-size: {{ headline_sub_size }}px;
+    font-size: clamp({{ headline_sub_size | times: 0.5 | round }}px, {{ headline_sub_size | divided_by: 10.0 }}vw, {{ headline_sub_size }}px);
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: clamp(15px, 3.75%, 30px);
+    margin-bottom: clamp(10px, 2vh, 30px);
   }
   
   .beautiful-newsletter-popup__description {
-    font-size: {{ description_size }}px;
+    font-size: clamp({{ description_size | times: 0.7 | round }}px, {{ description_size | divided_by: 10.0 }}vw, {{ description_size }}px);
     color: #ffffff;
-    margin-bottom: clamp(20px, 5%, 40px);
+    margin-bottom: clamp(15px, 3vh, 40px);
     max-width: 100%;
     width: 100%;
     line-height: 1.6;
@@ -176,23 +177,23 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__email-label {
     display: block;
-    font-size: {{ email_label_size }}px;
+    font-size: clamp({{ email_label_size | times: 0.7 | round }}px, {{ email_label_size | divided_by: 10.0 }}vw, {{ email_label_size }}px);
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: clamp(8px, 1.5%, 12px);
+    margin-bottom: clamp(6px, 1vh, 12px);
     text-align: left;
   }
   
   .beautiful-newsletter-popup__email-input {
     width: 100%;
-    padding: {{ email_input_padding }}px {{ email_input_padding | times: 1.25 | round }}px;
+    padding: clamp({{ email_input_padding | times: 0.6 | round }}px, {{ email_input_padding | divided_by: 10.0 }}vh, {{ email_input_padding }}px) clamp({{ email_input_padding | times: 0.75 | round }}px, {{ email_input_padding | times: 1.25 | divided_by: 10.0 }}vw, {{ email_input_padding | times: 1.25 | round }}px);
     background: #ffffff;
     border: 2px solid #000000;
     color: #000000;
-    font-size: {{ email_input_size }}px;
-    margin-bottom: clamp(15px, 2.5%, 20px);
+    font-size: clamp({{ email_input_size | times: 0.75 | round }}px, {{ email_input_size | divided_by: 10.0 }}vw, {{ email_input_size }}px);
+    margin-bottom: clamp(12px, 2vh, 20px);
     box-sizing: border-box;
     border-radius: 0;
   }
@@ -208,11 +209,11 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__button {
     width: 100%;
-    padding: {{ button_padding }}px {{ button_padding | times: 1.67 | round }}px;
+    padding: clamp({{ button_padding | times: 0.6 | round }}px, {{ button_padding | divided_by: 10.0 }}vh, {{ button_padding }}px) clamp({{ button_padding | times: 1 | round }}px, {{ button_padding | times: 1.67 | divided_by: 10.0 }}vw, {{ button_padding | times: 1.67 | round }}px);
     background: #ff0000;
     color: #ffffff;
     border: none;
-    font-size: {{ button_font_size }}px;
+    font-size: clamp({{ button_font_size | times: 0.7 | round }}px, {{ button_font_size | divided_by: 10.0 }}vw, {{ button_font_size }}px);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
