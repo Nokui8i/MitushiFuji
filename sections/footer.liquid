@@ -285,18 +285,27 @@
     }
   }
   
-  /* בדסקטופ - התפריט מתחת ללוגו, NEWSLETTER בצד שמאל */
+  /* בדסקטופ - NEWSLETTER בצד שמאל, לוגו + תפריט בצד ימין */
   @media (min-width: 750px) {
     .js-footer .footer-main-row {
       flex-direction: row !important;
       align-items: flex-start !important;
-      justify-content: space-between !important;
+      justify-content: flex-start !important;
+      gap: 48px !important;
+    }
+    
+    .js-footer .footer-newsletter-column {
+      order: 1 !important;
+      flex: 0 0 auto !important;
+      width: auto !important;
+      max-width: 350px !important;
     }
     
     .js-footer .footer-logo-column {
+      order: 2 !important;
+      flex: 0 0 auto !important;
       width: auto !important;
       max-width: none !important;
-      flex: 0 0 auto !important;
     }
     
     .js-footer .footer-nav-wrapper {
@@ -313,11 +322,6 @@
     
     .js-footer .footer__nav--single-column .nav__item {
       text-align: left !important;
-    }
-    
-    .js-footer .footer-newsletter-column {
-      order: -1 !important;
-      margin-right: 48px !important;
     }
   }
 </style>
