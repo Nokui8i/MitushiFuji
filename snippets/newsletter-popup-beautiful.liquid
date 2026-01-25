@@ -24,7 +24,7 @@ Two-column layout: Left (black content), Right (white image)
     max-height: 800px;
     margin: 0;
     background: #ffffff;
-    border-radius: 8px;
+    border-radius: clamp(4px, 1%, 8px);
     overflow: hidden;
     position: relative;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
@@ -55,7 +55,7 @@ Two-column layout: Left (black content), Right (white image)
   .beautiful-newsletter-popup__left {
     background: #000000;
     color: #ffffff;
-    padding: 60px 50px;
+    padding: clamp(20px, 8%, 60px) clamp(20px, 6%, 50px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -69,19 +69,19 @@ Two-column layout: Left (black content), Right (white image)
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__left {
-      padding: 40px 30px;
+      padding: clamp(20px, 6%, 40px) clamp(15px, 5%, 30px);
       min-height: 100%;
     }
   }
   
   .beautiful-newsletter-popup__close {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: clamp(10px, 2.5%, 20px);
+    right: clamp(10px, 2.5%, 20px);
     background: #000000;
     border: none;
-    width: 40px;
-    height: 40px;
+    width: clamp(30px, 5%, 40px);
+    height: clamp(30px, 5%, 40px);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -89,7 +89,7 @@ Two-column layout: Left (black content), Right (white image)
     cursor: pointer;
     z-index: 10;
     color: #ffffff;
-    font-size: 20px;
+    font-size: clamp(16px, 2.5%, 20px);
     line-height: 1;
     transition: transform 0.2s;
   }
@@ -99,10 +99,10 @@ Two-column layout: Left (black content), Right (white image)
   }
   
   .beautiful-newsletter-popup__logo {
-    font-size: 32px;
+    font-size: clamp(20px, 4%, 32px);
     font-weight: 700;
-    letter-spacing: 2px;
-    margin-bottom: 40px;
+    letter-spacing: clamp(1px, 0.25%, 2px);
+    margin-bottom: clamp(20px, 5%, 40px);
     color: #ffffff;
     text-transform: uppercase;
   }
@@ -112,62 +112,63 @@ Two-column layout: Left (black content), Right (white image)
   }
   
   .beautiful-newsletter-popup__headline-main {
-    font-size: 48px;
+    font-size: clamp(24px, 6%, 48px);
     font-weight: 900;
     color: #ff0000;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
+    letter-spacing: clamp(0.5px, 0.125%, 1px);
+    margin-bottom: clamp(5px, 1.25%, 10px);
     line-height: 1.1;
   }
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__headline-main {
-      font-size: 32px;
+      font-size: clamp(20px, 4.5%, 32px);
     }
   }
   
   .beautiful-newsletter-popup__headline-sub {
-    font-size: 18px;
+    font-size: clamp(12px, 2.25%, 18px);
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 30px;
+    letter-spacing: clamp(1px, 0.25%, 2px);
+    margin-bottom: clamp(15px, 3.75%, 30px);
   }
   
   .beautiful-newsletter-popup__description {
-    font-size: 14px;
+    font-size: clamp(11px, 1.75%, 14px);
     color: #ffffff;
-    margin-bottom: 40px;
-    max-width: 400px;
+    margin-bottom: clamp(20px, 5%, 40px);
+    max-width: 100%;
+    width: 100%;
     line-height: 1.6;
   }
   
   .beautiful-newsletter-popup__form {
     width: 100%;
-    max-width: 400px;
+    max-width: 100%;
   }
   
   .beautiful-newsletter-popup__email-label {
     display: block;
-    font-size: 12px;
+    font-size: clamp(10px, 1.5%, 12px);
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
+    letter-spacing: clamp(0.5px, 0.125%, 1px);
+    margin-bottom: clamp(8px, 1.5%, 12px);
     text-align: left;
   }
   
   .beautiful-newsletter-popup__email-input {
     width: 100%;
-    padding: 16px 20px;
+    padding: clamp(12px, 2%, 16px) clamp(15px, 2.5%, 20px);
     background: #ffffff;
     border: 2px solid #000000;
     color: #000000;
-    font-size: 16px;
-    margin-bottom: 20px;
+    font-size: clamp(13px, 2%, 16px);
+    margin-bottom: clamp(15px, 2.5%, 20px);
     box-sizing: border-box;
     border-radius: 0;
   }
@@ -183,14 +184,14 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__button {
     width: 100%;
-    padding: 18px 30px;
+    padding: clamp(14px, 2.25%, 18px) clamp(20px, 3.75%, 30px);
     background: #ff0000;
     color: #ffffff;
     border: none;
-    font-size: 14px;
+    font-size: clamp(11px, 1.75%, 14px);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: clamp(1px, 0.25%, 2px);
     cursor: pointer;
     transition: background 0.3s, transform 0.2s;
     border-radius: 0;
@@ -230,10 +231,10 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__error,
   .beautiful-newsletter-popup__success {
-    margin-top: 16px;
-    padding: 12px;
+    margin-top: clamp(12px, 2%, 16px);
+    padding: clamp(10px, 1.5%, 12px);
     border-radius: 4px;
-    font-size: 14px;
+    font-size: clamp(11px, 1.75%, 14px);
     text-align: left;
   }
   
