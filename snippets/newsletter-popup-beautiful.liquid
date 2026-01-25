@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% comment %}
 Beautiful Newsletter Popup Design
 Two-column layout: Left (black content), Right (white image)
@@ -381,3 +382,388 @@ Two-column layout: Left (black content), Right (white image)
     </div>
   </div>
 </div>
+=======
+{% comment %}
+Beautiful Newsletter Popup Design
+Two-column layout: Left (black content), Right (white image)
+{% endcomment %}
+
+{%- liquid
+  assign form_id = 'beautifulNewsletterForm' | append: section.id
+  assign logo_image = section.settings.logo_image
+  assign logo_text = section.settings.logo_text | default: shop.name
+  assign headline_main = section.settings.headline_main | default: 'EXCLUSIVE DISCOUNT'
+  assign headline_sub = section.settings.headline_sub
+  assign description_text = section.settings.description_text | default: 'Join the family and get exclusive email-only offers by signing up.'
+  assign email_label = section.settings.email_label | default: 'ENTER YOUR EMAIL'
+  assign button_text = section.settings.button_text | default: 'UNLOCK YOUR OFFER'
+  assign popup_width = section.settings.popup_width | default: 70
+  assign popup_height = section.settings.popup_height | default: 70
+  assign logo_size = section.settings.logo_size | default: 32
+  assign headline_main_size = section.settings.headline_main_size | default: 48
+  assign headline_sub_size = section.settings.headline_sub_size | default: 18
+  assign description_size = section.settings.description_size | default: 14
+  assign email_label_size = section.settings.email_label_size | default: 12
+  assign email_input_size = section.settings.email_input_size | default: 16
+  assign email_input_padding = section.settings.email_input_padding | default: 16
+  assign button_font_size = section.settings.button_font_size | default: 14
+  assign button_padding = section.settings.button_padding | default: 18
+-%}
+
+<style>
+  .beautiful-newsletter-popup {
+    width: {{ popup_width }}vw;
+    max-width: 95vw;
+    height: {{ popup_height }}vh;
+    max-height: 95vh;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: clamp(4px, 1%, 8px);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+  
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup {
+      width: min(95vw, {{ popup_width }}vw);
+      height: min(85vh, {{ popup_height }}vh);
+      max-width: 95vw;
+      max-height: 95vh;
+    }
+  }
+  
+  @media (min-width: 1920px) {
+    .beautiful-newsletter-popup {
+      width: min({{ popup_width }}vw, {{ popup_width | times: 19.2 | round }}px);
+      height: min({{ popup_height }}vh, {{ popup_height | times: 10.8 | round }}px);
+    }
+  }
+  
+  .beautiful-newsletter-popup__container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+  }
+  
+  @media (min-width: 750px) {
+    .beautiful-newsletter-popup__container {
+      flex-direction: row;
+    }
+  }
+  
+  .beautiful-newsletter-popup__left {
+    background: #000000;
+    color: #ffffff;
+    padding: 8% 6%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    flex: 1;
+    min-height: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
+  
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__left {
+      padding: 6% 5%;
+      min-height: 100%;
+    }
+  }
+  
+  .beautiful-newsletter-popup__close {
+    position: absolute;
+    top: clamp(10px, 2.5%, 20px);
+    right: clamp(10px, 2.5%, 20px);
+    background: #000000;
+    border: none;
+    width: clamp(30px, 5%, 40px);
+    height: clamp(30px, 5%, 40px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    color: #ffffff;
+    font-size: clamp(16px, 2.5%, 20px);
+    line-height: 1;
+    transition: transform 0.2s;
+  }
+  
+  .beautiful-newsletter-popup__close:hover {
+    transform: scale(1.1);
+  }
+  
+  .beautiful-newsletter-popup__logo {
+    font-size: clamp({{ logo_size | times: 0.5 | round }}px, calc({{ logo_size }}px * {{ popup_width }}vw / 100), {{ logo_size | times: 1.5 | round }}px);
+    font-weight: 700;
+    letter-spacing: clamp(1px, calc(2px * {{ popup_width }} / 100), 3px);
+    margin-bottom: clamp(3%, calc(6% * {{ popup_height }} / 100), 8%);
+    color: #ffffff;
+    text-transform: uppercase;
+  }
+  
+  .beautiful-newsletter-popup__logo .logo-accent {
+    color: #ff0000;
+  }
+  
+  .beautiful-newsletter-popup__logo img {
+    max-width: 100%;
+    height: auto;
+    max-height: clamp({{ logo_size }}px, calc({{ logo_size | times: 2 }}px * {{ popup_width }}vw / 100), {{ logo_size | times: 3 }}px);
+    display: block;
+  }
+  
+  .beautiful-newsletter-popup__headline-main {
+    font-size: clamp({{ headline_main_size | times: 0.6 | round }}px, calc({{ headline_main_size }}px * {{ popup_width }}vw / 100), {{ headline_main_size | times: 1.4 | round }}px);
+    font-weight: 900;
+    color: #ff0000;
+    text-transform: uppercase;
+    letter-spacing: clamp(0.5px, calc(1px * {{ popup_width }} / 100), 2px);
+    margin-bottom: clamp(1%, calc(1.5% * {{ popup_height }} / 100), 2.5%);
+    line-height: 1.1;
+  }
+  
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__headline-main {
+      font-size: clamp({{ headline_main_size | times: 0.4 | round }}px, calc({{ headline_main_size | times: 0.67 | round }}px * {{ popup_width }}vw / 100), {{ headline_main_size | times: 0.9 | round }}px);
+    }
+  }
+  
+  .beautiful-newsletter-popup__headline-sub {
+    font-size: clamp({{ headline_sub_size | times: 0.7 | round }}px, calc({{ headline_sub_size }}px * {{ popup_width }}vw / 100), {{ headline_sub_size | times: 1.3 | round }}px);
+    font-weight: 600;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: clamp(1px, calc(2px * {{ popup_width }} / 100), 3px);
+    margin-bottom: clamp(2%, calc(4% * {{ popup_height }} / 100), 6%);
+    line-height: 1.3;
+  }
+  
+  .beautiful-newsletter-popup__description {
+    font-size: clamp({{ description_size | times: 0.8 | round }}px, calc({{ description_size }}px * {{ popup_width }}vw / 100), {{ description_size | times: 1.4 | round }}px);
+    color: #ffffff;
+    margin-bottom: clamp(4%, calc(6% * {{ popup_height }} / 100), 8%);
+    max-width: 100%;
+    width: 100%;
+    line-height: 1.6;
+  }
+  
+  .beautiful-newsletter-popup__form {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .beautiful-newsletter-popup__email-label {
+    display: block;
+    font-size: clamp({{ email_label_size | times: 0.8 | round }}px, calc({{ email_label_size }}px * {{ popup_width }}vw / 100), {{ email_label_size | times: 1.3 | round }}px);
+    font-weight: 600;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: clamp(0.5px, calc(1px * {{ popup_width }} / 100), 2px);
+    margin-bottom: clamp(1.5%, calc(2% * {{ popup_height }} / 100), 3%);
+    text-align: left;
+  }
+  
+  .beautiful-newsletter-popup__email-input {
+    width: 100%;
+    padding: clamp({{ email_input_padding | times: 0.7 | round }}px, calc({{ email_input_padding }}px * {{ popup_height }}vh / 100), {{ email_input_padding | times: 1.3 | round }}px) clamp({{ email_input_padding | times: 0.9 | round }}px, calc({{ email_input_padding | times: 1.25 | round }}px * {{ popup_width }}vw / 100), {{ email_input_padding | times: 1.6 | round }}px);
+    background: #ffffff;
+    border: 2px solid #000000;
+    color: #000000;
+    font-size: clamp({{ email_input_size | times: 0.85 | round }}px, calc({{ email_input_size }}px * {{ popup_width }}vw / 100), {{ email_input_size | times: 1.3 | round }}px);
+    margin-bottom: clamp(2%, calc(3% * {{ popup_height }} / 100), 4%);
+    box-sizing: border-box;
+    border-radius: 0;
+  }
+  
+  .beautiful-newsletter-popup__email-input::placeholder {
+    color: #999999;
+  }
+  
+  .beautiful-newsletter-popup__email-input:focus {
+    outline: none;
+    border-color: #ff0000;
+  }
+  
+  .beautiful-newsletter-popup__button {
+    width: 100%;
+    padding: clamp({{ button_padding | times: 0.7 | round }}px, calc({{ button_padding }}px * {{ popup_height }}vh / 100), {{ button_padding | times: 1.3 | round }}px) clamp({{ button_padding | times: 0.9 | round }}px, calc({{ button_padding | times: 1.67 | round }}px * {{ popup_width }}vw / 100), {{ button_padding | times: 2.2 | round }}px);
+    background: #ff0000;
+    color: #ffffff;
+    border: none;
+    font-size: clamp({{ button_font_size | times: 0.85 | round }}px, calc({{ button_font_size }}px * {{ popup_width }}vw / 100), {{ button_font_size | times: 1.3 | round }}px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: clamp(1px, calc(2px * {{ popup_width }} / 100), 3px);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    border-radius: 0;
+  }
+  
+  .beautiful-newsletter-popup__button:hover {
+    background: #cc0000;
+    transform: translateY(-2px);
+  }
+  
+  .beautiful-newsletter-popup__right {
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+    min-height: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__right {
+      min-height: 100%;
+    }
+  }
+  
+  .beautiful-newsletter-popup__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .beautiful-newsletter-popup__error,
+  .beautiful-newsletter-popup__success {
+    margin-top: clamp(12px, 2%, 16px);
+    padding: clamp(10px, 1.5%, 12px);
+    border-radius: 4px;
+    font-size: clamp(11px, 1.75%, 14px);
+    text-align: left;
+  }
+  
+  .beautiful-newsletter-popup__error {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff0000;
+    border: 1px solid #ff0000;
+  }
+  
+  .beautiful-newsletter-popup__success {
+    background: rgba(0, 255, 0, 0.1);
+    color: #00ff00;
+    border: 1px solid #00ff00;
+  }
+</style>
+
+<div class="beautiful-newsletter-popup h-100 d-flex fd-column">
+  <button class="beautiful-newsletter-popup__close js-popup-close-btn" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
+    ×
+  </button>
+  
+  <div class="beautiful-newsletter-popup__container">
+    <!-- Left Column: Content -->
+    <div class="beautiful-newsletter-popup__left">
+      <div class="beautiful-newsletter-popup__logo">
+        {% if logo_image %}
+          {%- liquid
+            assign logo_alt = logo_image.alt | default: shop.name
+            assign logo_url = logo_image | image_url: width: 300
+          -%}
+          <img src="{{ logo_url }}" alt="{{ logo_alt }}" loading="eager">
+        {% else %}
+          {{ logo_text | replace: 'Q', '<span class="logo-accent">Q</span>' }}
+        {% endif %}
+      </div>
+      
+      <h2 class="beautiful-newsletter-popup__headline-main">
+        {{ headline_main }}
+      </h2>
+      
+      {% if headline_sub != blank %}
+        <p class="beautiful-newsletter-popup__headline-sub">
+          {{ headline_sub }}
+        </p>
+      {% endif %}
+      
+      <p class="beautiful-newsletter-popup__description">
+        {{ description_text }}
+      </p>
+      
+      <div class="beautiful-newsletter-popup__form">
+        {%- form 'customer', id: form_id -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          
+          <label for="email-{{ form_id }}" class="beautiful-newsletter-popup__email-label">
+            {{ email_label }}
+          </label>
+          
+          <input 
+            id="email-{{ form_id }}"
+            type="email" 
+            name="contact[email]" 
+            class="beautiful-newsletter-popup__email-input"
+            value="{{ form.email }}" 
+            placeholder="Email"
+            aria-required="true"
+            autocorrect="off"
+            autocapitalize="off"
+            autocomplete="email"
+            {% if form.errors %} 
+              autofocus 
+              aria-invalid="true" 
+              aria-describedby="{{ form_id }}-error" 
+            {% elsif form.posted_successfully? %} 
+              aria-describedby="{{ form_id }}-success"
+            {% endif %}
+            required
+          >
+          
+          <button type="submit" class="beautiful-newsletter-popup__button">
+            {{ button_text }}
+          </button>
+          
+          {%- if form.errors -%}
+            <div id="{{ form_id }}-error" class="beautiful-newsletter-popup__error" role="alert">
+              {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+            </div>
+          {%- endif -%}
+          
+          {%- if form.posted_successfully? -%}
+            <div id="{{ form_id }}-success" class="beautiful-newsletter-popup__success" role="alert">
+              {{ 'general.newsletter.success' | t }}
+            </div>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+    
+    <!-- Right Column: Image -->
+    <div class="beautiful-newsletter-popup__right">
+      {% if section.settings.right_image %}
+        {%- liquid
+          assign image_alt = section.settings.right_image.alt | default: 'Newsletter'
+          assign image_url = section.settings.right_image | image_url: width: 800
+        -%}
+        <img 
+          src="{{ image_url }}" 
+          alt="{{ image_alt }}"
+          class="beautiful-newsletter-popup__image"
+          loading="eager"
+        >
+      {% else %}
+        <div style="width: 100%; height: 100%; background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999; font-size: 18px;">
+          Image Placeholder
+        </div>
+      {% endif %}
+      
+    </div>
+  </div>
+</div>
+>>>>>>> 1cbba6a31852147cbb81b211e38f66a5c2aeeac1
