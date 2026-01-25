@@ -165,7 +165,7 @@
         "headline_main_size": 23,
         "headline_sub_size": 21,
         "description_size": 14,
-        "email_label_size": 8,
+        "email_label_size": 11,
         "email_input_size": 12,
         "email_input_padding": 12,
         "button_font_size": 14,
