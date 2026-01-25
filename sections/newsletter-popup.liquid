@@ -167,6 +167,35 @@
       "visible_if": "{{ section.settings.use_beautiful_design == true }}"
     },
     {
+      "type": "header",
+      "content": "Popup Size",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "range",
+      "id": "popup_width",
+      "label": "Popup Width (%)",
+      "min": 40,
+      "max": 95,
+      "step": 5,
+      "unit": "%",
+      "default": 70,
+      "info": "Control the width of the popup (40% to 95%)",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "range",
+      "id": "popup_height",
+      "label": "Popup Height (%)",
+      "min": 40,
+      "max": 95,
+      "step": 5,
+      "unit": "%",
+      "default": 70,
+      "info": "Control the height of the popup (40% to 95%)",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
       "type": "paragraph",
       "content": "t:general.newsletter_popup_info"
     },
