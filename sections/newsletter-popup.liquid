@@ -120,18 +120,23 @@
       "visible_if": "section.settings.use_beautiful_design == true"
     },
     {
+      "type": "header",
+      "content": "Logo Settings",
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
       "type": "image_picker",
       "id": "logo_image",
-      "label": "Logo Image",
-      "info": "Upload your logo image. If not provided, text will be used instead.",
+      "label": "Upload Logo Image",
+      "info": "Upload your logo image here. If you upload an image, it will replace the logo text below.",
       "visible_if": "section.settings.use_beautiful_design == true"
     },
     {
       "type": "text",
       "id": "logo_text",
-      "label": "Logo Text (if no image)",
+      "label": "Logo Text (only if no image uploaded)",
       "default": "MITUSHI",
-      "info": "This text will be shown if no logo image is uploaded",
+      "info": "This text will be shown only if no logo image is uploaded above",
       "visible_if": "section.settings.use_beautiful_design == true"
     },
     {
