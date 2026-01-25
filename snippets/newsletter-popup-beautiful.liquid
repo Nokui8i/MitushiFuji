@@ -72,7 +72,7 @@ Two-column layout: Left (black content), Right (white image)
   .beautiful-newsletter-popup__left {
     background: #000000;
     color: #ffffff;
-    padding: clamp(20px, 4vh, 60px) clamp(20px, 3vw, 50px);
+    padding: 8% 6%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -87,7 +87,7 @@ Two-column layout: Left (black content), Right (white image)
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__left {
-      padding: clamp(15px, 3vh, 40px) clamp(15px, 4vw, 30px);
+      padding: 6% 5%;
       min-height: 100%;
     }
   }
@@ -117,10 +117,10 @@ Two-column layout: Left (black content), Right (white image)
   }
   
   .beautiful-newsletter-popup__logo {
-    font-size: clamp({{ logo_size | times: 0.5 | round }}px, {{ logo_size | divided_by: 10.0 }}vw, {{ logo_size }}px);
+    font-size: calc({{ logo_size }}px * {{ popup_width }} / 100);
     font-weight: 700;
     letter-spacing: 2px;
-    margin-bottom: clamp(15px, 3vh, 40px);
+    margin-bottom: 6%;
     color: #ffffff;
     text-transform: uppercase;
   }
@@ -132,39 +132,39 @@ Two-column layout: Left (black content), Right (white image)
   .beautiful-newsletter-popup__logo img {
     max-width: 100%;
     height: auto;
-    max-height: clamp({{ logo_size }}px, {{ logo_size | times: 2 | divided_by: 10.0 }}vw, {{ logo_size | times: 2 }}px);
+    max-height: calc({{ logo_size | times: 2 }}px * {{ popup_width }} / 100);
     display: block;
   }
   
   .beautiful-newsletter-popup__headline-main {
-    font-size: clamp({{ headline_main_size | times: 0.4 | round }}px, {{ headline_main_size | divided_by: 10.0 }}vw, {{ headline_main_size }}px);
+    font-size: calc({{ headline_main_size }}px * {{ popup_width }} / 100);
     font-weight: 900;
     color: #ff0000;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: clamp(5px, 1vh, 10px);
+    margin-bottom: 1.5%;
     line-height: 1.1;
   }
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__headline-main {
-      font-size: clamp({{ headline_main_size | times: 0.3 | round }}px, {{ headline_main_size | times: 0.67 | divided_by: 10.0 }}vw, {{ headline_main_size | times: 0.67 | round }}px);
+      font-size: calc({{ headline_main_size | times: 0.67 | round }}px * {{ popup_width }} / 100);
     }
   }
   
   .beautiful-newsletter-popup__headline-sub {
-    font-size: clamp({{ headline_sub_size | times: 0.5 | round }}px, {{ headline_sub_size | divided_by: 10.0 }}vw, {{ headline_sub_size }}px);
+    font-size: calc({{ headline_sub_size }}px * {{ popup_width }} / 100);
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: clamp(10px, 2vh, 30px);
+    margin-bottom: 4%;
   }
   
   .beautiful-newsletter-popup__description {
-    font-size: clamp({{ description_size | times: 0.7 | round }}px, {{ description_size | divided_by: 10.0 }}vw, {{ description_size }}px);
+    font-size: calc({{ description_size }}px * {{ popup_width }} / 100);
     color: #ffffff;
-    margin-bottom: clamp(15px, 3vh, 40px);
+    margin-bottom: 6%;
     max-width: 100%;
     width: 100%;
     line-height: 1.6;
@@ -177,23 +177,23 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__email-label {
     display: block;
-    font-size: clamp({{ email_label_size | times: 0.7 | round }}px, {{ email_label_size | divided_by: 10.0 }}vw, {{ email_label_size }}px);
+    font-size: calc({{ email_label_size }}px * {{ popup_width }} / 100);
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: clamp(6px, 1vh, 12px);
+    margin-bottom: 2%;
     text-align: left;
   }
   
   .beautiful-newsletter-popup__email-input {
     width: 100%;
-    padding: clamp({{ email_input_padding | times: 0.6 | round }}px, {{ email_input_padding | divided_by: 10.0 }}vh, {{ email_input_padding }}px) clamp({{ email_input_padding | times: 0.75 | round }}px, {{ email_input_padding | times: 1.25 | divided_by: 10.0 }}vw, {{ email_input_padding | times: 1.25 | round }}px);
+    padding: calc({{ email_input_padding }}px * {{ popup_height }} / 100) calc({{ email_input_padding | times: 1.25 | round }}px * {{ popup_width }} / 100);
     background: #ffffff;
     border: 2px solid #000000;
     color: #000000;
-    font-size: clamp({{ email_input_size | times: 0.75 | round }}px, {{ email_input_size | divided_by: 10.0 }}vw, {{ email_input_size }}px);
-    margin-bottom: clamp(12px, 2vh, 20px);
+    font-size: calc({{ email_input_size }}px * {{ popup_width }} / 100);
+    margin-bottom: 3%;
     box-sizing: border-box;
     border-radius: 0;
   }
@@ -209,11 +209,11 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__button {
     width: 100%;
-    padding: clamp({{ button_padding | times: 0.6 | round }}px, {{ button_padding | divided_by: 10.0 }}vh, {{ button_padding }}px) clamp({{ button_padding | times: 1 | round }}px, {{ button_padding | times: 1.67 | divided_by: 10.0 }}vw, {{ button_padding | times: 1.67 | round }}px);
+    padding: calc({{ button_padding }}px * {{ popup_height }} / 100) calc({{ button_padding | times: 1.67 | round }}px * {{ popup_width }} / 100);
     background: #ff0000;
     color: #ffffff;
     border: none;
-    font-size: clamp({{ button_font_size | times: 0.7 | round }}px, {{ button_font_size | divided_by: 10.0 }}vw, {{ button_font_size }}px);
+    font-size: calc({{ button_font_size }}px * {{ popup_width }} / 100);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
