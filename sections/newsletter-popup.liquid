@@ -118,10 +118,18 @@
       "visible_if": "section.settings.use_beautiful_design == true"
     },
     {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo Image",
+      "info": "Upload your logo image. If not provided, text will be used instead.",
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
       "type": "text",
       "id": "logo_text",
-      "label": "Logo Text",
+      "label": "Logo Text (if no image)",
       "default": "MITUSHI",
+      "info": "This text will be shown if no logo image is uploaded",
       "visible_if": "section.settings.use_beautiful_design == true"
     },
     {
@@ -136,6 +144,7 @@
       "id": "headline_sub",
       "label": "Sub Headline",
       "default": "ON YOUR FIRST ORDER",
+      "info": "Leave empty to hide this text",
       "visible_if": "section.settings.use_beautiful_design == true"
     },
     {
@@ -164,6 +173,118 @@
       "id": "right_image",
       "label": "Right Column Image",
       "info": "Image for the right column (recommended: 800x600px)",
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
+      "type": "header",
+      "content": "Text Sizes",
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
+      "type": "range",
+      "id": "logo_size",
+      "label": "Logo Size",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 32,
+      "info": "Font size for logo text (if using text instead of image)",
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
+      "type": "range",
+      "id": "headline_main_size",
+      "label": "Main Headline Size",
+      "min": 20,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 48,
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
+      "type": "range",
+      "id": "headline_sub_size",
+      "label": "Sub Headline Size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 18,
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description Size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
+      "type": "range",
+      "id": "email_label_size",
+      "label": "Email Label Size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
+      "type": "header",
+      "content": "Form Element Sizes",
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
+      "type": "range",
+      "id": "email_input_size",
+      "label": "Email Input Font Size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
+      "type": "range",
+      "id": "email_input_padding",
+      "label": "Email Input Padding",
+      "min": 8,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "info": "Vertical padding for email input field",
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button Font Size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "visible_if": "section.settings.use_beautiful_design == true"
+    },
+    {
+      "type": "range",
+      "id": "button_padding",
+      "label": "Button Padding",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 18,
+      "info": "Vertical padding for button",
       "visible_if": "section.settings.use_beautiful_design == true"
     },
     {

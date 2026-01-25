@@ -5,6 +5,7 @@ Two-column layout: Left (black content), Right (white image)
 
 {%- liquid
   assign form_id = 'beautifulNewsletterForm' | append: section.id
+  assign logo_image = section.settings.logo_image
   assign logo_text = section.settings.logo_text | default: shop.name
   assign headline_main = section.settings.headline_main | default: 'EXCLUSIVE DISCOUNT'
   assign headline_sub = section.settings.headline_sub | default: 'ON YOUR FIRST ORDER'
@@ -13,6 +14,15 @@ Two-column layout: Left (black content), Right (white image)
   assign button_text = section.settings.button_text | default: 'UNLOCK YOUR OFFER'
   assign popup_width = section.settings.popup_width | default: 70
   assign popup_height = section.settings.popup_height | default: 70
+  assign logo_size = section.settings.logo_size | default: 32
+  assign headline_main_size = section.settings.headline_main_size | default: 48
+  assign headline_sub_size = section.settings.headline_sub_size | default: 18
+  assign description_size = section.settings.description_size | default: 14
+  assign email_label_size = section.settings.email_label_size | default: 12
+  assign email_input_size = section.settings.email_input_size | default: 16
+  assign email_input_padding = section.settings.email_input_padding | default: 16
+  assign button_font_size = section.settings.button_font_size | default: 14
+  assign button_padding = section.settings.button_padding | default: 18
 -%}
 
 <style>
@@ -99,9 +109,9 @@ Two-column layout: Left (black content), Right (white image)
   }
   
   .beautiful-newsletter-popup__logo {
-    font-size: clamp(20px, 4%, 32px);
+    font-size: {{ logo_size }}px;
     font-weight: 700;
-    letter-spacing: clamp(1px, 0.25%, 2px);
+    letter-spacing: 2px;
     margin-bottom: clamp(20px, 5%, 40px);
     color: #ffffff;
     text-transform: uppercase;
@@ -111,33 +121,40 @@ Two-column layout: Left (black content), Right (white image)
     color: #ff0000;
   }
   
+  .beautiful-newsletter-popup__logo img {
+    max-width: 100%;
+    height: auto;
+    max-height: {{ logo_size | times: 2 }}px;
+    display: block;
+  }
+  
   .beautiful-newsletter-popup__headline-main {
-    font-size: clamp(24px, 6%, 48px);
+    font-size: {{ headline_main_size }}px;
     font-weight: 900;
     color: #ff0000;
     text-transform: uppercase;
-    letter-spacing: clamp(0.5px, 0.125%, 1px);
+    letter-spacing: 1px;
     margin-bottom: clamp(5px, 1.25%, 10px);
     line-height: 1.1;
   }
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__headline-main {
-      font-size: clamp(20px, 4.5%, 32px);
+      font-size: {{ headline_main_size | times: 0.67 | round }}px;
     }
   }
   
   .beautiful-newsletter-popup__headline-sub {
-    font-size: clamp(12px, 2.25%, 18px);
+    font-size: {{ headline_sub_size }}px;
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: clamp(1px, 0.25%, 2px);
+    letter-spacing: 2px;
     margin-bottom: clamp(15px, 3.75%, 30px);
   }
   
   .beautiful-newsletter-popup__description {
-    font-size: clamp(11px, 1.75%, 14px);
+    font-size: {{ description_size }}px;
     color: #ffffff;
     margin-bottom: clamp(20px, 5%, 40px);
     max-width: 100%;
@@ -152,22 +169,22 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__email-label {
     display: block;
-    font-size: clamp(10px, 1.5%, 12px);
+    font-size: {{ email_label_size }}px;
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: clamp(0.5px, 0.125%, 1px);
+    letter-spacing: 1px;
     margin-bottom: clamp(8px, 1.5%, 12px);
     text-align: left;
   }
   
   .beautiful-newsletter-popup__email-input {
     width: 100%;
-    padding: clamp(12px, 2%, 16px) clamp(15px, 2.5%, 20px);
+    padding: {{ email_input_padding }}px {{ email_input_padding | times: 1.25 | round }}px;
     background: #ffffff;
     border: 2px solid #000000;
     color: #000000;
-    font-size: clamp(13px, 2%, 16px);
+    font-size: {{ email_input_size }}px;
     margin-bottom: clamp(15px, 2.5%, 20px);
     box-sizing: border-box;
     border-radius: 0;
@@ -184,14 +201,14 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__button {
     width: 100%;
-    padding: clamp(14px, 2.25%, 18px) clamp(20px, 3.75%, 30px);
+    padding: {{ button_padding }}px {{ button_padding | times: 1.67 | round }}px;
     background: #ff0000;
     color: #ffffff;
     border: none;
-    font-size: clamp(11px, 1.75%, 14px);
+    font-size: {{ button_font_size }}px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: clamp(1px, 0.25%, 2px);
+    letter-spacing: 2px;
     cursor: pointer;
     transition: background 0.3s, transform 0.2s;
     border-radius: 0;
@@ -260,16 +277,26 @@ Two-column layout: Left (black content), Right (white image)
     <!-- Left Column: Content -->
     <div class="beautiful-newsletter-popup__left">
       <div class="beautiful-newsletter-popup__logo">
-        {{ logo_text | replace: 'Q', '<span class="logo-accent">Q</span>' }}
+        {% if logo_image %}
+          {%- liquid
+            assign logo_alt = logo_image.alt | default: shop.name
+            assign logo_url = logo_image | image_url: width: 300
+          -%}
+          <img src="{{ logo_url }}" alt="{{ logo_alt }}" loading="eager">
+        {% else %}
+          {{ logo_text | replace: 'Q', '<span class="logo-accent">Q</span>' }}
+        {% endif %}
       </div>
       
       <h2 class="beautiful-newsletter-popup__headline-main">
         {{ headline_main }}
       </h2>
       
-      <p class="beautiful-newsletter-popup__headline-sub">
-        {{ headline_sub }}
-      </p>
+      {% if headline_sub != blank %}
+        <p class="beautiful-newsletter-popup__headline-sub">
+          {{ headline_sub }}
+        </p>
+      {% endif %}
       
       <p class="beautiful-newsletter-popup__description">
         {{ description_text }}
