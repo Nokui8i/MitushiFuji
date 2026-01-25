@@ -38,7 +38,7 @@
         "enable_back_to_top": true,
         "enable_collapse": false,
         "remove_padding_top": false,
-        "remove_padding_bottom": true,
+        "remove_padding_bottom": false,
         "logo": "shopify://shop_images/mitushi_logo_transparent_trimmed_2000w.png",
         "logo_width": 150,
         "heading": "",
