@@ -283,30 +283,33 @@
     }
   }
   
-  /* בדסקטופ - התפריט מתחת ללוגו */
+  /* בדסקטופ - התפריט מתחת ללוגו (אנכי) */
   @media (min-width: 750px) {
     .js-footer .footer-main-row {
-      flex-direction: column !important;
+      flex-direction: row !important;
+      align-items: flex-start !important;
     }
     
     .js-footer .footer-logo-column {
-      width: 100% !important;
+      width: auto !important;
       max-width: none !important;
+      flex: 0 0 auto !important;
     }
     
     .js-footer .footer-nav-column {
-      width: 100% !important;
+      width: auto !important;
       max-width: none !important;
-      margin-top: 24px !important;
+      margin-top: 0 !important;
+      margin-left: 48px !important;
+      flex: 0 0 auto !important;
     }
     
     .js-footer .footer__nav--single-column {
       display: flex !important;
-      flex-direction: row !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;
       justify-content: flex-start !important;
-      align-items: center !important;
-      gap: 24px !important;
+      align-items: flex-start !important;
+      gap: 8px !important;
     }
     
     .js-footer .footer__nav--single-column .nav__item {
