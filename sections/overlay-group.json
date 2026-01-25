@@ -170,7 +170,7 @@
         "email_input_padding": 12,
         "button_font_size": 14,
         "button_padding": 14,
-        "popup_width": 60,
+        "popup_width": 50,
         "popup_height": 50,
         "trigger": "delay-after-page-load",
         "delay_until": 5,
