@@ -117,10 +117,10 @@ Two-column layout: Left (black content), Right (white image)
   }
   
   .beautiful-newsletter-popup__logo {
-    font-size: calc({{ logo_size }}px * {{ popup_width }} / 100);
+    font-size: clamp({{ logo_size | times: 0.5 | round }}px, calc({{ logo_size }}px * {{ popup_width }}vw / 100), {{ logo_size | times: 1.5 | round }}px);
     font-weight: 700;
-    letter-spacing: 2px;
-    margin-bottom: 6%;
+    letter-spacing: clamp(1px, calc(2px * {{ popup_width }} / 100), 3px);
+    margin-bottom: clamp(3%, calc(6% * {{ popup_height }} / 100), 8%);
     color: #ffffff;
     text-transform: uppercase;
   }
@@ -132,39 +132,40 @@ Two-column layout: Left (black content), Right (white image)
   .beautiful-newsletter-popup__logo img {
     max-width: 100%;
     height: auto;
-    max-height: calc({{ logo_size | times: 2 }}px * {{ popup_width }} / 100);
+    max-height: clamp({{ logo_size }}px, calc({{ logo_size | times: 2 }}px * {{ popup_width }}vw / 100), {{ logo_size | times: 3 }}px);
     display: block;
   }
   
   .beautiful-newsletter-popup__headline-main {
-    font-size: calc({{ headline_main_size }}px * {{ popup_width }} / 100);
+    font-size: clamp({{ headline_main_size | times: 0.6 | round }}px, calc({{ headline_main_size }}px * {{ popup_width }}vw / 100), {{ headline_main_size | times: 1.4 | round }}px);
     font-weight: 900;
     color: #ff0000;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 1.5%;
+    letter-spacing: clamp(0.5px, calc(1px * {{ popup_width }} / 100), 2px);
+    margin-bottom: clamp(1%, calc(1.5% * {{ popup_height }} / 100), 2.5%);
     line-height: 1.1;
   }
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__headline-main {
-      font-size: calc({{ headline_main_size | times: 0.67 | round }}px * {{ popup_width }} / 100);
+      font-size: clamp({{ headline_main_size | times: 0.4 | round }}px, calc({{ headline_main_size | times: 0.67 | round }}px * {{ popup_width }}vw / 100), {{ headline_main_size | times: 0.9 | round }}px);
     }
   }
   
   .beautiful-newsletter-popup__headline-sub {
-    font-size: calc({{ headline_sub_size }}px * {{ popup_width }} / 100);
+    font-size: clamp({{ headline_sub_size | times: 0.7 | round }}px, calc({{ headline_sub_size }}px * {{ popup_width }}vw / 100), {{ headline_sub_size | times: 1.3 | round }}px);
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 4%;
+    letter-spacing: clamp(1px, calc(2px * {{ popup_width }} / 100), 3px);
+    margin-bottom: clamp(2%, calc(4% * {{ popup_height }} / 100), 6%);
+    line-height: 1.3;
   }
   
   .beautiful-newsletter-popup__description {
-    font-size: calc({{ description_size }}px * {{ popup_width }} / 100);
+    font-size: clamp({{ description_size | times: 0.8 | round }}px, calc({{ description_size }}px * {{ popup_width }}vw / 100), {{ description_size | times: 1.4 | round }}px);
     color: #ffffff;
-    margin-bottom: 6%;
+    margin-bottom: clamp(4%, calc(6% * {{ popup_height }} / 100), 8%);
     max-width: 100%;
     width: 100%;
     line-height: 1.6;
@@ -177,23 +178,23 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__email-label {
     display: block;
-    font-size: calc({{ email_label_size }}px * {{ popup_width }} / 100);
+    font-size: clamp({{ email_label_size | times: 0.8 | round }}px, calc({{ email_label_size }}px * {{ popup_width }}vw / 100), {{ email_label_size | times: 1.3 | round }}px);
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 2%;
+    letter-spacing: clamp(0.5px, calc(1px * {{ popup_width }} / 100), 2px);
+    margin-bottom: clamp(1.5%, calc(2% * {{ popup_height }} / 100), 3%);
     text-align: left;
   }
   
   .beautiful-newsletter-popup__email-input {
     width: 100%;
-    padding: calc({{ email_input_padding }}px * {{ popup_height }} / 100) calc({{ email_input_padding | times: 1.25 | round }}px * {{ popup_width }} / 100);
+    padding: clamp({{ email_input_padding | times: 0.7 | round }}px, calc({{ email_input_padding }}px * {{ popup_height }}vh / 100), {{ email_input_padding | times: 1.3 | round }}px) clamp({{ email_input_padding | times: 0.9 | round }}px, calc({{ email_input_padding | times: 1.25 | round }}px * {{ popup_width }}vw / 100), {{ email_input_padding | times: 1.6 | round }}px);
     background: #ffffff;
     border: 2px solid #000000;
     color: #000000;
-    font-size: calc({{ email_input_size }}px * {{ popup_width }} / 100);
-    margin-bottom: 3%;
+    font-size: clamp({{ email_input_size | times: 0.85 | round }}px, calc({{ email_input_size }}px * {{ popup_width }}vw / 100), {{ email_input_size | times: 1.3 | round }}px);
+    margin-bottom: clamp(2%, calc(3% * {{ popup_height }} / 100), 4%);
     box-sizing: border-box;
     border-radius: 0;
   }
@@ -209,14 +210,14 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__button {
     width: 100%;
-    padding: calc({{ button_padding }}px * {{ popup_height }} / 100) calc({{ button_padding | times: 1.67 | round }}px * {{ popup_width }} / 100);
+    padding: clamp({{ button_padding | times: 0.7 | round }}px, calc({{ button_padding }}px * {{ popup_height }}vh / 100), {{ button_padding | times: 1.3 | round }}px) clamp({{ button_padding | times: 0.9 | round }}px, calc({{ button_padding | times: 1.67 | round }}px * {{ popup_width }}vw / 100), {{ button_padding | times: 2.2 | round }}px);
     background: #ff0000;
     color: #ffffff;
     border: none;
-    font-size: calc({{ button_font_size }}px * {{ popup_width }} / 100);
+    font-size: clamp({{ button_font_size | times: 0.85 | round }}px, calc({{ button_font_size }}px * {{ popup_width }}vw / 100), {{ button_font_size | times: 1.3 | round }}px);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: clamp(1px, calc(2px * {{ popup_width }} / 100), 3px);
     cursor: pointer;
     transition: background 0.3s, transform 0.2s;
     border-radius: 0;
