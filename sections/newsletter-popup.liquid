@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {%- unless section.settings.show_only_on_index and template != 'index' -%}
   {%- unless section.settings.show_only_for_visitors and customer -%}
     {%- liquid
@@ -627,3 +628,634 @@
   ]
 }
 {% endschema %}
+=======
+{%- unless section.settings.show_only_on_index and template != 'index' -%}
+  {%- unless section.settings.show_only_for_visitors and customer -%}
+    {%- liquid
+      if section.settings.desktop_direction == 'fd-column-md'
+        assign vertical_layout = 'vertical_layout'
+        assign desktop_direction_vertical = section.settings.desktop_direction | append: ' ' | append: section.settings.desktop_alignment_vertical | append: ' ' | append: section.settings.desktop_position_vertical
+      endif
+      if section.settings.desktop_direction == 'fd-row-md'
+        assign vertical_layout = section.settings.enable_vertical_on_mobile | replace: true, 'vertical_layout'
+        assign desktop_direction_horizontal = section.settings.desktop_direction | append: ' ' | append: section.settings.desktop_alignment | append: ' ' | append: section.settings.desktop_position
+      endif
+
+      unless section.settings.sticky_popup_color.alpha == 0.0 or section.settings.sticky_popup_color == blank
+        assign sticky_popup_color = 'color: ' | append: section.settings.sticky_popup_color | append: ';'
+      endunless
+
+      unless section.settings.sticky_popup_background.alpha == 0.0 or section.settings.sticky_popup_background == blank
+        assign sticky_popup_background = '--gradient-background: ' | append: section.settings.sticky_popup_background | append: ';'
+      endunless
+    -%}
+    {% capture children %}
+      {% content_for 'blocks' %}
+    {% endcapture %}
+
+    <sht-newsletter-popup class="newsletter-popup {{ desktop_direction_vertical }} {{ desktop_direction_horizontal }}" tabindex="-1" data-ui-component="Newsletter Popup Section" data-section-id="{{ section.id }}" data-delay-time="{{ section.settings.delay_time }}" data-delay-days="{{ section.settings.delay_days }}" data-delay-until="{{ section.settings.delay_until }}" data-trigger="{{ section.settings.trigger }}" {% if section.settings.show_only_on_index %}data-show-only-on-index{% endif %} {% if section.settings.show_only_for_visitors %}data-show-only-for-visitors{% endif %}>
+      {% if section.settings.use_beautiful_design %}
+        <style>
+          sht-newsletter-popup {
+            background: transparent !important;
+          }
+          .newsletter-popup-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(0, 0, 0, 0.6) !important;
+            z-index: 1 !important;
+            backdrop-filter: blur(2px);
+          }
+          .popup-container {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: transparent !important;
+            z-index: 2 !important;
+            position: relative !important;
+          }
+        </style>
+      {% endif %}
+      <div class="popup-container p-relative color-{{ section.settings.color_scheme }} h-100 d-flex middle-xs center-xs" style="--width-md: {{ section.settings.width }}%;">
+        {% if section.settings.use_beautiful_design %}
+          {%- render 'newsletter-popup-beautiful', section: section -%}
+        {% else %}
+          {% if section.settings.enable_sticky_popup %}
+            <button class="btn btn-small btn-icon btn-secondary btn-custom p-absolute js-popup-close-btn zi-9 right-12 top-12" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
+              {%- render 'icon-minus' -%}
+            </button>
+          {% else %}
+            <div class="p-absolute  zi-9 right-12 top-12">
+              <button class="btn btn-small btn-icon btn-secondary--animate js-popup-close-btn" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
+                {%- render 'icon-close' -%}
+              </button>
+            </div>
+          {% endif %}
+
+          <div class="newsletter-popup__content w-100 h-100 scrollbar">
+            <div class="newsletter-popup__content-container d-flex {{ vertical_layout }} {{ section.settings.desktop_direction }} h-100" style="gap: {{ section.settings.desktop_gap }}px;" data-deferred-content>
+              <!-- Content will be loaded here when popup opens -->
+            </div>
+          </div>
+          
+          <template class="js-newsletter-content-template">
+            {{ children }}
+          </template>
+        {% endif %}
+      </div>
+      <div class="newsletter-popup-overlay js-newsletter-popup-overlay"></div>
+    </sht-newsletter-popup>
+
+    {% if section.settings.enable_sticky_popup %}
+      <button class="color-{{ section.settings.color_scheme }} sticky-popup--{{ section.settings.sticky_popup_position }}-{{ section.settings.sticky_popup_alignment }} btn p-fixed gap-12 d-flex newsletter-popup-trigger js-newsletter-popup-trigger" style="{{ sticky_popup_background }}; {{ sticky_popup_color }}">
+        <span>{{ section.settings.sticky_popup_text | default: 'Join now' }}</span>
+        {% if section.settings.show_close_button %}
+          {%- render 'icon-close' class: 'flex-auto' -%}
+        {% endif %}
+      </button>
+    {% endif %}
+  {% endunless %}
+{% endunless %}
+
+{% schema %}
+{
+  "name": "t:general.newsletter_popup",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:general.general"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:general.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_beautiful_design",
+      "label": "Use Beautiful Design",
+      "default": true,
+      "info": "Enable the modern two-column newsletter popup design"
+    },
+    {
+      "type": "header",
+      "content": "Beautiful Design Settings",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo Text",
+      "default": "MITUSHI",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "text",
+      "id": "headline_main",
+      "label": "Main Headline",
+      "default": "EXCLUSIVE DISCOUNT",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "text",
+      "id": "headline_sub",
+      "label": "Sub Headline",
+      "default": "ON YOUR FIRST ORDER",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "textarea",
+      "id": "description_text",
+      "label": "Description",
+      "default": "Join the family and get exclusive email-only offers by signing up.",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email Label",
+      "default": "ENTER YOUR EMAIL",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "UNLOCK YOUR OFFER",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image",
+      "label": "Right Column Image",
+      "info": "Image for the right column (recommended: 800x600px)",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Popup Size",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "range",
+      "id": "popup_width",
+      "label": "Popup Width (%)",
+      "min": 40,
+      "max": 95,
+      "step": 5,
+      "unit": "%",
+      "default": 70,
+      "info": "Control the width of the popup (40% to 95%)",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "range",
+      "id": "popup_height",
+      "label": "Popup Height (%)",
+      "min": 40,
+      "max": 95,
+      "step": 5,
+      "unit": "%",
+      "default": 70,
+      "info": "Control the height of the popup (40% to 95%)",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:general.newsletter_popup_info"
+    },
+    {
+      "type": "select",
+      "id": "trigger",
+      "label": "t:general.when_to_show",
+      "info": "t:general.when_to_show_info",
+      "options": [
+        {
+          "value": "reaching-to-footer",
+          "label": "t:general.reaching_the_footer"
+        },
+        {
+          "value": "after-closing-cart-notification",
+          "label": "t:general.after_add_to_cart"
+        },
+        {
+          "value": "delay-after-page-load",
+          "label": "t:general.delay_after_page_load"
+        }
+      ],
+      "default": "reaching-to-footer"
+    },
+    {
+      "type": "range",
+      "id": "delay_until",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "unit": "s",
+      "default": 3,
+      "label": "t:general.delay_popup",
+      "info": "t:general.delay_popup_info",
+      "visible_if": "{{ section.settings.trigger == 'delay-after-page-load' }}"
+    },
+    {
+      "type": "select",
+      "id": "delay_time",
+      "label": "t:general.frequency",
+      "info": "t:general.frequency_info",
+      "visible_if": "{{ section.settings.trigger != 'after-closing-cart-notification' }}",
+      "options": [
+        {
+          "value": "session",
+          "label": "t:general.after_each_browser_session"
+        },
+        {
+          "value": "cookies",
+          "label": "t:general.until_visitor_clears_cookies"
+        },
+        {
+          "value": "days",
+          "label": "t:general.after_a_set_number_of_days"
+        }
+      ],
+      "default": "session"
+    },
+    {
+      "type": "range",
+      "id": "delay_days",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "default": 30,
+      "unit": "day",
+      "label": "t:general.days_to_wait",
+      "visible_if": "{{ section.settings.delay_time == 'days' and section.settings.trigger != 'after-closing-cart-notification' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_only_on_index",
+      "label": "t:general.show_only_on_index",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_only_for_visitors",
+      "label": "t:general.show_only_for_visitors",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:general.layout"
+    },
+    {
+      "type": "select",
+      "id": "desktop_direction",
+      "label": "t:general.direction",
+      "options": [
+        {
+          "value": "fd-column-md",
+          "label": "t:general.vertical"
+        },
+        {
+          "value": "fd-row-md",
+          "label": "t:general.horizontal"
+        }
+      ],
+      "default": "fd-column-md"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_vertical_on_mobile",
+      "label": "t:general.vertical_on_mobile",
+      "default": true,
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
+    },
+    {
+      "type": "select",
+      "id": "desktop_alignment",
+      "label": "t:general.alignment",
+      "options": [
+        {
+          "value": "start-xs",
+          "label": "t:general.left"
+        },
+        {
+          "value": "center-xs",
+          "label": "t:general.center"
+        },
+        {
+          "value": "end-xs",
+          "label": "t:general.right"
+        }
+      ],
+      "default": "start-xs",
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
+
+    },
+    {
+      "type": "select",
+      "id": "desktop_alignment_vertical",
+      "label": "t:general.alignment",
+      "options": [
+        {
+          "value": "top-md",
+          "label": "t:general.left"
+        },
+        {
+          "value": "middle-md",
+          "label": "t:general.center"
+        },
+        {
+          "value": "bottom-md",
+          "label": "t:general.right"
+        }
+      ],
+      "default": "bottom-md",
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-column-md' }}"
+
+    },
+    {
+      "type": "select",
+      "id": "desktop_position",
+      "label": "t:general.position",
+      "options": [
+        {
+          "value": "middle-xs",
+          "label": "t:general.middle"
+        },
+        {
+          "value": "bottom-xs",
+          "label": "t:general.bottom"
+        }
+      ],
+      "default": "middle-xs",
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
+    },
+    {
+      "type": "select",
+      "id": "desktop_position_vertical",
+      "label": "t:general.position",
+      "options": [
+        {
+          "value": "center-md middle-xs",
+          "label": "t:general.middle"
+        },
+        {
+          "value": "end-md bottom-xs",
+          "label": "t:general.bottom"
+        }
+      ],
+      "default": "center-md middle-xs",
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-column-md' }}"
+    },
+    {
+      "type": "range",
+      "id": "desktop_gap",
+      "label": "t:general.gap",
+      "default": 12,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "t:general.size"
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "t:general.width",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "t:general.sticky_popup"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:general.show_sticky_popup_when_dismissed"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_popup",
+      "label": "t:general.enable_sticky_popup",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "sticky_popup_text",
+      "label": "t:general.text",
+      "default": "Get 20% off",
+      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+    },
+    {
+      "type": "select",
+      "id": "sticky_popup_alignment",
+      "label": "t:general.alignment",
+      "visible_if": "{{ section.settings.enable_sticky_popup == true }}",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:general.left"
+        },
+        {
+          "value": "right",
+          "label": "t:general.right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "sticky_popup_position",
+      "label": "t:general.position",
+      "options": [
+        {
+          "value": "middle",
+          "label": "t:general.middle"
+        },
+        {
+          "value": "bottom",
+          "label": "t:general.bottom"
+        }
+      ],
+      "default": "middle",
+      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+    },
+    {
+      "type": "color",
+      "id": "sticky_popup_color",
+      "label": "t:general.custom_text_color",
+      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+    },
+    {
+      "type": "color",
+      "id": "sticky_popup_background",
+      "label": "t:general.custom_text_background",
+      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_close_button",
+      "label": "t:general.show_close_button",
+      "default": true,
+      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+    }
+  ],
+  "enabled_on": {
+    "groups": ["custom.overlay"]
+  },
+  "blocks": [
+    {
+      "type": "@theme"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.newsletter_popup",
+      "blocks": {
+        "group_1": {
+          "type": "group",
+          "name": "t:general.group",
+          "settings": {
+            "video_controller_color": "transparent",
+            "desktop_direction": "fd-column-md",
+            "content_alignment_desktop_vertical": "ta-left-md top-md",
+            "content_position_desktop_vertical": "center-md",
+            "content_alignment_desktop_horizontal": "ta-center-md center-md",
+            "content_position_desktop_horizontal": "middle-md",
+            "gap_desktop": 24,
+            "mobile_direction": "fd-column",
+            "content_alignment_mobile_vertical": "ta-center middle-xs",
+            "content_position_mobile_vertical": "start-xs",
+            "content_alignment_mobile_horizontal": "ta-left start-xs",
+            "content_position_mobile_horizontal": "top-xs",
+            "gap_mobile": 12,
+            "width": "100%",
+            "custom_width": 20,
+            "mobile_width": "100%",
+            "mobile_custom_width": 0,
+            "height": "100%",
+            "custom_height": 100,
+            "padding_top": 0,
+            "padding_bottom": 0,
+            "padding_left": 0,
+            "padding_right": 0,
+            "link": ""
+          },
+          "blocks": {
+            "image": {
+              "type": "image",
+              "name": "t:general.image",
+              "settings": {
+                "image_ratio": "1/1",
+                "desktop_width": 100,
+                "mobile_width": 100,
+                "height": "fill",
+                "link": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "image"
+          ]
+        },
+        "group_2": {
+          "type": "group",
+          "name": "t:general.group",
+          "settings": {
+            "desktop_direction": "fd-column-md",
+            "content_alignment_desktop_vertical": "ta-center-md middle-md",
+            "content_position_desktop_vertical": "center-md",
+            "content_alignment_desktop_horizontal": "ta-left-md start-md",
+            "content_position_desktop_horizontal": "top-md",
+            "gap_desktop": 12,
+            "mobile_direction": "fd-column",
+            "content_alignment_mobile_vertical": "ta-center middle-xs",
+            "content_position_mobile_vertical": "center-xs",
+            "content_alignment_mobile_horizontal": "ta-left start-xs",
+            "content_position_mobile_horizontal": "top-xs",
+            "gap_mobile": 12,
+            "width": "100%",
+            "custom_width": 0,
+            "mobile_width": "100%",
+            "mobile_custom_width": 0,
+            "height": "100%",
+            "custom_height": 0,
+            "padding_top": 24,
+            "padding_bottom": 24,
+            "padding_left": 24,
+            "padding_right": 24,
+            "link": ""
+          },
+          "blocks": {
+            "subheading": {
+              "type": "subheading",
+              "name": "t:general.subheading",
+              "settings": {
+                "subheading": "Subheading"
+              },
+              "blocks": {}
+            },
+            "heading": {
+              "type": "heading",
+              "name": "t:general.heading",
+              "settings": {
+                "heading": "Sign up for our newsletter",
+                "heading_size": "1"
+              },
+              "blocks": {}
+            },
+            "description": {
+              "type": "description",
+              "name": "t:general.description",
+              "settings": {
+                "description": "<p>Describe what your customers will receive when subscribing to your newsletter.</p>"
+              },
+              "blocks": {}
+            },
+            "newsletter_form": {
+              "type": "newsletter-form",
+              "name": "t:general.newsletter_form",
+              "settings": {
+                "button_label": "Subscribe",
+                "button_style": "primary",
+                "width": "fill",
+                "custom_width": 100,
+                "mobile_width": "fill",
+                "mobile_custom_width": 100
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "subheading",
+            "heading",
+            "description",
+            "newsletter_form"
+          ]
+        }
+      },
+      "block_order": [
+        "group_1",
+        "group_2"
+      ]
+    }
+  ]
+}
+{% endschema %}
+>>>>>>> 91f2492671f69dba44a8bfe4c5dc5d5956e30082
