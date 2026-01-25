@@ -56,34 +56,20 @@
         <div class="clm footer-nav-column" style="--w-xs: 12; --w-sm: 10; --w-lg: 3;">
           <div class="footer-nav-wrapper">
             <ul class="footer__nav footer__nav--single-column ls-none">
-            {%- for block in section.blocks -%}
-              {%- case block.type -%}
-                {%- when 'menu' -%}
-                  <div class="">
-                    <sht-clps-rgn class="collapsible-region" data-properties='{"isCollapsibleOnDesktop":false, "isCollapsibleOnMobile":{{ section.settings.enable_collapse }}, "ariaDescribedby": "clsbeTgr-{{ section_id }}-{{ forloop.index }}", "ariaControls": "clsbeCtt-{{ section_id }}-{{forloop.index}}"}'>
-                      <button id="clsbeTgr-{{ section_id }}-{{ forloop.index }}" class="pt-16 pb-16 pl-0 pr-0 m-zero js-collapsible-region-trigger btn-collapsible btn-plain h6 ta-left w-100 d-flex top-xs between-xs middle-xs wb-break-word c-pointer" aria-controls="clsbeCtt-{{ section_id }}-{{forloop.index}}" aria-expanded="false">
-                        {{- block.settings.heading | escape -}}
-                        {%- if section.settings.enable_collapse -%}
-                          {{ icon_chevron_down_with_class }}
-                        {%- endif -%}
-                      </button>
-                      <div id="clsbeCtt-{{ section_id }}-{{ forloop.index }}" class="collapsible-region__content pb-24 js-collapsible-region-content" role="region" tabindex="-1" aria-describedby="clsbeTgr-{{ section_id }}-{{forloop.index}}" hidden>
-                        {%- if block.settings.menu -%}
-                          <ul class="footer__nav ls-none">
-                            {%- for link in block.settings.menu.links -%}
-                              <li class="nav__item">
-                                <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %} class="footer__nav__link d-inline-block pt-8 pb-8 pr-0 pl-0">
-                                  {{- link.title -}}
-                                </a>
-                              </li>
-                            {%- endfor -%}
-                          </ul>
-                        {%- endif -%}
-                      </div>
-                    </sht-clps-rgn>
-                  </div>
-              {%- endcase -%}
-            {%- endfor -%}
+              {%- for block in section.blocks -%}
+                {%- case block.type -%}
+                  {%- when 'menu' -%}
+                    {%- if block.settings.menu -%}
+                      {%- for link in block.settings.menu.links -%}
+                        <li class="nav__item">
+                          <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %} class="footer__nav__link d-inline-block pt-8 pb-8 pr-0 pl-0">
+                            {{- link.title -}}
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    {%- endif -%}
+                {%- endcase -%}
+              {%- endfor -%}
             </ul>
           </div>
         </div>
