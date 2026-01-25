@@ -627,7 +627,6 @@
   ]
 }
 {% endschema %}
-    {%- liquid
       if section.settings.desktop_direction == 'fd-column-md'
         assign vertical_layout = 'vertical_layout'
         assign desktop_direction_vertical = section.settings.desktop_direction | append: ' ' | append: section.settings.desktop_alignment_vertical | append: ' ' | append: section.settings.desktop_position_vertical
