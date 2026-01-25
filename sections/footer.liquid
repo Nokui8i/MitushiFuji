@@ -285,27 +285,26 @@
     }
   }
   
-  /* בדסקטופ - NEWSLETTER בצד שמאל, לוגו + תפריט בצד ימין */
+  /* בדסקטופ - LOGO + תפריט בצד שמאל קיצוני, NEWSLETTER בצד ימין קיצוני */
   @media (min-width: 750px) {
     .js-footer .footer-main-row {
       flex-direction: row !important;
       align-items: flex-start !important;
-      justify-content: flex-start !important;
-      gap: 48px !important;
-    }
-    
-    .js-footer .footer-newsletter-column {
-      order: 1 !important;
-      flex: 0 0 auto !important;
-      width: auto !important;
-      max-width: 350px !important;
+      justify-content: space-between !important;
     }
     
     .js-footer .footer-logo-column {
-      order: 2 !important;
       flex: 0 0 auto !important;
       width: auto !important;
       max-width: none !important;
+      margin-right: auto !important;
+    }
+    
+    .js-footer .footer-newsletter-column {
+      flex: 0 0 auto !important;
+      width: auto !important;
+      max-width: 350px !important;
+      margin-left: auto !important;
     }
     
     .js-footer .footer-nav-wrapper {
