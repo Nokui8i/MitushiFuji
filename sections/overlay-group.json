@@ -160,7 +160,7 @@
         "email_label": "ENTER YOUR EMAIL",
         "button_text": "JOIN THE FAMILY",
         "right_image": "shopify://shop_images/3_jpg.webp",
-        "popup_width": 50,
+        "popup_width": 40,
         "popup_height": 40,
         "trigger": "delay-after-page-load",
         "delay_until": 5,
