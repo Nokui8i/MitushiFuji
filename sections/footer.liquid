@@ -17,8 +17,8 @@
         </button>
       </div>
       {%- if section.settings.logo != blank or section.settings.heading != blank or section.settings.description != blank or section.settings.show_info -%}
-        <div class="clm" style="--w-xs: 12; --w-sm: 10; --w-lg: 3;">
-          <div class="">
+        <div class="clm footer-logo-column" style="--w-xs: 12; --w-sm: 10; --w-lg: 3;">
+          <div class="footer-logo-wrapper">
             <span class="h6 pt-16 pb-16 m-zero d-block hide-empty">{{- section.settings.heading | escape -}}</span>
             {%- if section.settings.logo != blank -%}
               <div class="footer__logo d-block mt-24 mb-24 center-xs start-lg" style="--logo-width: {{ section.settings.logo_width }}px">
@@ -235,14 +235,33 @@
   
   /* מרכז את הלוגו ב-mobile */
   @media (max-width: 749px) {
-    .js-footer .footer__logo {
+    .js-footer .footer-logo-column {
       display: flex !important;
       justify-content: center !important;
       align-items: center !important;
     }
     
+    .js-footer .footer-logo-wrapper {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      width: 100% !important;
+    }
+    
+    .js-footer .footer__logo {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      text-align: center !important;
+      width: 100% !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+    
     .js-footer .footer__logo .logo {
       margin: 0 auto !important;
+      display: block !important;
     }
   }
 </style>
