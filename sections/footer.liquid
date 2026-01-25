@@ -53,8 +53,9 @@
         </div>
       {%- endif -%}
       {%- if section.blocks.size > 0 -%}
-        <div class="clm" style="--w-xs: 12; --w-sm: 10; --w-lg: 6;">
-          <div class="footer__nav__list d-grid c-gap r-gap-lg-24">
+        <div class="clm footer-nav-column" style="--w-xs: 12; --w-sm: 10; --w-lg: 3;">
+          <div class="footer-nav-wrapper">
+            <ul class="footer__nav footer__nav--single-column ls-none">
             {%- for block in section.blocks -%}
               {%- case block.type -%}
                 {%- when 'menu' -%}
@@ -83,6 +84,7 @@
                   </div>
               {%- endcase -%}
             {%- endfor -%}
+            </ul>
           </div>
         </div>
       {%- endif -%}
