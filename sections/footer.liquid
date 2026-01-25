@@ -9,7 +9,7 @@
 -%}
 <footer class="js-footer section color-{{ section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: false, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: false, '' }} {% render 'animation-loader', section: section %}" data-ui-component="Section Footer">
   <div class="ctnr">
-    <div class="rw center-xs start-lg">
+    <div class="rw center-xs start-lg footer-main-row">
       <div class="clm {{ section.settings.enable_back_to_top | default: 'd-none' | replace: 'true', '' }}" style="--w-xs: 12; --w-sm: 10; --w-lg: 12;">
         <button onclick="SHTHelper.qde.scrollTo({top: 0, behavior: `smooth`});" class="mb-64 pt-lg-12 pb-lg-12 btn btn-link padding--start js-back-to-top-btn">
           {{ 'sections.footer.back_to_top' | t }}
@@ -262,6 +262,67 @@
     .js-footer .footer__logo .logo {
       margin: 0 auto !important;
       display: block !important;
+    }
+    
+    /* מרכז את התפריט ב-mobile */
+    .js-footer .footer-nav-column {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+    }
+    
+    .js-footer .footer-nav-wrapper {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100% !important;
+    }
+    
+    .js-footer .footer__nav--single-column {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      gap: 8px !important;
+    }
+    
+    .js-footer .footer__nav--single-column .nav__item {
+      text-align: center !important;
+    }
+    
+    .js-footer .footer__nav--single-column .footer__nav__link {
+      text-align: center !important;
+    }
+  }
+  
+  /* בדסקטופ - התפריט מתחת ללוגו */
+  @media (min-width: 750px) {
+    .js-footer .footer-main-row {
+      flex-direction: column !important;
+    }
+    
+    .js-footer .footer-logo-column {
+      width: 100% !important;
+      max-width: none !important;
+    }
+    
+    .js-footer .footer-nav-column {
+      width: 100% !important;
+      max-width: none !important;
+      margin-top: 24px !important;
+    }
+    
+    .js-footer .footer__nav--single-column {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      justify-content: flex-start !important;
+      align-items: center !important;
+      gap: 24px !important;
+    }
+    
+    .js-footer .footer__nav--single-column .nav__item {
+      text-align: left !important;
     }
   }
 </style>
