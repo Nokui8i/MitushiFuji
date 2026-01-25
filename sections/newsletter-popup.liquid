@@ -627,7 +627,6 @@
   ]
 }
 {% endschema %}
-  {%- unless section.settings.show_only_for_visitors and customer -%}
     {%- liquid
       if section.settings.desktop_direction == 'fd-column-md'
         assign vertical_layout = 'vertical_layout'
