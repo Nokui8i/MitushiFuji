@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <sht-cart-noti id="cartNotificationPanel" class="js-cartNotificationPanel cart-notification w-100 zi-7 no-focus-visible left-0 right-0 d-block p-absolute visible-xs maw-100 opacity-1" tabindex="-1" hidden="true" style="display: none !important; visibility: hidden !important; opacity: 0 !important;">
     <style>
       #cartNotificationPanel,
@@ -46,4 +47,54 @@
         </div>
       </div>
     </div>
+=======
+<sht-cart-noti id="cartNotificationPanel" class="js-cartNotificationPanel cart-notification w-100 zi-7 no-focus-visible left-0 right-0 d-block p-absolute visible-xs maw-100 opacity-1" tabindex="-1" hidden="true" style="display: none !important; visibility: hidden !important; opacity: 0 !important;">
+    <style>
+      #cartNotificationPanel,
+      .js-cartNotificationPanel,
+      sht-cart-noti {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+    </style>
+    <div data-type="cart-notification-panel-wrapper" class="js-cart-notification-panel-wrapper p-relative" >
+      <div class="focus-inset js-cart-notification-panel-container" aria-modal="true" aria-label="{{ 'general.cart.item_added' | t }}" role="dialog" tabindex="-1">
+        <div class="d-flex middle-xs between-xs mb-24">
+          <p class="m-zero d-flex middle-xs ">
+            <span class="icon icon--small btn-icon bs-none color-accent-2 fs-0 mr-8">
+              {%- render 'icon-check-mark', size: 16 -%}
+            </span>
+            {{ "general.cart.success_message" | t }}
+          </p>
+          <button type="button" class="btn btn-icon btn-small btn-secondary--animate js-cart-notification-panel-close-btn" aria-label="{{ 'accessibility.close' | t }}" >
+            {% render 'icon-close' %}
+          </button>
+        </div>
+        {% if settings.cart_show_free_shipping_notification and settings.cart_minimum_order_price_for_free_shipping != blank %}
+          <div class="cart-notification-free-shipping js-cart-notification-free-shipping top-xs pb-8 pt-8"></div>
+        {% endif %}
+        <div class="js-cart-notification-panel-content cart-notification-panel-content d-grid top-xs mt-16 mb-24 gap-16 "></div>
+        <div class="cart-notification__links">
+          <a href="{{ routes.cart_url }}" {% if settings.cart_type == 'drawer' %} role="button" onclick="event.preventDefault();try { window.cartNotificationPanel.close(); window.shtCartDrawer.openDrawer(SHTHelper.qs('.js-header-cart-status-btn')); } catch(err) { window.location.assign('{{ routes.cart_url }}');}" {% endif %} aria-haspopup="true" aria-expanded="false" aria-controls="shtCartDrawer" class="btn btn-large btn-secondary--animate w-100 mb-16">
+            <span class="d-block o-hidden p-relative">
+              <span class="btn-secondary__content">
+                {{ "general.cart.view" | t }} (<span class="js-cart-notification-panel-item-count-content"></span>)
+              </span>
+            </span>
+          </a>
+          <form action="{{ routes.cart_url }}" method="post" id="cart-notification-form">
+            <button class="btn btn-large btn-primary--animate w-100 js-cart-notification-panel-btn mb-16" name="checkout">
+              <span class="d-block o-hidden p-relative">
+                <span class="btn-primary__content">
+                  {{ "sections.cart.checkout" | t }}
+                </span>
+              </span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+>>>>>>> 322939432324e37ee5a9257ab20ec3cac1b1609a
   </sht-cart-noti>
