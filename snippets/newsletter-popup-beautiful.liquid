@@ -11,14 +11,16 @@ Two-column layout: Left (black content), Right (white image with red accent)
   assign description_text = section.settings.description_text | default: 'Join the family and get exclusive email-only offers by signing up.'
   assign email_label = section.settings.email_label | default: 'ENTER YOUR EMAIL'
   assign button_text = section.settings.button_text | default: 'UNLOCK YOUR OFFER'
+  assign popup_width = section.settings.popup_width | default: 70
+  assign popup_height = section.settings.popup_height | default: 70
 -%}
 
 <style>
   .beautiful-newsletter-popup {
     max-width: none;
-    width: 70%;
+    width: {{ popup_width }}%;
     max-width: 1400px;
-    height: 70%;
+    height: {{ popup_height }}%;
     max-height: 800px;
     margin: 0;
     background: #ffffff;
@@ -226,18 +228,6 @@ Two-column layout: Left (black content), Right (white image with red accent)
     left: 0;
   }
   
-  .beautiful-newsletter-popup__red-accent {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40%;
-    background: linear-gradient(135deg, #ff0000 0%, #ff0000 50%, transparent 50%);
-    clip-path: polygon(0 100%, 100% 0, 100% 100%);
-    z-index: 2;
-    opacity: 0.9;
-  }
-  
   .beautiful-newsletter-popup__error,
   .beautiful-newsletter-popup__success {
     margin-top: 16px;
@@ -351,7 +341,6 @@ Two-column layout: Left (black content), Right (white image with red accent)
         </div>
       {% endif %}
       
-      <div class="beautiful-newsletter-popup__red-accent"></div>
     </div>
   </div>
 </div>
