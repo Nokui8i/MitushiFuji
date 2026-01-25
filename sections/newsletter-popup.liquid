@@ -127,7 +127,7 @@
       "id": "logo_image",
       "label": "Upload Logo Image",
       "info": "Upload your logo image here. If you upload an image, it will replace the logo text below.",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "text",
@@ -135,14 +135,14 @@
       "label": "Logo Text (only if no image uploaded)",
       "default": "MITUSHI",
       "info": "This text will be shown only if no logo image is uploaded above",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "text",
       "id": "headline_main",
       "label": "Main Headline",
       "default": "EXCLUSIVE DISCOUNT",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "text",
@@ -150,35 +150,35 @@
       "label": "Sub Headline",
       "default": "ON YOUR FIRST ORDER",
       "info": "Leave empty to hide this text",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "textarea",
       "id": "description_text",
       "label": "Description",
       "default": "Join the family and get exclusive email-only offers by signing up.",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "text",
       "id": "email_label",
       "label": "Email Label",
       "default": "ENTER YOUR EMAIL",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "text",
       "id": "button_text",
       "label": "Button Text",
       "default": "UNLOCK YOUR OFFER",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "image_picker",
       "id": "right_image",
       "label": "Right Column Image",
       "info": "Image for the right column (recommended: 800x600px)",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "header",
@@ -194,7 +194,7 @@
       "unit": "px",
       "default": 32,
       "info": "Font size for logo text (if using text instead of image)",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "range",
@@ -205,7 +205,7 @@
       "step": 1,
       "unit": "px",
       "default": 48,
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "range",
@@ -216,7 +216,7 @@
       "step": 1,
       "unit": "px",
       "default": 18,
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "range",
@@ -227,7 +227,7 @@
       "step": 1,
       "unit": "px",
       "default": 14,
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "range",
@@ -238,7 +238,7 @@
       "step": 1,
       "unit": "px",
       "default": 12,
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "header",
@@ -253,7 +253,7 @@
       "step": 1,
       "unit": "px",
       "default": 16,
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "range",
@@ -265,7 +265,7 @@
       "unit": "px",
       "default": 16,
       "info": "Vertical padding for email input field",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "range",
@@ -276,7 +276,7 @@
       "step": 1,
       "unit": "px",
       "default": 14,
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "range",
@@ -288,7 +288,7 @@
       "unit": "px",
       "default": 18,
       "info": "Vertical padding for button",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "header",
@@ -304,7 +304,7 @@
       "unit": "%",
       "default": 70,
       "info": "Control the width of the popup (40% to 95%)",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "range",
@@ -316,7 +316,7 @@
       "unit": "%",
       "default": 70,
       "info": "Control the height of the popup (40% to 95%)",
-      "visible_if": "section.settings.use_beautiful_design == true"
+      "visible_if": "{{ section.settings.use_beautiful_design }}"
     },
     {
       "type": "paragraph",
@@ -353,14 +353,14 @@
       "default": 3,
       "label": "t:general.delay_popup",
       "info": "t:general.delay_popup_info",
-      "visible_if": "section.settings.trigger == 'delay-after-page-load'"
+      "visible_if": "{{ section.settings.trigger == 'delay-after-page-load' }}"
     },
     {
       "type": "select",
       "id": "delay_time",
       "label": "t:general.frequency",
       "info": "t:general.frequency_info",
-      "visible_if": "section.settings.trigger != 'after-closing-cart-notification'",
+      "visible_if": "{{ section.settings.trigger != 'after-closing-cart-notification' }}",
       "options": [
         {
           "value": "session",
@@ -386,7 +386,7 @@
       "default": 30,
       "unit": "day",
       "label": "t:general.days_to_wait",
-      "visible_if": "section.settings.delay_time == 'days' and section.settings.trigger != 'after-closing-cart-notification'"
+      "visible_if": "{{ section.settings.delay_time == 'days' and section.settings.trigger != 'after-closing-cart-notification' }}"
     },
     {
       "type": "checkbox",
@@ -425,7 +425,7 @@
       "id": "enable_vertical_on_mobile",
       "label": "t:general.vertical_on_mobile",
       "default": true,
-      "visible_if": "section.settings.desktop_direction == 'fd-row-md'"
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
     },
     {
       "type": "select",
@@ -446,7 +446,7 @@
         }
       ],
       "default": "start-xs",
-      "visible_if": "section.settings.desktop_direction == 'fd-row-md'"
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
 
     },
     {
@@ -468,7 +468,7 @@
         }
       ],
       "default": "bottom-md",
-      "visible_if": "section.settings.desktop_direction == 'fd-column-md'"
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-column-md' }}"
 
     },
     {
@@ -486,7 +486,7 @@
         }
       ],
       "default": "middle-xs",
-      "visible_if": "section.settings.desktop_direction == 'fd-row-md'"
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
     },
     {
       "type": "select",
@@ -503,7 +503,7 @@
         }
       ],
       "default": "center-md middle-xs",
-      "visible_if": "section.settings.desktop_direction == 'fd-column-md'"
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-column-md' }}"
     },
     {
       "type": "range",
