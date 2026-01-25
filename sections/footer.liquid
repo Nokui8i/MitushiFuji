@@ -34,6 +34,30 @@
                 >
               </div>
             {%- endif -%}
+            {%- if section.blocks.size > 0 -%}
+              <div class="footer-nav-wrapper mt-24">
+                <ul class="footer__nav footer__nav--single-column ls-none">
+                  {%- assign menu_processed = false -%}
+                  {%- for block in section.blocks -%}
+                    {%- if menu_processed == false -%}
+                      {%- case block.type -%}
+                        {%- when 'menu' -%}
+                          {%- if block.settings.menu -%}
+                            {%- for link in block.settings.menu.links -%}
+                              <li class="nav__item">
+                                <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %} class="footer__nav__link d-inline-block pt-8 pb-8 pr-0 pl-0">
+                                  {{- link.title -}}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                            {%- assign menu_processed = true -%}
+                          {%- endif -%}
+                      {%- endcase -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
             <div class="text-block pt-12 pb-12 hide-empty">
               {{- section.settings.description -}}
             </div>
@@ -52,29 +76,7 @@
           </div>
         </div>
       {%- endif -%}
-      {%- if section.blocks.size > 0 -%}
-        <div class="clm footer-nav-column" style="--w-xs: 12; --w-sm: 10; --w-lg: 3;">
-          <div class="footer-nav-wrapper">
-            <ul class="footer__nav footer__nav--single-column ls-none">
-              {%- for block in section.blocks -%}
-                {%- case block.type -%}
-                  {%- when 'menu' -%}
-                    {%- if block.settings.menu -%}
-                      {%- for link in block.settings.menu.links -%}
-                        <li class="nav__item">
-                          <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %} class="footer__nav__link d-inline-block pt-8 pb-8 pr-0 pl-0">
-                            {{- link.title -}}
-                          </a>
-                        </li>
-                      {%- endfor -%}
-                    {%- endif -%}
-                {%- endcase -%}
-              {%- endfor -%}
-            </ul>
-          </div>
-        </div>
-      {%- endif -%}
-      <div class="clm hide-empty" style="--w-xs: 12; --w-sm: 10; --w-lg: 3;">
+      <div class="clm footer-newsletter-column hide-empty" style="--w-xs: 12; --w-sm: 10; --w-lg: 3;">
         {%- if section.settings.enable_newsletter -%}
           <div class="footer-newsletter card mt-24 mb-64 mt-lg-0 mb-lg-32">
             <span class="card__title">
@@ -283,11 +285,12 @@
     }
   }
   
-  /* בדסקטופ - התפריט מתחת ללוגו (אנכי) */
+  /* בדסקטופ - התפריט מתחת ללוגו, NEWSLETTER בצד שמאל */
   @media (min-width: 750px) {
     .js-footer .footer-main-row {
       flex-direction: row !important;
       align-items: flex-start !important;
+      justify-content: space-between !important;
     }
     
     .js-footer .footer-logo-column {
@@ -296,12 +299,8 @@
       flex: 0 0 auto !important;
     }
     
-    .js-footer .footer-nav-column {
-      width: auto !important;
-      max-width: none !important;
-      margin-top: 0 !important;
-      margin-left: 48px !important;
-      flex: 0 0 auto !important;
+    .js-footer .footer-nav-wrapper {
+      margin-top: 24px !important;
     }
     
     .js-footer .footer__nav--single-column {
@@ -314,6 +313,11 @@
     
     .js-footer .footer__nav--single-column .nav__item {
       text-align: left !important;
+    }
+    
+    .js-footer .footer-newsletter-column {
+      order: -1 !important;
+      margin-right: 48px !important;
     }
   }
 </style>
