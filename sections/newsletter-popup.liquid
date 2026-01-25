@@ -23,17 +23,35 @@
     {% endcapture %}
 
     <sht-newsletter-popup class="newsletter-popup {{ desktop_direction_vertical }} {{ desktop_direction_horizontal }}" tabindex="-1" data-ui-component="Newsletter Popup Section" data-section-id="{{ section.id }}" data-delay-time="{{ section.settings.delay_time }}" data-delay-days="{{ section.settings.delay_days }}" data-delay-until="{{ section.settings.delay_until }}" data-trigger="{{ section.settings.trigger }}" {% if section.settings.show_only_on_index %}data-show-only-on-index{% endif %} {% if section.settings.show_only_for_visitors %}data-show-only-for-visitors{% endif %}>
+      {% if section.settings.use_beautiful_design %}
+        <style>
+          sht-newsletter-popup {
+            background: transparent !important;
+          }
+          .newsletter-popup-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(0, 0, 0, 0.6) !important;
+            z-index: 1 !important;
+            backdrop-filter: blur(2px);
+          }
+          .popup-container {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: transparent !important;
+            z-index: 2 !important;
+            position: relative !important;
+          }
+        </style>
+      {% endif %}
       <div class="popup-container p-relative color-{{ section.settings.color_scheme }} h-100 d-flex middle-xs center-xs" style="--width-md: {{ section.settings.width }}%;">
         {% if section.settings.use_beautiful_design %}
-          <style>
-            .popup-container {
-              display: flex !important;
-              align-items: center !important;
-              justify-content: center !important;
-              width: 100% !important;
-              height: 100% !important;
-            }
-          </style>
           {%- render 'newsletter-popup-beautiful', section: section -%}
         {% else %}
           {% if section.settings.enable_sticky_popup %}
