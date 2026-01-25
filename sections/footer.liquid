@@ -21,7 +21,7 @@
           <div class="">
             <span class="h6 pt-16 pb-16 m-zero d-block hide-empty">{{- section.settings.heading | escape -}}</span>
             {%- if section.settings.logo != blank -%}
-              <div class="footer__logo d-block mt-24 mb-24" style="--logo-width: {{ section.settings.logo_width }}px">
+              <div class="footer__logo d-block mt-24 mb-24 center-xs start-lg" style="--logo-width: {{ section.settings.logo_width }}px">
                 {%- assign image_size_2x = section.settings.logo_width | times: 2 -%}
                 <img
                   srcset="{{ section.settings.logo | image_url: width: section.settings.logo_width }} 1x, {{ section.settings.logo | image_url: width: image_size_2x }} 2x"
@@ -231,6 +231,19 @@
   .js-footer path {
     fill: #000000 !important;
     stroke: #000000 !important;
+  }
+  
+  /* מרכז את הלוגו ב-mobile */
+  @media (max-width: 749px) {
+    .js-footer .footer__logo {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+    }
+    
+    .js-footer .footer__logo .logo {
+      margin: 0 auto !important;
+    }
   }
 </style>
 
