@@ -44,7 +44,7 @@ Two-column layout: Left (black content), Right (white image)
       width: 95vw !important;
       max-width: 95vw !important;
       height: auto !important;
-      min-height: 85vh;
+      min-height: auto;
       max-height: 95vh;
     }
   }
@@ -53,8 +53,8 @@ Two-column layout: Left (black content), Right (white image)
     .beautiful-newsletter-popup {
       width: 100vw !important;
       max-width: 100vw !important;
-      height: 100vh !important;
-      min-height: 100vh;
+      height: auto !important;
+      min-height: auto;
       max-height: 100vh;
       border-radius: 0;
     }
@@ -105,8 +105,11 @@ Two-column layout: Left (black content), Right (white image)
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__left {
-      padding: 8% 6%;
-      min-height: 100%;
+      padding: 10% 8%;
+      min-height: auto;
+      width: 100%;
+      flex: 1 1 100%;
+      height: auto;
     }
   }
   
@@ -342,7 +345,7 @@ Two-column layout: Left (black content), Right (white image)
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__right {
-      min-height: 100%;
+      display: none !important;
     }
   }
   
