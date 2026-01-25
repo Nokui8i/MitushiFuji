@@ -74,7 +74,7 @@
           "name": "t:general.group",
           "settings": {
             "color_scheme": "scheme-1",
-            "overlay_opacity": 30,
+            "overlay_opacity": 8,
             "mask_overlay_color": "",
             "content_overlay_color": "",
             "background_media": "none",
@@ -84,10 +84,10 @@
             "video_controller_color": "transparent",
             "desktop_direction": "fd-column-md",
             "content_alignment_desktop_vertical": "ta-center-md middle-md",
-            "content_position_desktop_vertical": "center-md",
+            "content_position_desktop_vertical": "start-md",
             "content_alignment_desktop_horizontal": "ta-left-md start-md",
             "content_position_desktop_horizontal": "top-md",
-            "gap_desktop": 12,
+            "gap_desktop": 9,
             "mobile_direction": "fd-column",
             "content_alignment_mobile_vertical": "ta-center middle-xs",
             "content_position_mobile_vertical": "center-xs",
@@ -107,14 +107,6 @@
             "link": ""
           },
           "blocks": {
-            "subheading_iEzGWb": {
-              "type": "subheading",
-              "name": "t:general.subheading",
-              "settings": {
-                "subheading": "Subheading"
-              },
-              "blocks": {}
-            },
             "heading_iH7cij": {
               "type": "heading",
               "name": "t:general.heading",
@@ -128,7 +120,7 @@
               "type": "description",
               "name": "t:general.description",
               "settings": {
-                "description": "<p>Describe what your customers will receive when subscribing to your newsletter.</p>"
+                "description": "<p>Subscribe now to get the latest news, exclusive offers, and helpful tips every week!</p>"
               },
               "blocks": {}
             },
@@ -147,7 +139,6 @@
             }
           },
           "block_order": [
-            "subheading_iEzGWb",
             "heading_iH7cij",
             "description_F74WAg",
             "newsletter_form_JzyAyH"
@@ -158,6 +149,7 @@
         "group_Ewd38c",
         "group_pEqw8R"
       ],
+      "disabled": true,
       "custom_css": [],
       "settings": {
         "color_scheme": "",
