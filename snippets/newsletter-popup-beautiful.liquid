@@ -41,17 +41,35 @@ Two-column layout: Left (black content), Right (white image)
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup {
-      width: min(95vw, {{ popup_width }}vw);
-      height: min(85vh, {{ popup_height }}vh);
-      max-width: 95vw;
+      width: 95vw !important;
+      max-width: 95vw !important;
+      height: auto !important;
+      min-height: 85vh;
       max-height: 95vh;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .beautiful-newsletter-popup {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      height: 100vh !important;
+      min-height: 100vh;
+      max-height: 100vh;
+      border-radius: 0;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .beautiful-newsletter-popup {
+      max-width: {{ popup_width | times: 12 | round }}px;
     }
   }
   
   @media (min-width: 1920px) {
     .beautiful-newsletter-popup {
-      width: min({{ popup_width }}vw, {{ popup_width | times: 19.2 | round }}px);
-      height: min({{ popup_height }}vh, {{ popup_height | times: 10.8 | round }}px);
+      max-width: {{ popup_width | times: 19.2 | round }}px;
+      max-height: {{ popup_height | times: 10.8 | round }}px;
     }
   }
   
@@ -87,19 +105,25 @@ Two-column layout: Left (black content), Right (white image)
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__left {
-      padding: 6% 5%;
+      padding: 8% 6%;
       min-height: 100%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .beautiful-newsletter-popup__left {
+      padding: 10% 5%;
     }
   }
   
   .beautiful-newsletter-popup__close {
     position: absolute;
-    top: clamp(10px, 2.5%, 20px);
-    right: clamp(10px, 2.5%, 20px);
+    top: 15px;
+    right: 15px;
     background: #000000;
     border: none;
-    width: clamp(30px, 5%, 40px);
-    height: clamp(30px, 5%, 40px);
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -107,9 +131,29 @@ Two-column layout: Left (black content), Right (white image)
     cursor: pointer;
     z-index: 10;
     color: #ffffff;
-    font-size: clamp(16px, 2.5%, 20px);
+    font-size: 20px;
     line-height: 1;
     transition: transform 0.2s;
+  }
+  
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__close {
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      font-size: 18px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .beautiful-newsletter-popup__close {
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+    }
   }
   
   .beautiful-newsletter-popup__close:hover {
@@ -117,12 +161,19 @@ Two-column layout: Left (black content), Right (white image)
   }
   
   .beautiful-newsletter-popup__logo {
-    font-size: clamp({{ logo_size | times: 0.5 | round }}px, calc({{ logo_size }}px * {{ popup_width }}vw / 100), {{ logo_size | times: 1.5 | round }}px);
+    font-size: {{ logo_size }}px;
     font-weight: 700;
-    letter-spacing: clamp(1px, calc(2px * {{ popup_width }} / 100), 3px);
-    margin-bottom: clamp(3%, calc(6% * {{ popup_height }} / 100), 8%);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
     color: #ffffff;
     text-transform: uppercase;
+  }
+  
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__logo {
+      font-size: {{ logo_size | times: 0.8 | round }}px;
+      margin-bottom: 15px;
+    }
   }
   
   .beautiful-newsletter-popup__logo .logo-accent {
@@ -132,43 +183,70 @@ Two-column layout: Left (black content), Right (white image)
   .beautiful-newsletter-popup__logo img {
     max-width: 100%;
     height: auto;
-    max-height: clamp({{ logo_size }}px, calc({{ logo_size | times: 2 }}px * {{ popup_width }}vw / 100), {{ logo_size | times: 3 }}px);
+    max-height: {{ logo_size | times: 2 }}px;
     display: block;
   }
   
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__logo img {
+      max-height: {{ logo_size | times: 1.5 }}px;
+    }
+  }
+  
   .beautiful-newsletter-popup__headline-main {
-    font-size: clamp({{ headline_main_size | times: 0.6 | round }}px, calc({{ headline_main_size }}px * {{ popup_width }}vw / 100), {{ headline_main_size | times: 1.4 | round }}px);
+    font-size: {{ headline_main_size }}px;
     font-weight: 900;
     color: #ff0000;
     text-transform: uppercase;
-    letter-spacing: clamp(0.5px, calc(1px * {{ popup_width }} / 100), 2px);
-    margin-bottom: clamp(1%, calc(1.5% * {{ popup_height }} / 100), 2.5%);
+    letter-spacing: 1px;
+    margin-bottom: 15px;
     line-height: 1.1;
   }
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup__headline-main {
-      font-size: clamp({{ headline_main_size | times: 0.4 | round }}px, calc({{ headline_main_size | times: 0.67 | round }}px * {{ popup_width }}vw / 100), {{ headline_main_size | times: 0.9 | round }}px);
+      font-size: {{ headline_main_size | times: 0.7 | round }}px;
+      margin-bottom: 12px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .beautiful-newsletter-popup__headline-main {
+      font-size: {{ headline_main_size | times: 0.6 | round }}px;
     }
   }
   
   .beautiful-newsletter-popup__headline-sub {
-    font-size: clamp({{ headline_sub_size | times: 0.7 | round }}px, calc({{ headline_sub_size }}px * {{ popup_width }}vw / 100), {{ headline_sub_size | times: 1.3 | round }}px);
+    font-size: {{ headline_sub_size }}px;
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: clamp(1px, calc(2px * {{ popup_width }} / 100), 3px);
-    margin-bottom: clamp(2%, calc(4% * {{ popup_height }} / 100), 6%);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
     line-height: 1.3;
   }
   
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__headline-sub {
+      font-size: {{ headline_sub_size | times: 0.9 | round }}px;
+      margin-bottom: 15px;
+    }
+  }
+  
   .beautiful-newsletter-popup__description {
-    font-size: clamp({{ description_size | times: 0.8 | round }}px, calc({{ description_size }}px * {{ popup_width }}vw / 100), {{ description_size | times: 1.4 | round }}px);
+    font-size: {{ description_size }}px;
     color: #ffffff;
-    margin-bottom: clamp(4%, calc(6% * {{ popup_height }} / 100), 8%);
+    margin-bottom: 30px;
     max-width: 100%;
     width: 100%;
     line-height: 1.6;
+  }
+  
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__description {
+      font-size: {{ description_size | times: 0.95 | round }}px;
+      margin-bottom: 20px;
+    }
   }
   
   .beautiful-newsletter-popup__form {
@@ -178,25 +256,40 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__email-label {
     display: block;
-    font-size: clamp({{ email_label_size | times: 0.8 | round }}px, calc({{ email_label_size }}px * {{ popup_width }}vw / 100), {{ email_label_size | times: 1.3 | round }}px);
+    font-size: {{ email_label_size }}px;
     font-weight: 600;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: clamp(0.5px, calc(1px * {{ popup_width }} / 100), 2px);
-    margin-bottom: clamp(1.5%, calc(2% * {{ popup_height }} / 100), 3%);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
     text-align: left;
+  }
+  
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__email-label {
+      font-size: {{ email_label_size | times: 0.95 | round }}px;
+      margin-bottom: 8px;
+    }
   }
   
   .beautiful-newsletter-popup__email-input {
     width: 100%;
-    padding: clamp({{ email_input_padding | times: 0.7 | round }}px, calc({{ email_input_padding }}px * {{ popup_height }}vh / 100), {{ email_input_padding | times: 1.3 | round }}px) clamp({{ email_input_padding | times: 0.9 | round }}px, calc({{ email_input_padding | times: 1.25 | round }}px * {{ popup_width }}vw / 100), {{ email_input_padding | times: 1.6 | round }}px);
+    padding: {{ email_input_padding }}px {{ email_input_padding | times: 1.2 | round }}px;
     background: #ffffff;
     border: 2px solid #000000;
     color: #000000;
-    font-size: clamp({{ email_input_size | times: 0.85 | round }}px, calc({{ email_input_size }}px * {{ popup_width }}vw / 100), {{ email_input_size | times: 1.3 | round }}px);
-    margin-bottom: clamp(2%, calc(3% * {{ popup_height }} / 100), 4%);
+    font-size: {{ email_input_size }}px;
+    margin-bottom: 15px;
     box-sizing: border-box;
     border-radius: 0;
+  }
+  
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__email-input {
+      padding: {{ email_input_padding | times: 0.9 | round }}px {{ email_input_padding }}px;
+      font-size: {{ email_input_size | times: 0.95 | round }}px;
+      margin-bottom: 12px;
+    }
   }
   
   .beautiful-newsletter-popup__email-input::placeholder {
@@ -210,17 +303,24 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__button {
     width: 100%;
-    padding: clamp({{ button_padding | times: 0.7 | round }}px, calc({{ button_padding }}px * {{ popup_height }}vh / 100), {{ button_padding | times: 1.3 | round }}px) clamp({{ button_padding | times: 0.9 | round }}px, calc({{ button_padding | times: 1.67 | round }}px * {{ popup_width }}vw / 100), {{ button_padding | times: 2.2 | round }}px);
+    padding: {{ button_padding }}px {{ button_padding | times: 1.5 | round }}px;
     background: #ff0000;
     color: #ffffff;
     border: none;
-    font-size: clamp({{ button_font_size | times: 0.85 | round }}px, calc({{ button_font_size }}px * {{ popup_width }}vw / 100), {{ button_font_size | times: 1.3 | round }}px);
+    font-size: {{ button_font_size }}px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: clamp(1px, calc(2px * {{ popup_width }} / 100), 3px);
+    letter-spacing: 2px;
     cursor: pointer;
     transition: background 0.3s, transform 0.2s;
     border-radius: 0;
+  }
+  
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__button {
+      padding: {{ button_padding | times: 0.9 | round }}px {{ button_padding | times: 1.2 | round }}px;
+      font-size: {{ button_font_size | times: 0.95 | round }}px;
+    }
   }
   
   .beautiful-newsletter-popup__button:hover {
@@ -257,11 +357,19 @@ Two-column layout: Left (black content), Right (white image)
   
   .beautiful-newsletter-popup__error,
   .beautiful-newsletter-popup__success {
-    margin-top: clamp(12px, 2%, 16px);
-    padding: clamp(10px, 1.5%, 12px);
+    margin-top: 12px;
+    padding: 10px 12px;
     border-radius: 4px;
-    font-size: clamp(11px, 1.75%, 14px);
+    font-size: 13px;
     text-align: left;
+  }
+  
+  @media (max-width: 749px) {
+    .beautiful-newsletter-popup__error,
+    .beautiful-newsletter-popup__success {
+      font-size: 12px;
+      padding: 8px 10px;
+    }
   }
   
   .beautiful-newsletter-popup__error {
