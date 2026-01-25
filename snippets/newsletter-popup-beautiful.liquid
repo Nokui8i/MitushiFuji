@@ -27,12 +27,11 @@ Two-column layout: Left (black content), Right (white image)
 
 <style>
   .beautiful-newsletter-popup {
-    max-width: none;
-    width: {{ popup_width }}%;
-    max-width: 1400px;
-    height: {{ popup_height }}%;
-    max-height: 800px;
-    margin: 0;
+    width: {{ popup_width }}vw;
+    max-width: 95vw;
+    height: {{ popup_height }}vh;
+    max-height: 95vh;
+    margin: 0 auto;
     background: #ffffff;
     border-radius: clamp(4px, 1%, 8px);
     overflow: hidden;
@@ -42,9 +41,17 @@ Two-column layout: Left (black content), Right (white image)
   
   @media (max-width: 749px) {
     .beautiful-newsletter-popup {
-      width: 95%;
-      height: 85%;
-      max-height: 600px;
+      width: min(95vw, {{ popup_width }}vw);
+      height: min(85vh, {{ popup_height }}vh);
+      max-width: 95vw;
+      max-height: 95vh;
+    }
+  }
+  
+  @media (min-width: 1920px) {
+    .beautiful-newsletter-popup {
+      width: min({{ popup_width }}vw, {{ popup_width | times: 19.2 | round }}px);
+      height: min({{ popup_height }}vh, {{ popup_height | times: 10.8 | round }}px);
     }
   }
   
