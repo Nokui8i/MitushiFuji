@@ -230,7 +230,7 @@
       "default": 3,
       "label": "t:general.delay_popup",
       "info": "t:general.delay_popup_info",
-      "visible_if": "{{ section.settings.trigger == 'delay-after-page-load' }}"
+      "visible_if": "section.settings.trigger == 'delay-after-page-load'"
     },
     {
       "type": "select",
@@ -263,7 +263,7 @@
       "default": 30,
       "unit": "day",
       "label": "t:general.days_to_wait",
-      "visible_if": "{{ section.settings.delay_time == 'days' and section.settings.trigger != 'after-closing-cart-notification' }}"
+      "visible_if": "section.settings.delay_time == 'days' and section.settings.trigger != 'after-closing-cart-notification'"
     },
     {
       "type": "checkbox",
@@ -302,7 +302,7 @@
       "id": "enable_vertical_on_mobile",
       "label": "t:general.vertical_on_mobile",
       "default": true,
-      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
+      "visible_if": "section.settings.desktop_direction == 'fd-row-md'"
     },
     {
       "type": "select",
@@ -323,7 +323,7 @@
         }
       ],
       "default": "start-xs",
-      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
+      "visible_if": "section.settings.desktop_direction == 'fd-row-md'"
 
     },
     {
@@ -345,7 +345,7 @@
         }
       ],
       "default": "bottom-md",
-      "visible_if": "{{ section.settings.desktop_direction == 'fd-column-md' }}"
+      "visible_if": "section.settings.desktop_direction == 'fd-column-md'"
 
     },
     {
@@ -363,7 +363,7 @@
         }
       ],
       "default": "middle-xs",
-      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
+      "visible_if": "section.settings.desktop_direction == 'fd-row-md'"
     },
     {
       "type": "select",
@@ -380,7 +380,7 @@
         }
       ],
       "default": "center-md middle-xs",
-      "visible_if": "{{ section.settings.desktop_direction == 'fd-column-md' }}"
+      "visible_if": "section.settings.desktop_direction == 'fd-column-md'"
     },
     {
       "type": "range",
@@ -425,13 +425,13 @@
       "id": "sticky_popup_text",
       "label": "t:general.text",
       "default": "Get 20% off",
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+      "visible_if": "section.settings.enable_sticky_popup == true"
     },
     {
       "type": "select",
       "id": "sticky_popup_alignment",
       "label": "t:general.alignment",
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}",
+      "visible_if": "section.settings.enable_sticky_popup == true",
       "options": [
         {
           "value": "left",
@@ -459,26 +459,26 @@
         }
       ],
       "default": "middle",
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+      "visible_if": "section.settings.enable_sticky_popup == true"
     },
     {
       "type": "color",
       "id": "sticky_popup_color",
       "label": "t:general.custom_text_color",
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+      "visible_if": "section.settings.enable_sticky_popup == true"
     },
     {
       "type": "color",
       "id": "sticky_popup_background",
       "label": "t:general.custom_text_background",
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+      "visible_if": "section.settings.enable_sticky_popup == true"
     },
     {
       "type": "checkbox",
       "id": "show_close_button",
       "label": "t:general.show_close_button",
       "default": true,
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+      "visible_if": "section.settings.enable_sticky_popup == true"
     }
   ],
   "enabled_on": {
@@ -765,7 +765,7 @@
       "default": 3,
       "label": "t:general.delay_popup",
       "info": "t:general.delay_popup_info",
-      "visible_if": "{{ section.settings.trigger == 'delay-after-page-load' }}"
+      "visible_if": "section.settings.trigger == 'delay-after-page-load'"
     },
     {
       "type": "select",
@@ -798,7 +798,7 @@
       "default": 30,
       "unit": "day",
       "label": "t:general.days_to_wait",
-      "visible_if": "{{ section.settings.delay_time == 'days' and section.settings.trigger != 'after-closing-cart-notification' }}"
+      "visible_if": "section.settings.delay_time == 'days' and section.settings.trigger != 'after-closing-cart-notification'"
     },
     {
       "type": "checkbox",
@@ -837,7 +837,7 @@
       "id": "enable_vertical_on_mobile",
       "label": "t:general.vertical_on_mobile",
       "default": true,
-      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
+      "visible_if": "section.settings.desktop_direction == 'fd-row-md'"
     },
     {
       "type": "select",
@@ -858,7 +858,7 @@
         }
       ],
       "default": "start-xs",
-      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
+      "visible_if": "section.settings.desktop_direction == 'fd-row-md'"
 
     },
     {
@@ -880,7 +880,7 @@
         }
       ],
       "default": "bottom-md",
-      "visible_if": "{{ section.settings.desktop_direction == 'fd-column-md' }}"
+      "visible_if": "section.settings.desktop_direction == 'fd-column-md'"
 
     },
     {
@@ -898,7 +898,7 @@
         }
       ],
       "default": "middle-xs",
-      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
+      "visible_if": "section.settings.desktop_direction == 'fd-row-md'"
     },
     {
       "type": "select",
@@ -915,7 +915,7 @@
         }
       ],
       "default": "center-md middle-xs",
-      "visible_if": "{{ section.settings.desktop_direction == 'fd-column-md' }}"
+      "visible_if": "section.settings.desktop_direction == 'fd-column-md'"
     },
     {
       "type": "range",
@@ -960,13 +960,13 @@
       "id": "sticky_popup_text",
       "label": "t:general.text",
       "default": "Get 20% off",
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+      "visible_if": "section.settings.enable_sticky_popup == true"
     },
     {
       "type": "select",
       "id": "sticky_popup_alignment",
       "label": "t:general.alignment",
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}",
+      "visible_if": "section.settings.enable_sticky_popup == true",
       "options": [
         {
           "value": "left",
@@ -994,26 +994,26 @@
         }
       ],
       "default": "middle",
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+      "visible_if": "section.settings.enable_sticky_popup == true"
     },
     {
       "type": "color",
       "id": "sticky_popup_color",
       "label": "t:general.custom_text_color",
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+      "visible_if": "section.settings.enable_sticky_popup == true"
     },
     {
       "type": "color",
       "id": "sticky_popup_background",
       "label": "t:general.custom_text_background",
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+      "visible_if": "section.settings.enable_sticky_popup == true"
     },
     {
       "type": "checkbox",
       "id": "show_close_button",
       "label": "t:general.show_close_button",
       "default": true,
-      "visible_if": "{{ section.settings.enable_sticky_popup == true }}"
+      "visible_if": "section.settings.enable_sticky_popup == true"
     }
   ],
   "enabled_on": {
