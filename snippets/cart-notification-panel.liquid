@@ -1,4 +1,14 @@
-<sht-cart-noti id="cartNotificationPanel" class="js-cartNotificationPanel cart-notification w-100 zi-7 no-focus-visible left-0 right-0 d-block p-absolute visible-xs maw-100 opacity-1" tabindex="-1" hidden="true">
+<sht-cart-noti id="cartNotificationPanel" class="js-cartNotificationPanel cart-notification w-100 zi-7 no-focus-visible left-0 right-0 d-block p-absolute visible-xs maw-100 opacity-1" tabindex="-1" hidden="true" style="display: none !important; visibility: hidden !important; opacity: 0 !important;">
+    <style>
+      #cartNotificationPanel,
+      .js-cartNotificationPanel,
+      sht-cart-noti {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+    </style>
     <div data-type="cart-notification-panel-wrapper" class="js-cart-notification-panel-wrapper p-relative" >
       <div class="focus-inset js-cart-notification-panel-container" aria-modal="true" aria-label="{{ 'general.cart.item_added' | t }}" role="dialog" tabindex="-1">
         <div class="d-flex middle-xs between-xs mb-24">
