@@ -23,28 +23,32 @@
     {% endcapture %}
 
     <sht-newsletter-popup class="newsletter-popup {{ desktop_direction_vertical }} {{ desktop_direction_horizontal }}" tabindex="-1" data-ui-component="Newsletter Popup Section" data-section-id="{{ section.id }}" data-delay-time="{{ section.settings.delay_time }}" data-delay-days="{{ section.settings.delay_days }}" data-delay-until="{{ section.settings.delay_until }}" data-trigger="{{ section.settings.trigger }}" {% if section.settings.show_only_on_index %}data-show-only-on-index{% endif %} {% if section.settings.show_only_for_visitors %}data-show-only-for-visitors{% endif %}>
-      <div class="popup-container p-relative color-{{ section.settings.color_scheme }} h-100" style="--width-md: {{ section.settings.width }}%;">
-        {% if section.settings.enable_sticky_popup %}
-          <button class="btn btn-small btn-icon btn-secondary btn-custom p-absolute js-popup-close-btn zi-9 right-12 top-12" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
-            {%- render 'icon-minus' -%}
-          </button>
+      <div class="popup-container p-relative color-{{ section.settings.color_scheme }} h-100 d-flex middle-xs center-xs" style="--width-md: {{ section.settings.width }}%;">
+        {% if section.settings.use_beautiful_design %}
+          {%- render 'newsletter-popup-beautiful', section: section -%}
         {% else %}
-          <div class="p-absolute  zi-9 right-12 top-12">
-            <button class="btn btn-small btn-icon btn-secondary--animate js-popup-close-btn" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
-              {%- render 'icon-close' -%}
+          {% if section.settings.enable_sticky_popup %}
+            <button class="btn btn-small btn-icon btn-secondary btn-custom p-absolute js-popup-close-btn zi-9 right-12 top-12" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
+              {%- render 'icon-minus' -%}
             </button>
-          </div>
-        {% endif %}
+          {% else %}
+            <div class="p-absolute  zi-9 right-12 top-12">
+              <button class="btn btn-small btn-icon btn-secondary--animate js-popup-close-btn" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
+                {%- render 'icon-close' -%}
+              </button>
+            </div>
+          {% endif %}
 
-        <div class="newsletter-popup__content w-100 h-100 scrollbar">
-          <div class="newsletter-popup__content-container d-flex {{ vertical_layout }} {{ section.settings.desktop_direction }} h-100" style="gap: {{ section.settings.desktop_gap }}px;" data-deferred-content>
-            <!-- Content will be loaded here when popup opens -->
+          <div class="newsletter-popup__content w-100 h-100 scrollbar">
+            <div class="newsletter-popup__content-container d-flex {{ vertical_layout }} {{ section.settings.desktop_direction }} h-100" style="gap: {{ section.settings.desktop_gap }}px;" data-deferred-content>
+              <!-- Content will be loaded here when popup opens -->
+            </div>
           </div>
-        </div>
-        
-        <template class="js-newsletter-content-template">
-          {{ children }}
-        </template>
+          
+          <template class="js-newsletter-content-template">
+            {{ children }}
+          </template>
+        {% endif %}
       </div>
       <div class="newsletter-popup-overlay js-newsletter-popup-overlay"></div>
     </sht-newsletter-popup>
@@ -73,6 +77,67 @@
       "id": "color_scheme",
       "label": "t:general.color_scheme",
       "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_beautiful_design",
+      "label": "Use Beautiful Design",
+      "default": true,
+      "info": "Enable the modern two-column newsletter popup design"
+    },
+    {
+      "type": "header",
+      "content": "Beautiful Design Settings",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo Text",
+      "default": "MITUSHI",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "text",
+      "id": "headline_main",
+      "label": "Main Headline",
+      "default": "EXCLUSIVE DISCOUNT",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "text",
+      "id": "headline_sub",
+      "label": "Sub Headline",
+      "default": "ON YOUR FIRST ORDER",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "textarea",
+      "id": "description_text",
+      "label": "Description",
+      "default": "Join the family and get exclusive email-only offers by signing up.",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email Label",
+      "default": "ENTER YOUR EMAIL",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "UNLOCK YOUR OFFER",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image",
+      "label": "Right Column Image",
+      "info": "Image for the right column (recommended: 800x600px)",
+      "visible_if": "{{ section.settings.use_beautiful_design == true }}"
     },
     {
       "type": "paragraph",
