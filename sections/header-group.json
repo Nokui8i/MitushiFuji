@@ -88,7 +88,7 @@
         "logo_width_mobile": 100,
         "menu": "main-menu",
         "open_external_link": false,
-        "show_currency_selector": false,
+        "show_currency_selector": true,
         "show_language_selector": true,
         "enable_contact": true,
         "enable_social": true,
