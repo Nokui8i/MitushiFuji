@@ -77,6 +77,28 @@
         </div>
       {%- endif -%}
       <div class="clm footer-newsletter-column hide-empty" style="--w-xs: 12; --w-sm: 10; --w-lg: 3;">
+        {%- if section.settings.show_currency_selector and localization.available_countries.size > 1 or section.settings.show_language_selector and localization.available_languages.size > 1 -%}
+          <div class="footer-localization-top w-100 d-flex gap-16 fw-wrap hide-empty mb-24 mb-lg-16 center-xs">
+            {%- if section.settings.show_currency_selector and localization.available_countries.size > 1 -%}
+              <sht-localization class="d-flex" data-js-file-id="component-country-switcher-js-file" data-js-file="{{ 'component-country-switcher.js' | asset_url }}" data-section-id="shopify-section-country-switcher-footer" data-url="{{ routes.root_url }}?section_id=country-switcher-footer">
+                <button type="button" class="js-country-switcher-btn btn-localization fs-body d-flex between-xs middle-xs w-100 ta-left c-pointer b-zero gap-4">
+                  {{ localization.country | image_url: width: 24, height: 24 | image_tag: widths: '24', sizes: '350px', class: 'country-list--flag br-50p of-cover h-100', loading: 'lazy', fetchpriority: 'auto', decoding: 'async' }}
+                  {{ localization.country.currency.iso_code }}
+                  {{ localization.country.currency.symbol }}
+                  {{ icon_chevron_down }}
+                </button>
+              </sht-localization>
+            {%- endif -%}
+            {%- if section.settings.show_language_selector and localization.available_languages.size > 1 -%}
+              <sht-localization class="d-flex" data-js-file-id="component-language-switcher-js-file" data-js-file="{{ 'component-language-switcher.js' | asset_url }}" data-section-id="shopify-section-language-switcher-footer" data-url="{{ routes.root_url }}?section_id=language-switcher-footer">
+                <button type="button" class="js-language-switcher-btn btn-localization fs-body d-flex between-xs middle-xs w-100 ta-left c-pointer b-zero gap-4">
+                  {{ localization.language.iso_code | upcase }}
+                  {{ icon_chevron_down }}
+                </button>
+              </sht-localization>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
         {%- if section.settings.enable_newsletter -%}
           <div class="footer-newsletter card mt-24 mb-64 mt-lg-0 mb-lg-32">
             <span class="card__title">
@@ -135,26 +157,6 @@
     </div>
     <div class="footer__content__bottom m-auto d-flex center-xs fd-column middle-xs mt-lg-64 gap-24 c-gap-lg-48 r-gap-lg-4 fd-row-lg between-lg fw-wrap">
       <div class="d-flex fd-column center-xs middle-xs fd-row-lg hide-empty">
-        <div class="footer-localization w-100 d-flex gap-16 fw-wrap hide-empty mb-64 mb-lg-0 pr-lg-24 flex-1 center-xs">
-          {%- if section.settings.show_currency_selector and localization.available_countries.size > 1 -%}
-            <sht-localization class="d-flex" data-js-file-id="component-country-switcher-js-file" data-js-file="{{ 'component-country-switcher.js' | asset_url }}" data-section-id="shopify-section-country-switcher-footer" data-url="{{ routes.root_url }}?section_id=country-switcher-footer">
-              <button type="button" class="js-country-switcher-btn btn-localization fs-body d-flex between-xs middle-xs w-100 ta-left c-pointer b-zero gap-4">
-                {{ localization.country | image_url: width: 24, height: 24 | image_tag: widths: '24', sizes: '350px', class: 'country-list--flag br-50p of-cover h-100', loading: 'lazy', fetchpriority: 'auto', decoding: 'async' }}
-                {{ localization.country.currency.iso_code }}
-                {{ localization.country.currency.symbol }}
-                {{ icon_chevron_down }}
-              </button>
-            </sht-localization>
-          {%- endif -%}
-          {%- if section.settings.show_language_selector and localization.available_languages.size > 1 -%}
-            <sht-localization class="d-flex" data-js-file-id="component-language-switcher-js-file" data-js-file="{{ 'component-language-switcher.js' | asset_url }}" data-section-id="shopify-section-language-switcher-footer" data-url="{{ routes.root_url }}?section_id=language-switcher-footer">
-              <button type="button" class="js-language-switcher-btn btn-localization fs-body d-flex between-xs middle-xs w-100 ta-left c-pointer b-zero gap-4">
-                {{ localization.language.iso_code | upcase }}
-                {{ icon_chevron_down }}
-              </button>
-            </sht-localization>
-          {%- endif -%}
-        </div>
         {%- if section.settings.show_payment_methods and shop.enabled_payment_types -%}
           <div class="footer__payment p-relative-lg pl-lg-24">
             <span class="visually-hidden">{{ 'sections.footer.payment' | t }}</span>
