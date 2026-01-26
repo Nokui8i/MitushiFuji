@@ -1969,16 +1969,36 @@ section[data-ui-component="Running Content Section"] {
 .header__cart-count,
 #headerCartStatus .header__cart-count,
 .js-header-cart-status-btn .header__cart-count,
-.header__icon--cart .header__cart-count {
+.header__icon--cart .header__cart-count,
+a#headerCartStatus .header__cart-count,
+a[href*="cart"] .header__cart-count,
+.header__icon .header__cart-count {
   background-color: #ffffff !important;
   color: #000000 !important;
+  border-radius: 50% !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 2px 4px !important;
+  font-weight: 600 !important;
 }
 
 .header__cart-count .cart-count-number,
 #headerCartStatus .header__cart-count .cart-count-number,
-.js-header-cart-status-btn .header__cart-count .cart-count-number {
+.js-header-cart-status-btn .header__cart-count .cart-count-number,
+.header__cart-count span,
+.header__cart-count span.cart-count-number,
+.header__cart-count > span {
   color: #000000 !important;
   background-color: transparent !important;
+}
+
+/* גם כל הטקסט בתוך ה-badge */
+.header__cart-count *,
+#headerCartStatus .header__cart-count * {
+  color: #000000 !important;
 }
 
 /* ===== COOKIE CONSENT BANNER - Beautiful Design ===== */

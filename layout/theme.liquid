@@ -303,61 +303,103 @@
           const cartCountNumber = headerCartStatus.querySelector('.header__cart-count .cart-count-number');
           
           if (cartCountWrapper) {
-            // שחזר את ה-styles המקוריים
-            cartCountWrapper.style.backgroundColor = '#ffffff';
-            cartCountWrapper.style.color = '#000000';
-            cartCountWrapper.style.borderRadius = '50%';
-            cartCountWrapper.style.minWidth = '18px';
-            cartCountWrapper.style.height = '18px';
-            cartCountWrapper.style.display = 'flex';
-            cartCountWrapper.style.alignItems = 'center';
-            cartCountWrapper.style.justifyContent = 'center';
-            cartCountWrapper.style.padding = '2px 4px';
-            cartCountWrapper.style.fontWeight = '600';
+            // כפית חזקה עם setProperty ו-'important'
+            cartCountWrapper.style.setProperty('background-color', '#ffffff', 'important');
+            cartCountWrapper.style.setProperty('color', '#000000', 'important');
+            cartCountWrapper.style.setProperty('border-radius', '50%', 'important');
+            cartCountWrapper.style.setProperty('min-width', '18px', 'important');
+            cartCountWrapper.style.setProperty('height', '18px', 'important');
+            cartCountWrapper.style.setProperty('display', 'flex', 'important');
+            cartCountWrapper.style.setProperty('align-items', 'center', 'important');
+            cartCountWrapper.style.setProperty('justify-content', 'center', 'important');
+            cartCountWrapper.style.setProperty('padding', '2px 4px', 'important');
+            cartCountWrapper.style.setProperty('font-weight', '600', 'important');
           }
           
           if (cartCountNumber) {
-            cartCountNumber.style.color = '#000000';
+            cartCountNumber.style.setProperty('color', '#000000', 'important');
+            cartCountNumber.style.setProperty('background-color', 'transparent', 'important');
+          }
+          
+          // גם כל ה-spans הפנימיים
+          if (cartCountWrapper) {
+            const allSpans = cartCountWrapper.querySelectorAll('span');
+            allSpans.forEach(function(span) {
+              if (span.classList.contains('cart-count-number') || span.textContent.trim().match(/^\d+$/)) {
+                span.style.setProperty('color', '#000000', 'important');
+                span.style.setProperty('background-color', 'transparent', 'important');
+              }
+            });
           }
         }
         
-        // צפה בשינויים ב-#headerCartStatus
+        // צפה בשינויים ב-#headerCartStatus וב-document.body
         const observer = new MutationObserver(function(mutations) {
+          let shouldRestore = false;
           mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-              // אחרי עדכון - שחזר את ה-styles
-              setTimeout(restoreCartCountStyles, 10);
+            if (mutation.type === 'childList' || mutation.type === 'attributes') {
+              shouldRestore = true;
             }
           });
+          if (shouldRestore) {
+            // שחזר מיד אחרי שינוי
+            restoreCartCountStyles();
+            // וגם אחרי קצת זמן כדי לוודא
+            setTimeout(restoreCartCountStyles, 50);
+            setTimeout(restoreCartCountStyles, 200);
+          }
         });
         
         // התחל observation כשהדף נטען
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', function() {
-            const headerCartStatus = document.querySelector('#headerCartStatus');
-            if (headerCartStatus) {
-              observer.observe(headerCartStatus, {
-                childList: true,
-                subtree: true
-              });
-              restoreCartCountStyles();
-            }
-          });
-        } else {
+        function initObserver() {
           const headerCartStatus = document.querySelector('#headerCartStatus');
           if (headerCartStatus) {
             observer.observe(headerCartStatus, {
               childList: true,
-              subtree: true
+              subtree: true,
+              attributes: true,
+              attributeFilter: ['style', 'class']
             });
             restoreCartCountStyles();
           }
+          
+          // גם צפה ב-document.body לשינויים גלובליים
+          if (document.body) {
+            observer.observe(document.body, {
+              childList: true,
+              subtree: true
+            });
+          }
+        }
+        
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initObserver);
+        } else {
+          initObserver();
         }
         
         // גם אחרי עדכוני AJAX של Shopify
         document.addEventListener('shopify:section:load', function() {
+          setTimeout(restoreCartCountStyles, 10);
           setTimeout(restoreCartCountStyles, 100);
+          setTimeout(restoreCartCountStyles, 300);
         });
+        
+        // גם אחרי כל fetch/XMLHttpRequest
+        const originalFetch = window.fetch;
+        window.fetch = function() {
+          const result = originalFetch.apply(this, arguments);
+          result.then(function() {
+            setTimeout(restoreCartCountStyles, 100);
+            setTimeout(restoreCartCountStyles, 500);
+          }).catch(function() {});
+          return result;
+        };
+        
+        // בדיקה תקופתית - וודא שה-styles נשמרים כל הזמן
+        setInterval(function() {
+          restoreCartCountStyles();
+        }, 500);
       })();
     </script>
   </body>
