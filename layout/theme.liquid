@@ -296,11 +296,94 @@
       // תיקון: שמירה על ה-styles של cart count badge אחרי עדכונים דינמיים
       (function() {
         function restoreCartCountStyles() {
-          const headerCartStatus = document.querySelector('#headerCartStatus');
-          if (!headerCartStatus) return;
+          // מצא את כל ה-cart count badges (יכול להיות יותר מאחד)
+          const allCartCountWrappers = document.querySelectorAll('.header__cart-count');
+          const allHeaderCartStatus = document.querySelectorAll('#headerCartStatus');
           
-          const cartCountWrapper = headerCartStatus.querySelector('.header__cart-count');
-          const cartCountNumber = headerCartStatus.querySelector('.header__cart-count .cart-count-number');
+          // תקן את כל ה-badges שנמצאו
+          allCartCountWrappers.forEach(function(cartCountWrapper) {
+            if (cartCountWrapper) {
+              // כפית חזקה עם setProperty ו-'important'
+              cartCountWrapper.style.setProperty('background-color', '#ffffff', 'important');
+              cartCountWrapper.style.setProperty('color', '#000000', 'important');
+              cartCountWrapper.style.setProperty('border-radius', '50%', 'important');
+              cartCountWrapper.style.setProperty('min-width', '18px', 'important');
+              cartCountWrapper.style.setProperty('height', '18px', 'important');
+              cartCountWrapper.style.setProperty('display', 'flex', 'important');
+              cartCountWrapper.style.setProperty('align-items', 'center', 'important');
+              cartCountWrapper.style.setProperty('justify-content', 'center', 'important');
+              cartCountWrapper.style.setProperty('padding', '2px 4px', 'important');
+              cartCountWrapper.style.setProperty('font-weight', '600', 'important');
+              
+              // גם כל ה-spans הפנימיים
+              const allSpans = cartCountWrapper.querySelectorAll('span');
+              allSpans.forEach(function(span) {
+                if (span.classList.contains('cart-count-number') || span.textContent.trim().match(/^\d+$/)) {
+                  span.style.setProperty('color', '#000000', 'important');
+                  span.style.setProperty('background-color', 'transparent', 'important');
+                }
+              });
+            }
+          });
+          
+          // גם דרך headerCartStatus (אם קיים)
+          allHeaderCartStatus.forEach(function(headerCartStatus) {
+            const cartCountWrapper = headerCartStatus.querySelector('.header__cart-count');
+            const cartCountNumber = headerCartStatus.querySelector('.header__cart-count .cart-count-number');
+            
+            if (cartCountWrapper) {
+              cartCountWrapper.style.setProperty('background-color', '#ffffff', 'important');
+              cartCountWrapper.style.setProperty('color', '#000000', 'important');
+              cartCountWrapper.style.setProperty('border-radius', '50%', 'important');
+              cartCountWrapper.style.setProperty('min-width', '18px', 'important');
+              cartCountWrapper.style.setProperty('height', '18px', 'important');
+              cartCountWrapper.style.setProperty('display', 'flex', 'important');
+              cartCountWrapper.style.setProperty('align-items', 'center', 'important');
+              cartCountWrapper.style.setProperty('justify-content', 'center', 'important');
+              cartCountWrapper.style.setProperty('padding', '2px 4px', 'important');
+              cartCountWrapper.style.setProperty('font-weight', '600', 'important');
+            }
+            
+            if (cartCountNumber) {
+              cartCountNumber.style.setProperty('color', '#000000', 'important');
+              cartCountNumber.style.setProperty('background-color', 'transparent', 'important');
+            }
+            
+            // גם כל ה-spans הפנימיים
+            if (cartCountWrapper) {
+              const allSpans = cartCountWrapper.querySelectorAll('span');
+              allSpans.forEach(function(span) {
+                if (span.classList.contains('cart-count-number') || span.textContent.trim().match(/^\d+$/)) {
+                  span.style.setProperty('color', '#000000', 'important');
+                  span.style.setProperty('background-color', 'transparent', 'important');
+                }
+              });
+            }
+          });
+          
+          // גם תקן ישירות לפי class (למקרה שיש element שלא בתוך headerCartStatus)
+          const directCartCounts = document.querySelectorAll('.header__cart-count:not(#headerCartStatus .header__cart-count)');
+          directCartCounts.forEach(function(cartCountWrapper) {
+            cartCountWrapper.style.setProperty('background-color', '#ffffff', 'important');
+            cartCountWrapper.style.setProperty('color', '#000000', 'important');
+            cartCountWrapper.style.setProperty('border-radius', '50%', 'important');
+            cartCountWrapper.style.setProperty('min-width', '18px', 'important');
+            cartCountWrapper.style.setProperty('height', '18px', 'important');
+            cartCountWrapper.style.setProperty('display', 'flex', 'important');
+            cartCountWrapper.style.setProperty('align-items', 'center', 'important');
+            cartCountWrapper.style.setProperty('justify-content', 'center', 'important');
+            cartCountWrapper.style.setProperty('padding', '2px 4px', 'important');
+            cartCountWrapper.style.setProperty('font-weight', '600', 'important');
+            
+            const allSpans = cartCountWrapper.querySelectorAll('span');
+            allSpans.forEach(function(span) {
+              if (span.classList.contains('cart-count-number') || span.textContent.trim().match(/^\d+$/)) {
+                span.style.setProperty('color', '#000000', 'important');
+                span.style.setProperty('background-color', 'transparent', 'important');
+              }
+            });
+          });
+        }
           
           if (cartCountWrapper) {
             // כפית חזקה עם setProperty ו-'important'
