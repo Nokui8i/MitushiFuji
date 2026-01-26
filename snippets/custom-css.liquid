@@ -1978,7 +1978,10 @@ a[href*="cart"] .header__cart-count,
 a.js-header-cart-status-btn .header__cart-count,
 .header__icons .header__cart-count,
 .header__icons--right .header__cart-count,
-[class*="header-cart-count"] {
+[class*="header-cart-count"],
+/* גם עם class subtext */
+.subtext.header__cart-count,
+.header__cart-count.subtext {
   background-color: #ffffff !important;
   background: #ffffff !important;
   color: #000000 !important;
