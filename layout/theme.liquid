@@ -339,14 +339,29 @@
           mutations.forEach(function(mutation) {
             if (mutation.type === 'childList' || mutation.type === 'attributes') {
               shouldRestore = true;
+              // אם יש nodes חדשים - שחזר מיד
+              if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+                requestAnimationFrame(function() {
+                  restoreCartCountStyles();
+                });
+              }
             }
           });
           if (shouldRestore) {
             // שחזר מיד אחרי שינוי
-            restoreCartCountStyles();
+            requestAnimationFrame(function() {
+              restoreCartCountStyles();
+            });
             // וגם אחרי קצת זמן כדי לוודא
-            setTimeout(restoreCartCountStyles, 50);
-            setTimeout(restoreCartCountStyles, 200);
+            setTimeout(function() {
+              requestAnimationFrame(restoreCartCountStyles);
+            }, 10);
+            setTimeout(function() {
+              requestAnimationFrame(restoreCartCountStyles);
+            }, 50);
+            setTimeout(function() {
+              requestAnimationFrame(restoreCartCountStyles);
+            }, 200);
           }
         });
         
@@ -380,9 +395,22 @@
         
         // גם אחרי עדכוני AJAX של Shopify
         document.addEventListener('shopify:section:load', function() {
-          setTimeout(restoreCartCountStyles, 10);
-          setTimeout(restoreCartCountStyles, 100);
-          setTimeout(restoreCartCountStyles, 300);
+          requestAnimationFrame(function() {
+            restoreCartCountStyles();
+            setTimeout(restoreCartCountStyles, 10);
+            setTimeout(restoreCartCountStyles, 100);
+            setTimeout(restoreCartCountStyles, 300);
+          });
+        });
+        
+        // גם אחרי עדכוני cart
+        document.addEventListener('cart:updated', function() {
+          requestAnimationFrame(function() {
+            restoreCartCountStyles();
+            setTimeout(restoreCartCountStyles, 10);
+            setTimeout(restoreCartCountStyles, 100);
+            setTimeout(restoreCartCountStyles, 300);
+          });
         });
         
         // גם אחרי כל fetch/XMLHttpRequest
@@ -390,16 +418,37 @@
         window.fetch = function() {
           const result = originalFetch.apply(this, arguments);
           result.then(function() {
-            setTimeout(restoreCartCountStyles, 100);
-            setTimeout(restoreCartCountStyles, 500);
+            requestAnimationFrame(function() {
+              restoreCartCountStyles();
+              setTimeout(restoreCartCountStyles, 50);
+              setTimeout(restoreCartCountStyles, 200);
+              setTimeout(restoreCartCountStyles, 500);
+            });
           }).catch(function() {});
           return result;
+        };
+        
+        // גם אחרי XMLHttpRequest
+        const originalXHROpen = XMLHttpRequest.prototype.open;
+        const originalXHRSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.open = function() {
+          this.addEventListener('load', function() {
+            if (this.responseURL && (this.responseURL.includes('/cart/add') || this.responseURL.includes('/cart/update'))) {
+              requestAnimationFrame(function() {
+                restoreCartCountStyles();
+                setTimeout(restoreCartCountStyles, 10);
+                setTimeout(restoreCartCountStyles, 100);
+                setTimeout(restoreCartCountStyles, 300);
+              });
+            }
+          });
+          return originalXHROpen.apply(this, arguments);
         };
         
         // בדיקה תקופתית - וודא שה-styles נשמרים כל הזמן
         setInterval(function() {
           restoreCartCountStyles();
-        }, 500);
+        }, 300);
       })();
     </script>
   </body>
