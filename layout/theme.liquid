@@ -292,5 +292,73 @@
         });
       });
     </script>
+    <script>
+      // תיקון: שמירה על ה-styles של cart count badge אחרי עדכונים דינמיים
+      (function() {
+        function restoreCartCountStyles() {
+          const headerCartStatus = document.querySelector('#headerCartStatus');
+          if (!headerCartStatus) return;
+          
+          const cartCountWrapper = headerCartStatus.querySelector('.header__cart-count');
+          const cartCountNumber = headerCartStatus.querySelector('.header__cart-count .cart-count-number');
+          
+          if (cartCountWrapper) {
+            // שחזר את ה-styles המקוריים
+            cartCountWrapper.style.backgroundColor = '#ffffff';
+            cartCountWrapper.style.color = '#000000';
+            cartCountWrapper.style.borderRadius = '50%';
+            cartCountWrapper.style.minWidth = '18px';
+            cartCountWrapper.style.height = '18px';
+            cartCountWrapper.style.display = 'flex';
+            cartCountWrapper.style.alignItems = 'center';
+            cartCountWrapper.style.justifyContent = 'center';
+            cartCountWrapper.style.padding = '2px 4px';
+            cartCountWrapper.style.fontWeight = '600';
+          }
+          
+          if (cartCountNumber) {
+            cartCountNumber.style.color = '#000000';
+          }
+        }
+        
+        // צפה בשינויים ב-#headerCartStatus
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+              // אחרי עדכון - שחזר את ה-styles
+              setTimeout(restoreCartCountStyles, 10);
+            }
+          });
+        });
+        
+        // התחל observation כשהדף נטען
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function() {
+            const headerCartStatus = document.querySelector('#headerCartStatus');
+            if (headerCartStatus) {
+              observer.observe(headerCartStatus, {
+                childList: true,
+                subtree: true
+              });
+              restoreCartCountStyles();
+            }
+          });
+        } else {
+          const headerCartStatus = document.querySelector('#headerCartStatus');
+          if (headerCartStatus) {
+            observer.observe(headerCartStatus, {
+              childList: true,
+              subtree: true
+            });
+            restoreCartCountStyles();
+          }
+        }
+        
+        // גם אחרי עדכוני AJAX של Shopify
+        document.addEventListener('shopify:section:load', function() {
+          setTimeout(restoreCartCountStyles, 100);
+        });
+      })();
+    </script>
   </body>
 </html>
