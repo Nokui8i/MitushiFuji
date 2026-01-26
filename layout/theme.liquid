@@ -293,7 +293,7 @@
       });
     </script>
     <script>
-      // מניעת עדכונים מיותרים של המספר באייקון העגלה
+      // מניעת עדכונים מיותרים של המספר באייקון העגלה + שמירה על העיצוב הנכון
       (function() {
         let lastCartCount = null;
         let updateTimeout = null;
@@ -304,6 +304,33 @@
           const text = cartCountElement.textContent.trim();
           const count = parseInt(text, 10);
           return isNaN(count) ? null : count;
+        }
+        
+        // שמור את ה-styles הנכונים על ה-cart count badge
+        function preserveCartCountStyles() {
+          const cartCountWrapper = document.querySelector('.header__cart-count');
+          const cartCountNumber = document.querySelector('.header__cart-count .cart-count-number');
+          
+          if (!cartCountWrapper || !cartCountNumber) return;
+          
+          // וודא שה-wrapper שומר על ה-styles הנכונים (רקע לבן, טקסט שחור)
+          if (!cartCountWrapper.style.backgroundColor || cartCountWrapper.style.backgroundColor !== 'rgb(255, 255, 255)') {
+            cartCountWrapper.style.backgroundColor = '#ffffff';
+            cartCountWrapper.style.color = '#000000';
+            cartCountWrapper.style.borderRadius = '50%';
+            cartCountWrapper.style.minWidth = '18px';
+            cartCountWrapper.style.height = '18px';
+            cartCountWrapper.style.display = 'flex';
+            cartCountWrapper.style.alignItems = 'center';
+            cartCountWrapper.style.justifyContent = 'center';
+            cartCountWrapper.style.padding = '2px 4px';
+            cartCountWrapper.style.fontWeight = '600';
+          }
+          
+          // וודא שה-number שומר על הטקסט השחור
+          if (!cartCountNumber.style.color || cartCountNumber.style.color !== 'rgb(0, 0, 0)') {
+            cartCountNumber.style.color = '#000000';
+          }
         }
         
         function updateCartCount(newCount) {
@@ -329,37 +356,65 @@
             } else {
               cartCountWrapper.classList.remove('opacity-0', 'hidden-xs');
             }
+            
+            // שמור על ה-styles הנכונים
+            preserveCartCountStyles();
           }
         }
         
         // צפה בשינויים ב-DOM עם MutationObserver
         function observeCartCount() {
+          const headerCartStatus = document.querySelector('#headerCartStatus');
           const cartCountElement = document.querySelector('.header__cart-count .cart-count-number');
-          if (!cartCountElement) {
+          
+          if (!headerCartStatus) {
             // נסה שוב אחרי זמן קצר
             setTimeout(observeCartCount, 500);
             return;
           }
           
-          const observer = new MutationObserver(function(mutations) {
+          // צפה בשינויים ב-#headerCartStatus (כשהתוכן מתעדכן דרך AJAX)
+          const headerObserver = new MutationObserver(function(mutations) {
             clearTimeout(updateTimeout);
             updateTimeout = setTimeout(function() {
+              // אחרי עדכון - וודא שה-styles נשמרו
+              preserveCartCountStyles();
               const currentCount = getCartCount();
               if (currentCount !== null && currentCount !== lastCartCount) {
-                // המספר השתנה - שמור את הערך החדש
                 lastCartCount = currentCount;
               }
-            }, 100);
+            }, 50);
           });
           
-          observer.observe(cartCountElement, {
+          headerObserver.observe(headerCartStatus, {
             childList: true,
             subtree: true,
-            characterData: true
+            attributes: false
           });
           
-          // אתחל את המספר הראשוני
+          // גם צפה בשינויים במספר עצמו
+          if (cartCountElement) {
+            const countObserver = new MutationObserver(function(mutations) {
+              clearTimeout(updateTimeout);
+              updateTimeout = setTimeout(function() {
+                preserveCartCountStyles();
+                const currentCount = getCartCount();
+                if (currentCount !== null && currentCount !== lastCartCount) {
+                  lastCartCount = currentCount;
+                }
+              }, 50);
+            });
+            
+            countObserver.observe(cartCountElement, {
+              childList: true,
+              subtree: true,
+              characterData: true
+            });
+          }
+          
+          // אתחל את המספר הראשוני ושמור על ה-styles
           lastCartCount = getCartCount();
+          preserveCartCountStyles();
         }
         
         // התחל את ה-observation כשהדף נטען
@@ -371,7 +426,17 @@
         
         // גם אחרי עדכוני AJAX של Shopify
         document.addEventListener('shopify:section:load', function() {
-          setTimeout(observeCartCount, 100);
+          setTimeout(function() {
+            observeCartCount();
+            preserveCartCountStyles();
+          }, 100);
+        });
+        
+        // גם אחרי add to cart (event מותאם אישית)
+        document.addEventListener('cart:updated', function() {
+          setTimeout(function() {
+            preserveCartCountStyles();
+          }, 100);
         });
       })();
     </script>
