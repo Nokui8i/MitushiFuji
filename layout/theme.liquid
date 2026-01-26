@@ -306,31 +306,42 @@
           return isNaN(count) ? null : count;
         }
         
-        // שמור את ה-styles הנכונים על ה-cart count badge
+        // שמור את ה-styles הנכונים על ה-cart count badge - כפית חזקה
         function preserveCartCountStyles() {
           const cartCountWrapper = document.querySelector('.header__cart-count');
           const cartCountNumber = document.querySelector('.header__cart-count .cart-count-number');
           
-          if (!cartCountWrapper || !cartCountNumber) return;
+          if (!cartCountWrapper) return;
           
-          // וודא שה-wrapper שומר על ה-styles הנכונים (רקע לבן, טקסט שחור)
-          if (!cartCountWrapper.style.backgroundColor || cartCountWrapper.style.backgroundColor !== 'rgb(255, 255, 255)') {
-            cartCountWrapper.style.backgroundColor = '#ffffff';
-            cartCountWrapper.style.color = '#000000';
-            cartCountWrapper.style.borderRadius = '50%';
-            cartCountWrapper.style.minWidth = '18px';
-            cartCountWrapper.style.height = '18px';
-            cartCountWrapper.style.display = 'flex';
-            cartCountWrapper.style.alignItems = 'center';
-            cartCountWrapper.style.justifyContent = 'center';
-            cartCountWrapper.style.padding = '2px 4px';
-            cartCountWrapper.style.fontWeight = '600';
+          // כפית חזקה - תמיד רקע לבן וטקסט שחור
+          cartCountWrapper.style.setProperty('background-color', '#ffffff', 'important');
+          cartCountWrapper.style.setProperty('color', '#000000', 'important');
+          cartCountWrapper.style.setProperty('border-radius', '50%', 'important');
+          cartCountWrapper.style.setProperty('min-width', '18px', 'important');
+          cartCountWrapper.style.setProperty('height', '18px', 'important');
+          cartCountWrapper.style.setProperty('display', 'flex', 'important');
+          cartCountWrapper.style.setProperty('align-items', 'center', 'important');
+          cartCountWrapper.style.setProperty('justify-content', 'center', 'important');
+          cartCountWrapper.style.setProperty('padding', '2px 4px', 'important');
+          cartCountWrapper.style.setProperty('font-weight', '600', 'important');
+          cartCountWrapper.style.setProperty('border', 'none', 'important');
+          cartCountWrapper.style.setProperty('box-shadow', 'none', 'important');
+          
+          // כפית חזקה על המספר עצמו
+          if (cartCountNumber) {
+            cartCountNumber.style.setProperty('color', '#000000', 'important');
+            cartCountNumber.style.setProperty('background-color', 'transparent', 'important');
+            cartCountNumber.style.setProperty('font-weight', '600', 'important');
           }
           
-          // וודא שה-number שומר על הטקסט השחור
-          if (!cartCountNumber.style.color || cartCountNumber.style.color !== 'rgb(0, 0, 0)') {
-            cartCountNumber.style.color = '#000000';
-          }
+          // גם כל ה-spans הפנימיים
+          const allSpans = cartCountWrapper.querySelectorAll('span');
+          allSpans.forEach(function(span) {
+            if (span.classList.contains('cart-count-number') || span.textContent.trim().match(/^\d+$/)) {
+              span.style.setProperty('color', '#000000', 'important');
+              span.style.setProperty('background-color', 'transparent', 'important');
+            }
+          });
         }
         
         function updateCartCount(newCount) {
@@ -438,6 +449,23 @@
             preserveCartCountStyles();
           }, 100);
         });
+        
+        // בדיקה תקופתית - וודא שה-styles נשמרים כל הזמן
+        setInterval(function() {
+          preserveCartCountStyles();
+        }, 500);
+        
+        // גם אחרי כל mutation ב-DOM
+        const globalObserver = new MutationObserver(function() {
+          preserveCartCountStyles();
+        });
+        
+        if (document.body) {
+          globalObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+          });
+        }
       })();
     </script>
   </body>
