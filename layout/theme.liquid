@@ -292,5 +292,88 @@
         });
       });
     </script>
+    <script>
+      // מניעת עדכונים מיותרים של המספר באייקון העגלה
+      (function() {
+        let lastCartCount = null;
+        let updateTimeout = null;
+        
+        function getCartCount() {
+          const cartCountElement = document.querySelector('.header__cart-count .cart-count-number');
+          if (!cartCountElement) return null;
+          const text = cartCountElement.textContent.trim();
+          const count = parseInt(text, 10);
+          return isNaN(count) ? null : count;
+        }
+        
+        function updateCartCount(newCount) {
+          if (newCount === null || newCount === lastCartCount) return;
+          
+          const cartCountElement = document.querySelector('.header__cart-count .cart-count-number');
+          const cartCountWrapper = document.querySelector('.header__cart-count');
+          
+          if (!cartCountElement || !cartCountWrapper) return;
+          
+          // עדכן רק אם המספר באמת השתנה
+          if (parseInt(cartCountElement.textContent.trim(), 10) !== newCount) {
+            cartCountElement.textContent = newCount;
+            lastCartCount = newCount;
+            
+            // עדכן את ה-class
+            cartCountWrapper.className = cartCountWrapper.className.replace(/header-cart-count-\d+/g, '');
+            cartCountWrapper.classList.add('header-cart-count-' + newCount);
+            
+            // עדכן את ה-visibility
+            if (newCount === 0) {
+              cartCountWrapper.classList.add('opacity-0', 'hidden-xs');
+            } else {
+              cartCountWrapper.classList.remove('opacity-0', 'hidden-xs');
+            }
+          }
+        }
+        
+        // צפה בשינויים ב-DOM עם MutationObserver
+        function observeCartCount() {
+          const cartCountElement = document.querySelector('.header__cart-count .cart-count-number');
+          if (!cartCountElement) {
+            // נסה שוב אחרי זמן קצר
+            setTimeout(observeCartCount, 500);
+            return;
+          }
+          
+          const observer = new MutationObserver(function(mutations) {
+            clearTimeout(updateTimeout);
+            updateTimeout = setTimeout(function() {
+              const currentCount = getCartCount();
+              if (currentCount !== null && currentCount !== lastCartCount) {
+                // המספר השתנה - שמור את הערך החדש
+                lastCartCount = currentCount;
+              }
+            }, 100);
+          });
+          
+          observer.observe(cartCountElement, {
+            childList: true,
+            subtree: true,
+            characterData: true
+          });
+          
+          // אתחל את המספר הראשוני
+          lastCartCount = getCartCount();
+        }
+        
+        // התחל את ה-observation כשהדף נטען
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', observeCartCount);
+        } else {
+          observeCartCount();
+        }
+        
+        // גם אחרי עדכוני AJAX של Shopify
+        document.addEventListener('shopify:section:load', function() {
+          setTimeout(observeCartCount, 100);
+        });
+      })();
+    </script>
   </body>
 </html>
