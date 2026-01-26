@@ -33,7 +33,7 @@
     "show_discount_field": true,
     "enable_cart_order_notes": false,
     "cart_show_free_shipping_notification": true,
-    "cart_minimum_order_price_for_free_shipping": "200",
+    "cart_minimum_order_price_for_free_shipping": "199",
     "product_information_new_in_date_limit": 10,
     "color_badge_text": "#ffffff",
     "color_sale_badge": "#121212",
@@ -1897,10 +1897,10 @@
   "platform_customizations": {
     "custom_css": [
       ".product__media-wrapper,.product__media-wrapper *,.product__media-item,.product__media-item *,.product__thumbnail,.product__thumbnail *,.product__media-wrapper img,.product__media-item img,.product__thumbnail img,.product__media-container,.product__media-container *,.product__media,.product__media *,deferred-media,deferred-media *,.product-media-modal__content img,.thumbnail-list__item,.thumbnail-list__item *,.thumbnail img,img[data-media-id] {border-radius: 12px !important; overflow: hidden !important;}",
-      " .product__media-wrapper,.product__media-container {max-width: 700px !important; max-height: 700px !important; margin: 0 auto !important;}",
-      " .product__media img {width: 100% !important; height: auto !important; object-fit: contain !important; border-radius: 12px !important; display: block !important;}",
-      " .thumbnail-list__item,.product__thumbnail {width: 100% !important; height: 100% !important; display: block !important;}",
-      " .thumbnail img,.product__thumbnail img,.thumbnail-list__item img,li[data-target] img {width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: top !important; display: block !important;}"
+      ".product__media-wrapper,.product__media-container {max-width: 700px !important; max-height: 700px !important; margin: 0 auto !important;}",
+      ".product__media img {width: 100% !important; height: auto !important; object-fit: contain !important; border-radius: 12px !important; display: block !important;}",
+      ".thumbnail-list__item,.product__thumbnail {width: 100% !important; height: 100% !important; display: block !important;}",
+      ".thumbnail img,.product__thumbnail img,.thumbnail-list__item img,li[data-target] img {width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: top !important; display: block !important;}"
     ]
   }
 }
