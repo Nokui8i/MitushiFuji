@@ -294,7 +294,20 @@
     </script>
     <script>
       // תיקון: שמירה על ה-styles של cart count badge אחרי עדכונים דינמיים
+      // רץ מיד - לפני שה-DOM מוכן
       (function() {
+        // רץ מיד - גם לפני DOMContentLoaded
+        if (document.readyState === 'loading') {
+          // רץ מיד כשה-DOM מתחיל להיטען
+          document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+              if (typeof restoreCartCountStyles === 'function') {
+                restoreCartCountStyles();
+              }
+            }, 0);
+          });
+        }
+        
         function restoreCartCountStyles() {
           // מצא את כל ה-cart count badges (יכול להיות יותר מאחד)
           const allCartCountWrappers = document.querySelectorAll('.header__cart-count');

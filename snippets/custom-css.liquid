@@ -1966,14 +1966,21 @@ section[data-ui-component="Running Content Section"] {
 
 /* ===== CART COUNT BADGE - Ensure White Background & Black Text ===== */
 /* וידוא שהמספר באייקון העגלה תמיד יהיה רקע לבן וטקסט שחור */
+/* כפית חזקה מאוד - כל האפשרויות */
 .header__cart-count,
 #headerCartStatus .header__cart-count,
 .js-header-cart-status-btn .header__cart-count,
 .header__icon--cart .header__cart-count,
 a#headerCartStatus .header__cart-count,
 a[href*="cart"] .header__cart-count,
-.header__icon .header__cart-count {
+.header__icon .header__cart-count,
+.header__icon--cart a .header__cart-count,
+a.js-header-cart-status-btn .header__cart-count,
+.header__icons .header__cart-count,
+.header__icons--right .header__cart-count,
+[class*="header-cart-count"] {
   background-color: #ffffff !important;
+  background: #ffffff !important;
   color: #000000 !important;
   border-radius: 50% !important;
   min-width: 18px !important;
@@ -1985,19 +1992,23 @@ a[href*="cart"] .header__cart-count,
   font-weight: 600 !important;
 }
 
+/* גם כל ה-spans והטקסט */
 .header__cart-count .cart-count-number,
 #headerCartStatus .header__cart-count .cart-count-number,
 .js-header-cart-status-btn .header__cart-count .cart-count-number,
 .header__cart-count span,
 .header__cart-count span.cart-count-number,
-.header__cart-count > span {
+.header__cart-count > span,
+.header__cart-count * {
   color: #000000 !important;
   background-color: transparent !important;
+  background: transparent !important;
 }
 
 /* גם כל הטקסט בתוך ה-badge */
 .header__cart-count *,
-#headerCartStatus .header__cart-count * {
+#headerCartStatus .header__cart-count *,
+.header__cart-count span * {
   color: #000000 !important;
 }
 
