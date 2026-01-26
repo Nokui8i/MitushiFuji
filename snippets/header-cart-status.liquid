@@ -1,7 +1,7 @@
 {%- render 'icon-cart' -%}
 <span class="visually-hidden">{{ 'sections.header.cart_label' | t }}</span>
-<span class="header__cart-count d-block p-absolute subtext ta-center color-accent-bg-1 ws-nowrap header-cart-count-{{- cart.item_count }} {% if cart.item_count == 0 %}opacity-0 hidden-xs {% endif %}" style="background-color: #ffffff; border-radius: 50%; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; padding: 2px 4px; font-weight: 600;">
-  <span class="cart-count-number d-block p-relative">
+<span class="header__cart-count d-block p-absolute subtext ta-center ws-nowrap header-cart-count-{{- cart.item_count }} {% if cart.item_count == 0 %}opacity-0 hidden-xs {% endif %}" style="background-color: #ffffff; color: #000000; border-radius: 50%; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; padding: 2px 4px; font-weight: 600;">
+  <span class="cart-count-number d-block p-relative" style="color: #000000;">
     {{- cart.item_count -}}
   </span>
 </span>
