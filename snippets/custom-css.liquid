@@ -1963,4 +1963,295 @@ section[data-ui-component="Running Content Section"] {
   height: 24px !important;
   fill: #000 !important;
 }
+
+/* ===== COOKIE CONSENT BANNER - Beautiful Design ===== */
+/* עיצוב יפה ונעים לעין ל-Cookie Consent Banner */
+
+/* Cookie Banner Container */
+shopify-cookie-banner,
+[data-shopify-cookie-banner],
+.cookie-banner,
+#shopify-cookie-banner {
+  z-index: 9999 !important;
+  font-family: var(--font-body-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif) !important;
+}
+
+/* Cookie Banner Panel */
+shopify-cookie-banner .cookie-banner__panel,
+[data-shopify-cookie-banner] .cookie-banner__panel,
+.cookie-banner__panel {
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  padding: 24px 28px !important;
+  max-width: 520px !important;
+  width: calc(100% - 32px) !important;
+  margin: 16px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+@media (max-width: 749px) {
+  shopify-cookie-banner .cookie-banner__panel,
+  [data-shopify-cookie-banner] .cookie-banner__panel,
+  .cookie-banner__panel {
+    padding: 20px 20px !important;
+    border-radius: 12px !important;
+    max-width: calc(100% - 24px) !important;
+    margin: 12px !important;
+  }
+}
+
+/* Cookie Banner Title */
+shopify-cookie-banner .cookie-banner__title,
+[data-shopify-cookie-banner] .cookie-banner__title,
+.cookie-banner__title,
+shopify-cookie-banner h2,
+[data-shopify-cookie-banner] h2 {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  margin: 0 0 12px 0 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.3px !important;
+}
+
+@media (max-width: 749px) {
+  shopify-cookie-banner .cookie-banner__title,
+  [data-shopify-cookie-banner] .cookie-banner__title,
+  .cookie-banner__title {
+    font-size: 18px !important;
+  }
+}
+
+/* Cookie Banner Description */
+shopify-cookie-banner .cookie-banner__description,
+[data-shopify-cookie-banner] .cookie-banner__description,
+.cookie-banner__description,
+shopify-cookie-banner p,
+[data-shopify-cookie-banner] p {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: #333333 !important;
+  margin: 0 0 20px 0 !important;
+  font-weight: 400 !important;
+}
+
+@media (max-width: 749px) {
+  shopify-cookie-banner .cookie-banner__description,
+  [data-shopify-cookie-banner] .cookie-banner__description,
+  .cookie-banner__description {
+    font-size: 13px !important;
+    margin-bottom: 18px !important;
+  }
+}
+
+/* Cookie Banner Links */
+shopify-cookie-banner a,
+[data-shopify-cookie-banner] a,
+.cookie-banner a {
+  color: #000000 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+  font-weight: 500 !important;
+  transition: opacity 0.2s ease !important;
+}
+
+shopify-cookie-banner a:hover,
+[data-shopify-cookie-banner] a:hover,
+.cookie-banner a:hover {
+  opacity: 0.7 !important;
+  text-decoration: underline !important;
+}
+
+/* Cookie Banner Buttons Container */
+shopify-cookie-banner .cookie-banner__buttons,
+[data-shopify-cookie-banner] .cookie-banner__buttons,
+.cookie-banner__buttons,
+shopify-cookie-banner .cookie-banner__actions,
+[data-shopify-cookie-banner] .cookie-banner__actions {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 10px !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  flex-wrap: wrap !important;
+  margin-top: 0 !important;
+}
+
+@media (max-width: 749px) {
+  shopify-cookie-banner .cookie-banner__buttons,
+  [data-shopify-cookie-banner] .cookie-banner__buttons,
+  .cookie-banner__buttons {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  
+  shopify-cookie-banner .cookie-banner__buttons > *,
+  [data-shopify-cookie-banner] .cookie-banner__buttons > * {
+    width: 100% !important;
+  }
+}
+
+/* Cookie Banner Accept Button */
+shopify-cookie-banner button[type="submit"],
+shopify-cookie-banner .cookie-banner__accept,
+[data-shopify-cookie-banner] button[type="submit"],
+[data-shopify-cookie-banner] .cookie-banner__accept,
+.cookie-banner__accept,
+shopify-cookie-banner button:not(.cookie-banner__decline):not([aria-label*="close"]):not([aria-label*="Close"]) {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  min-width: 100px !important;
+  text-align: center !important;
+}
+
+shopify-cookie-banner button[type="submit"]:hover,
+shopify-cookie-banner .cookie-banner__accept:hover,
+[data-shopify-cookie-banner] button[type="submit"]:hover,
+.cookie-banner__accept:hover {
+  background: #333333 !important;
+  border-color: #333333 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+@media (max-width: 749px) {
+  shopify-cookie-banner button[type="submit"],
+  shopify-cookie-banner .cookie-banner__accept,
+  .cookie-banner__accept {
+    width: 100% !important;
+    padding: 14px 24px !important;
+  }
+}
+
+/* Cookie Banner Decline Button */
+shopify-cookie-banner .cookie-banner__decline,
+[data-shopify-cookie-banner] .cookie-banner__decline,
+.cookie-banner__decline,
+shopify-cookie-banner button[aria-label*="decline"],
+shopify-cookie-banner button[aria-label*="Decline"] {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  min-width: 100px !important;
+  text-align: center !important;
+}
+
+shopify-cookie-banner .cookie-banner__decline:hover,
+[data-shopify-cookie-banner] .cookie-banner__decline:hover,
+.cookie-banner__decline:hover {
+  background: #f5f5f5 !important;
+  border-color: #333333 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+@media (max-width: 749px) {
+  shopify-cookie-banner .cookie-banner__decline,
+  .cookie-banner__decline {
+    width: 100% !important;
+    padding: 14px 24px !important;
+  }
+}
+
+/* Cookie Banner Manage Preferences Link */
+shopify-cookie-banner .cookie-banner__manage-preferences,
+[data-shopify-cookie-banner] .cookie-banner__manage-preferences,
+.cookie-banner__manage-preferences,
+shopify-cookie-banner a[href*="preferences"],
+shopify-cookie-banner a:not([href*="privacy"]):not([href*="Privacy"]) {
+  color: #000000 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  margin-right: auto !important;
+  transition: opacity 0.2s ease !important;
+  padding: 8px 0 !important;
+}
+
+shopify-cookie-banner .cookie-banner__manage-preferences:hover,
+[data-shopify-cookie-banner] .cookie-banner__manage-preferences:hover,
+.cookie-banner__manage-preferences:hover {
+  opacity: 0.7 !important;
+}
+
+@media (max-width: 749px) {
+  shopify-cookie-banner .cookie-banner__manage-preferences,
+  .cookie-banner__manage-preferences {
+    width: 100% !important;
+    text-align: center !important;
+    margin-right: 0 !important;
+    margin-bottom: 4px !important;
+  }
+}
+
+/* Cookie Banner Overlay/Backdrop */
+shopify-cookie-banner::before,
+[data-shopify-cookie-banner]::before {
+  content: '' !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(2px) !important;
+  z-index: -1 !important;
+}
+
+/* Cookie Banner Position - Bottom Right */
+shopify-cookie-banner,
+[data-shopify-cookie-banner] {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  top: auto !important;
+  z-index: 9999 !important;
+}
+
+@media (max-width: 749px) {
+  shopify-cookie-banner,
+  [data-shopify-cookie-banner] {
+    bottom: 16px !important;
+    right: 12px !important;
+    left: 12px !important;
+  }
+}
+
+/* Cookie Banner Animation */
+shopify-cookie-banner,
+[data-shopify-cookie-banner] {
+  animation: slideUpFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 </style>
