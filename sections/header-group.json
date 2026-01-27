@@ -14,6 +14,13 @@
     "announcement-bar": {
       "type": "announcement-bar",
       "blocks": {
+        "message_zBVAiw": {
+          "type": "message",
+          "settings": {
+            "message_text": "Designed in-house. No stock designs",
+            "message_link": ""
+          }
+        },
         "message-0": {
           "type": "message",
           "settings": {
@@ -23,11 +30,12 @@
         }
       },
       "block_order": [
+        "message_zBVAiw",
         "message-0"
       ],
       "settings": {
         "color_scheme": "scheme-2",
-        "enable_autoplay": false,
+        "enable_autoplay": true,
         "duration": 5,
         "open_external_link": false
       }
