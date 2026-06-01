@@ -9,6 +9,64 @@
  */
 {
   "sections": {
+    "mitushi_header_1": {
+      "type": "mitushi-header",
+      "blocks": {
+        "nav_item_home": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Home",
+            "href": "#home",
+            "active": true,
+            "dropdown_items": ""
+          }
+        },
+        "nav_item_products": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Products",
+            "href": "#products",
+            "active": false,
+            "dropdown_items": "Shirts | #shirts\nShorts | #shorts\nTanks | #tanks"
+          }
+        },
+        "nav_item_about": {
+          "type": "nav_item",
+          "settings": {
+            "label": "About us",
+            "href": "#about",
+            "active": false,
+            "dropdown_items": ""
+          }
+        },
+        "nav_item_contact": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Contact",
+            "href": "#contact",
+            "active": false,
+            "dropdown_items": ""
+          }
+        }
+      },
+      "block_order": [
+        "nav_item_home",
+        "nav_item_products",
+        "nav_item_about",
+        "nav_item_contact"
+      ],
+      "name": "Mitushi Header",
+      "settings": {
+        "logo_image": "",
+        "logo_alt": "Mitushi",
+        "logo_link": "#home",
+        "announcement_text_primary": "Free shipping on orders over $199",
+        "announcement_text_secondary": "新作コレクション",
+        "announcement_repeat_count": 8,
+        "currency_label": "USD $",
+        "cart_count": 2
+      }
+    },
     "image_banner_TnVcW9": {
       "type": "image-banner",
       "blocks": {
@@ -317,6 +375,7 @@
     }
   },
   "order": [
+    "mitushi_header_1",
     "image_banner_TnVcW9",
     "featured_product_carousel_EaipjV",
     "collection-list",
