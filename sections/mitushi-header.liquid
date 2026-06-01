@@ -1,0 +1,541 @@
+{% comment %}
+Mitushi Header Section
+Combines a collapsible announcement bar with a sticky header.
+{% endcomment %}
+
+<div class="mitushi-header-section">
+  <style>
+    .mitushi-header-section {
+      background: #28282B;
+      color: #f7f7f8;
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    .mitushi-announcement {
+      overflow: hidden;
+      background: #8b0000;
+      color: #fff;
+      transition: height 0.5s ease-out, opacity 0.5s ease-out;
+      height: 36px;
+      opacity: 1;
+    }
+
+    .mitushi-announcement-inner {
+      display: flex;
+      align-items: center;
+      height: 36px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .mitushi-marquee {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+      padding-left: 2rem;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      animation: mitushi-marquee 18s linear infinite;
+    }
+
+    .mitushi-marquee span {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .mitushi-marquee span[aria-hidden] {
+      opacity: 0.6;
+    }
+
+    @keyframes mitushi-marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .mitushi-sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid transparent;
+      transition: all 0.3s ease;
+      background: rgba(40, 40, 43, 0.84);
+      backdrop-filter: blur(22px);
+    }
+
+    .mitushi-sticky-header.scrolled {
+      border-color: rgba(255, 255, 255, 0.36);
+      padding-block: 0.5rem;
+    }
+
+    .mitushi-sticky-header:not(.scrolled) {
+      padding-block: 0.75rem;
+    }
+
+    .mitushi-header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 0 1.5rem;
+    }
+
+    .mitushi-logo-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .mitushi-logo-glow {
+      position: absolute;
+      left: -0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3rem;
+      height: 3rem;
+      border-radius: 9999px;
+      background: rgba(255, 0, 0, 0.9);
+      filter: blur(1px);
+    }
+
+    .mitushi-logo-image {
+      position: relative;
+      height: 3rem;
+      width: auto;
+      display: block;
+      filter: brightness(2.2) contrast(1.25);
+    }
+
+    .mitushi-nav {
+      display: none;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .md\:flex {
+        display: flex;
+      }
+
+      .mitushi-nav {
+        display: flex;
+      }
+    }
+
+    .mitushi-nav-item {
+      position: relative;
+    }
+
+    .mitushi-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.5rem 1rem;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .mitushi-nav-link.active {
+      color: #cc132a;
+    }
+
+    .mitushi-nav-link:hover {
+      color: #f7f7f8;
+    }
+
+    .mitushi-nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0.25rem;
+      left: 50%;
+      width: 1.5rem;
+      height: 1px;
+      transform: translateX(-50%);
+      background: #cc132a;
+    }
+
+    .mitushi-dropdown-trigger {
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      transform: translateX(-50%);
+      padding-top: 0.5rem;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .mitushi-nav-item:hover .mitushi-dropdown-trigger {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mitushi-dropdown-menu {
+      min-width: 11.25rem;
+      background: rgba(40, 40, 43, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.16);
+      border-radius: 0.5rem;
+      padding: 0.5rem 0;
+    }
+
+    .mitushi-dropdown-link {
+      display: block;
+      padding: 0.625rem 1rem;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .mitushi-dropdown-link:hover {
+      background: rgba(204, 19, 42, 0.1);
+      color: #cc132a;
+    }
+
+    .mitushi-utilities {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .mitushi-utilities button,
+    .mitushi-utilities a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      background: transparent;
+      color: rgba(255, 255, 255, 0.8);
+      padding: 0.625rem 0.875rem;
+      font-size: 0.75rem;
+      line-height: 1;
+      transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .mitushi-utilities button:hover,
+    .mitushi-utilities a:hover {
+      border-color: rgba(204, 19, 42, 0.6);
+      background: rgba(204, 19, 42, 0.08);
+      color: #cc132a;
+    }
+
+    .mitushi-currency-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .mitushi-flag {
+      display: inline-flex;
+      width: 1.5rem;
+      height: 1rem;
+      border-radius: 0.125rem;
+      overflow: hidden;
+      position: relative;
+      background: #0038b8;
+    }
+
+    .mitushi-flag::before {
+      content: '✡';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.625rem;
+      color: #fff;
+    }
+
+    .mitushi-cart-button {
+      position: relative;
+      padding: 0.75rem;
+    }
+
+    .mitushi-cart-badge {
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 9999px;
+      background: #cc132a;
+      color: #ffffff;
+      font-size: 0.5625rem;
+      font-weight: 700;
+    }
+
+    .text-crimson { color: #cc132a; }
+    .bg-crimson { background: #cc132a; }
+    .text-foreground\/80 { color: rgba(255, 255, 255, 0.8); }
+    .hover\:text-foreground:hover { color: #f7f7f8; }
+  </style>
+
+  <div id="mitushi-announcement-bar" class="mitushi-announcement" aria-hidden="false">
+    <div class="mitushi-announcement-inner">
+      <div class="mitushi-marquee">
+        {% for i in (1..settings.announcement_repeat_count) %}
+          <span>
+            {{ settings.announcement_text_primary }}
+            <span aria-hidden>✦</span>
+            {{ settings.announcement_text_secondary }}
+            <span aria-hidden>✦</span>
+          </span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <header id="mitushi-sticky-header" class="mitushi-sticky-header">
+    <div class="mitushi-header-inner">
+      <a href="{{ settings.logo_link }}" class="mitushi-logo-link">
+        <span aria-hidden="true" class="mitushi-logo-glow"></span>
+        {% if section.settings.logo_image != blank %}
+          <img src="{{ section.settings.logo_image | image_url: width: 240 }}" alt="{{ section.settings.logo_alt | escape }}" class="mitushi-logo-image" />
+        {% else %}
+          <span class="mitushi-logo-image" style="color:#fff;font-weight:700;font-size:1rem;">Mitushi</span>
+        {% endif %}
+      </a>
+
+      <nav class="mitushi-nav hidden items-center gap-1 md:flex" aria-label="Primary navigation">
+        {% for block in section.blocks %}
+          <div class="group mitushi-nav-item">
+            <a href="{{ block.settings.href }}" class="mitushi-nav-link {% if block.settings.active %}active{% endif %}">
+              {{ block.settings.label }}
+              {% if block.settings.dropdown_items != blank %}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              {% endif %}
+            </a>
+            {% if block.settings.dropdown_items != blank %}
+              <div class="mitushi-dropdown-trigger">
+                <div class="mitushi-dropdown-menu">
+                  {% assign dropdown_links = block.settings.dropdown_items | split: '\n' %}
+                  {% for dropdown_item in dropdown_links %}
+                    {% assign trimmed = dropdown_item | strip %}
+                    {% if trimmed != blank %}
+                      {% assign item_parts = trimmed | split: '|' %}
+                      <a href="{{ item_parts[1] | default: '#' | strip }}" class="mitushi-dropdown-link">
+                        {{ item_parts[0] | strip }}
+                      </a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </nav>
+
+      <div class="mitushi-utilities flex items-center gap-1">
+        <button type="button" class="mitushi-currency-button">
+          <span class="mitushi-flag"></span>
+          <span class="font-medium tracking-wide">{{ settings.currency_label }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="margin-left:0.25rem;">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+          </svg>
+        </button>
+
+        <button type="button" aria-label="Search" class="rounded-full p-2.5 text-foreground\/80 hover:bg-crimson\/10 hover:text-crimson transition">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4" width="16" height="16">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 12.65z" />
+          </svg>
+        </button>
+
+        <button type="button" aria-label="Cart" class="mitushi-cart-button rounded-full p-2.5 text-foreground\/80 hover:bg-crimson\/10 hover:text-crimson transition">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4" width="16" height="16">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2.25l.75 7.5a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25L20.25 3H3zm2.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm11 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+          </svg>
+          <span class="mitushi-cart-badge">{{ settings.cart_count }}</span>
+        </button>
+      </div>
+    </div>
+  </header>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var announcementBar = document.getElementById('mitushi-announcement-bar');
+    var stickyHeader = document.getElementById('mitushi-sticky-header');
+
+    function updateScrollState() {
+      var scrollY = window.scrollY || window.pageYOffset;
+      var atTop = scrollY < 4;
+      var scrolled = scrollY > 12;
+
+      if (announcementBar) {
+        announcementBar.style.height = atTop ? '36px' : '0px';
+        announcementBar.style.opacity = atTop ? '1' : '0';
+        announcementBar.setAttribute('aria-hidden', atTop ? 'false' : 'true');
+      }
+
+      if (stickyHeader) {
+        if (scrolled) {
+          stickyHeader.classList.add('scrolled');
+        } else {
+          stickyHeader.classList.remove('scrolled');
+        }
+      }
+    }
+
+    updateScrollState();
+    window.addEventListener('scroll', updateScrollState, { passive: true });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Mitushi Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image"
+    },
+    {
+      "type": "text",
+      "id": "logo_alt",
+      "label": "Logo alt text",
+      "default": "Mitushi"
+    },
+    {
+      "type": "url",
+      "id": "logo_link",
+      "label": "Logo link",
+      "default": "#home"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text_primary",
+      "label": "Announcement text primary",
+      "default": "Free shipping on orders over $199"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text_secondary",
+      "label": "Announcement text secondary",
+      "default": "新作コレクション"
+    },
+    {
+      "type": "number",
+      "id": "announcement_repeat_count",
+      "label": "Announcement repeat count",
+      "default": 8,
+      "min": 1,
+      "max": 20
+    },
+    {
+      "type": "text",
+      "id": "currency_label",
+      "label": "Currency label",
+      "default": "USD $"
+    },
+    {
+      "type": "number",
+      "id": "cart_count",
+      "label": "Cart item count",
+      "default": 2,
+      "min": 0,
+      "max": 99
+    }
+  ],
+  "blocks": [
+    {
+      "type": "nav_item",
+      "name": "Navigation item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Home"
+        },
+        {
+          "type": "url",
+          "id": "href",
+          "label": "Link",
+          "default": "#home"
+        },
+        {
+          "type": "checkbox",
+          "id": "active",
+          "label": "Active item",
+          "default": false
+        },
+        {
+          "type": "textarea",
+          "id": "dropdown_items",
+          "label": "Dropdown items (one per line, format: Label | URL)",
+          "default": "Shirts | #shirts\nShorts | #shorts\nTanks | #tanks"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Mitushi Header",
+      "category": "Header",
+      "blocks": [
+        {
+          "type": "nav_item",
+          "settings": {
+            "label": "Home",
+            "href": "#home",
+            "active": true,
+            "dropdown_items": ""
+          }
+        },
+        {
+          "type": "nav_item",
+          "settings": {
+            "label": "Products",
+            "href": "#products",
+            "active": false,
+            "dropdown_items": "Shirts | #shirts\nShorts | #shorts\nTanks | #tanks"
+          }
+        },
+        {
+          "type": "nav_item",
+          "settings": {
+            "label": "About us",
+            "href": "#about",
+            "active": false,
+            "dropdown_items": ""
+          }
+        },
+        {
+          "type": "nav_item",
+          "settings": {
+            "label": "Contact",
+            "href": "#contact",
+            "active": false,
+            "dropdown_items": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
