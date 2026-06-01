@@ -8,7 +8,7 @@ Combines a collapsible announcement bar with a sticky header.
     .mitushi-header-section {
       background: #28282B;
       color: #f7f7f8;
-      font-family: Inter, system-ui, sans-serif;
+      font-family: var(--font-sans);
     }
 
     .mitushi-announcement {
@@ -71,7 +71,7 @@ Combines a collapsible announcement bar with a sticky header.
     }
 
     .mitushi-sticky-header:not(.scrolled) {
-      padding-block: 0.75rem;
+      padding-block: 1.25rem;
     }
 
     .mitushi-header-inner {
@@ -80,8 +80,8 @@ Combines a collapsible announcement bar with a sticky header.
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1.5rem;
-      padding: 0 1.5rem;
+      gap: 3rem;
+      padding: 0 2rem;
     }
 
     .mitushi-logo-link {
@@ -89,26 +89,29 @@ Combines a collapsible announcement bar with a sticky header.
       display: inline-flex;
       align-items: center;
       text-decoration: none;
+      flex-shrink: 0;
     }
 
     .mitushi-logo-glow {
       position: absolute;
-      left: -0.75rem;
+      left: -12px;
       top: 50%;
       transform: translateY(-50%);
-      width: 3rem;
-      height: 3rem;
-      border-radius: 9999px;
-      background: rgba(255, 0, 0, 0.9);
-      filter: blur(1px);
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: #cc132a;
+      filter: blur(12px);
+      opacity: 0.7;
     }
 
     .mitushi-logo-image {
       position: relative;
-      height: 3rem;
+      height: 56px;
       width: auto;
       display: block;
-      filter: brightness(2.2) contrast(1.25);
+      filter: brightness(2.2) contrast(1.25) drop-shadow(0 0 10px rgba(204, 19, 42, 0.4));
+      max-width: 200px;
     }
 
     .mitushi-nav {
@@ -135,9 +138,9 @@ Combines a collapsible announcement bar with a sticky header.
       display: inline-flex;
       align-items: center;
       gap: 0.25rem;
-      padding: 0.5rem 1rem;
-      font-size: 11px;
-      font-weight: 600;
+      padding: 0.75rem 1.25rem;
+      font-size: 12px;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.28em;
       color: rgba(255, 255, 255, 0.8);
@@ -222,8 +225,8 @@ Combines a collapsible announcement bar with a sticky header.
       border: 1px solid rgba(255, 255, 255, 0.36);
       background: transparent;
       color: rgba(255, 255, 255, 0.8);
-      padding: 0.625rem 0.875rem;
-      font-size: 0.75rem;
+      padding: 0.75rem 1.125rem;
+      font-size: 13px;
       line-height: 1;
       transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
       text-decoration: none;
@@ -260,7 +263,7 @@ Combines a collapsible announcement bar with a sticky header.
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.625rem;
+      font-size: 9px;
       color: #fff;
     }
 
@@ -271,17 +274,17 @@ Combines a collapsible announcement bar with a sticky header.
 
     .mitushi-cart-badge {
       position: absolute;
-      top: 0.25rem;
-      right: 0.25rem;
+      top: 4px;
+      right: 4px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 1rem;
-      height: 1rem;
-      border-radius: 9999px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
       background: #cc132a;
       color: #ffffff;
-      font-size: 0.5625rem;
+      font-size: 9px;
       font-weight: 700;
     }
 
@@ -294,11 +297,11 @@ Combines a collapsible announcement bar with a sticky header.
   <div id="mitushi-announcement-bar" class="mitushi-announcement" aria-hidden="false">
     <div class="mitushi-announcement-inner">
       <div class="mitushi-marquee">
-        {% for i in (1..settings.announcement_repeat_count) %}
+        {% for i in (1..section.settings.announcement_repeat_count) %}
           <span>
-            {{ settings.announcement_text_primary }}
+            {{ section.settings.announcement_text_primary }}
             <span aria-hidden>✦</span>
-            {{ settings.announcement_text_secondary }}
+            {{ section.settings.announcement_text_secondary }}
             <span aria-hidden>✦</span>
           </span>
         {% endfor %}
@@ -308,13 +311,14 @@ Combines a collapsible announcement bar with a sticky header.
 
   <header id="mitushi-sticky-header" class="mitushi-sticky-header">
     <div class="mitushi-header-inner">
-      <a href="{{ settings.logo_link }}" class="mitushi-logo-link">
+      <a href="{{ section.settings.logo_link }}" class="mitushi-logo-link">
         <span aria-hidden="true" class="mitushi-logo-glow"></span>
         {% if section.settings.logo_image != blank %}
-          <img src="{{ section.settings.logo_image | image_url: width: 240 }}" alt="{{ section.settings.logo_alt | escape }}" class="mitushi-logo-image" width="240" height="240" />
+          {% assign logo_img_url = section.settings.logo_image | image_url: width: 400 %}
         {% else %}
-          <span class="mitushi-logo-image" style="color:#fff;font-weight:700;font-size:1rem;">Mitushi</span>
+          {% assign logo_img_url = 'mitushi-logo.png' | asset_url %}
         {% endif %}
+        <img src="{{ logo_img_url }}" alt="{{ section.settings.logo_alt | escape }}" class="mitushi-logo-image crimson-glow" width="220" height="56" style="height: 56px; width: auto; filter: brightness(2.2) contrast(1.25) drop-shadow(0 0 10px rgba(204, 19, 42, 0.4));" />
       </a>
 
       <nav class="mitushi-nav hidden items-center gap-1 md:flex" aria-label="Primary navigation">
@@ -351,23 +355,25 @@ Combines a collapsible announcement bar with a sticky header.
       <div class="mitushi-utilities flex items-center gap-1">
         <button type="button" class="mitushi-currency-button">
           <span class="mitushi-flag"></span>
-          <span class="font-medium tracking-wide">{{ settings.currency_label }}</span>
+          <span class="font-medium tracking-wide">{{ section.settings.currency_label }}</span>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="margin-left:0.25rem;">
             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
           </svg>
         </button>
 
         <button type="button" aria-label="Search" class="rounded-full p-2.5 text-foreground\/80 hover:bg-crimson\/10 hover:text-crimson transition">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4" width="16" height="16">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px; height:18px;" width="18" height="18">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 12.65z" />
           </svg>
         </button>
 
         <button type="button" aria-label="Cart" class="mitushi-cart-button rounded-full p-2.5 text-foreground\/80 hover:bg-crimson\/10 hover:text-crimson transition">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4" width="16" height="16">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2.25l.75 7.5a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25L20.25 3H3zm2.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm11 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px; height:18px;" width="18" height="18">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
-          <span class="mitushi-cart-badge">{{ settings.cart_count }}</span>
+          <span class="mitushi-cart-badge">{{ section.settings.cart_count }}</span>
         </button>
       </div>
     </div>
@@ -408,7 +414,7 @@ Combines a collapsible announcement bar with a sticky header.
 {
   "name": "Mitushi Header",
   "enabled_on": {
-    "templates": ["*"]
+    "groups": ["header"]
   },
   "settings": [
     {

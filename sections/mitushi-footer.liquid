@@ -1,0 +1,422 @@
+<style>
+  .mitushi-footer {
+    position: relative;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--ink);
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+
+  .mitushi-footer-container {
+    margin: 0 auto;
+    max-width: 1400px;
+    padding: 0 24px;
+  }
+
+  .mitushi-footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-footer-grid {
+      grid-template-columns: repeat(12, 1fr);
+    }
+  }
+
+  .mitushi-footer-brand {
+    grid-column: span 1;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-footer-brand {
+      grid-column: span 4;
+    }
+  }
+
+  .mitushi-footer-logo-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .mitushi-footer-logo-glow {
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #cc132a;
+    filter: blur(12px);
+    opacity: 0.7;
+  }
+
+  .mitushi-footer-logo {
+    position: relative;
+    height: 56px;
+    width: auto;
+    filter: brightness(2.2) contrast(1.25) drop-shadow(0 0 10px rgba(204, 19, 42, 0.4));
+  }
+
+  .mitushi-footer-description {
+    margin-top: 24px;
+    max-width: 320px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .mitushi-footer-social {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .mitushi-footer-social-link {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .mitushi-footer-social-link:hover {
+    border-color: #cc132a;
+    background-color: #cc132a;
+    color: #f7f7f8;
+  }
+
+  .mitushi-footer-links {
+    grid-column: span 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-footer-links {
+      grid-column: span 4;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .mitushi-footer-link-group h4 {
+    margin-bottom: 24px;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #cc132a;
+  }
+
+  .mitushi-footer-link-group ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mitushi-footer-link-group li {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .mitushi-footer-link-group a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .mitushi-footer-link-group a:hover {
+    color: #cc132a;
+  }
+
+  .mitushi-footer-newsletter {
+    grid-column: span 1;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-footer-newsletter {
+      grid-column: span 4;
+    }
+  }
+
+  .mitushi-footer-newsletter h4 {
+    margin-bottom: 24px;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #cc132a;
+  }
+
+  .mitushi-footer-newsletter-desc {
+    margin-bottom: 20px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .mitushi-footer-form {
+    display: flex;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: border-color 0.3s;
+  }
+
+  .mitushi-footer-form:focus-within {
+    border-color: #cc132a;
+  }
+
+  .mitushi-footer-input {
+    flex: 1;
+    background-color: transparent;
+    padding: 12px 16px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: #f7f7f8;
+    border: none;
+    outline: none;
+  }
+
+  .mitushi-footer-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .mitushi-footer-submit {
+    background-color: #cc132a;
+    padding: 12px 20px;
+    color: #f7f7f8;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: grid;
+    place-items: center;
+  }
+
+  .mitushi-footer-submit:hover {
+    background-color: #ff1a3a;
+  }
+
+  .mitushi-footer-newsletter-legal {
+    margin-top: 12px;
+    font-family: var(--font-jp);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .mitushi-footer-brandmark-wrapper {
+    position: relative;
+    margin-top: 80px;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 40px;
+  }
+
+  .mitushi-footer-brandmark {
+    font-family: var(--font-display);
+    font-size: clamp(80px, 18vw, 280px);
+    line-height: 1;
+    user-select: none;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
+    letter-spacing: 0.05em;
+  }
+
+  .mitushi-footer-bottom {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-footer-bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .mitushi-footer-bottom-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .mitushi-footer-bottom-links a {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .mitushi-footer-bottom-links a:hover {
+    color: #cc132a;
+  }
+</style>
+
+<footer class="mitushi-footer" id="contact">
+  <div class="mitushi-footer-container">
+    <div class="mitushi-footer-grid">
+      <!-- Brand -->
+      <div class="mitushi-footer-brand">
+        <div class="mitushi-footer-logo-wrapper">
+          <span class="mitushi-footer-logo-glow" aria-hidden="true"></span>
+          {% if section.settings.logo != blank %}
+            {% assign footer_logo_url = section.settings.logo | img_url: '240x120' %}
+          {% else %}
+            {% assign footer_logo_url = 'mitushi-logo.png' | asset_url %}
+          {% endif %}
+          <img
+            src="{{ footer_logo_url }}"
+            alt="Mitushi"
+            class="mitushi-footer-logo"
+            width="220"
+            height="56"
+            style="height: 56px; width: auto; filter: brightness(2.2) contrast(1.25);"
+          />
+        </div>
+        <p class="mitushi-footer-description">
+          {{ section.settings.description }}
+        </p>
+        <div class="mitushi-footer-social">
+          {% if section.settings.instagram_url %}
+            <a href="{{ section.settings.instagram_url }}" class="mitushi-footer-social-link" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.266.069 1.646.069 4.85 0 3.204-.012 3.584-.07 4.85-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.85-.07-3.251-.148-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12c0-3.403 2.759-6.162 6.162-6.162 3.403 0 6.162 2.759 6.162 6.162 0 3.403-2.759 6.162-6.162 6.162-3.403 0-6.162-2.759-6.162-6.162zm2.889 0c0 1.821 1.452 3.273 3.273 3.273 1.821 0 3.273-1.452 3.273-3.273 0-1.821-1.452-3.273-3.273-3.273-1.821 0-3.273 1.452-3.273 3.273zm9.871-6.412c0 .795.645 1.44 1.44 1.44.795 0 1.44-.645 1.44-1.44-.001-.795-.645-1.44-1.44-1.44-.795 0-1.44.645-1.44 1.44z"/>
+              </svg>
+            </a>
+          {% endif %}
+          {% if section.settings.tiktok_url %}
+            <a href="{{ section.settings.tiktok_url }}" class="mitushi-footer-social-link" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <path d="M19.498 3.094c-.456-.896-1.616-1.606-2.633-1.711-5.204-.524-10.869-.524-16.066 0-.915.082-2.09.682-2.566 1.639C0 5.555-.165 11.001 1.233 16.906c.532 1.65 1.622 2.585 2.727 2.71 5.206.52 10.874.52 16.066 0 1.19-.13 2.197-.6 2.226-1.794.365-4.467.335-8.905 0-13.728zM9.561 15.301V8.407a.375.375 0 0 1 .375-.375h.008a.375.375 0 0 1 .375.375v6.894a.375.375 0 0 1-.375.375h-.008a.375.375 0 0 1-.375-.375zm5.615 0V8.407a.375.375 0 0 1 .375-.375h.008a.375.375 0 0 1 .375.375v6.894a.375.375 0 0 1-.375.375h-.008a.375.375 0 0 1-.375-.375z"/>
+              </svg>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div class="mitushi-footer-links">
+        <div class="mitushi-footer-link-group">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#shirts">Shirts</a></li>
+            <li><a href="#shorts">Shorts</a></li>
+            <li><a href="#tanks">Tanks</a></li>
+            <li><a href="#">New arrivals</a></li>
+            <li><a href="#">Lookbook</a></li>
+          </ul>
+        </div>
+        <div class="mitushi-footer-link-group">
+          <h4>Help</h4>
+          <ul>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Size guide</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="mitushi-footer-newsletter">
+        <h4>Join the drop list</h4>
+        <p class="mitushi-footer-newsletter-desc">
+          {{ section.settings.newsletter_text }}
+        </p>
+        <form class="mitushi-footer-form" onsubmit="event.preventDefault();">
+          <input
+            type="email"
+            placeholder="your@email.com"
+            class="mitushi-footer-input"
+            required
+          />
+          <button type="submit" class="mitushi-footer-submit" aria-label="Subscribe">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </form>
+        <p class="mitushi-footer-newsletter-legal">限定ドロップ · ミツシ・コミュニティへようこそ</p>
+      </div>
+    </div>
+
+    <!-- Giant Brandmark -->
+    <div class="mitushi-footer-brandmark-wrapper">
+      <div class="mitushi-footer-brandmark">
+        MITUSHI
+      </div>
+    </div>
+
+    <!-- Bottom metadata -->
+    <div class="mitushi-footer-bottom">
+      <div>© {{ 'now' | date: "%Y" }} Mitushi Studio · All rights reserved</div>
+      <div class="mitushi-footer-bottom-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Brand Description",
+      "default": "Premium anime streetwear, crafted in limited drops. Tokyo silhouettes, luxury construction, worn in silence."
+    },
+    {
+      "type": "text",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "text",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter Description",
+      "default": "First access to releases, exclusive sizes, and members-only fits."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer"
+    }
+  ]
+}
+{% endschema %}

@@ -1,388 +1,131 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "mitushi_header_1": {
-      "type": "mitushi-header",
+    "mitushi_hero_1": {
+      "type": "mitushi-hero",
+      "settings": {
+        "hero_image": ""
+      }
+    },
+    "mitushi_categories_1": {
+      "type": "mitushi-categories",
       "blocks": {
-        "nav_item_home": {
-          "type": "nav_item",
+        "cat_1": {
+          "type": "category",
           "settings": {
-            "label": "Home",
-            "href": "#home",
-            "active": true,
-            "dropdown_items": ""
+            "title": "Shirts",
+            "japanese": "シャツ",
+            "count": "24 pieces",
+            "image": ""
           }
         },
-        "nav_item_products": {
-          "type": "nav_item",
+        "cat_2": {
+          "type": "category",
           "settings": {
-            "label": "Products",
-            "href": "#products",
-            "active": false,
-            "dropdown_items": "Shirts | #shirts\nShorts | #shorts\nTanks | #tanks"
+            "title": "Shorts",
+            "japanese": "ショーツ",
+            "count": "12 pieces",
+            "image": ""
           }
         },
-        "nav_item_about": {
-          "type": "nav_item",
+        "cat_3": {
+          "type": "category",
           "settings": {
-            "label": "About us",
-            "href": "#about",
-            "active": false,
-            "dropdown_items": ""
-          }
-        },
-        "nav_item_contact": {
-          "type": "nav_item",
-          "settings": {
-            "label": "Contact",
-            "href": "#contact",
-            "active": false,
-            "dropdown_items": ""
+            "title": "Tanks",
+            "japanese": "タンク",
+            "count": "9 pieces",
+            "image": ""
           }
         }
       },
       "block_order": [
-        "nav_item_home",
-        "nav_item_products",
-        "nav_item_about",
-        "nav_item_contact"
-      ],
-      "name": "Mitushi Header",
-      "settings": {
-        "logo_image": "",
-        "logo_alt": "Mitushi",
-        "logo_link": "#home",
-        "announcement_text_primary": "Free shipping on orders over $199",
-        "announcement_text_secondary": "新作コレクション",
-        "announcement_repeat_count": 8,
-        "currency_label": "USD $",
-        "cart_count": 2
-      }
+        "cat_1",
+        "cat_2",
+        "cat_3"
+      ]
     },
-    "image_banner_TnVcW9": {
-      "type": "image-banner",
+    "mitushi_carousel_1": {
+      "type": "mitushi-product-carousel",
       "blocks": {
-        "content_69egNy": {
-          "type": "content",
+        "prod_1": {
+          "type": "product",
           "settings": {
-            "content_position": "center-xs middle-xs ta-center",
-            "subheading": "",
-            "heading": "",
-            "description": "",
-            "primary_button_label": "",
-            "primary_button_link": "",
-            "secondary_button_label": "",
-            "secondary_button_link": ""
-          }
-        }
-      },
-      "block_order": [
-        "content_69egNy"
-      ],
-      "name": "t:general.image_banner",
-      "settings": {
-        "color_scheme": "",
-        "enable_large_heading": false,
-        "enable_fullwidth_banner": true,
-        "section_overlay_opacity": 0,
-        "section_mask_overlay_color": "#000000",
-        "section_content_overlay_color": "#ffffff",
-        "height_desktop": "50vh",
-        "height_mobile": "50vh",
-        "remove_padding_top": true,
-        "remove_padding_bottom": true,
-        "desktop_background_image": "shopify://shop_images/ChatGPT_Image_Jan_14_2026_01_23_59_PM_9de56559-3831-4ad9-88e5-c083b4238ba3.png",
-        "mobile_background_image": "shopify://shop_images/ChatGPT_Image_Jan_14_2026_02_07_17_PM.png",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--top-right",
-        "badge_shape": "badge--star",
-        "image_banner_link": ""
-      }
-    },
-    "featured_product_carousel_EaipjV": {
-      "type": "featured-product-carousel",
-      "custom_css": [
-        "h2 {font-weight: 700;}"
-      ],
-      "name": "t:general.featured_product_carousel",
-      "settings": {
-        "color_scheme": "",
-        "subheading": "",
-        "heading": "Best sellers",
-        "description": "",
-        "style_card": "standard",
-        "items_per_row_on_desktop": "4",
-        "content_align": "ta-center",
-        "show_navigation": true,
-        "remove_padding_top": false,
-        "remove_padding_bottom": true,
-        "product_list": [
-          "the-mark-of-ash",
-          "gum-gum-shorts"
-        ],
-        "show_ranking": false,
-        "ranking_badge_shape": "rectangle",
-        "ranking_badge_color": "color-accent-2",
-        "image_ratio": "auto",
-        "image_overlay_opacity": 34,
-        "section_mask_overlay_color": "",
-        "section_content_overlay_color": "",
-        "star_rating_overlay": "",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--bottom-right",
-        "badge_shape": "badge--asterisk"
-      }
-    },
-    "collection-list": {
-      "type": "collection-list",
-      "custom_css": [
-        "h2 {font-weight: 700;}"
-      ],
-      "settings": {
-        "color_scheme": "scheme-1",
-        "subheading": "",
-        "heading": "PRODUCTS",
-        "description": "",
-        "style_card": "card",
-        "items_per_row_on_desktop": "3",
-        "items_per_row_on_mobile": "1",
-        "content_align": "ta-center m-auto",
-        "enable_carousel": true,
-        "show_navigation": true,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false,
-        "collection_list": [
-          "shirts",
-          "shorts"
-        ],
-        "enable_view_all": false,
-        "button_main_text": "",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--bottom-right",
-        "badge_shape": "badge--star"
-      }
-    },
-    "17687530853fdb3082": {
-      "type": "_blocks",
-      "disabled": true,
-      "settings": {}
-    },
-    "product_hotspots_znJJMA": {
-      "type": "product-hotspots",
-      "blocks": {
-        "hotspot_VbDkbd": {
-          "type": "hotspot",
-          "settings": {
-            "product": "the-mark-of-ash",
-            "top_offset": 45,
-            "left_offset": 43
+            "name": "Kanji Oversized Tee",
+            "tag": "Ghost",
+            "price": "89",
+            "front_image": "",
+            "back_image": "",
+            "badge": "New"
           }
         },
-        "hotspot_RVRDyE": {
-          "type": "hotspot",
+        "prod_2": {
+          "type": "product",
           "settings": {
-            "product": "gum-gum-shorts",
-            "top_offset": 73,
-            "left_offset": 53
+            "name": "Samurai Print Tee",
+            "tag": "Crimson Warrior",
+            "price": "95",
+            "front_image": "",
+            "back_image": "",
+            "badge": "Hot"
           }
         },
-        "statistic_CamanL": {
-          "type": "statistic",
+        "prod_3": {
+          "type": "product",
           "settings": {
-            "label": "HAPPY ANIME FANS",
-            "description": ""
-          }
-        }
-      },
-      "block_order": [
-        "hotspot_VbDkbd",
-        "hotspot_RVRDyE",
-        "statistic_CamanL"
-      ],
-      "settings": {
-        "color_scheme": "scheme-1",
-        "subheading": "",
-        "heading": "",
-        "description": "",
-        "background_color": "",
-        "background_darkness": 0,
-        "show_navigation": true,
-        "show_statistics_navigation": true,
-        "animation_duration": 900,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false,
-        "image_hotspot": "shopify://shop_images/DSC00565.webp",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--top-left",
-        "badge_shape": "badge--star"
-      }
-    },
-    "video_banner_xE4peK": {
-      "type": "video-banner",
-      "blocks": {
-        "content_nzUy7K": {
-          "type": "content",
-          "settings": {
-            "content_position": "center-xs middle-xs ta-center",
-            "subheading": "",
-            "heading": "「GREAT MINDS THINK ALIKE」コレクション",
-            "description": "<p>「Great Minds Think Alike」は、2つのファッションブランドの初めてのコラボレーションです。このキャンペーンは、偉大な精神が交わり、互いに協力する重要な節目とも言えます。</p>",
-            "primary_button_label": "コレクションをご覧ください",
-            "primary_button_link": "",
-            "secondary_button_label": "",
-            "secondary_button_link": ""
-          }
-        }
-      },
-      "block_order": [
-        "content_nzUy7K"
-      ],
-      "disabled": true,
-      "settings": {
-        "color_scheme": "",
-        "enable_large_heading": false,
-        "enable_fullwidth_banner": true,
-        "image_overlay_opacity": 13,
-        "section_mask_overlay_color": "#000000",
-        "section_content_overlay_color": "#ffffff",
-        "height_desktop": "50",
-        "height_mobile": "50",
-        "remove_padding_top": true,
-        "remove_padding_bottom": true,
-        "video_source": "external",
-        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "video_source_mobile": "external",
-        "video_url_mobile": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "badge_text": "",
-        "badge_color": "color-accent-1",
-        "badge_position": "p-badge--top-right",
-        "badge_shape": "badge--star",
-        "video_banner_link": ""
-      }
-    },
-    "running_content_WeVz9x": {
-      "type": "running-content",
-      "blocks": {
-        "content_PBCNmD": {
-          "type": "content",
-          "settings": {
-            "custom_text_color": "#f2d908",
-            "custom_icon_color": "",
-            "enable_icon": true,
-            "text": "BORN FROM ANIME",
-            "font_style": "marquee-font--body",
-            "icon_source": "theme_library",
-            "options_icon": "check",
-            "custom_svg": "",
-            "link": ""
+            "name": "Bone Tank",
+            "tag": "Oni",
+            "price": "65",
+            "front_image": "",
+            "back_image": "",
+            "badge": ""
           }
         },
-        "content_QiHmmi": {
-          "type": "content",
+        "prod_4": {
+          "type": "product",
           "settings": {
-            "custom_text_color": "#f2d908",
-            "custom_icon_color": "",
-            "enable_icon": true,
-            "text": "STREET UNIFORM",
-            "font_style": "marquee-font--body",
-            "icon_source": "theme_library",
-            "options_icon": "check",
-            "custom_svg": "",
-            "link": ""
+            "name": "Striped Shorts",
+            "tag": "Rising Sun",
+            "price": "79",
+            "front_image": "",
+            "back_image": "",
+            "badge": "Drop 03"
           }
         },
-        "content_UbRzer": {
-          "type": "content",
+        "prod_5": {
+          "type": "product",
           "settings": {
-            "custom_text_color": "#f2d908",
-            "custom_icon_color": "",
-            "enable_icon": true,
-            "text": "PURE ANIME ENERGY",
-            "font_style": "marquee-font--body",
-            "icon_source": "theme_library",
-            "options_icon": "check",
-            "custom_svg": "",
-            "link": ""
+            "name": "Tokyo Tee",
+            "tag": "Night Series",
+            "price": "89",
+            "front_image": "",
+            "back_image": "",
+            "badge": ""
+          }
+        },
+        "prod_6": {
+          "type": "product",
+          "settings": {
+            "name": "Onsen Shorts",
+            "tag": "Mono",
+            "price": "79",
+            "front_image": "",
+            "back_image": "",
+            "badge": ""
           }
         }
       },
       "block_order": [
-        "content_PBCNmD",
-        "content_QiHmmi",
-        "content_UbRzer"
-      ],
-      "name": "t:general.running_content",
-      "settings": {
-        "color_scheme": "scheme-2",
-        "accent_scheme": "color-accent-1",
-        "custom_background_color": "",
-        "speed": "2",
-        "slope_style": "none",
-        "item_size": "h3",
-        "scroll_direction": "left",
-        "remove_padding_top": true,
-        "remove_padding_bottom": true
-      }
-    },
-    "1768841045d7c09c5d": {
-      "type": "apps",
-      "blocks": {
-        "instafeed_app_block_pMmqrN": {
-          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
-          "settings": {
-            "title": "INSTAGRAM POSTS",
-            "title_color": "",
-            "title_size_v2": 0,
-            "alignment": "center",
-            "instafeed_margin_top": 0,
-            "instafeed_margin_bottom": 0,
-            "instafeed_margin_sides": 0,
-            "show_instagram_link": true,
-            "link_alignment": "left",
-            "link_color": "#000000",
-            "background_color": "",
-            "feed_id": "",
-            "html_area": ""
-          }
-        }
-      },
-      "block_order": [
-        "instafeed_app_block_pMmqrN"
-      ],
-      "custom_css": [
-        ".mitushi-faq,.mitushi-faq * {font-family: var(--font-body-family), system-ui !important;}",
-        ".mitushi-faq .mitushi-faq__title,.mitushi-faq .mitushi-faq__q,.mitushi-faq summary {font-family: var(--font-heading-family), inherit !important; font-weight: 800 !important;}",
-        ".mitushi-faq .mitushi-faq__a,.mitushi-faq p {font-weight: 400 !important; line-height: 1.75 !important;}"
-      ],
-      "settings": {
-        "color_scheme": "",
-        "enable_content_fullwidth": false,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false
-      }
+        "prod_1",
+        "prod_2",
+        "prod_3",
+        "prod_4",
+        "prod_5",
+        "prod_6"
+      ]
     }
   },
   "order": [
-    "mitushi_header_1",
-    "image_banner_TnVcW9",
-    "featured_product_carousel_EaipjV",
-    "collection-list",
-    "17687530853fdb3082",
-    "product_hotspots_znJJMA",
-    "video_banner_xE4peK",
-    "running_content_WeVz9x",
-    "1768841045d7c09c5d"
+    "mitushi_hero_1",
+    "mitushi_categories_1",
+    "mitushi_carousel_1"
   ]
 }

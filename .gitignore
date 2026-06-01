@@ -30,3 +30,7 @@ node_modules/
 
 # GitHub Actions secrets (keep this file, but secrets are in GitHub)
 # .github/workflows/shopify-deploy.yml
+
+# Scratch files
+scratch_stellar/
+

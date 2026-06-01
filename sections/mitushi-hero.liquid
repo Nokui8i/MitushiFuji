@@ -1,0 +1,418 @@
+<style>
+  .mitushi-hero {
+    position: relative;
+    min-height: 88vh;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--ink);
+    color: var(--bone);
+    font-family: var(--font-sans);
+    display: flex;
+    align-items: center;
+  }
+
+  .mitushi-hero-backdrop {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(55% 60% at 70% 50%, rgba(204, 19, 42, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .mitushi-hero-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image: linear-gradient(var(--bone) 1px, transparent 1px), linear-gradient(90deg, var(--bone) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    pointer-events: none;
+  }
+
+  .mitushi-hero-badge-left {
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    z-index: 20;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: rgba(244, 244, 244, 0.6);
+  }
+
+  .mitushi-hero-badge-right {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    z-index: 20;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: rgba(244, 244, 244, 0.6);
+  }
+
+  .mitushi-hero-vertical-jp {
+    pointer-events: none;
+    position: absolute;
+    left: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    font-family: var(--font-jp);
+    font-size: 11px;
+    letter-spacing: 1em;
+    color: rgba(244, 244, 244, 0.4);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .mitushi-hero-vertical-jp {
+      display: block;
+    }
+  }
+
+  .mitushi-hero-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 96px 24px 64px;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 48px;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-hero-container {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 64px;
+      padding: 128px 32px 64px;
+    }
+  }
+
+  /* Left Column Copy */
+  .mitushi-hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mitushi-hero-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(244, 244, 244, 0.2);
+    background-color: rgba(40, 40, 43, 0.4);
+    padding: 6px 16px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    color: rgba(244, 244, 244, 0.7);
+    margin-bottom: 24px;
+  }
+
+  .mitushi-hero-live-dot {
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    background-color: var(--crimson);
+    box-shadow: 0 0 10px var(--crimson);
+  }
+
+  .mitushi-hero-title {
+    font-family: var(--font-display);
+    line-height: 0.85;
+    font-size: clamp(48px, 8vw, 96px);
+    text-transform: uppercase;
+    margin: 0 0 24px 0;
+  }
+
+  .mitushi-hero-title .text-crimson {
+    color: var(--crimson);
+  }
+
+  .mitushi-hero-title .text-stroke {
+    -webkit-text-stroke: 1px var(--bone);
+    color: transparent;
+  }
+
+  .mitushi-hero-desc {
+    max-width: 480px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(244, 244, 244, 0.7);
+    margin: 0 0 32px 0;
+  }
+
+  .mitushi-hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .mitushi-hero-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--crimson);
+    color: var(--bone);
+    padding: 16px 28px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .mitushi-hero-btn-primary:hover {
+    box-shadow: 0 0 30px rgba(204, 19, 42, 0.6);
+  }
+
+  .mitushi-hero-btn-primary span {
+    transition: transform 0.3s ease;
+  }
+
+  .mitushi-hero-btn-primary:hover span {
+    transform: translateX(4px);
+  }
+
+  .mitushi-hero-btn-secondary {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: rgba(244, 244, 244, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .mitushi-hero-btn-secondary:hover {
+    color: var(--crimson);
+  }
+
+  /* Stats row */
+  .mitushi-hero-stats {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: rgba(244, 244, 244, 0.5);
+  }
+
+  .mitushi-hero-stat-item .stat-num {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--bone);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .mitushi-hero-stat-item .stat-num.crimson {
+    color: var(--crimson);
+  }
+
+  .mitushi-hero-stats-divider {
+    height: 32px;
+    width: 1px;
+    background-color: rgba(244, 244, 244, 0.15);
+  }
+
+  /* Right Column Image */
+  .mitushi-hero-media {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .mitushi-hero-red-sun {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 78%;
+    height: 78%;
+    border-radius: 50%;
+    background-color: var(--crimson);
+    filter: blur(1px);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .mitushi-hero-image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  .mitushi-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+  }
+
+  /* Angled badges */
+  .mitushi-hero-badge-float {
+    position: absolute;
+    z-index: 10;
+    background-color: rgba(40, 40, 43, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(244, 244, 244, 0.15);
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+  }
+
+  .mitushi-hero-badge-float.top-right {
+    top: 10%;
+    right: -16px;
+    transform: rotate(6deg);
+    border-color: rgba(204, 19, 42, 0.6);
+  }
+
+  .mitushi-hero-badge-float.bottom-left {
+    bottom: 10%;
+    left: -16px;
+    transform: rotate(-6deg);
+  }
+
+  .mitushi-hero-badge-float .badge-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: rgba(244, 244, 244, 0.5);
+  }
+
+  .mitushi-hero-badge-float.top-right .badge-label {
+    color: var(--crimson);
+  }
+
+  .mitushi-hero-badge-float .badge-val {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--bone);
+    margin-top: 2px;
+  }
+</style>
+
+<section class="mitushi-hero" id="home">
+  <!-- Radial backdrop -->
+  <div class="mitushi-hero-backdrop" aria-hidden="true"></div>
+
+  <!-- Grid background -->
+  <div class="mitushi-hero-grid" aria-hidden="true"></div>
+
+  <!-- Corner badges -->
+  <div class="mitushi-hero-badge-left">FW · 26 / Drop 03</div>
+  <div class="mitushi-hero-badge-right">Tokyo — Tel Aviv</div>
+
+  <!-- Japanese vertical text -->
+  <div class="mitushi-hero-vertical-jp">匠 · 二〇二六</div>
+
+  <div class="mitushi-hero-container">
+    <!-- Left Column: Copy -->
+    <div class="mitushi-hero-copy">
+      <div class="mitushi-hero-live-badge">
+        <span class="mitushi-hero-live-dot"></span>
+        New Drop · Live Now
+      </div>
+      <h1 class="mitushi-hero-title">
+        Wear the<br>
+        <span class="text-crimson">Legend</span><br>
+        <span class="text-stroke">In Silence</span>
+      </h1>
+      <p class="mitushi-hero-desc">
+        Limited-edition anime streetwear engineered in Tokyo silhouettes.
+        Heavyweight cotton, pigment-dyed, built to outlive the season.
+      </p>
+      <div class="mitushi-hero-buttons">
+        <a href="#shop" class="mitushi-hero-btn-primary">
+          Shop the Drop <span>→</span>
+        </a>
+        <a href="#lookbook" class="mitushi-hero-btn-secondary">
+          View Lookbook
+        </a>
+      </div>
+
+      <div class="mitushi-hero-stats">
+        <div class="mitushi-hero-stat-item">
+          <div class="stat-num">03</div>
+          <div>Active Drops</div>
+        </div>
+        <div class="mitushi-hero-stats-divider"></div>
+        <div class="mitushi-hero-stat-item">
+          <div class="stat-num">48H</div>
+          <div>Until Restock</div>
+        </div>
+        <div class="mitushi-hero-stats-divider"></div>
+        <div class="mitushi-hero-stat-item">
+          <div class="stat-num crimson">夢</div>
+          <div>Dreams FW26</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Media (Image & Red Sun Backdrop) -->
+    <div class="mitushi-hero-media">
+      <div class="mitushi-hero-red-sun"></div>
+      <div class="mitushi-hero-image-wrapper">
+        {% if section.settings.hero_image != blank %}
+          {% assign hero_img_url = section.settings.hero_image | img_url: '520x650' %}
+        {% else %}
+          {% assign hero_img_url = 'hero-model.jpg' | asset_url %}
+        {% endif %}
+        <img
+          src="{{ hero_img_url }}"
+          alt="Mitushi anime streetwear model"
+          width="520"
+          height="650"
+          class="mitushi-hero-image"
+        />
+      </div>
+
+      <!-- Floating Badges -->
+      <div class="mitushi-hero-badge-float top-right">
+        <div class="badge-label">Limited</div>
+        <div class="badge-val">/ 300</div>
+      </div>
+      <div class="mitushi-hero-badge-float bottom-left">
+        <div class="badge-label">Drop 03</div>
+        <div class="badge-val">夢 DREAMS</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Section"
+    }
+  ]
+}
+{% endschema %}

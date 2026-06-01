@@ -1,0 +1,391 @@
+<style>
+  .mitushi-categories {
+    position: relative;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--ink);
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+
+  .mitushi-categories-container {
+    margin: 0 auto;
+    max-width: 1400px;
+    padding: 0 24px;
+  }
+
+  .mitushi-categories-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+  }
+
+  .mitushi-categories-title-group > div:first-child {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5em;
+    color: #cc132a;
+    margin-bottom: 12px;
+  }
+
+  .mitushi-categories-title-group > h2 {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    font-size: 32px;
+    font-weight: 700;
+    color: #f7f7f8;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-categories-title-group > h2 {
+      font-size: 56px;
+    }
+  }
+
+  .mitushi-categories-view-all {
+    display: none;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .mitushi-categories-view-all:hover {
+    color: #cc132a;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-categories-view-all {
+      display: block;
+    }
+  }
+
+  .mitushi-categories-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-categories-grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+    }
+  }
+
+  .mitushi-category-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.05);
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: border-color 0.3s;
+  }
+
+  .mitushi-category-card:hover {
+    border-color: rgba(204, 19, 42, 0.6);
+  }
+
+  .mitushi-category-card.big {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-category-card.big {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+  }
+
+  .mitushi-category-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-category-card.big .mitushi-category-image-wrapper {
+      aspect-ratio: auto;
+      height: 100%;
+    }
+  }
+
+  .mitushi-category-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    filter: grayscale(20%);
+    transition: all 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  .mitushi-category-card:hover .mitushi-category-image {
+    transform: scale(1.05);
+    filter: grayscale(0%);
+  }
+
+  .mitushi-category-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #28282B, rgba(40, 40, 43, 0.2), transparent);
+    opacity: 0.9;
+  }
+
+  .mitushi-category-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-category-content {
+      padding: 32px;
+    }
+  }
+
+  .mitushi-category-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .mitushi-category-jp {
+    font-family: var(--font-jp);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .mitushi-category-badge {
+    border: 1px solid rgba(247, 247, 248, 0.3);
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: rgba(247, 247, 248, 0.8);
+    backdrop-filter: blur(4px);
+  }
+
+  .mitushi-category-bottom {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mitushi-category-count {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 8px;
+  }
+
+  .mitushi-category-bottom-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .mitushi-category-name {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    font-size: 32px;
+    font-weight: 700;
+    color: #f7f7f8;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-category-name {
+      font-size: 56px;
+    }
+  }
+
+  .mitushi-category-arrow {
+    width: 32px;
+    height: 32px;
+    color: #cc132a;
+    opacity: 0;
+    transform: translateX(8px);
+    transition: all 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mitushi-category-card:hover .mitushi-category-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .mitushi-category-ring {
+    position: absolute;
+    inset: 0;
+    border: 1px solid transparent;
+    transition: border-color 0.3s;
+    pointer-events: none;
+  }
+
+  .mitushi-category-card:hover .mitushi-category-ring {
+    border-color: rgba(204, 19, 42, 0.6);
+  }
+</style>
+
+<section class="mitushi-categories" id="products">
+  <div class="mitushi-categories-container">
+    <div class="mitushi-categories-header">
+      <div class="mitushi-categories-title-group">
+        <div>/ 01 — Collections</div>
+        <h2>Shop by category</h2>
+      </div>
+      <a href="#" class="mitushi-categories-view-all">View all →</a>
+    </div>
+
+    <div class="mitushi-categories-grid">
+      <a href="#shirts" class="mitushi-category-card big">
+        <div class="mitushi-category-image-wrapper">
+          {% if section.blocks[0].settings.image != blank %}
+            {% assign cat_1_img = section.blocks[0].settings.image | img_url: '600x800' %}
+          {% else %}
+            {% assign cat_1_img = 'cat-shirts.jpg' | asset_url %}
+          {% endif %}
+          <img
+            src="{{ cat_1_img }}"
+            alt="Shirts"
+            loading="lazy"
+            class="mitushi-category-image"
+          />
+        </div>
+        <div class="mitushi-category-overlay"></div>
+        <div class="mitushi-category-content">
+          <div class="mitushi-category-top">
+            <span class="mitushi-category-jp">{{ section.blocks[0].settings.japanese }}</span>
+            <span class="mitushi-category-badge">01</span>
+          </div>
+          <div class="mitushi-category-bottom">
+            <div class="mitushi-category-count">{{ section.blocks[0].settings.count }}</div>
+            <div class="mitushi-category-bottom-row">
+              <h3 class="mitushi-category-name">{{ section.blocks[0].settings.title }}</h3>
+              <svg class="mitushi-category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17L17 7M17 7H7m10 0v10"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="mitushi-category-ring"></div>
+      </a>
+
+      <a href="#shorts" class="mitushi-category-card">
+        <div class="mitushi-category-image-wrapper">
+          {% if section.blocks[1].settings.image != blank %}
+            {% assign cat_2_img = section.blocks[1].settings.image | img_url: '600x800' %}
+          {% else %}
+            {% assign cat_2_img = 'cat-shorts.jpg' | asset_url %}
+          {% endif %}
+          <img
+            src="{{ cat_2_img }}"
+            alt="Shorts"
+            loading="lazy"
+            class="mitushi-category-image"
+          />
+        </div>
+        <div class="mitushi-category-overlay"></div>
+        <div class="mitushi-category-content">
+          <div class="mitushi-category-top">
+            <span class="mitushi-category-jp">{{ section.blocks[1].settings.japanese }}</span>
+            <span class="mitushi-category-badge">02</span>
+          </div>
+          <div class="mitushi-category-bottom">
+            <div class="mitushi-category-count">{{ section.blocks[1].settings.count }}</div>
+            <div class="mitushi-category-bottom-row">
+              <h3 class="mitushi-category-name">{{ section.blocks[1].settings.title }}</h3>
+              <svg class="mitushi-category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17L17 7M17 7H7m10 0v10"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="mitushi-category-ring"></div>
+      </a>
+
+      <a href="#tanks" class="mitushi-category-card">
+        <div class="mitushi-category-image-wrapper">
+          {% if section.blocks[2].settings.image != blank %}
+            {% assign cat_3_img = section.blocks[2].settings.image | img_url: '600x800' %}
+          {% else %}
+            {% assign cat_3_img = 'cat-tanks.jpg' | asset_url %}
+          {% endif %}
+          <img
+            src="{{ cat_3_img }}"
+            alt="Tanks"
+            loading="lazy"
+            class="mitushi-category-image"
+          />
+        </div>
+        <div class="mitushi-category-overlay"></div>
+        <div class="mitushi-category-content">
+          <div class="mitushi-category-top">
+            <span class="mitushi-category-jp">{{ section.blocks[2].settings.japanese }}</span>
+            <span class="mitushi-category-badge">03</span>
+          </div>
+          <div class="mitushi-category-bottom">
+            <div class="mitushi-category-count">{{ section.blocks[2].settings.count }}</div>
+            <div class="mitushi-category-bottom-row">
+              <h3 class="mitushi-category-name">{{ section.blocks[2].settings.title }}</h3>
+              <svg class="mitushi-category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17L17 7M17 7H7m10 0v10"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="mitushi-category-ring"></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Categories Section",
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Shirts"
+        },
+        {
+          "type": "text",
+          "id": "japanese",
+          "label": "Japanese Name",
+          "default": "シャツ"
+        },
+        {
+          "type": "text",
+          "id": "count",
+          "label": "Count",
+          "default": "24 pieces"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Categories Section"
+    }
+  ]
+}
+{% endschema %}

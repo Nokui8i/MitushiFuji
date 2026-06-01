@@ -1,0 +1,417 @@
+<style>
+  .mitushi-product-carousel {
+    background-color: var(--ink);
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+
+  .mitushi-carousel-container {
+    margin: 0 auto;
+    max-width: 1400px;
+    padding: 0 24px;
+  }
+
+  .mitushi-carousel-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .mitushi-carousel-title-group > div:first-child {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5em;
+    color: #cc132a;
+    margin-bottom: 12px;
+  }
+
+  .mitushi-carousel-title-group > h2 {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    font-size: 32px;
+    font-weight: 700;
+    color: #f7f7f8;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-carousel-title-group > h2 {
+      font-size: 56px;
+    }
+  }
+
+  .mitushi-carousel-controls {
+    display: flex;
+    gap: 8px;
+  }
+
+  .mitushi-carousel-btn {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: #f7f7f8;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .mitushi-carousel-btn:hover {
+    border-color: #cc132a;
+    color: #cc132a;
+  }
+
+  .mitushi-carousel-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .mitushi-carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mitushi-product-card {
+    position: relative;
+    flex-shrink: 0;
+    width: 78vw;
+    snap-start: always;
+  }
+
+  @media (min-width: 640px) {
+    .mitushi-product-card {
+      width: 360px;
+    }
+  }
+
+  .mitushi-product-image-wrapper {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .mitushi-product-front,
+  .mitushi-product-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 500ms;
+  }
+
+  .mitushi-product-back {
+    opacity: 0;
+  }
+
+  .mitushi-product-card:hover .mitushi-product-back {
+    opacity: 1;
+  }
+
+  .mitushi-product-card:hover .mitushi-product-front {
+    opacity: 0;
+  }
+
+  .mitushi-product-badge {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    background-color: #cc132a;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: #f7f7f8;
+    z-index: 10;
+  }
+
+  .mitushi-product-add-btn {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(247, 247, 248, 0.95);
+    color: #28282B;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 10;
+  }
+
+  .mitushi-product-card:hover .mitushi-product-add-btn {
+    opacity: 1;
+  }
+
+  .mitushi-product-add-btn:hover {
+    background-color: #cc132a;
+    color: #f7f7f8;
+  }
+
+  .mitushi-product-cta {
+    position: absolute;
+    inset-x: 0;
+    bottom: 0;
+    background-color: rgba(40, 40, 43, 0.95);
+    padding: 16px;
+    backdrop-filter: blur(4px);
+    transform: translateY(100%);
+    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mitushi-product-card:hover .mitushi-product-cta {
+    transform: translateY(0);
+  }
+
+  .mitushi-product-cta-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .mitushi-product-cta-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mitushi-product-cta-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .mitushi-product-price {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    font-size: 20px;
+    font-weight: 700;
+    color: #f7f7f8;
+  }
+
+  .mitushi-product-cart-btn {
+    background-color: #cc132a;
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: #f7f7f8;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .mitushi-product-cart-btn:hover {
+    background-color: #ff1a3a;
+  }
+
+  .mitushi-product-info {
+    margin-top: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .mitushi-product-details {
+    flex: 1;
+  }
+
+  .mitushi-product-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #f7f7f8;
+  }
+
+  .mitushi-product-tag {
+    margin-top: 6px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .mitushi-product-info-price {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    font-size: 18px;
+    font-weight: 700;
+    color: #f7f7f8;
+  }
+</style>
+
+<section class="mitushi-product-carousel">
+  <div class="mitushi-carousel-container">
+    <div class="mitushi-carousel-header">
+      <div class="mitushi-carousel-title-group">
+        <div>/ 02 — Latest drop</div>
+        <h2>Featured pieces</h2>
+      </div>
+      <div class="mitushi-carousel-controls">
+        <button class="mitushi-carousel-btn" aria-label="Previous" onclick="scrollCarousel(-1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <button class="mitushi-carousel-btn" aria-label="Next" onclick="scrollCarousel(1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mitushi-carousel-track" id="carouselTrack">
+      {% for block in section.blocks %}
+        {% assign index_mod = forloop.index %}
+        {% if block.settings.front_image != blank %}
+          {% assign front_img = block.settings.front_image | img_url: '360x450' %}
+        {% else %}
+          {% if index_mod == 1 or index_mod == 5 %}
+            {% assign front_img = 'product-shirt-1.jpg' | asset_url %}
+          {% elsif index_mod == 2 %}
+            {% assign front_img = 'product-shirt-2.jpg' | asset_url %}
+          {% elsif index_mod == 3 %}
+            {% assign front_img = 'product-tank-1.jpg' | asset_url %}
+          {% else %}
+            {% assign front_img = 'product-shorts-1.jpg' | asset_url %}
+          {% endif %}
+        {% endif %}
+
+        {% if block.settings.back_image != blank %}
+          {% assign back_img = block.settings.back_image | img_url: '360x450' %}
+        {% else %}
+          {% if index_mod == 1 or index_mod == 5 %}
+            {% assign back_img = 'product-shirt-1-back.jpg' | asset_url %}
+          {% elsif index_mod == 2 %}
+            {% assign back_img = 'product-shirt-2-back.jpg' | asset_url %}
+          {% elsif index_mod == 3 %}
+            {% assign back_img = 'product-tank-1-back.jpg' | asset_url %}
+          {% else %}
+            {% assign back_img = 'product-shorts-1-back.jpg' | asset_url %}
+          {% endif %}
+        {% endif %}
+
+        <article class="mitushi-product-card">
+          <div class="mitushi-product-image-wrapper">
+            <img
+              src="{{ front_img }}"
+              alt="{{ block.settings.name }}"
+              loading="lazy"
+              class="mitushi-product-front"
+            />
+            <img
+              src="{{ back_img }}"
+              alt="{{ block.settings.name }} (back)"
+              loading="lazy"
+              class="mitushi-product-back"
+            />
+            {% if block.settings.badge %}
+              <span class="mitushi-product-badge">{{ block.settings.badge }}</span>
+            {% endif %}
+            <button class="mitushi-product-add-btn" aria-label="Add to cart">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+
+            <div class="mitushi-product-cta">
+              <div class="mitushi-product-cta-content">
+                <div class="mitushi-product-cta-info">
+                  <div class="mitushi-product-cta-label">Quick add</div>
+                  <div class="mitushi-product-price">${{ block.settings.price }}</div>
+                </div>
+                <button class="mitushi-product-cart-btn">Add to cart</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mitushi-product-info">
+            <div class="mitushi-product-details">
+              <h3 class="mitushi-product-name">{{ block.settings.name }}</h3>
+              <p class="mitushi-product-tag">{{ block.settings.tag }}</p>
+            </div>
+            <div class="mitushi-product-info-price">${{ block.settings.price }}</div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  function scrollCarousel(direction) {
+    const track = document.getElementById('carouselTrack');
+    if (track) {
+      track.scrollBy({ left: direction * 380, behavior: 'smooth' });
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Product Carousel",
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Product Name",
+          "default": "Product Name"
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Product Tag/Collection",
+          "default": "Collection Name"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price",
+          "default": "89"
+        },
+        {
+          "type": "image_picker",
+          "id": "front_image",
+          "label": "Front Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "back_image",
+          "label": "Back Image"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge (e.g., New, Hot, Drop 03)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Carousel"
+    }
+  ]
+}
+{% endschema %}
