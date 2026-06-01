@@ -407,6 +407,9 @@ Combines a collapsible announcement bar with a sticky header.
 {% schema %}
 {
   "name": "Mitushi Header",
+  "enabled_on": {
+    "templates": ["*"]
+  },
   "settings": [
     {
       "type": "image_picker",
@@ -497,9 +500,6 @@ Combines a collapsible announcement bar with a sticky header.
     {
       "name": "Mitushi Header",
       "category": "Header",
-      "enabled_on": {
-        "templates": ["*"]
-      },
       "blocks": [
         {
           "type": "nav_item",
@@ -542,9 +542,6 @@ Combines a collapsible announcement bar with a sticky header.
     {
       "name": "Mitushi Header (General)",
       "category": "Custom",
-      "enabled_on": {
-        "templates": ["*"]
-      },
       "blocks": []
     }
   ]
