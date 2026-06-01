@@ -311,7 +311,7 @@ Combines a collapsible announcement bar with a sticky header.
       <a href="{{ settings.logo_link }}" class="mitushi-logo-link">
         <span aria-hidden="true" class="mitushi-logo-glow"></span>
         {% if section.settings.logo_image != blank %}
-          <img src="{{ section.settings.logo_image | image_url: width: 240 }}" alt="{{ section.settings.logo_alt | escape }}" class="mitushi-logo-image" />
+          <img src="{{ section.settings.logo_image | image_url: width: 240 }}" alt="{{ section.settings.logo_alt | escape }}" class="mitushi-logo-image" width="240" height="240" />
         {% else %}
           <span class="mitushi-logo-image" style="color:#fff;font-weight:700;font-size:1rem;">Mitushi</span>
         {% endif %}
@@ -423,7 +423,7 @@ Combines a collapsible announcement bar with a sticky header.
       "default": "Mitushi"
     },
     {
-      "type": "url",
+      "type": "text",
       "id": "logo_link",
       "label": "Logo link",
       "default": "#home"
@@ -444,9 +444,7 @@ Combines a collapsible announcement bar with a sticky header.
       "type": "number",
       "id": "announcement_repeat_count",
       "label": "Announcement repeat count",
-      "default": 8,
-      "min": 1,
-      "max": 20
+      "default": 8
     },
     {
       "type": "text",
@@ -458,9 +456,7 @@ Combines a collapsible announcement bar with a sticky header.
       "type": "number",
       "id": "cart_count",
       "label": "Cart item count",
-      "default": 2,
-      "min": 0,
-      "max": 99
+      "default": 2
     }
   ],
   "blocks": [
@@ -475,7 +471,7 @@ Combines a collapsible announcement bar with a sticky header.
           "default": "Home"
         },
         {
-          "type": "url",
+          "type": "text",
           "id": "href",
           "label": "Link",
           "default": "#home"
