@@ -283,6 +283,10 @@
           if prod_obj.title == blank and block.settings.product_handle != blank
             assign prod_obj = all_products[block.settings.product_handle]
           endif
+          if prod_obj == blank
+            assign fallback_index = forloop.index0
+            assign prod_obj = collections.all.products[fallback_index]
+          endif
           assign prod_name = block.settings.name
           assign prod_tag = block.settings.tag
           assign prod_price = block.settings.price | prepend: '$'

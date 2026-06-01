@@ -342,11 +342,11 @@
         Heavyweight cotton, pigment-dyed, built to outlive the season.
       </p>
       <div class="mitushi-hero-buttons">
-        <a href="#shop" class="mitushi-hero-btn-primary">
-          Shop the Drop <span>→</span>
+        <a href="{{ section.settings.button_1_link | default: '/collections/all' }}" class="mitushi-hero-btn-primary">
+          {{ section.settings.button_1_label | default: 'Shop the Drop' }} <span>→</span>
         </a>
-        <a href="#lookbook" class="mitushi-hero-btn-secondary">
-          View Lookbook
+        <a href="{{ section.settings.button_2_link | default: '/pages/look-book' }}" class="mitushi-hero-btn-secondary">
+          {{ section.settings.button_2_label | default: 'View Lookbook' }}
         </a>
       </div>
 
@@ -407,6 +407,28 @@
       "type": "image_picker",
       "id": "hero_image",
       "label": "Hero Image"
+    },
+    {
+      "type": "text",
+      "id": "button_1_label",
+      "label": "Button 1 Label",
+      "default": "Shop the Drop"
+    },
+    {
+      "type": "url",
+      "id": "button_1_link",
+      "label": "Button 1 Link"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Button 2 Label",
+      "default": "View Lookbook"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Button 2 Link"
     }
   ],
   "presets": [

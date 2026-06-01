@@ -263,6 +263,21 @@
             if col_obj.title == blank and block.settings.collection != blank
               assign col_obj = collections[block.settings.collection]
             endif
+          else
+            assign fallback_index = forloop.index0
+            assign count = 0
+            for collection in collections
+              if collection.handle != 'all' and collection.handle != 'frontpage'
+                if count == fallback_index
+                  assign col_obj = collection
+                  break
+                endif
+                assign count = count | plus: 1
+              endif
+            endfor
+          endif
+
+          if col_obj != blank
             assign col_url = col_obj.url
             assign col_title = col_obj.title
             assign col_count = col_obj.all_products_count | append: ' pieces'
