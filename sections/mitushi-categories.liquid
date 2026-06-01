@@ -246,104 +246,73 @@
     </div>
 
     <div class="mitushi-categories-grid">
-      <a href="#shirts" class="mitushi-category-card big">
-        <div class="mitushi-category-image-wrapper">
-          {% if section.blocks[0].settings.image != blank %}
-            {% assign cat_1_img = section.blocks[0].settings.image | img_url: '600x800' %}
-          {% else %}
-            {% assign cat_1_img = 'cat-shirts.jpg' | asset_url %}
-          {% endif %}
-          <img
-            src="{{ cat_1_img }}"
-            alt="Shirts"
-            loading="lazy"
-            class="mitushi-category-image"
-          />
-        </div>
-        <div class="mitushi-category-overlay"></div>
-        <div class="mitushi-category-content">
-          <div class="mitushi-category-top">
-            <span class="mitushi-category-jp">{{ section.blocks[0].settings.japanese }}</span>
-            <span class="mitushi-category-badge">01</span>
-          </div>
-          <div class="mitushi-category-bottom">
-            <div class="mitushi-category-count">{{ section.blocks[0].settings.count }}</div>
-            <div class="mitushi-category-bottom-row">
-              <h3 class="mitushi-category-name">{{ section.blocks[0].settings.title }}</h3>
-              <svg class="mitushi-category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M7 17L17 7M17 7H7m10 0v10"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="mitushi-category-ring"></div>
-      </a>
+      {% for block in section.blocks %}
+        {%- liquid
+          assign is_big = false
+          if forloop.first
+            assign is_big = true
+          endif
 
-      <a href="#shorts" class="mitushi-category-card">
-        <div class="mitushi-category-image-wrapper">
-          {% if section.blocks[1].settings.image != blank %}
-            {% assign cat_2_img = section.blocks[1].settings.image | img_url: '600x800' %}
-          {% else %}
-            {% assign cat_2_img = 'cat-shorts.jpg' | asset_url %}
-          {% endif %}
-          <img
-            src="{{ cat_2_img }}"
-            alt="Shorts"
-            loading="lazy"
-            class="mitushi-category-image"
-          />
-        </div>
-        <div class="mitushi-category-overlay"></div>
-        <div class="mitushi-category-content">
-          <div class="mitushi-category-top">
-            <span class="mitushi-category-jp">{{ section.blocks[1].settings.japanese }}</span>
-            <span class="mitushi-category-badge">02</span>
-          </div>
-          <div class="mitushi-category-bottom">
-            <div class="mitushi-category-count">{{ section.blocks[1].settings.count }}</div>
-            <div class="mitushi-category-bottom-row">
-              <h3 class="mitushi-category-name">{{ section.blocks[1].settings.title }}</h3>
-              <svg class="mitushi-category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M7 17L17 7M17 7H7m10 0v10"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="mitushi-category-ring"></div>
-      </a>
+          assign col_url = '#'
+          assign col_title = block.settings.title
+          assign col_count = block.settings.count
+          assign col_jp = block.settings.japanese
 
-      <a href="#tanks" class="mitushi-category-card">
-        <div class="mitushi-category-image-wrapper">
-          {% if section.blocks[2].settings.image != blank %}
-            {% assign cat_3_img = section.blocks[2].settings.image | img_url: '600x800' %}
-          {% else %}
-            {% assign cat_3_img = 'cat-tanks.jpg' | asset_url %}
-          {% endif %}
-          <img
-            src="{{ cat_3_img }}"
-            alt="Tanks"
-            loading="lazy"
-            class="mitushi-category-image"
-          />
-        </div>
-        <div class="mitushi-category-overlay"></div>
-        <div class="mitushi-category-content">
-          <div class="mitushi-category-top">
-            <span class="mitushi-category-jp">{{ section.blocks[2].settings.japanese }}</span>
-            <span class="mitushi-category-badge">03</span>
+          if block.settings.collection != blank
+            assign col_obj = block.settings.collection
+            if col_obj.title == blank and block.settings.collection != blank
+              assign col_obj = collections[block.settings.collection]
+            endif
+            assign col_url = col_obj.url
+            assign col_title = col_obj.title
+            assign col_count = col_obj.all_products_count | append: ' pieces'
+          endif
+
+          if block.settings.image != blank
+            assign cat_img = block.settings.image | img_url: '600x800'
+          elsif block.settings.collection != blank and col_obj.image != blank
+            assign cat_img = col_obj.image | img_url: '600x800'
+          elsif block.settings.collection != blank and col_obj.products.first.featured_image != blank
+            assign cat_img = col_obj.products.first.featured_image | img_url: '600x800'
+          else
+            if forloop.index == 1
+              assign cat_img = 'cat-shirts.jpg' | asset_url
+            elsif forloop.index == 2
+              assign cat_img = 'cat-shorts.jpg' | asset_url
+            else
+              assign cat_img = 'cat-tanks.jpg' | asset_url
+            endif
+          endif
+        -%}
+
+        <a href="{{ col_url }}" class="mitushi-category-card{% if is_big %} big{% endif %}" {{ block.shopify_attributes }}>
+          <div class="mitushi-category-image-wrapper">
+            <img
+              src="{{ cat_img }}"
+              alt="{{ col_title | escape }}"
+              loading="lazy"
+              class="mitushi-category-image"
+            />
           </div>
-          <div class="mitushi-category-bottom">
-            <div class="mitushi-category-count">{{ section.blocks[2].settings.count }}</div>
-            <div class="mitushi-category-bottom-row">
-              <h3 class="mitushi-category-name">{{ section.blocks[2].settings.title }}</h3>
-              <svg class="mitushi-category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M7 17L17 7M17 7H7m10 0v10"></path>
-              </svg>
+          <div class="mitushi-category-overlay"></div>
+          <div class="mitushi-category-content">
+            <div class="mitushi-category-top">
+              <span class="mitushi-category-jp">{{ col_jp }}</span>
+              <span class="mitushi-category-badge">0{{ forloop.index }}</span>
+            </div>
+            <div class="mitushi-category-bottom">
+              <div class="mitushi-category-count">{{ col_count }}</div>
+              <div class="mitushi-category-bottom-row">
+                <h3 class="mitushi-category-name">{{ col_title }}</h3>
+                <svg class="mitushi-category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 17L17 7M17 7H7m10 0v10"></path>
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="mitushi-category-ring"></div>
-      </a>
+          <div class="mitushi-category-ring"></div>
+        </a>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -357,9 +326,14 @@
       "name": "Category",
       "settings": [
         {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        },
+        {
           "type": "text",
           "id": "title",
-          "label": "Title",
+          "label": "Fallback/Override Title",
           "default": "Shirts"
         },
         {
@@ -371,13 +345,13 @@
         {
           "type": "text",
           "id": "count",
-          "label": "Count",
+          "label": "Fallback Count (if no collection)",
           "default": "24 pieces"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Category Image"
+          "label": "Category Image Override"
         }
       ]
     }

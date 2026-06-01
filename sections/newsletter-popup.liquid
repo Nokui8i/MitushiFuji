@@ -23,10 +23,18 @@
     {% endcapture %}
 
     <sht-newsletter-popup class="newsletter-popup {{ desktop_direction_vertical }} {{ desktop_direction_horizontal }}" tabindex="-1" data-ui-component="Newsletter Popup Section" data-section-id="{{ section.id }}" data-delay-time="{{ section.settings.delay_time }}" data-delay-days="{{ section.settings.delay_days }}" data-delay-until="{{ section.settings.delay_until }}" data-trigger="{{ section.settings.trigger }}" {% if section.settings.show_only_on_index %}data-show-only-on-index{% endif %} {% if section.settings.show_only_for_visitors %}data-show-only-for-visitors{% endif %}>
+      <style>
+        #shopify-section-{{ section.id }} {
+          position: relative;
+          z-index: 999999 !important;
+        }
+      </style>
       {% if section.settings.use_beautiful_design %}
         <style>
           sht-newsletter-popup {
             background: transparent !important;
+            position: relative;
+            z-index: 99999 !important;
           }
           .newsletter-popup-overlay {
             position: fixed !important;
@@ -35,7 +43,7 @@
             width: 100vw !important;
             height: 100vh !important;
             background: rgba(0, 0, 0, 0.6) !important;
-            z-index: 1 !important;
+            z-index: 99998 !important;
             backdrop-filter: blur(2px);
           }
           .popup-container {
@@ -45,7 +53,7 @@
             width: 100vw !important;
             height: 100vh !important;
             background: transparent !important;
-            z-index: 2 !important;
+            z-index: 99999 !important;
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
