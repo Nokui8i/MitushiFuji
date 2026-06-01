@@ -318,23 +318,37 @@
       <!-- Links -->
       <div class="mitushi-footer-links">
         <div class="mitushi-footer-link-group">
-          <h4>Shop</h4>
+          {%- assign footer_menu_1 = linklists[section.settings.menu_1] -%}
+          <h4>{{ footer_menu_1.title | default: 'Shop' }}</h4>
           <ul>
-            <li><a href="#shirts">Shirts</a></li>
-            <li><a href="#shorts">Shorts</a></li>
-            <li><a href="#tanks">Tanks</a></li>
-            <li><a href="#">New arrivals</a></li>
-            <li><a href="#">Lookbook</a></li>
+            {%- if footer_menu_1.links != blank -%}
+              {%- for link in footer_menu_1.links -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- endfor -%}
+            {%- else -%}
+              <li><a href="#shirts">Shirts</a></li>
+              <li><a href="#shorts">Shorts</a></li>
+              <li><a href="#tanks">Tanks</a></li>
+              <li><a href="#">New arrivals</a></li>
+              <li><a href="#">Lookbook</a></li>
+            {%- endif -%}
           </ul>
         </div>
         <div class="mitushi-footer-link-group">
-          <h4>Help</h4>
+          {%- assign footer_menu_2 = linklists[section.settings.menu_2] -%}
+          <h4>{{ footer_menu_2.title | default: 'Help' }}</h4>
           <ul>
-            <li><a href="#">Shipping</a></li>
-            <li><a href="#">Returns</a></li>
-            <li><a href="#">Size guide</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">FAQ</a></li>
+            {%- if footer_menu_2.links != blank -%}
+              {%- for link in footer_menu_2.links -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- endfor -%}
+            {%- else -%}
+              <li><a href="#">Shipping</a></li>
+              <li><a href="#">Returns</a></li>
+              <li><a href="#">Size guide</a></li>
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">FAQ</a></li>
+            {%- endif -%}
           </ul>
         </div>
       </div>
@@ -373,9 +387,16 @@
     <div class="mitushi-footer-bottom">
       <div>© {{ 'now' | date: "%Y" }} Mitushi Studio · All rights reserved</div>
       <div class="mitushi-footer-bottom-links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Cookies</a>
+        {%- assign footer_menu_bottom = linklists[section.settings.menu_bottom] -%}
+        {%- if footer_menu_bottom.links != blank -%}
+          {%- for link in footer_menu_bottom.links -%}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {%- endfor -%}
+        {%- else -%}
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Cookies</a>
+        {%- endif -%}
       </div>
     </div>
   </div>
@@ -411,6 +432,21 @@
       "id": "newsletter_text",
       "label": "Newsletter Description",
       "default": "First access to releases, exclusive sizes, and members-only fits."
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "First Link List (e.g. Shop)"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Second Link List (e.g. Help)"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_bottom",
+      "label": "Bottom Link List (e.g. Policies)"
     }
   ],
   "presets": [

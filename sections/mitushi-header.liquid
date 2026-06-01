@@ -311,7 +311,7 @@ Combines a collapsible announcement bar with a sticky header.
 
   <header id="mitushi-sticky-header" class="mitushi-sticky-header">
     <div class="mitushi-header-inner">
-      <a href="{{ section.settings.logo_link }}" class="mitushi-logo-link">
+      <a href="{{ section.settings.logo_link | default: routes.root_url }}" class="mitushi-logo-link">
         <span aria-hidden="true" class="mitushi-logo-glow"></span>
         {% if section.settings.logo_image != blank %}
           {% assign logo_img_url = section.settings.logo_image | image_url: width: 400 %}
@@ -322,34 +322,61 @@ Combines a collapsible announcement bar with a sticky header.
       </a>
 
       <nav class="mitushi-nav hidden items-center gap-1 md:flex" aria-label="Primary navigation">
-        {% for block in section.blocks %}
-          <div class="group mitushi-nav-item">
-            <a href="{{ block.settings.href }}" class="mitushi-nav-link {% if block.settings.active %}active{% endif %}">
-              {{ block.settings.label }}
-              {% if block.settings.dropdown_items != blank %}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
-                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
-                </svg>
-              {% endif %}
-            </a>
-            {% if block.settings.dropdown_items != blank %}
-              <div class="mitushi-dropdown-trigger">
-                <div class="mitushi-dropdown-menu">
-                  {% assign dropdown_links = block.settings.dropdown_items | split: '\n' %}
-                  {% for dropdown_item in dropdown_links %}
-                    {% assign trimmed = dropdown_item | strip %}
-                    {% if trimmed != blank %}
-                      {% assign item_parts = trimmed | split: '|' %}
-                      <a href="{{ item_parts[1] | default: '#' | strip }}" class="mitushi-dropdown-link">
-                        {{ item_parts[0] | strip }}
+        {%- assign menu_links = linklists[section.settings.menu].links -%}
+        {%- if menu_links != blank -%}
+          {% for link in menu_links %}
+            <div class="group mitushi-nav-item">
+              <a href="{{ link.url }}" class="mitushi-nav-link {% if link.active or link.child_active %}active{% endif %}">
+                {{ link.title }}
+                {% if link.links.size > 0 %}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+                  </svg>
+                {% endif %}
+              </a>
+              {% if link.links.size > 0 %}
+                <div class="mitushi-dropdown-trigger">
+                  <div class="mitushi-dropdown-menu">
+                    {% for childlink in link.links %}
+                      <a href="{{ childlink.url }}" class="mitushi-dropdown-link">
+                        {{ childlink.title }}
                       </a>
-                    {% endif %}
-                  {% endfor %}
+                    {% endfor %}
+                  </div>
                 </div>
-              </div>
-            {% endif %}
-          </div>
-        {% endfor %}
+              {% endif %}
+            </div>
+          {% endfor %}
+        {%- else -%}
+          {% for block in section.blocks %}
+            <div class="group mitushi-nav-item" {{ block.shopify_attributes }}>
+              <a href="{{ block.settings.href }}" class="mitushi-nav-link {% if block.settings.active %}active{% endif %}">
+                {{ block.settings.label }}
+                {% if block.settings.dropdown_items != blank %}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+                  </svg>
+                {% endif %}
+              </a>
+              {% if block.settings.dropdown_items != blank %}
+                <div class="mitushi-dropdown-trigger">
+                  <div class="mitushi-dropdown-menu">
+                    {% assign dropdown_links = block.settings.dropdown_items | split: '\n' %}
+                    {% for dropdown_item in dropdown_links %}
+                      {% assign trimmed = dropdown_item | strip %}
+                      {% if trimmed != blank %}
+                        {% assign item_parts = trimmed | split: '|' %}
+                        <a href="{{ item_parts[1] | default: '#' | strip }}" class="mitushi-dropdown-link">
+                          {{ item_parts[0] | strip }}
+                        </a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {%- endif -%}
       </nav>
 
       <div class="mitushi-utilities flex items-center gap-1">
@@ -429,10 +456,15 @@ Combines a collapsible announcement bar with a sticky header.
       "default": "Mitushi"
     },
     {
-      "type": "text",
+      "type": "url",
       "id": "logo_link",
-      "label": "Logo link",
-      "default": "#home"
+      "label": "Logo link"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
     },
     {
       "type": "text",
@@ -477,10 +509,9 @@ Combines a collapsible announcement bar with a sticky header.
           "default": "Home"
         },
         {
-          "type": "text",
+          "type": "url",
           "id": "href",
-          "label": "Link",
-          "default": "#home"
+          "label": "Link"
         },
         {
           "type": "checkbox",
