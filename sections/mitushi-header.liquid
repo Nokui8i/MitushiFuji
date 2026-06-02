@@ -149,8 +149,9 @@ Combines a collapsible announcement bar with a sticky header.
       display: inline-flex;
       align-items: center;
       gap: 0.25rem;
-      padding: 0.75rem 1.25rem;
-      font-size: 11px;
+      padding: 0.625rem 1.25rem;
+      font-size: 12px;
+      line-height: 1;
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.28em;
@@ -271,8 +272,15 @@ Combines a collapsible announcement bar with a sticky header.
 
     .mitushi-cart-button {
       position: relative;
-      padding: 0.75rem !important;
+      padding: 0.625rem !important;
       border: 1px solid transparent !important;
+    }
+
+    .mitushi-search-btn svg,
+    .mitushi-cart-button svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
     }
 
     .mitushi-cart-button:hover {
@@ -368,7 +376,7 @@ Combines a collapsible announcement bar with a sticky header.
       background: transparent;
       border: 1px solid transparent !important;
       border-radius: 9999px;
-      padding: 0.75rem;
+      padding: 0.625rem;
       cursor: pointer;
       transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
     }
@@ -475,6 +483,284 @@ Combines a collapsible announcement bar with a sticky header.
       border-color: rgba(204, 19, 42, 0.4);
       color: #cc132a;
     }
+
+    .mitushi-header-start {
+      display: none;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* Mobile menu toggle */
+    .mitushi-menu-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.625rem;
+      border: 1px solid transparent;
+      border-radius: 9999px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      transition: color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .mitushi-menu-toggle svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .mitushi-menu-toggle:hover,
+    .mitushi-menu-toggle[aria-expanded="true"] {
+      background: rgba(204, 19, 42, 0.08);
+      color: #cc132a;
+    }
+
+    /* Mobile drawer */
+    .mitushi-mobile-drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 10050;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .mitushi-mobile-drawer.is-open {
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .mitushi-mobile-drawer__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0);
+      transition: background 0.3s ease;
+    }
+
+    .mitushi-mobile-drawer.is-open .mitushi-mobile-drawer__backdrop {
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .mitushi-mobile-drawer__panel {
+      position: absolute;
+      top: 0;
+      inset-inline-end: 0;
+      width: min(100%, 320px);
+      height: 100%;
+      max-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      background: rgba(28, 28, 30, 0.98);
+      backdrop-filter: blur(22px) saturate(140%);
+      -webkit-backdrop-filter: blur(22px) saturate(140%);
+      border-inline-start: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: -16px 0 48px rgba(0, 0, 0, 0.35);
+      transform: translate3d(100%, 0, 0);
+      transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    [dir="rtl"] .mitushi-mobile-drawer__panel {
+      transform: translate3d(-100%, 0, 0);
+      box-shadow: 16px 0 48px rgba(0, 0, 0, 0.35);
+    }
+
+    .mitushi-mobile-drawer.is-open .mitushi-mobile-drawer__panel {
+      transform: translate3d(0, 0, 0);
+    }
+
+    .mitushi-mobile-drawer__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
+    }
+
+    .mitushi-mobile-drawer__title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .mitushi-mobile-drawer__close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: transparent;
+      color: rgba(255, 255, 255, 0.75);
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .mitushi-mobile-drawer__close:hover {
+      background: rgba(204, 19, 42, 0.12);
+      border-color: rgba(204, 19, 42, 0.35);
+      color: #cc132a;
+    }
+
+    .mitushi-mobile-drawer__body {
+      flex: 1;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 0.5rem 0 1.5rem;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .mitushi-mobile-nav-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .mitushi-mobile-nav-item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mitushi-mobile-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.88);
+      text-decoration: none;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .mitushi-mobile-link:hover,
+    .mitushi-mobile-link.is-active {
+      color: #cc132a;
+      background: rgba(204, 19, 42, 0.06);
+    }
+
+    .mitushi-mobile-link--summary {
+      list-style: none;
+      cursor: pointer;
+    }
+
+    .mitushi-mobile-link--summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mitushi-mobile-accordion[open] .mitushi-mobile-chevron {
+      transform: rotate(180deg);
+    }
+
+    .mitushi-mobile-chevron {
+      flex-shrink: 0;
+      opacity: 0.6;
+      transition: transform 0.2s ease;
+    }
+
+    .mitushi-mobile-submenu {
+      display: flex;
+      flex-direction: column;
+      padding: 0 0 0.5rem;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .mitushi-mobile-sublink {
+      display: block;
+      padding: 0.75rem 1.25rem 0.75rem 2rem;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    [dir="rtl"] .mitushi-mobile-sublink {
+      padding: 0.75rem 2rem 0.75rem 1.25rem;
+    }
+
+    .mitushi-mobile-sublink:hover {
+      color: #cc132a;
+      background: rgba(204, 19, 42, 0.08);
+    }
+
+    body.mitushi-menu-open {
+      overflow: hidden;
+    }
+
+    @media (max-width: 767px) {
+      .mitushi-header-start {
+        display: flex;
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: start;
+        min-width: 44px;
+      }
+
+      .mitushi-header-inner {
+        display: grid;
+        grid-template-columns: minmax(44px, 1fr) auto minmax(44px, 1fr);
+        align-items: center;
+        gap: 0.5rem;
+        padding-inline: 1rem;
+      }
+
+      .mitushi-logo-link {
+        justify-self: center;
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .mitushi-nav {
+        display: none !important;
+      }
+
+      .mitushi-utilities {
+        justify-self: end;
+        grid-column: 3;
+        grid-row: 1;
+      }
+
+      .mitushi-logo-image {
+        height: 44px;
+      }
+
+      .mitushi-logo-glow {
+        width: 48px;
+        height: 48px;
+        left: -8px;
+      }
+
+      .mitushi-sticky-header:not(.scrolled) {
+        padding-block: 10px;
+      }
+
+      .mitushi-sticky-header.scrolled {
+        padding-block: 8px;
+      }
+
+      .mitushi-marquee {
+        font-size: 10px;
+        gap: 2.5rem;
+        padding-inline-start: 1rem;
+      }
+
+      .mitushi-search-overlay-panel {
+        padding: 1rem;
+      }
+
+      .mitushi-search-input {
+        font-size: 1rem;
+      }
+    }
   </style>
 
   <div id="mitushi-announcement-bar" class="mitushi-announcement" aria-hidden="false">
@@ -494,6 +780,21 @@ Combines a collapsible announcement bar with a sticky header.
 
   <header id="mitushi-sticky-header" class="mitushi-sticky-header">
     <div class="mitushi-header-inner">
+      <div class="mitushi-header-start">
+        <button
+          type="button"
+          id="mitushi-menu-toggle"
+          class="mitushi-menu-toggle"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mitushi-mobile-drawer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M21 7H3V5h18v2zm0 6H3v-2h18v2zm-5 6H3v-2h13v2z" />
+          </svg>
+        </button>
+      </div>
+
       <a href="{{ section.settings.logo_link | default: routes.root_url }}" class="mitushi-logo-link">
         <span aria-hidden="true" class="mitushi-logo-glow"></span>
         {% if section.settings.logo_image != blank %}
@@ -689,17 +990,14 @@ Combines a collapsible announcement bar with a sticky header.
       </nav>
 
       <div class="mitushi-utilities flex items-center gap-1">
-
-
-
-        <button type="button" id="mitushi-search-toggle" aria-label="Open search" class="mitushi-search-btn rounded-full p-2.5 transition inline-flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px; height:18px;" width="18" height="18">
+        <button type="button" id="mitushi-search-toggle" aria-label="Open search" class="mitushi-search-btn rounded-full transition inline-flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 12.65z" />
           </svg>
         </button>
 
-        <a href="{{ routes.cart_url }}" aria-label="Cart" class="mitushi-cart-button rounded-full p-2.5 text-foreground\/80 hover:bg-crimson\/10 hover:text-crimson transition inline-block">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px; height:18px;" width="18" height="18">
+        <a href="{{ routes.cart_url }}" aria-label="Cart" class="mitushi-cart-button rounded-full text-foreground\/80 hover:bg-crimson\/10 hover:text-crimson transition inline-flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -709,6 +1007,26 @@ Combines a collapsible announcement bar with a sticky header.
       </div>
     </div>
   </header>
+
+  {%- comment -%} Mobile menu drawer {%- endcomment -%}
+  <div id="mitushi-mobile-drawer" class="mitushi-mobile-drawer" hidden aria-hidden="true">
+    <div class="mitushi-mobile-drawer__backdrop" id="mitushi-mobile-drawer-backdrop" aria-hidden="true"></div>
+    <div class="mitushi-mobile-drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="mitushi-mobile-drawer__head">
+        <span class="mitushi-mobile-drawer__title">Menu</span>
+        <button type="button" class="mitushi-mobile-drawer__close" id="mitushi-mobile-drawer-close" aria-label="Close menu">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="mitushi-mobile-drawer__body">
+        <nav aria-label="Mobile navigation">
+          {% render 'mitushi-mobile-nav', section: section %}
+        </nav>
+      </div>
+    </div>
+  </div>
 
   {%- comment -%} Search Overlay {%- endcomment -%}
   <div id="mitushi-search-overlay" class="mitushi-search-overlay" hidden aria-hidden="true">
@@ -838,6 +1156,59 @@ Combines a collapsible announcement bar with a sticky header.
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && searchOverlay && !searchOverlay.hidden) {
         closeSearch();
+      }
+    });
+
+    // Mobile menu drawer
+    var menuToggle = document.getElementById('mitushi-menu-toggle');
+    var mobileDrawer = document.getElementById('mitushi-mobile-drawer');
+    var mobileDrawerClose = document.getElementById('mitushi-mobile-drawer-close');
+    var mobileDrawerBackdrop = document.getElementById('mitushi-mobile-drawer-backdrop');
+
+    function openMobileMenu() {
+      if (!mobileDrawer) return;
+      mobileDrawer.removeAttribute('hidden');
+      mobileDrawer.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('mitushi-menu-open');
+      if (menuToggle) menuToggle.setAttribute('aria-expanded', 'true');
+      requestAnimationFrame(function () {
+        mobileDrawer.classList.add('is-open');
+      });
+    }
+
+    function closeMobileMenu() {
+      if (!mobileDrawer) return;
+      mobileDrawer.classList.remove('is-open');
+      mobileDrawer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('mitushi-menu-open');
+      if (menuToggle) {
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.focus();
+      }
+      setTimeout(function () {
+        mobileDrawer.setAttribute('hidden', '');
+      }, 320);
+    }
+
+    if (menuToggle) menuToggle.addEventListener('click', openMobileMenu);
+    if (mobileDrawerClose) mobileDrawerClose.addEventListener('click', closeMobileMenu);
+    if (mobileDrawerBackdrop) mobileDrawerBackdrop.addEventListener('click', closeMobileMenu);
+
+    if (mobileDrawer) {
+      mobileDrawer.querySelectorAll('a.mitushi-mobile-link, a.mitushi-mobile-sublink').forEach(function (link) {
+        link.addEventListener('click', closeMobileMenu);
+      });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && mobileDrawer && mobileDrawer.classList.contains('is-open')) {
+        closeMobileMenu();
+      }
+    });
+
+    window.addEventListener('resize', function () {
+      if (window.innerWidth >= 768 && mobileDrawer && mobileDrawer.classList.contains('is-open')) {
+        closeMobileMenu();
       }
     });
   })();

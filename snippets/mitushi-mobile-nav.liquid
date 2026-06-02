@@ -1,0 +1,168 @@
+{% comment %}
+  Mobile navigation links for mitushi-header (accordion for Products / children).
+{% endcomment %}
+<ul class="mitushi-mobile-nav-list" role="list">
+  {%- assign menu_links = linklists[section.settings.menu].links -%}
+  {%- if menu_links != blank -%}
+    {%- liquid
+      assign has_categories_link = false
+      for link in menu_links
+        assign link_title_down = link.title | downcase
+        if link_title_down == 'products' or link_title_down == 'categories' or link_title_down == 'collections'
+          assign has_categories_link = true
+        endif
+      endfor
+      assign categories_rendered = false
+    -%}
+    {% for link in menu_links %}
+      {%- liquid
+        assign is_products_link = false
+        assign link_title_down = link.title | downcase
+        if link_title_down == 'products' or link_title_down == 'categories' or link_title_down == 'collections'
+          assign is_products_link = true
+        endif
+      -%}
+      <li class="mitushi-mobile-nav-item">
+        {% if is_products_link or link.links.size > 0 %}
+          <details class="mitushi-mobile-accordion">
+            <summary class="mitushi-mobile-link mitushi-mobile-link--summary">
+              {% if is_products_link %}Products{% else %}{{ link.title }}{% endif %}
+              <svg class="mitushi-mobile-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            </summary>
+            <div class="mitushi-mobile-submenu">
+              {% if is_products_link %}
+                {% for collection in collections %}
+                  {% unless collection.handle == 'all' or collection.handle == 'frontpage' %}
+                    <a href="{{ collection.url }}" class="mitushi-mobile-sublink">{{ collection.title }}</a>
+                  {% endunless %}
+                {% endfor %}
+              {% else %}
+                {% for childlink in link.links %}
+                  <a href="{{ childlink.url }}" class="mitushi-mobile-sublink">{{ childlink.title }}</a>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </details>
+        {% else %}
+          <a href="{{ link.url }}" class="mitushi-mobile-link {% if link.active %}is-active{% endif %}">{{ link.title }}</a>
+        {% endif %}
+      </li>
+
+      {%- liquid
+        assign should_render_categories = false
+        if has_categories_link == false and categories_rendered == false
+          if link_title_down == 'home'
+            assign should_render_categories = true
+          elsif forloop.last
+            assign should_render_categories = true
+          endif
+        endif
+      -%}
+      {%- if should_render_categories -%}
+        {%- assign categories_rendered = true -%}
+        <li class="mitushi-mobile-nav-item">
+          <details class="mitushi-mobile-accordion">
+            <summary class="mitushi-mobile-link mitushi-mobile-link--summary">
+              Products
+              <svg class="mitushi-mobile-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            </summary>
+            <div class="mitushi-mobile-submenu">
+              {% for collection in collections %}
+                {% unless collection.handle == 'all' or collection.handle == 'frontpage' %}
+                  <a href="{{ collection.url }}" class="mitushi-mobile-sublink">{{ collection.title }}</a>
+                {% endunless %}
+              {% endfor %}
+            </div>
+          </details>
+        </li>
+      {%- endif -%}
+    {% endfor %}
+  {%- else -%}
+    {%- liquid
+      assign has_categories_block = false
+      for block in section.blocks
+        assign block_label_down = block.settings.label | downcase
+        if block_label_down == 'products' or block_label_down == 'categories' or block_label_down == 'collections'
+          assign has_categories_block = true
+        endif
+      endfor
+      assign categories_rendered_block = false
+    -%}
+    {% for block in section.blocks %}
+      {%- liquid
+        assign is_products_block = false
+        assign block_label_down = block.settings.label | downcase
+        if block_label_down == 'products' or block_label_down == 'categories' or block_label_down == 'collections'
+          assign is_products_block = true
+        endif
+      -%}
+      <li class="mitushi-mobile-nav-item" {{ block.shopify_attributes }}>
+        {% if is_products_block or block.settings.dropdown_items != blank %}
+          <details class="mitushi-mobile-accordion">
+            <summary class="mitushi-mobile-link mitushi-mobile-link--summary {% if block.settings.active %}is-active{% endif %}">
+              {{ block.settings.label }}
+              <svg class="mitushi-mobile-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            </summary>
+            <div class="mitushi-mobile-submenu">
+              {% if is_products_block %}
+                {% for collection in collections %}
+                  {% unless collection.handle == 'all' or collection.handle == 'frontpage' %}
+                    <a href="{{ collection.url }}" class="mitushi-mobile-sublink">{{ collection.title }}</a>
+                  {% endunless %}
+                {% endfor %}
+              {% else %}
+                {% assign dropdown_links = block.settings.dropdown_items | split: '\n' %}
+                {% for dropdown_item in dropdown_links %}
+                  {% assign trimmed = dropdown_item | strip %}
+                  {% if trimmed != blank %}
+                    {% assign item_parts = trimmed | split: '|' %}
+                    <a href="{{ item_parts[1] | default: '#' | strip }}" class="mitushi-mobile-sublink">{{ item_parts[0] | strip }}</a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            </div>
+          </details>
+        {% else %}
+          <a href="{{ block.settings.href }}" class="mitushi-mobile-link {% if block.settings.active %}is-active{% endif %}">{{ block.settings.label }}</a>
+        {% endif %}
+      </li>
+
+      {%- liquid
+        assign should_render_categories_block = false
+        if has_categories_block == false and categories_rendered_block == false
+          if block_label_down == 'home'
+            assign should_render_categories_block = true
+          elsif forloop.last
+            assign should_render_categories_block = true
+          endif
+        endif
+      -%}
+      {%- if should_render_categories_block -%}
+        {%- assign categories_rendered_block = true -%}
+        <li class="mitushi-mobile-nav-item">
+          <details class="mitushi-mobile-accordion">
+            <summary class="mitushi-mobile-link mitushi-mobile-link--summary">
+              Products
+              <svg class="mitushi-mobile-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            </summary>
+            <div class="mitushi-mobile-submenu">
+              {% for collection in collections %}
+                {% unless collection.handle == 'all' or collection.handle == 'frontpage' %}
+                  <a href="{{ collection.url }}" class="mitushi-mobile-sublink">{{ collection.title }}</a>
+                {% endunless %}
+              {% endfor %}
+            </div>
+          </details>
+        </li>
+      {%- endif -%}
+    {% endfor %}
+  {%- endif -%}
+</ul>
