@@ -343,11 +343,11 @@
                 <li><a href="{{ link.url }}">{{ link.title }}</a></li>
               {%- endfor -%}
             {%- else -%}
-              <li><a href="#">Shipping</a></li>
-              <li><a href="#">Returns</a></li>
-              <li><a href="#">Size guide</a></li>
-              <li><a href="#">Contact</a></li>
-              <li><a href="#">FAQ</a></li>
+              <li><a href="/pages/shipping">Shipping</a></li>
+              <li><a href="/pages/returns">Returns</a></li>
+              <li><a href="/pages/size-charts">Size guide</a></li>
+              <li><a href="/pages/contact">Contact</a></li>
+              <li><a href="/pages/faq">FAQ</a></li>
             {%- endif -%}
           </ul>
         </div>
@@ -393,9 +393,9 @@
             <a href="{{ link.url }}">{{ link.title }}</a>
           {%- endfor -%}
         {%- else -%}
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Cookies</a>
+          <a href="/pages/privacy-policy">Privacy Policy</a>
+          <a href="/pages/terms-of-service">Terms of Service</a>
+          <a href="/pages/copyrights">Copyrights</a>
         {%- endif -%}
       </div>
     </div>
