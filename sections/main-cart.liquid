@@ -75,6 +75,85 @@
       text-transform: none !important;
     }
 
+    .mitushi-freeship {
+      margin-bottom: 1.25rem;
+      padding: 1rem 1.1rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mitushi-freeship__head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .mitushi-freeship__message {
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.45;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(247, 247, 248, 0.72);
+    }
+
+    .mitushi-freeship__amount {
+      color: #f7f7f8;
+      font-weight: 700;
+    }
+
+    .mitushi-freeship__note {
+      display: block;
+      margin-top: 0.2rem;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: rgba(247, 247, 248, 0.4);
+      text-transform: uppercase;
+    }
+
+    .mitushi-freeship__qualified {
+      color: #cc132a;
+      font-weight: 700;
+    }
+
+    .mitushi-freeship__goal {
+      flex-shrink: 0;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: rgba(247, 247, 248, 0.45);
+    }
+
+    .mitushi-freeship__track {
+      height: 4px;
+      width: 100%;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .mitushi-freeship__fill {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #cc132a 0%, #ff1a3a 100%);
+      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mitushi-freeship__fill.is-complete {
+      background: linear-gradient(90deg, #cc132a 0%, #e8a030 100%);
+    }
+
+    .mitushi-freeship__progress-native {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
     @media (max-width: 767px) {
       #mainCartContainer {
         padding: 1.25rem 1rem 2.5rem !important;
@@ -296,6 +375,16 @@
 
       <!-- Cart Form -->
       <form action="{{ routes.cart_url }}" method="post" id="cartForm" class="{{ cart_empty_hide }}">
+        {%- liquid
+          assign fs_minimum = settings.cart_minimum_order_price_for_free_shipping | default: '199'
+          if fs_minimum == blank
+            assign fs_minimum = '199'
+          endif
+          assign free_shipping_threshold = fs_minimum | times: 100
+        -%}
+        {%- if cart != empty -%}
+          {% render 'mitushi-free-shipping-bar' %}
+        {%- endif -%}
         <div class="grid grid-cols-1 gap-10 lg:grid-cols-3">
           
           <!-- Left Column: Items List -->
@@ -407,30 +496,6 @@
               
               <!-- Title -->
               <h2 class="font-display text-2xl mb-4 text-foreground">Order summary</h2>
-
-              <!-- Free Shipping Bar -->
-              {% if settings.cart_show_free_shipping_notification and settings.cart_minimum_order_price_for_free_shipping != blank %}
-                <div class="js-free-shipping-notification-message mt-5 mb-5">
-                  {%- liquid
-                    assign free_shipping_threshold = settings.cart_minimum_order_price_for_free_shipping | times: 100
-                    assign remaining = free_shipping_threshold | minus: cart.total_price
-                    assign progress = cart.total_price | times: 100.0 | divided_by: free_shipping_threshold | at_most: 100
-                  -%}
-                  <sht-free-shipping-bar class="no-js-hidden" data-total-price="{{ cart.total_price }}" data-free-shipping-original-price="{{ settings.cart_minimum_order_price_for_free_shipping }}" data-free-shipping-price="{{ free_shipping_threshold }}">
-                    <div class="mb-2 text-[11px] uppercase tracking-[0.25em] text-foreground/70 js-free-shipping-message">
-                      {% if cart.total_price >= free_shipping_threshold %}
-                        <span class="text-crimson">★ You unlocked free shipping</span>
-                      {% else %}
-                        Add <span class="text-crimson">{{ remaining | money }}</span> for free shipping
-                      {% endif %}
-                    </div>
-                    <div class="h-1 w-full overflow-hidden bg-foreground/10">
-                      <progress class="h-full bg-crimson transition-all duration-700 js-free-shipping-progress" style="width: {{ progress }}%; height: 4px; display: block; border: none; background: transparent; -webkit-appearance: none; appearance: none;" value="{{ cart.total_price }}" max="{{ free_shipping_threshold }}"></progress>
-                      <span class="js-free-shipping-progress-content d-none-important" style="display:none !important;"></span>
-                    </div>
-                  </sht-free-shipping-bar>
-                </div>
-              {% endif %}
 
               <!-- Subtotal & Shipping summary rows -->
               <dl class="mt-6 space-y-3 text-sm">

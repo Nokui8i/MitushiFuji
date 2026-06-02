@@ -1,0 +1,82 @@
+{% comment %}
+  Free shipping progress — $199 threshold (Mitushi promise).
+  Compatible with theme sht-free-shipping-bar JS for cart updates.
+{% endcomment %}
+{%- liquid
+  assign fs_minimum = settings.cart_minimum_order_price_for_free_shipping | default: '199'
+  if fs_minimum == blank
+    assign fs_minimum = '199'
+  endif
+  assign free_shipping_threshold = fs_minimum | times: 100
+  assign remaining = free_shipping_threshold | minus: cart.total_price
+  if remaining < 0
+    assign remaining = 0
+  endif
+  assign progress = cart.total_price | times: 100.0 | divided_by: free_shipping_threshold | at_most: 100
+  assign qualified = false
+  if cart.total_price >= free_shipping_threshold
+    assign qualified = true
+  endif
+-%}
+
+<div class="mitushi-freeship">
+  <sht-free-shipping-bar
+    class="mitushi-freeship__widget no-js-hidden"
+    data-total-price="{{ cart.total_price }}"
+    data-free-shipping-original-price="{{ fs_minimum }}"
+    data-free-shipping-price="{{ free_shipping_threshold }}"
+  >
+    <div class="mitushi-freeship__head">
+      <p class="mitushi-freeship__message js-free-shipping-message">
+        {%- if qualified -%}
+          <span class="mitushi-freeship__qualified">Free shipping unlocked</span>
+        {%- else -%}
+          Add <strong class="mitushi-freeship__amount">{{ remaining | money }}</strong> for free shipping <span class="mitushi-freeship__note">(orders over ${{ fs_minimum }})</span>
+        {%- endif -%}
+      </p>
+      <span class="mitushi-freeship__goal">{{ progress | round }}%</span>
+    </div>
+
+    <div class="mitushi-freeship__track" aria-hidden="true">
+      <div
+        class="mitushi-freeship__fill js-free-shipping-progress-visual{% if qualified %} is-complete{% endif %}"
+        style="width: {{ progress }}%;"
+      ></div>
+    </div>
+
+    <progress
+      class="mitushi-freeship__progress-native js-free-shipping-progress"
+      value="{{ cart.total_price }}"
+      max="{{ free_shipping_threshold }}"
+      aria-label="Free shipping progress"
+    ></progress>
+    <span class="js-free-shipping-progress-content d-none-important" hidden></span>
+  </sht-free-shipping-bar>
+</div>
+
+<script>
+  (function () {
+    function syncFreeshipFill(root) {
+      if (!root) return;
+      const bar = root.querySelector('.js-free-shipping-progress');
+      const fill = root.querySelector('.js-free-shipping-progress-visual');
+      if (!bar || !fill) return;
+      const max = parseFloat(bar.getAttribute('max')) || 1;
+      const val = parseFloat(bar.value) || 0;
+      const pct = Math.min(100, Math.max(0, (val / max) * 100));
+      fill.style.width = pct + '%';
+      fill.classList.toggle('is-complete', val >= max);
+    }
+
+    document.querySelectorAll('.mitushi-freeship').forEach(function (wrap) {
+      syncFreeshipFill(wrap);
+      const progress = wrap.querySelector('.js-free-shipping-progress');
+      if (progress) {
+        new MutationObserver(function () { syncFreeshipFill(wrap); }).observe(progress, {
+          attributes: true,
+          attributeFilter: ['value']
+        });
+      }
+    });
+  })();
+</script>
