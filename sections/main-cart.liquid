@@ -68,6 +68,13 @@
       display: none !important;
     }
 
+    #mainCartContainer .cart-item__title {
+      font-family: var(--font-body-family) !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.01em !important;
+      text-transform: none !important;
+    }
+
     @media (max-width: 767px) {
       #mainCartContainer {
         padding: 1.25rem 1rem 2.5rem !important;
@@ -155,13 +162,9 @@
         font-size: 1.2rem !important;
       }
 
-      #mainCartContainer .cart-item h3 {
+      #mainCartContainer .cart-item__title {
         font-size: clamp(1.2rem, 5.2vw, 1.45rem) !important;
         line-height: 1.15;
-      }
-
-      #mainCartContainer .cart-item__info .text-\[10px\] {
-        margin-top: 0.25rem !important;
       }
 
       #mainCartContainer .cart-item__info .text-xs {
@@ -320,12 +323,8 @@
                           <div class="cart-item__info">
                             <!-- Title -->
                             <a href="{{ line_item.url }}">
-                              <h3 class="font-display text-xl leading-none text-foreground hover:text-crimson transition">{{ line_item.product.title | escape }}</h3>
+                              <h3 class="cart-item__title text-xl leading-snug text-foreground hover:text-crimson transition">{{ line_item.product.title | escape }}</h3>
                             </a>
-                            <!-- Tag / Vendor -->
-                            <p class="mt-1.5 text-[10px] uppercase tracking-[0.3em] text-foreground/50">
-                              {{ line_item.product.vendor | default: "Mitushi" }}
-                            </p>
                             <!-- Size Option -->
                             {%- if line_item.product.has_only_default_variant == false -%}
                               <p class="mt-2 text-xs text-foreground/70">
