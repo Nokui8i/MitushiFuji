@@ -138,6 +138,7 @@
       /* Breadcrumbs */
       .breadcrumb, .breadcrumb * {
         color: rgba(255, 255, 255, 0.8) !important;
+        font-size: 11px !important;
       }
       .breadcrumb a {
         color: rgba(255, 255, 255, 0.8) !important;
@@ -151,9 +152,10 @@
         color: rgba(255, 255, 255, 0.4) !important;
       }
 
-      /* Text and labels */
-      .color-light, .subtext, .field__label, .filter-form__result-count, .js-product-count {
+      /* Text and labels sizing */
+      .color-light, .subtext, .field__label, .filter-form__result-count, .js-product-count, .filter-form__item label {
         color: rgba(255, 255, 255, 0.6) !important;
+        font-size: 11px !important;
       }
 
       /* Selection filter tags / active filters */
@@ -161,6 +163,7 @@
         background-color: #38383B !important;
         color: #f7f7f8 !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        font-size: 11px !important;
       }
       
       .tag:hover, .filter-form--tag a:hover {
@@ -168,31 +171,68 @@
         color: #cc132a !important;
       }
 
-      /* Filter buttons, dropdown fields */
-      .btn-secondary, .btn-secondary--animate {
+      /* Filter buttons, dropdown fields (Removing borders) */
+      .btn-secondary, .btn-secondary--animate, .js-collection-product-drawer-trigger, .drawer-open button {
         background-color: transparent !important;
         color: #f7f7f8 !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-      }
-      .btn-secondary:hover, .btn-secondary--animate:hover {
-        border-color: #cc132a !important;
-        color: #cc132a !important;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        font-size: 13px !important;
+        letter-spacing: 0.1em !important;
+        text-transform: uppercase !important;
       }
       
-      /* Card backgrounds and text colors */
+      .js-collection-product-drawer-trigger:hover, .btn-secondary:hover, .btn-secondary--animate:hover {
+        color: #cc132a !important;
+      }
+
+      /* Sorting select element custom styling without white borders */
+      .field__select, .field__text, #SortByField, .filter-form-sorting {
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        background-color: transparent !important;
+        font-size: 12px !important;
+        color: #f7f7f8 !important;
+      }
+      
+      .filter-form-sorting select option {
+        background-color: #28282B !important;
+        color: #f7f7f8 !important;
+      }
+      
+      /* Card backgrounds, margins, and custom hover red borders */
       .card-product, .card, .product-card, .card-collection {
         background-color: transparent !important;
         color: #f7f7f8 !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        transition: all 0.3s ease !important;
+        padding: 8px !important;
+        border-radius: 4px !important;
+      }
+      
+      .card-product:hover, .card:hover, .product-card:hover, .card-collection:hover {
+        border-color: rgba(204, 19, 42, 0.6) !important;
+        box-shadow: 0 0 12px rgba(204, 19, 42, 0.4) !important;
       }
       
       .price, .price-item {
         color: #f7f7f8 !important;
+        font-size: 13px !important;
       }
 
       /* Filter labels and headings */
       .filter-form__summary {
         color: #f7f7f8 !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        font-size: 13px !important;
+      }
+      
+      /* Drawer Apply / Clear buttons borders override */
+      .drawer__footer button, .drawer__footer a {
+        border: none !important;
+        box-shadow: none !important;
       }
     </style>
     {% render 'style-variables' %}
