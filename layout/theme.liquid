@@ -115,34 +115,230 @@
       }
 
       html {
-        font-size: 71% !important;
+        font-size: 86% !important;
+        background-color: #28282B !important;
       }
 
-      /* Enlarge custom sections text sizes slightly and convert to rem to scale automatically */
-      .mitushi-product-name {
-        font-size: 1.6rem !important;
+      /* Global custom styles to match Lovable premium streetwear layout */
+      
+      /* Navigation links, currency button and dropdown overrides in Header */
+      .mitushi-nav-link {
+        font-size: 13px !important;
+        letter-spacing: 0.28em !important;
+        font-weight: 600 !important;
       }
-      .mitushi-product-tag {
-        font-size: 1.35rem !important;
+      .mitushi-dropdown-link {
+        font-size: 12px !important;
+        letter-spacing: 0.24em !important;
       }
-      .mitushi-product-info-price {
-        font-size: 2.0rem !important;
+      .mitushi-currency-button {
+        font-size: 12.5px !important;
+        letter-spacing: 0.15em !important;
+        font-weight: 500 !important;
       }
-      .mitushi-product-price {
-        font-size: 2.2rem !important;
+      .mitushi-currency-option {
+        font-size: 12px !important;
+        letter-spacing: 0.12em !important;
       }
+
+      /* Collection and Grid Page container improvements */
+      .main-collection-product .ctnr {
+        max-width: 1400px !important;
+        padding-inline: 24px !important;
+      }
+
+      /* Force product cards to be responsive (100% column width) instead of fixed carousel width (360px) in grid views */
+      .products .mitushi-product-card,
+      .main-collection-product .mitushi-product-card,
+      #mainCollectionProductContainer .mitushi-product-card {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      /* Global Mitushi Product Card styling (originally from carousel stylesheet, now global to render properly on all lists, grids, recommendations and search pages) */
+      .mitushi-product-card {
+        position: relative;
+        flex-shrink: 0;
+        width: 100%;
+        display: block;
+      }
+
+      .mitushi-product-image-wrapper {
+        position: relative;
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      .mitushi-product-front,
+      .mitushi-product-back {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 500ms;
+      }
+
+      .mitushi-product-back {
+        opacity: 0;
+      }
+
+      .mitushi-product-card:hover .mitushi-product-back {
+        opacity: 1;
+      }
+
+      .mitushi-product-card:hover .mitushi-product-front {
+        opacity: 0;
+      }
+
       .mitushi-product-badge {
-        font-size: 1.15rem !important;
+        position: absolute;
+        left: 12px;
+        top: 12px;
+        background-color: #cc132a !important;
+        padding: 4px 10px !important;
+        font-size: 1.25rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.3em !important;
+        color: #f7f7f8 !important;
+        z-index: 10 !important;
       }
+
+      .mitushi-product-add-btn {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(247, 247, 248, 0.95);
+        color: #28282B;
+        border: none;
+        cursor: pointer;
+        opacity: 0;
+        transition: all 0.3s;
+        z-index: 10;
+      }
+
+      .mitushi-product-card:hover .mitushi-product-add-btn {
+        opacity: 1;
+      }
+
+      .mitushi-product-add-btn:hover {
+        background-color: #cc132a;
+        color: #f7f7f8;
+      }
+
+      .mitushi-product-cta {
+        position: absolute;
+        inset-x: 0;
+        bottom: 0;
+        background-color: rgba(40, 40, 43, 0.95) !important;
+        padding: 16px !important;
+        backdrop-filter: blur(4px) !important;
+        transform: translateY(100%) !important;
+        transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+
+      .mitushi-product-card:hover .mitushi-product-cta {
+        transform: translateY(0) !important;
+      }
+
+      .mitushi-product-cta-content {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+      }
+
+      .mitushi-product-cta-info {
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      .mitushi-product-cta-label {
+        font-size: 10px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.3em !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+      }
+
+      .mitushi-product-price {
+        font-family: var(--font-display) !important;
+        letter-spacing: 0.02em !important;
+        font-size: 2.4rem !important;
+        font-weight: 700 !important;
+        color: #f7f7f8 !important;
+      }
+
+      .mitushi-product-cart-btn {
+        background-color: #cc132a !important;
+        padding: 10px 16px !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.3em !important;
+        color: #f7f7f8 !important;
+        border: none !important;
+        cursor: pointer !important;
+        transition: all 0.3s !important;
+      }
+
+      .mitushi-product-cart-btn:hover {
+        background-color: #ff1a3a !important;
+      }
+
+      .mitushi-product-info {
+        margin-top: 16px !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: space-between !important;
+        gap: 16px !important;
+        text-align: left !important;
+      }
+
+      .mitushi-product-details {
+        flex: 1 !important;
+      }
+
+      .mitushi-product-name {
+        font-size: 1.8rem !important;
+        font-weight: 500 !important;
+        color: #f7f7f8 !important;
+        margin: 0 !important;
+        font-family: var(--font-display) !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+      }
+
+      .mitushi-product-tag {
+        margin-top: 6px !important;
+        font-size: 1.45rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.2em !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+      }
+
+      .mitushi-product-info-price {
+        font-family: var(--font-display) !important;
+        letter-spacing: 0.02em !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        color: #f7f7f8 !important;
+      }
+
       .mitushi-carousel-title-group > div:first-child {
-        font-size: 1.15rem !important;
+        font-size: 1.25rem !important;
       }
       .mitushi-carousel-title-group > h2 {
-        font-size: 3.6rem !important;
+        font-size: 3.8rem !important;
       }
       @media (min-width: 768px) {
         .mitushi-carousel-title-group > h2 {
-          font-size: 6.2rem !important;
+          font-size: 6.4rem !important;
         }
       }
 
@@ -167,25 +363,33 @@
         border-color: rgba(255, 255, 255, 0.2) !important;
       }
 
-      /* Breadcrumbs */
+      /* Breadcrumbs: custom styled to look identical to Lovable */
       .breadcrumb, .breadcrumb * {
-        color: rgba(255, 255, 255, 0.8) !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.3em !important;
+        font-family: var(--font-sans) !important;
+        font-weight: 500 !important;
       }
       .breadcrumb a {
-        color: rgba(255, 255, 255, 0.8) !important;
-        text-decoration: underline !important;
-        text-underline-offset: 4px;
+        color: rgba(255, 255, 255, 0.5) !important;
+        text-decoration: none !important;
+        transition: color 0.3s !important;
       }
       .breadcrumb a:hover {
         color: #cc132a !important;
       }
       .breadcrumb li + li::before {
-        color: rgba(255, 255, 255, 0.4) !important;
+        color: rgba(255, 255, 255, 0.3) !important;
+        content: "/" !important;
+        padding-inline: 8px !important;
       }
 
       /* Text and labels */
       .color-light, .subtext, .field__label, .filter-form__result-count, .js-product-count {
         color: rgba(255, 255, 255, 0.6) !important;
+        font-size: 1.45rem !important;
       }
 
       /* Selection filter tags / active filters */
@@ -193,6 +397,7 @@
         background-color: #38383B !important;
         color: #f7f7f8 !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        font-size: 1.4rem !important;
       }
       
       .tag:hover, .filter-form--tag a:hover {
@@ -200,15 +405,40 @@
         color: #cc132a !important;
       }
 
-      /* Filter buttons, dropdown fields */
-      .btn-secondary, .btn-secondary--animate {
+      /* Filter buttons, dropdown fields styling */
+      .js-collection-product-drawer-trigger, .btn-secondary, .btn-secondary--animate {
         background-color: transparent !important;
         color: #f7f7f8 !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        font-size: 12.5px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.28em !important;
+        font-family: var(--font-sans) !important;
+        font-weight: 600 !important;
+        min-height: 48px !important;
+        padding: 0 24px !important;
       }
+      
       .btn-secondary:hover, .btn-secondary--animate:hover {
         border-color: #cc132a !important;
         color: #cc132a !important;
+      }
+      
+      #SortByField, .field__text, .field__select select {
+        font-size: 12.5px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.2em !important;
+        font-family: var(--font-sans) !important;
+        font-weight: 500 !important;
+        min-height: 48px !important;
+      }
+      
+      .filter-form__result-count, .js-product-count, .filter-form__result-count p {
+        font-size: 13px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.2em !important;
+        font-family: var(--font-sans) !important;
+        color: rgba(255, 255, 255, 0.6) !important;
       }
       
       /* Card backgrounds and text colors */
