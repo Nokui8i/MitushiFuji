@@ -8,6 +8,62 @@
   endif
 -%}
 <div class="bg-background text-foreground min-h-screen" id="mainCart" data-ui-component="Main Cart Section">
+  <style>
+    /* Cart page specific size adjustments to ensure high readability */
+    #mainCartContainer {
+      font-size: 16px;
+    }
+    #mainCartContainer .text-\[10px\] {
+      font-size: 12px !important;
+    }
+    #mainCartContainer .text-\[11px\] {
+      font-size: 13px !important;
+    }
+    #mainCartContainer .text-\[12px\] {
+      font-size: 14px !important;
+    }
+    #mainCartContainer .text-xs {
+      font-size: 14px !important;
+    }
+    #mainCartContainer .text-sm {
+      font-size: 16px !important;
+    }
+    #mainCartContainer .text-base {
+      font-size: 18px !important;
+    }
+    #mainCartContainer .text-lg {
+      font-size: 20px !important;
+    }
+    #mainCartContainer .text-xl {
+      font-size: 23px !important;
+    }
+    #mainCartContainer .text-2xl {
+      font-size: 28px !important;
+    }
+    #mainCartContainer .text-4xl {
+      font-size: 38px !important;
+    }
+    #mainCartContainer .text-5xl {
+      font-size: 48px !important;
+    }
+    #mainCartContainer .text-6xl {
+      font-size: 58px !important;
+    }
+    
+    /* Make quantity input a bit larger to match */
+    #mainCartContainer .js-quantity-input {
+      font-size: 14px !important;
+      width: 2.5rem !important;
+    }
+    #mainCartContainer .js-quantity-btn svg {
+      width: 14px !important;
+      height: 14px !important;
+    }
+    #mainCartContainer .field_quantity button {
+      width: 2.5rem !important;
+      height: 2.5rem !important;
+    }
+  </style>
   <main class="mx-auto max-w-[1400px] px-6 py-12" id="mainCartContainer">
     <sht-cart-frm class="cart-content section d-block">
       

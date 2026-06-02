@@ -115,7 +115,11 @@
       }
 
       html {
-        font-size: 86% !important;
+        {% if request.page_type == 'cart' %}
+          font-size: 100% !important;
+        {% else %}
+          font-size: 86% !important;
+        {% endif %}
       }
 
       /* Enlarge custom sections text sizes slightly and convert to rem to scale automatically */
