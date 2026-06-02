@@ -102,14 +102,18 @@
   .mitushi-faq > p,
   .mitushi-faq > div > p,
   .mitushi-faq p:first-of-type,
-  .mitushi-faq p.mitushi-faq__subtitle {
+  .mitushi-faq p.mitushi-faq__subtitle,
+  .mitushi-faq__subtitle,
+  .mitushi-faq .mitushi-faq__subtitle,
+  .rte .mitushi-faq__subtitle {
     text-align: center !important;
-    color: rgba(255, 255, 255, 0.75) !important;
+    color: #ffffff !important;
     font-size: 16px !important;
-    margin-bottom: 40px !important;
+    margin: 0 auto 40px auto !important;
     letter-spacing: 0.05em !important;
     display: block !important;
     width: 100% !important;
+    opacity: 1 !important;
   }
 
   /* Remove any nested arrows or buttons inside the summary, leaving only our custom '+' */
@@ -119,7 +123,10 @@
   .mitushi-faq summary .icon,
   .mitushi-faq summary [class*="icon"],
   .mitushi-faq summary [class*="arrow"],
-  .mitushi-faq summary [class*="chevron"] {
+  .mitushi-faq summary [class*="chevron"],
+  .mitushi-faq__chev,
+  .mitushi-faq .mitushi-faq__chev,
+  .rte .mitushi-faq__chev {
     display: none !important;
   }
 </style>
