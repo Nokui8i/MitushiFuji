@@ -365,19 +365,117 @@ Combines a collapsible announcement bar with a sticky header.
       border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    /* Search link */
+    /* Search button */
     .mitushi-search-btn {
       color: rgba(255, 255, 255, 0.8);
-      text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.36);
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 9999px;
-      padding: 0.75rem;
+      padding: 0.625rem;
+      cursor: pointer;
       transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
     }
 
     .mitushi-search-btn:hover {
       border-color: rgba(204, 19, 42, 0.6);
       background: rgba(204, 19, 42, 0.08);
+      color: #cc132a;
+    }
+
+    /* Search overlay */
+    .mitushi-search-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .mitushi-search-overlay:not([hidden]) {
+      pointer-events: auto;
+    }
+
+    .mitushi-search-overlay-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0);
+      transition: background 0.25s ease;
+    }
+
+    .mitushi-search-overlay.is-open .mitushi-search-overlay-backdrop {
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .mitushi-search-overlay-panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(28, 28, 30, 0.97);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      transform: translateY(-100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 1.25rem 2rem;
+    }
+
+    .mitushi-search-overlay.is-open .mitushi-search-overlay-panel {
+      transform: translateY(0);
+    }
+
+    .mitushi-search-form {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .mitushi-search-form-icon {
+      flex-shrink: 0;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .mitushi-search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: #f4f4f4;
+      letter-spacing: 0.02em;
+      padding: 0.5rem 0;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .mitushi-search-input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .mitushi-search-input::-webkit-search-cancel-button {
+      -webkit-appearance: none;
+    }
+
+    .mitushi-search-close-btn {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: transparent;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .mitushi-search-close-btn:hover {
+      background: rgba(204, 19, 42, 0.12);
+      border-color: rgba(204, 19, 42, 0.4);
       color: #cc132a;
     }
   </style>
@@ -501,11 +599,11 @@ Combines a collapsible announcement bar with a sticky header.
           </button>
         {%- endif -%}
 
-        <a href="{{ routes.search_url }}" aria-label="Search" class="mitushi-search-btn rounded-full p-2.5 text-foreground\/80 hover:bg-crimson\/10 hover:text-crimson transition inline-flex items-center justify-center">
+        <button type="button" id="mitushi-search-toggle" aria-label="Open search" class="mitushi-search-btn rounded-full p-2.5 transition inline-flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px; height:18px;" width="18" height="18">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 12.65z" />
           </svg>
-        </a>
+        </button>
 
         <a href="{{ routes.cart_url }}" aria-label="Cart" class="mitushi-cart-button rounded-full p-2.5 text-foreground\/80 hover:bg-crimson\/10 hover:text-crimson transition inline-block">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px; height:18px;" width="18" height="18">
@@ -518,6 +616,34 @@ Combines a collapsible announcement bar with a sticky header.
       </div>
     </div>
   </header>
+
+  {%- comment -%} Search Overlay {%- endcomment -%}
+  <div id="mitushi-search-overlay" class="mitushi-search-overlay" hidden aria-hidden="true">
+    <div class="mitushi-search-overlay-backdrop" id="mitushi-search-backdrop"></div>
+    <div class="mitushi-search-overlay-panel">
+      <form action="{{ routes.search_url }}" method="get" class="mitushi-search-form" role="search">
+        <input type="hidden" name="type" value="product,article,page">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mitushi-search-form-icon" width="20" height="20" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 12.65z" />
+        </svg>
+        <input
+          id="mitushi-search-input"
+          type="search"
+          name="q"
+          placeholder="Search products, drops, collections…"
+          autocomplete="off"
+          class="mitushi-search-input"
+          aria-label="Search"
+        >
+        <button type="button" id="mitushi-search-close" class="mitushi-search-close-btn" aria-label="Close search">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -581,6 +707,45 @@ Combines a collapsible announcement bar with a sticky header.
         e.stopPropagation();
       });
     }
+
+    // Search overlay
+    var searchToggle = document.getElementById('mitushi-search-toggle');
+    var searchOverlay = document.getElementById('mitushi-search-overlay');
+    var searchClose = document.getElementById('mitushi-search-close');
+    var searchBackdrop = document.getElementById('mitushi-search-backdrop');
+    var searchInput = document.getElementById('mitushi-search-input');
+
+    function openSearch() {
+      if (!searchOverlay) return;
+      searchOverlay.removeAttribute('hidden');
+      searchOverlay.setAttribute('aria-hidden', 'false');
+      // Trigger animation on next frame
+      requestAnimationFrame(function () {
+        searchOverlay.classList.add('is-open');
+        if (searchInput) searchInput.focus();
+      });
+    }
+
+    function closeSearch() {
+      if (!searchOverlay) return;
+      searchOverlay.classList.remove('is-open');
+      searchOverlay.setAttribute('aria-hidden', 'true');
+      setTimeout(function () {
+        searchOverlay.setAttribute('hidden', '');
+        if (searchInput) searchInput.value = '';
+      }, 300);
+      if (searchToggle) searchToggle.focus();
+    }
+
+    if (searchToggle) searchToggle.addEventListener('click', openSearch);
+    if (searchClose) searchClose.addEventListener('click', closeSearch);
+    if (searchBackdrop) searchBackdrop.addEventListener('click', closeSearch);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && searchOverlay && !searchOverlay.hidden) {
+        closeSearch();
+      }
+    });
   })();
 </script>
 
