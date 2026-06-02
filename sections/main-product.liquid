@@ -34,6 +34,305 @@
     {{ product.media | where: 'media_type', 'model' | json }}
   </script>
 {%- endif -%}
+<style>
+  /* Base section container dark premium style override */
+  .main-product {
+    background-color: #28282B !important;
+    color: #f4f4f4 !important;
+    font-family: var(--font-sans) !important;
+    padding-top: 48px !important;
+    padding-bottom: 96px !important;
+  }
+
+  .main-product a {
+    color: #f4f4f4 !important;
+    transition: color 0.3s ease;
+  }
+
+  .main-product a:hover {
+    color: #cc132a !important;
+  }
+
+  /* Breadcrumb typography and color */
+  .breadcrumb {
+    background: transparent !important;
+    color: rgba(244, 244, 244, 0.5) !important;
+    text-transform: uppercase !important;
+    font-size: 10px !important;
+    letter-spacing: 0.3em !important;
+    margin-bottom: 32px !important;
+    padding: 0 !important;
+  }
+
+  .breadcrumb a {
+    color: rgba(244, 244, 244, 0.5) !important;
+  }
+
+  .breadcrumb a:hover {
+    color: #cc132a !important;
+  }
+
+  /* Product Title styling */
+  .main-product .product__title h1 {
+    font-family: var(--font-display) !important;
+    font-size: 48px !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase !important;
+    color: #f4f4f4 !important;
+    line-height: 1.1 !important;
+    margin-bottom: 16px !important;
+  }
+
+  @media (min-width: 768px) {
+    .main-product .product__title h1 {
+      font-size: 64px !important;
+    }
+  }
+
+  /* Subtitle or category slug styling (Japanese / category) */
+  .main-product .product__vendor {
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5em !important;
+    color: #cc132a !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Product Price styling */
+  .main-product .product__prices {
+    background: transparent !important;
+    padding: 0 !important;
+    margin-bottom: 24px !important;
+  }
+
+  .main-product .product-price {
+    font-family: var(--font-display) !important;
+    font-size: 32px !important;
+    color: #cc132a !important;
+  }
+
+  .main-product .product-price s {
+    font-size: 20px !important;
+    color: rgba(244, 244, 244, 0.4) !important;
+    margin-left: 8px !important;
+  }
+
+  .main-product .price__sale-badge-wrapper {
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+
+  .main-product .product__badge {
+    background-color: #cc132a !important;
+    border-radius: 0 !important;
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3em !important;
+    color: #f4f4f4 !important;
+    border: none !important;
+  }
+
+  .main-product .product__badge .sale-badge {
+    background: transparent !important;
+    color: #f4f4f4 !important;
+    padding: 0 !important;
+  }
+
+  .main-product .product__badge .sale-badge::before {
+    display: none !important;
+  }
+
+  /* Description and RTE content */
+  .main-product .product__description {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: rgba(244, 244, 244, 0.7) !important;
+    max-width: 480px !important;
+    margin-bottom: 32px !important;
+  }
+
+  /* Variant Picker options (S, M, L, XL, 2XL buttons) */
+  .main-product .product-option__name {
+    font-family: var(--font-sans) !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3em !important;
+    color: rgba(244, 244, 244, 0.7) !important;
+    margin-bottom: 12px !important;
+  }
+
+  .main-product .product-option ul {
+    gap: 8px !important;
+  }
+
+  .main-product .product-option__value {
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 0 !important;
+    transition: all 0.3s ease !important;
+    background: transparent !important;
+  }
+
+  .main-product .product-option__value:hover {
+    border-color: #cc132a !important;
+  }
+
+  .main-product .product-option__label {
+    background: transparent !important;
+    color: #f4f4f4 !important;
+    font-family: var(--font-sans) !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    padding: 10px 16px !important;
+    border-radius: 0 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .main-product .input--variant:checked + .product-option__label {
+    background-color: #cc132a !important;
+    color: #f4f4f4 !important;
+    box-shadow: none !important;
+  }
+
+  /* Quantity Selector */
+  .main-product .field_quantity {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 0 !important;
+    height: 48px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+
+  .main-product .field_quantity button {
+    background: transparent !important;
+    color: #f4f4f4 !important;
+    width: 44px !important;
+    height: 46px !important;
+    border: none !important;
+    display: grid !important;
+    place-items: center !important;
+    cursor: pointer !important;
+    transition: color 0.3s;
+  }
+
+  .main-product .field_quantity button:hover {
+    color: #cc132a !important;
+  }
+
+  .main-product .field_quantity input {
+    background: transparent !important;
+    color: #f4f4f4 !important;
+    border: none !important;
+    width: 40px !important;
+    height: 46px !important;
+    text-align: center !important;
+    font-family: var(--font-sans) !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    outline: none !important;
+  }
+
+  /* Add to Cart CTA Button */
+  .main-product .product-btn-atc {
+    background-color: #cc132a !important;
+    border: 1px solid #cc132a !important;
+    color: #f4f4f4 !important;
+    font-family: var(--font-sans) !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3em !important;
+    border-radius: 0 !important;
+    height: 48px !important;
+    padding: 0 32px !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .main-product .product-btn-atc:hover:not([disabled]) {
+    background-color: #ff1a3a !important;
+    border-color: #ff1a3a !important;
+    box-shadow: 0 0 20px rgba(204, 19, 42, 0.4) !important;
+  }
+
+  .main-product .product-btn-atc[disabled] {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: rgba(244, 244, 244, 0.3) !important;
+    cursor: not-allowed !important;
+  }
+
+  /* Free Shipping notification info tag */
+  .main-product .product__info-wrapper .gap-2 {
+    color: rgba(244, 244, 244, 0.6) !important;
+    font-size: 12px !important;
+    margin-top: 16px !important;
+  }
+
+  /* Collapsible Accordions (tabs / description) */
+  .main-product .accordion__item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 0 !important;
+  }
+
+  .main-product .accordion__header button {
+    padding: 20px 0 !important;
+    color: #f4f4f4 !important;
+  }
+
+  .main-product .accordion__header button span.h5 {
+    font-family: var(--font-sans) !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3em !important;
+    color: #f4f4f4 !important;
+  }
+
+  .main-product .accordion__header button:hover span.h5 {
+    color: #cc132a !important;
+  }
+
+  .main-product .accordion-content {
+    color: rgba(244, 244, 244, 0.65) !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    padding-bottom: 20px !important;
+  }
+
+  /* Slideshow and Gallery styling */
+  .main-product .product-slideshow {
+    border: none !important;
+    background: transparent !important;
+  }
+
+  .main-product .product-slideshow__thumbs {
+    background: transparent !important;
+  }
+
+  .main-product .product-slideshow__thumb {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .main-product .product-slideshow__thumb.is-active-item,
+  .main-product .product-slideshow__thumb:hover {
+    border-color: #cc132a !important;
+  }
+
+  .main-product .product-gallery-carousel {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+  }
+</style>
+
 <div class="main-product{{ settings.enable_breadcrumb | default: '' | replace: 'true', ' has-breadcrumb' }} has-animation section color-{{- section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }}" id="{{ section.id }}" data-ui-component="Main Product Section">
   <div class="product-details c-gap-md-1 top-xs d-flex fd-row-md fd-column gap-36 p-relative zi-1">
     <div class="product__media-wrapper product__media--{{ section.settings.media_layout }} product__media--{{ section.settings.media_layout | replace: '-left' ,'' | replace: '-right' ,'' | replace: '-below' ,'' | replace: '-1-column', '' | replace: '-2-columns', '' | replace: '-collage', '' }} js-product-media-wrapper {{ section.settings.enable_sticky_content | default: '' | replace: 'true', 'product-detail__item--sticky' }} {{ product.media.size |  replace: 0, 'd-none d-block-md' }} product-detail__item {{ section.settings.width_on_large_screen }} w-100 o-hidden" role="region" data-section="{{ section.id }}" aria-label="{{- 'accessibility.view_gallery' | t -}}">
