@@ -433,6 +433,88 @@
         }
       });
     });
+
+    // 5. AJAX Add to Cart
+    const productForm = document.getElementById('product-form');
+    if (productForm) {
+      productForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const atcBtn = productForm.querySelector('.product-atc-submit-btn');
+        const atcText = productForm.querySelector('.atc-btn-text');
+        
+        if (atcBtn && atcBtn.hasAttribute('disabled')) return;
+        
+        // Add loading state
+        if (atcBtn) {
+          atcBtn.setAttribute('disabled', 'disabled');
+          atcBtn.style.opacity = '0.7';
+        }
+        const originalText = atcText ? atcText.innerHTML : 'Add to cart';
+        if (atcText) {
+          atcText.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style="animation: spin 1s linear infinite; display: inline-block; width: 1rem; height: 1rem; margin-right: 0.5rem; vertical-align: middle;">
+              <style>
+                @keyframes spin {
+                  from { transform: rotate(0deg); }
+                  to { transform: rotate(360deg); }
+                }
+              </style>
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25;"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style="opacity: 0.75;"></path>
+            </svg>
+            Adding...
+          `;
+        }
+        
+        const cartNotification = document.getElementById('cartNotificationPanel');
+        const formData = new FormData(productForm);
+        
+        // Include sections to render for the cart notification popup
+        if (cartNotification && typeof cartNotification.getSectionsToRender === 'function') {
+          const sectionsToRender = cartNotification.getSectionsToRender() || [];
+          sectionsToRender.forEach(sect => {
+            formData.append('sections', sect.section || sect.id);
+          });
+          formData.append('sections_url', window.location.pathname);
+        }
+        
+        fetch(window.routes?.cart_add_url || '/cart/add.js', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 422 || data.status === 'bad_request' || data.description) {
+            alert(data.description || data.message || 'Error adding to cart');
+          } else {
+            // Successfully added!
+            if (cartNotification && typeof cartNotification.renderContents === 'function') {
+              cartNotification.renderContents(data, true, atcBtn);
+            }
+            
+            // Trigger header cart status animation & update if necessary
+            const headerCartStatus = document.getElementById('headerCartStatus');
+            if (headerCartStatus) {
+              headerCartStatus.classList.add('header-cart-status--animate');
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error adding to cart:', error);
+        })
+        .finally(() => {
+          // Restore button state
+          if (atcBtn) {
+            atcBtn.removeAttribute('disabled');
+            atcBtn.style.opacity = '1';
+          }
+          if (atcText) {
+            atcText.innerHTML = originalText;
+          }
+        });
+      });
+    }
   });
 </script>
 {%- liquid
