@@ -153,9 +153,12 @@
       }
 
       /* Text and labels sizing */
-      .color-light, .subtext, .field__label, .filter-form__result-count, .js-product-count, .filter-form__item label {
+      .color-light, .subtext, .field__label, .filter-form__item label {
         color: rgba(255, 255, 255, 0.6) !important;
         font-size: 15px !important;
+      }
+      .filter-form__result-count, .js-product-count {
+        display: none !important;
       }
 
       /* Selection filter tags / active filters */
@@ -209,7 +212,7 @@
         max-width: 100% !important;
         flex: 1 1 100% !important;
         display: flex !important;
-        justify-content: space-between !important;
+        justify-content: flex-end !important;
         align-items: center !important;
       }
       
@@ -242,20 +245,22 @@
         height: auto !important;
         align-self: flex-start !important;
         width: 100% !important;
+        max-width: 320px !important;
+        margin: 0 auto !important;
       }
       
       /* Target price text sizes on cards */
       .product-card .price, .product-card .price-item,
       .card-product .price, .card-product .price-item {
         color: #f7f7f8 !important;
-        font-size: 16px !important;
-        font-weight: 600 !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
       }
 
       /* Target heading sizes on cards */
       .product-card .card__heading, .product-card .card__heading a,
       .card-product .card__heading, .card-product .card__heading a {
-        font-size: 18px !important;
+        font-size: 22px !important;
         font-weight: 700 !important;
         text-transform: uppercase !important;
         color: #f7f7f8 !important;
