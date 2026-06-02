@@ -98,7 +98,7 @@
       }
 
       /* Global Dark Theme Overrides */
-      :root {
+      :root, [class*="color-"], .color-scheme-1, .color-scheme-2, .color-accent-1, .color-accent-2 {
         --color-page-bg: #28282B !important;
         --color-page-bg-rgb: 40, 40, 43 !important;
         --gradient-background: #28282B !important;
@@ -108,7 +108,7 @@
         --color-divider: rgba(255, 255, 255, 0.12) !important;
       }
 
-      body, html, #page {
+      body, html, #page, .section, .section-alone, .main-collection-product, .breadcrumb-wrapper, .ctnr {
         background-color: #28282B !important;
         background: #28282B !important;
         color: #f7f7f8 !important;
