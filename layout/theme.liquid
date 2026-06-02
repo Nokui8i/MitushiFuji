@@ -289,6 +289,34 @@
         justify-content: center !important;
         pointer-events: none !important;
       }
+      /* ── Product card: price closer + thin frame ── */
+      .product-card,
+      .card--product {
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
+        transition: border-color 0.2s ease !important;
+      }
+
+      .product-card:hover,
+      .card--product:hover {
+        border-color: rgba(255, 255, 255, 0.25) !important;
+      }
+
+      /* Bring price closer to the product name */
+      .card__content .price,
+      .card__content--inner .price,
+      .product-card .price {
+        margin-top: 2px !important;
+        margin-bottom: 4px !important;
+      }
+
+      .card__content,
+      .card__content--inner {
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        row-gap: 2px !important;
+      }
     </style>
     {% render 'style-variables' %}
     {{ content_for_header }}
