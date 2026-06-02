@@ -2305,4 +2305,156 @@ shopify-cookie-banner,
     transform: translateY(0);
   }
 }
+/* ==========================================
+   FAQ PAGE DESIGN Refinements (MITUSHI FUJI)
+   ========================================== */
+
+/* Target the wrapper and any accordion lists on pages */
+.mitushi-faq, 
+.rte details {
+  max-width: 900px !important;
+  margin: 40px auto !important;
+  padding: 0 20px !important;
+}
+
+/* Accordion wrapper card styling */
+.mitushi-faq details,
+.rte details {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 8px !important;
+  margin-bottom: 16px !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  overflow: hidden !important;
+  display: block !important;
+}
+
+.mitushi-faq details:hover,
+.rte details:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(204, 19, 42, 0.3) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+.mitushi-faq details[open],
+.rte details[open] {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: var(--crimson) !important;
+  box-shadow: 0 0 15px rgba(204, 19, 42, 0.15) !important;
+}
+
+/* Summary Trigger styling */
+.mitushi-faq summary,
+.rte summary {
+  padding: 20px 24px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  user-select: none !important;
+  list-style: none !important;
+  transition: color 0.3s ease !important;
+}
+
+/* Hide default marker for webkit and standard browsers */
+.mitushi-faq summary::-webkit-details-marker,
+.rte summary::-webkit-details-marker {
+  display: none !important;
+}
+
+.mitushi-faq details > summary::marker,
+.rte details > summary::marker {
+  display: none !important;
+  content: "" !important;
+}
+
+.mitushi-faq summary:hover,
+.rte summary:hover {
+  color: var(--crimson) !important;
+}
+
+/* Custom modern '+' / '−' expand indicators */
+.mitushi-faq summary::after,
+.rte summary::after {
+  content: '+' !important;
+  font-family: var(--font-sans) !important;
+  font-size: 20px !important;
+  font-weight: 300 !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: transform 0.3s ease, color 0.3s ease !important;
+  width: 32px !important;
+  height: 32px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.mitushi-faq details[open] summary::after,
+.rte details[open] summary::after {
+  content: '−' !important;
+  transform: rotate(180deg) !important;
+  color: var(--crimson) !important;
+  border-color: var(--crimson) !important;
+}
+
+/* Style answer content */
+.mitushi-faq .mitushi-faq__a,
+.mitushi-faq details > div,
+.mitushi-faq details > p,
+.rte details > div,
+.rte details > p {
+  padding: 0 24px 24px 24px !important;
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-family: var(--font-sans) !important;
+  margin: 0 !important;
+  text-align: left !important;
+}
+
+/* HIDE all nested arrow chevrons/circles inside the summary */
+.mitushi-faq summary button,
+.mitushi-faq summary svg,
+.mitushi-faq summary i,
+.mitushi-faq summary .icon,
+.mitushi-faq summary .accordion__toggle,
+.mitushi-faq summary [class*="icon"],
+.mitushi-faq summary [class*="arrow"],
+.mitushi-faq summary [class*="chevron"],
+.rte summary button,
+.rte summary svg,
+.rte summary i,
+.rte summary .icon,
+.rte summary .accordion__toggle,
+.rte summary [class*="icon"],
+.rte summary [class*="arrow"],
+.rte summary [class*="chevron"],
+summary .accordion__toggle {
+  display: none !important;
+}
+
+/* Centered high-contrast Subtitle paragraph */
+.mitushi-faq > p,
+.mitushi-faq > div > p,
+.mitushi-faq p:first-of-type,
+.mitushi-faq p.mitushi-faq__subtitle,
+.mitushi-faq p.mitushi-faq__subtitle *,
+.rte p.mitushi-faq__subtitle,
+.rte p.mitushi-faq__subtitle * {
+  text-align: center !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 16px !important;
+  margin-bottom: 40px !important;
+  letter-spacing: 0.05em !important;
+  display: block !important;
+  width: 100% !important;
+}
 </style>
