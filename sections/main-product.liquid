@@ -11,1115 +11,431 @@
   assign size_guide_dialog_id = ''
   assign popup_content_block = nil
   assign popup_content_dialog_id = ''
-  assign pg_mobile = 'd-none-important'
-  if section.settings.enable_pagination_mobile
-    assign pg_mobile = 'd-flex'
-  endif
-  assign thumb_index = 0
-  assign ratio_thubnails = section.settings.thumbnails_ratio
-  assign object_fit = 'of-cover'
-  if ratio_thubnails contains 'fit'
-    assign ratio_thubnails = ratio_thubnails | replace: 'fit', ''
-    assign object_fit = 'of-contain'
-  endif
-  if section.settings.thumbnails_ratio == 'adapt'
-    assign object_fit = 'of-contain'
-  endif
-  if settings.enable_content_max_width
-    assign max_width_content = 'max-width-content'
-  endif
-%}
-{%- if first_3d_model -%}
-  <script type="application/json" id="ProductJSON-{{ product.id }}">
-    {{ product.media | where: 'media_type', 'model' | json }}
-  </script>
-{%- endif -%}
-<style>
-  /* Base section container dark premium style override */
-  .main-product {
-    background-color: #28282B !important;
-    color: #f4f4f4 !important;
-    font-family: var(--font-sans) !important;
-    padding-top: 48px !important;
-    padding-bottom: 96px !important;
-  }
+  
+  for block in section.blocks
+    if block.type == 'size_guide'
+      assign size_guide_block = block
+      assign size_guide_dialog_id = 'productSizeGuide-' | append: block.id | append: '-' | append: section.id
+    endif
+    if block.type == 'popup'
+      assign popup_content_block = block
+      assign popup_content_dialog_id = 'productPopup-' | append: block.id | append: '-' | append: section.id
+    endif
+  endfor
+-%}
+<div class="bg-background text-foreground min-h-screen py-10" id="mainProduct" data-ui-component="Main Product Section">
+  <main class="mx-auto max-w-[1400px] px-6">
+    <!-- Breadcrumb -->
+    <nav class="mb-8 flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-foreground/50">
+      <a href="/" class="hover:text-crimson">Home</a>
+      <span>/</span>
+      <span>{{ product.collections.first.title | default: "Streetwear" }}</span>
+      <span>/</span>
+      <span class="text-foreground">{{ product.title }}</span>
+    </nav>
 
-  .main-product a {
-    color: #f4f4f4 !important;
-    transition: color 0.3s ease;
-  }
-
-  .main-product a:hover {
-    color: #cc132a !important;
-  }
-
-  /* Breadcrumb typography and color */
-  .breadcrumb {
-    background: transparent !important;
-    color: rgba(244, 244, 244, 0.5) !important;
-    text-transform: uppercase !important;
-    font-size: 10px !important;
-    letter-spacing: 0.3em !important;
-    margin-bottom: 32px !important;
-    padding: 0 !important;
-  }
-
-  .breadcrumb a {
-    color: rgba(244, 244, 244, 0.5) !important;
-  }
-
-  .breadcrumb a:hover {
-    color: #cc132a !important;
-  }
-
-  /* Product Title styling */
-  .main-product .product__title h1 {
-    font-family: var(--font-display) !important;
-    font-size: 48px !important;
-    letter-spacing: 0.02em !important;
-    text-transform: uppercase !important;
-    color: #f4f4f4 !important;
-    line-height: 1.1 !important;
-    margin-bottom: 16px !important;
-  }
-
-  @media (min-width: 768px) {
-    .main-product .product__title h1 {
-      font-size: 64px !important;
-    }
-  }
-
-  /* Subtitle or category slug styling (Japanese / category) */
-  .main-product .product__vendor {
-    font-size: 10px !important;
-    font-weight: 500 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5em !important;
-    color: #cc132a !important;
-    margin-bottom: 8px !important;
-  }
-
-  /* Product Price styling */
-  .main-product .product__prices {
-    background: transparent !important;
-    padding: 0 !important;
-    margin-bottom: 24px !important;
-  }
-
-  .main-product .product-price {
-    font-family: var(--font-display) !important;
-    font-size: 32px !important;
-    color: #cc132a !important;
-  }
-
-  .main-product .product-price s {
-    font-size: 20px !important;
-    color: rgba(244, 244, 244, 0.4) !important;
-    margin-left: 8px !important;
-  }
-
-  .main-product .price__sale-badge-wrapper {
-    display: inline-block !important;
-    vertical-align: middle !important;
-  }
-
-  .main-product .product__badge {
-    background-color: #cc132a !important;
-    border-radius: 0 !important;
-    padding: 4px 8px !important;
-    font-size: 10px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.3em !important;
-    color: #f4f4f4 !important;
-    border: none !important;
-  }
-
-  .main-product .product__badge .sale-badge {
-    background: transparent !important;
-    color: #f4f4f4 !important;
-    padding: 0 !important;
-  }
-
-  .main-product .product__badge .sale-badge::before {
-    display: none !important;
-  }
-
-  /* Description and RTE content */
-  .main-product .product__description {
-    font-size: 14px !important;
-    line-height: 1.6 !important;
-    color: rgba(244, 244, 244, 0.7) !important;
-    max-width: 480px !important;
-    margin-bottom: 32px !important;
-  }
-
-  /* Variant Picker options (S, M, L, XL, 2XL buttons) */
-  .main-product .product-option__name {
-    font-family: var(--font-sans) !important;
-    font-size: 10px !important;
-    font-weight: 500 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.3em !important;
-    color: rgba(244, 244, 244, 0.7) !important;
-    margin-bottom: 12px !important;
-  }
-
-  .main-product .product-option ul {
-    gap: 8px !important;
-  }
-
-  .main-product .product-option__value {
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    border-radius: 0 !important;
-    transition: all 0.3s ease !important;
-    background: transparent !important;
-  }
-
-  .main-product .product-option__value:hover {
-    border-color: #cc132a !important;
-  }
-
-  .main-product .product-option__label {
-    background: transparent !important;
-    color: #f4f4f4 !important;
-    font-family: var(--font-sans) !important;
-    font-size: 12px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.05em !important;
-    padding: 10px 16px !important;
-    border-radius: 0 !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-  }
-
-  .main-product .input--variant:checked + .product-option__label {
-    background-color: #cc132a !important;
-    color: #f4f4f4 !important;
-    box-shadow: none !important;
-  }
-
-  /* Quantity Selector */
-  .main-product .field_quantity {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    border-radius: 0 !important;
-    height: 48px !important;
-    padding: 0 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-  }
-
-  .main-product .field_quantity button {
-    background: transparent !important;
-    color: #f4f4f4 !important;
-    width: 44px !important;
-    height: 46px !important;
-    border: none !important;
-    display: grid !important;
-    place-items: center !important;
-    cursor: pointer !important;
-    transition: color 0.3s;
-  }
-
-  .main-product .field_quantity button:hover {
-    color: #cc132a !important;
-  }
-
-  .main-product .field_quantity input {
-    background: transparent !important;
-    color: #f4f4f4 !important;
-    border: none !important;
-    width: 40px !important;
-    height: 46px !important;
-    text-align: center !important;
-    font-family: var(--font-sans) !important;
-    font-weight: 600 !important;
-    font-size: 14px !important;
-    outline: none !important;
-  }
-
-  /* Add to Cart CTA Button */
-  .main-product .product-btn-atc {
-    background-color: #cc132a !important;
-    border: 1px solid #cc132a !important;
-    color: #f4f4f4 !important;
-    font-family: var(--font-sans) !important;
-    font-size: 12px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.3em !important;
-    border-radius: 0 !important;
-    height: 48px !important;
-    padding: 0 32px !important;
-    transition: all 0.3s ease !important;
-  }
-
-  .main-product .product-btn-atc:hover:not([disabled]) {
-    background-color: #ff1a3a !important;
-    border-color: #ff1a3a !important;
-    box-shadow: 0 0 20px rgba(204, 19, 42, 0.4) !important;
-  }
-
-  .main-product .product-btn-atc[disabled] {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
-    color: rgba(244, 244, 244, 0.3) !important;
-    cursor: not-allowed !important;
-  }
-
-  /* Free Shipping notification info tag */
-  .main-product .product__info-wrapper .gap-2 {
-    color: rgba(244, 244, 244, 0.6) !important;
-    font-size: 12px !important;
-    margin-top: 16px !important;
-  }
-
-  /* Collapsible Accordions (tabs / description) */
-  .main-product .accordion__item {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    padding: 0 !important;
-  }
-
-  .main-product .accordion__header button {
-    padding: 20px 0 !important;
-    color: #f4f4f4 !important;
-  }
-
-  .main-product .accordion__header button span.h5 {
-    font-family: var(--font-sans) !important;
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.3em !important;
-    color: #f4f4f4 !important;
-  }
-
-  .main-product .accordion__header button:hover span.h5 {
-    color: #cc132a !important;
-  }
-
-  .main-product .accordion-content {
-    color: rgba(244, 244, 244, 0.65) !important;
-    font-size: 14px !important;
-    line-height: 1.6 !important;
-    padding-bottom: 20px !important;
-  }
-
-  /* Slideshow and Gallery styling */
-  .main-product .product-slideshow {
-    border: none !important;
-    background: transparent !important;
-  }
-
-  .main-product .product-slideshow__thumbs {
-    background: transparent !important;
-  }
-
-  .main-product .product-slideshow__thumb {
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    background: rgba(255, 255, 255, 0.02) !important;
-    transition: all 0.3s ease !important;
-  }
-
-  .main-product .product-slideshow__thumb.is-active-item,
-  .main-product .product-slideshow__thumb:hover {
-    border-color: #cc132a !important;
-  }
-
-  .main-product .product-gallery-carousel {
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    background: rgba(255, 255, 255, 0.02) !important;
-  }
-</style>
-
-<div class="main-product{{ settings.enable_breadcrumb | default: '' | replace: 'true', ' has-breadcrumb' }} has-animation section color-{{- section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }}" id="{{ section.id }}" data-ui-component="Main Product Section">
-  <div class="product-details c-gap-md-1 top-xs d-flex fd-row-md fd-column gap-36 p-relative zi-1">
-    <div class="product__media-wrapper product__media--{{ section.settings.media_layout }} product__media--{{ section.settings.media_layout | replace: '-left' ,'' | replace: '-right' ,'' | replace: '-below' ,'' | replace: '-1-column', '' | replace: '-2-columns', '' | replace: '-collage', '' }} js-product-media-wrapper {{ section.settings.enable_sticky_content | default: '' | replace: 'true', 'product-detail__item--sticky' }} {{ product.media.size |  replace: 0, 'd-none d-block-md' }} product-detail__item {{ section.settings.width_on_large_screen }} w-100 o-hidden" role="region" data-section="{{ section.id }}" aria-label="{{- 'accessibility.view_gallery' | t -}}">
-      <a class="visually-hidden skip-to-content btn btn-primary d-block ta-center" href="#productInfo-{{ section.id }}">{{ 'accessibility.skip_to_product_information' | t }}</a>
-      {%- if section.settings.media_layout contains 'slideshow' -%}
-        <div class="product__media-wrapper--single-with-thumbnails p-sticky top-0">
-          <sht-prd-slideshow role="status" class="product-slideshow d-block p-relative" data-hide-variant-image="true" data-section="{{ section.id }}">
-            <div class="product-slideshow__thumbnail p-absolute middle-y zi-2 d-none d-block-md no-js-hidden">
-              <sht-vert-carousel class="carousel--vertical" data-section="{{ section.id }}">
-                <div class="product-slideshow__thumbs h-100 top-xs js-carousel-items vertical-carousel vertical-carousel__container d-flex fd-column p-zero m-zero oy-auto p-relative disable-scrollbars fw-nowrap scrollable scrollable-y scrl-bhvr-auto" role="list" aria-label="{{ 'accessibility.slider' | t }}">
-                  {%- liquid
-                    if product.selected_or_first_available_variant.featured_media != null
-                      assign thumb_index = thumb_index | plus: 1
-                      assign featured_media = product.selected_or_first_available_variant.featured_media
-                      if section.settings.thumbnails_ratio == 'adapt'
-                        assign thumb_ratio = featured_media.aspect_ratio
-                      else
-                        assign thumb_ratio = ratio_thubnails
-                      endif
-                      render 'product-slideshow-thumb', section: section, media: featured_media, product: product, place_holder: place_holder, thumb_index: thumb_index, ratio: thumb_ratio, object_fit: object_fit, media_background: section.settings.media_background
-                    endif
-                    for media in product.media
-                      assign thumb_index = thumb_index | plus: 1
-                      unless media.id == product.selected_or_first_available_variant.featured_media.id
-                        if section.settings.thumbnails_ratio == 'adapt'
-                          assign thumb_ratio = media.aspect_ratio
-                        else
-                          assign thumb_ratio = ratio_thubnails
-                        endif
-                        render 'product-slideshow-thumb', section: section, media: media, product: product, place_holder: place_holder, thumb_index: thumb_index, ratio: thumb_ratio, object_fit: object_fit, media_background: section.settings.media_background
-                      endunless
-                    endfor
-                  -%}
-                </div>
-                <div class="product-slideshow__pagination carousel-controls--outside carousel-pagination d-none center-xs no-js-hidden js-carousel-pagination">
-                  <div class="p-absolute carousel-controls--outside-btn">
-                    <button type="button" data-step="1" class="btn btn-primary--animate rtl-flip-x btn-small btn-icon btn-prev p-absolute js-carousel-prev-btn" aria-label="{{ 'accessibility.previous_slide' | t }}" name="previous">{% render 'icon-chevron-left' %}</button>
-                  </div>
-                  <div class="p-absolute carousel-controls--outside-btn carousel-controls--outside-btn-next">
-                    <button type="button" data-step="1" class="btn btn-primary--animate rtl-flip-x btn-small btn-icon btn-next p-absolute js-carousel-next-btn" aria-label="{{ 'accessibility.next_slide' | t }}" name="next">{% render 'icon-chevron-right' %}</button>
-                  </div>
-                </div>
-              </sht-vert-carousel>
-            </div>
-            <div class="product-slideshow__slider flex-1 p-relative">
-              {% render 'product-gallery-carousel', product: product, section: section, place_holder: place_holder, rand: section_id, hide_variant_image: true, is_first_image: is_first_image, open_zoom_modal: section.settings.enable_media_zoom, pg_mobile: pg_mobile, ratio: section.settings.media_ratio, force_eager: true, media_background: section.settings.media_background %}
-              {% render 'product-thumbnail-horizoltal', product: product, section: section, enable_thumbnail_mobile: section.settings.enable_thumbnail_mobile, ratio_thubnails: ratio_thubnails, object_fit: object_fit, media_background: section.settings.media_background %}
-            </div>
-          </sht-prd-slideshow>
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
+      <!-- Gallery -->
+      <div class="flex flex-col-reverse gap-4 lg:flex-row">
+        <!-- Thumbnails -->
+        <div class="flex gap-3 lg:flex-col overflow-x-auto lg:overflow-visible hide-scrollbar">
+          {%- for media in product.media -%}
+            <button
+              type="button"
+              data-index="{{ forloop.index0 }}"
+              class="thumb-btn relative aspect-square w-20 flex-shrink-0 overflow-hidden border transition-all {% if forloop.first %}border-crimson{% else %}border-border/60 hover:border-foreground/40{% endif %} bg-card cursor-pointer"
+            >
+              <img src="{{ media.src | image_url: width: 160 }}" alt="{{ media.alt | escape }}" class="h-full w-full object-cover" />
+            </button>
+          {%- endfor -%}
         </div>
-      {%- else -%}
-        <div class="product__media-wrapper--gallery-grid" id="productMediaGalleryGrid-{{ section.id }}">
-          <sht-prd-slideshow role="status" class="product-slideshow" data-hide-variant-image="false" data-section="{{ section.id }}">
-            <div class="product-slideshow__slider p-relative">
-              {% render 'product-gallery-carousel', product: product, section: section, place_holder: place_holder, rand: section_id, hide_variant_image: false, is_first_image: is_first_image, open_zoom_modal: section.settings.enable_media_zoom, pg_mobile: pg_mobile, ratio: section.settings.media_ratio, force_eager: true, media_background: section.settings.media_background %}
-              {% render 'product-thumbnail-horizoltal', product: product, section: section, enable_thumbnail_mobile: section.settings.enable_thumbnail_mobile, ratio_thubnails: ratio_thubnails, object_fit: object_fit, media_background: section.settings.media_background %}
-            </div>
-          </sht-prd-slideshow>
+        
+        <!-- Main Image -->
+        <div class="relative flex-1">
+          <div class="relative aspect-[4/5] overflow-hidden bg-card">
+            {%- for media in product.media -%}
+              <img
+                src="{{ media.src | image_url: width: 1000 }}"
+                alt="{{ media.alt | escape }}"
+                data-index="{{ forloop.index0 }}"
+                class="main-gallery-img absolute inset-0 h-full w-full object-cover transition-opacity duration-500 {% if forloop.first %}opacity-100{% else %}opacity-0{% endif %}"
+              />
+            {%- endfor -%}
+            
+            {%- assign has_drop_tag = false -%}
+            {%- for tag in product.tags -%}
+              {%- if tag contains 'Drop' or tag contains 'drop' -%}
+                <span class="absolute left-4 top-4 bg-crimson px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.3em] text-white">
+                  {{ tag | escape }}
+                </span>
+                {%- assign has_drop_tag = true -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- unless has_drop_tag -%}
+              <span class="absolute left-4 top-4 bg-crimson px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.3em] text-white">
+                Drop 03
+              </span>
+            {%- endunless -%}
+          </div>
         </div>
-      {%- endif -%}
-    </div>
-    <div class="product__info-wrapper product-detail__item w-100 {{ max_width_content }} {{ section.settings.enable_sticky_content | default: '' | replace: 'true', 'product-detail__item--sticky' }}">
-      <div id="productInfo-{{ section.id }}" class="main-product-info-container product__info-container d-flex fd-column" role="region" aria-label="{{- 'accessibility.view_product_info' | t -}}">
-        {%- for block in section.blocks -%}
-          {%- case block.type -%}
-            {%- when '@app' -%}
-            <div class="product__info ord-{{ forloop.index }}">
-              {% render block %}
-            </div>
-            {%- when 'product_variation' -%}
-              {%- render 'product-variation', product: product, section: section, option_name: block.settings.option_name, sign: ':' -%}
-            {%- when 'title' -%}
-            <div class="product__info ord-{{ forloop.index }} product__info--spacing product__title" {{ block.shopify_attributes }}>
-              <div class="d-flex middle-xs between-xs">
-                <h1 class="h2 m-zero mr-8 wb-break-word">{{ product.title | escape }}</h1>
-                {%- if block.settings.enable_share -%}
-                  <sht-share-prd-btn class="zi-2 p-relative" data-product-url="{{ product.selected_variant.url | default: product.url | prepend: request.origin }}">
-                    <div class="js-web-share-api-container" hidden><button class="btn btn-icon btn-small btn-secondary--animate js-web-share-api-btn" aria-label="{{ 'accessibility.social_share' | t }}">{% render 'icon-share' %}</button></div>
-                    <sht-dtl-exposal>
-                      <details class="js-none-web-share-api-container p-relative zi-2" id="productShareDetails-{{ block.id }}-{{ section.id }}">
-                        <summary aria-controls="productShare-{{ block.id }}-{{ section.id }}" aria-expanded="false" class="btn btn-small ls-none btn-icon btn btn-secondary--animate js-none-web-share-api-btn">
-                          {% render 'icon-share', pros: 'aria-hidden="true" focusable="false"' %}
-                        </summary>
-                        <div id="productShare-{{ block.id }}-{{ section.id }}" class="p-absolute social-share-list">{% render 'product-social-share', product: product %}</div>
-                      </details>
-                    </sht-dtl-exposal>
-                  </sht-share-prd-btn>
-                {%- endif -%}
-              </div>
-            </div>
-            {%- when 'social_share'-%}
-            <div id="productShare-{{ block.id }}-{{ section.id }}" class="product__info ord-{{ forloop.index }} product__info--spacing d-flex middle-xs gap-12">
-              <h3 class="h6 m-zero">{{'accessibility.share' | t}}</h3>
-              {% render 'product-social-share-horizontal',
-                product: product, 
-                enable_facebook: block.settings.enable_facebook,
-                enable_x: block.settings.enable_x,
-                enable_pinterest: block.settings.enable_pinterest
-                enable_email: block.settings.enable_email
-              %}
-              </div>
-            {%- when 'vendor' -%}
-            <div class="product__info ord-{{ forloop.index }} product__info--spacing product__vendor wb-break-word" {{ block.shopify_attributes }}>
-              <div class="color-light subtext"><span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span> <span>{{ product.vendor }}</span></div>
-            </div>
-            {%- when 'price' -%}
-              {% liquid
-                unless block.settings.color_product_price.alpha == 0.0 or block.settings.color_product_price == blank
-                  assign price_color = 'color: ' | append: block.settings.color_product_price
+      </div>
 
-                  if block.settings.heading_size == 'h6'
-                    assign type_scale = 0.85
-                  elsif block.settings.heading_size == 'h4'
-                    assign type_scale = 0.85
-                  elsif block.settings.heading_size == 'h2'
-                    assign type_scale = 1.25
-                  endif
+      <!-- Info -->
+      <div class="lg:pl-8">
+        <div class="mb-2 text-[10px] font-medium uppercase tracking-[0.5em] text-crimson">
+          / {{ product.type | default: 'GHOST' | uppercase }} — 鬼
+        </div>
+        <h1 class="font-display text-5xl md:text-6xl leading-none text-foreground uppercase">{{ product.title }}</h1>
+        <div class="mt-4 flex items-baseline gap-3">
+          <span class="font-display text-3xl text-crimson product-price-display">{{ product.selected_or_first_available_variant.price | money }}</span>
+          <span class="text-xs uppercase tracking-[0.3em] text-foreground/50">{{ cart.currency.iso_code }}</span>
+        </div>
+        
+        <!-- Short description -->
+        <p class="mt-6 max-w-md text-sm leading-relaxed text-foreground/70">
+          {%- if product.metafields.descriptors.subtitle != blank -%}
+            {{ product.metafields.descriptors.subtitle }}
+          {%- else -%}
+            {{ product.description | replace: '<br>', ' ' | replace: '</p>', ' ' | strip_html | truncatewords: 30 }}
+          {%- endif -%}
+        </p>
 
-                  assign subtext_size = 'calc(var(--font-body-size) * TYPE_SCALE)' | replace: 'TYPE_SCALE', type_scale
+        <!-- Product form -->
+        {%- form 'product', product, id: 'product-form', class: 'mt-10', novalidate: 'novalidate' -%}
+          <input type="hidden" name="return_to" value="/cart" />
+          
+          <select name="id" id="ProductSelect-{{ section.id }}" class="hidden">
+            {%- for variant in product.variants -%}
+              <option value="{{ variant.id }}"
+                {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                data-price="{{ variant.price | money }}"
+                data-available="{{ variant.available }}"
+                data-options="{%- for opt in variant.options -%}{{ opt | escape }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}"
+              >
+                {{ variant.title }}
+              </option>
+            {%- endfor -%}
+          </select>
 
-                  if block.settings.heading_size == 'custom-size'
-                    assign subtext_size = block.settings.custom_text_size | times: 0.6 | append: 'px'
-                  endif
-                endunless
-              %}
-            <div class="product__info ord-{{ forloop.index }} product__prices {{ block.settings.show_background | default: '' | replace: 'true', 'product__prices--background pt-16 pb-16 pr-12 pl-12 pr-md-20 pl-md-20' }}" {{ block.shopify_attributes }}>
-              <div class="d-flex middle-xs fw-wrap c-gap-12" id="productPrice-{{ section.id }}" role="status" style="{{ price_color }}; {{ price_color_regular }}; {% if block.settings.heading_size == 'custom-size' %}--custom-text-size: {{ block.settings.custom_text_size }}px{% endif %}; --type-scale: {{ type_scale }}; --subtext-size: {{ subtext_size }}">
-                {% render 'product-price', product: product, target: product.selected_or_first_available_variant, price_class: 'price--large', price_sale_bold: 'fw-700', price_style: block.settings.heading_size %}
-                {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price and block.settings.show_sale_badge %}
-                  {%- liquid
-                      assign discount_cost = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price
-                      assign discount_percent = discount_cost | times: 100.0 | divided_by: product.selected_or_first_available_variant.compare_at_price | round: 2
-                    -%}
-                  <div class="product__badge mt-8 mb-8">
-                    <span class="sale-badge subtext d-inline-block p-relative fw-700">
-                      <span class="p-relative zi-1 tt-up">
-                        {{- 'products.product.on_sale' | t }}
-                        {% if settings.currency_code_enabled %} {{- discount_cost | money_with_currency -}}
-                        {% else %} {{- discount_cost | money -}}
-                        {% endif %}
-                        ({{ discount_percent }}%)
-                      </span>
-                    </span>
-                  </div>
-                {% endif %}
-              </div>
-              {%- if block.settings.show_tax_and_shipping_policy -%}
-                <div class="mt-4 mb-4 color-light hide-empty subtext text-block">
-                  {%- if cart.taxes_included -%}
-                    {{- 'products.product.include_taxes' | t -}}&nbsp;
-                  {%- endif -%}
-                  {%- if shop.shipping_policy.body != blank -%}
-                    {{- 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url -}}
-                  {%- endif -%}
-                </div>
-              {% endif %}
-              {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
-                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                {{ form | payment_terms }}
-              {%- endform -%}
-            </div>
-            {%- when 'SKU' -%}
-              <div class="product__info product__sku product__info--spacing gap-24 d-flex fd-column ord-{{ forloop.index }} " id="sku-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
-                <span class="variant-sku color-light subtext"><span class="variant-sku__label">SKU: </span>{{ product.selected_or_first_available_variant.sku }}</span>
-              </div>
-            {%- when 'basic_description' -%}
-            <div class="product__info ord-{{ forloop.index }} product__description wb-break-word" {{ block.shopify_attributes }}>
-              {% assign product_description = 'products.product.description' | t %}
-              {% capture custom_icon %}
-                {%- liquid
-                  assign icon_svg = ''
-                  assign icon_source = block.settings.icon_source
-                  if icon_source == 'theme_library'
-                    render 'icon-loader', icon: block.settings.options_icon, size: 36, class: "icon-custom--large h-100 w-100 d-block color-scheme"
-                  elsif icon_source == 'custom_img'
-                    assign custom_icon = 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder media of-cover js-image-lazy'
-                    assign custom_icon = block.settings.custom_img | image_url: width: block.settings.custom_img.width | image_tag: widths: '250', sizes: '500px', alt: block.settings.heading, class: 'media of-cover h-100 w-100'
-                    render 'image', image_item: custom_icon, image_wrap_classes: "icon-custom--large d-block", image_classes: "h-100 w-100"
-                  else
-                    assign icon_svg = block.settings.html_code
-                  endif
-                  -%}
-                  {%- if icon_svg != '' -%}<div class="icon-custom--large custom-icon h-100 w-100 {{ block.settings.accent_scheme }}">{{- icon_svg -}}</div>{%- endif -%}
-              {% endcapture %}
-              {% if block.settings.enable_collapsible %}
-                {% capture accordion_icons %}
-                  <span class="zi-1 btn btn-small btn-icon">
-                    {% render 'icon-plus', class: 'accordion__icon--plus p-absolute' %}
-                    {% render 'icon-minus', class: 'accordion__icon--minus p-absolute' %}
-                  </span>
-                {% endcapture %}
-                <sht-accordion data-properties='{"multiple": true, "default_open": {{ block.settings.expand_collapsible_by_default | json }} }'>
-                  <div class="accordion__item js-accordion-item pt-16 pb-16">
-                    <div class="accordion__header">
-                      <button class="btn-plain w-100 js-accordion-trigger d-flex middle-xs p-relative pt-16 pb-16 p-zero c-pointer" id="accordion-title-{{- block.id -}}" aria-expanded="{{ block.settings.expand_collapsible_by_default }}" aria-controls="accordion-content-{{- block.id -}}">
-                        {% if block.settings.enable_icon %}
-                          {{ custom_icon | replace: 'color-scheme', block.settings.accent_scheme }}
-                        {% endif %}
-                        <span class="h5 m-zero flex-1 ml-12 ta-left">{{ block.settings.heading | escape | default: product_description }}</span>
-                        <span class="accordion__toggle zi-1 d-flex">{{ accordion_icons }}</span>
-                      </button>
-                    </div>
-                    <div class="js-accordion-content accordion-content mb-24 rte pac--{{ forloop.index }}-{{ block.id }}{% if block.settings.expand_collapsible_by_default %} open{% endif %}" id="accordion-content-{{- block.id -}}" role="region" aria-describedby="product__description-{{ block.id }}" tabindex="-1" style="max-height: {% if block.settings.expand_collapsible_by_default %}none{% else %}0{% endif %};">
-                      {{- product.description -}}
-                    </div>
-                  </div>
-                </sht-accordion>
-              {% else %}
-                <div class="d-flex gap-12 mb-16 middle-xs">
-                  {% if block.settings.enable_icon %}
-                    {{ custom_icon | replace: 'color-scheme', block.settings.accent_scheme }}
-                  {% endif %}
-                  <span class="d-block h5 mb-0">{{ block.settings.heading | escape | default: product_description }}</span>
-                </div>
-                <div class="rte">{{ product.description }}</div>
-              {% endif %}
-            </div>
-            {%- when 'variants' -%}
-            <div class="product__info ord-{{ forloop.index }} product__variants gap-24 d-flex fd-column js-product-variants-block" {{ block.shopify_attributes }}>
-              <div class="js-variant-picker" id="variantPicker-{{- section.id }}">
-                {%- unless product.has_only_default_variant -%}
-                  {%- if block.settings.variant_picker_type == 'button' -%}
-                    <sht-variant-radios class="product__variants--radios d-flex fd-column gap-24 no-js-hidden {% if block.settings.enable_variant_scroll %}variant-selector--scroll{% endif %}" data-section="{{ section.id }}" data-url="{{ product.url }}">
-                      {%- for option in product.options_with_values -%}
-                        {% assign index = forloop.index | minus: 1 %}
-                        <fieldset class="form__fields product-option js-variant-radio-container d-flex fw-wrap p-zero m-zero b-zero">
-                          <legend class="p-zero m-zero product-option__name">
-                            <span class="h6 mr-8">{{ option.name }}</span>
-                            <span class="js-variant-radio-option-name color-light hide-empty" data-option-index="{{ index }}" data-option-name="{{ option.name }}">{{ product.selected_or_first_available_variant.options[index] }}</span>
-                          </legend>
-                          {%- assign variant_name = option.name | downcase -%}
-                          {%- if variant_label == variant_name and block.settings.enable_variant_swatches -%}
-                            {% render 'main-product-color-swatch', product: product, option: option, section: section, product_form_id: product_form_id, index: index %}
-                          {%- else -%}
-                            <ul class="ls-none d-flex fw-wrap gap-12">
-                              {%- for value in option.values -%}
-                                {% liquid
-                                  assign option_disabled = true
-                                  if value.available
-                                    assign option_disabled = false
-                                  endif
-                                %}
-                                <li class="form__field js-variant-option-value product-option__value
-                                  {% if option_disabled %} product-option--unavailable {% endif %}
-                                  {% if product.selected_or_first_available_variant.available == false and option.selected_value == value %}product-option--sold-out{% endif %}"
-                                  data-value="{{ value | escape }}-{{ index }}"
-                                  data-option-index="{{ index }}"
-                                >
-                                  <input type="radio" class="form__control input--variant js-variant-radio-item js-variant-item visually-hidden"
-                                    id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
-                                    name="{{ option.name }}" value="{{ value | escape }}"
-                                    data-variant-value="{{ value | escape }}-{{ index }}"
-                                    form="{{ product_form_id }}"
-                                    data-option-value-id="{{ value.id }}"
-                                    {% if option.selected_value == value %} checked {% endif %}
-                                  >
-                                  <label class="form__label product-option__label d-block js-variant-option-label" for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">{{ value }}</label>
-                                </li>
-                              {%- endfor -%}
-                            </ul>
-                          {%- endif -%}
-                        </fieldset>
-                      {%- endfor -%}
-                      <script data-selected-variant type="application/json">{{ product.selected_or_first_available_variant | json }}</script>
-                    </sht-variant-radios>
-                  {%- else -%}
-                    {% render 'main-product-variant-selects', section: section, option: option, product: product, variant_label: variant_label, block: block, product_form_id: product_form_id %}
-                  {%- endif -%}
-                  <noscript>
-                    <div class="form__fields {% if product.has_only_default_variant %} hidden{% endif %}">
-                      <div class="form__field">
-                        <label class="form__label" for="Variants-{{ section.id }}-{{ forloop.index0 }}">{{ 'products.product.product_variants' | t }}</label>
-                        <div class="field--animation">
-                          <select name="id" id="Variants-{{ section.id }}-{{ forloop.index0 }}" class="form__control w-100 h-100 field__text" form="{{ product_form_id }}">
-                            {%- for variant in product.variants -%}
-                              <option
-                                {% if variant == product.selected_or_first_available_variant %}
-                                selected="selected"
-                                {% endif %}
-                                {% if variant.available == false %}
-                                disabled
-                                {% endif %}
-                                value="{{ variant.id }}">
-                                {{ variant.title }}
-                                {%- if variant.available == false %}
-                                  - {{ 'products.product.sold_out' | t }}{% endif %}- {{ variant.price | money | strip_html }}
-                              </option>
-                            {%- endfor -%}
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </noscript>
-                {%- endunless -%}
-              </div>
-              <div class="js-inventory-tracking hide-empty fw-700" id="inventoryTracking-{{ section.id }}" role="status">
-                {%- if product.selected_or_first_available_variant.inventory_quantity > 0 -%}
-                  {%- liquid
-                      assign stock_status = 'product--instock color-success'
-                      if settings.product_information_low_stock_threshold > 0 and settings.product_information_low_stock_threshold >= product.selected_or_first_available_variant.inventory_quantity
-                        assign stock_status = 'product--lowstock'
-                      endif
-                    -%}
-                  <span class="{{ stock_status }}">
-                    {%- if block.settings.show_stock_number -%}
-                      {{ 'products.product.in_stock_html' | t: stock: product.selected_or_first_available_variant.inventory_quantity }}
-                    {%- else -%}
-                      {{ 'products.product.in_stock' | t }}
-                    {%- endif -%}
-                  </span>
-                {%- else -%}
-                  {%- if product.selected_or_first_available_variant.inventory_policy != 'continue' and product.selected_or_first_available_variant.inventory_management != blank -%}
-                    <span class="product--outstock color-danger">{{ 'products.product.out_of_stock' | t }}</span>
-                  {%- endif -%}
-                {%- endif -%}
-              </div>
-            </div>
-            {%- when 'purchasing' -%}
-            <sht-sticky-prd-info class="product__info ord-{{ forloop.index }} d-block" data-section-id="{{ section.id }}" data-is-enabled="{{ section.settings.show_sticky_purchasing_bar }}">
-              <div class="js-sticky-product-info" {{ block.shopify_attributes }}>
-                <div class="product__form">
-                  <sht-prd-frm class="sht-product__form product-form d-grid gap-12" data-section="{{ section.id }}">
-                    <div class="form--error js-product-form-error-wrapper" data-type="error-wrapper" role="alert" hidden>
-                      <span class="d-flex middle-xs">
-                        <span class="icon--error icon icon--small mr-8 fs-0">{%- render 'icon-error', size: 16 -%}</span>
-                        <span class="js-product-form-error-message" data-type="error-message"></span>
-                      </span>
-                    </div>
-                    {%- form 'product', product, id: product_form_id, class: 'form form__fields', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
-                      <div class="form__field"><input type="hidden" class="form__control" name="id" value="{{ product.selected_or_first_available_variant.id }}" disabled></div>
-                      <div class="product-form__buttons d-flex top-xs fd-column">
-                        {%-liquid
-                          if block.settings.show_gift_card_recipient and product.gift_card?
-                            render 'gift-card-recipient-form', product: product, form: form, section: section
-                          endif
-                         -%}
-                        <div class="gap-16 d-flex w-100 middle-xs">
-                          <div class="product__quantity{% if block.settings.show_quantity_selector == 'never' or block.settings.show_quantity_selector == 'add-to-cart' %} d-none{% endif %}" id="productQuantity-{{ section.id }}" data-show="{{ block.settings.show_quantity_selector }}">
-                            <label class="field__label visually-hidden" for="productQuantityInput-{{ section.id }}">{{ 'products.product.quantity.label' | t }}:</label>
-                            <sht-qty-inp class="field_quantity d-inline-flex middle-xs center-xs">
-                              <button class="no-js-hidden js-quantity-btn js-quantity-btn-minus btn btn-icon btn-large btn-plain" aria-label="{{ 'accessibility.minus' | t }}" name="minus" data-name="minus" type="button">{%- render 'icon-minus', size: 20 -%}</button>
-                              <input class="js-quantity-input qty-element input-number b-zero ta-center" type="number" name="quantity" aria-label="{{ 'products.product.quantity.input_label' | t: product: product.title | escape }}" id="productQuantityInput-{{ section.id }}" min="1" value="1" form="{{ product_form_id }}">
-                              <button class="no-js-hidden js-quantity-btn js-quantity-btn-plus btn btn-icon btn-large btn-plain" aria-label="{{ 'accessibility.plus' | t }}" name="plus" data-name="plus" type="button">{%- render 'icon-plus', size: 20 -%}</button>
-                            </sht-qty-inp>
-                          </div>
-                          <button type="submit" name="add" class="js-product-form-submit-btn product-btn-atc btn {% if product.selected_or_first_available_variant.available == false %} btn-secondary {% else %} btn-secondary--animate {% endif %} btn-large w-100"
-                            {% if product.selected_or_first_available_variant.available == false %}
-                              disabled
-                              {% assign add_to_cart_btn_lbl = 'products.product.sold_out' | t %}
-                            {% else %}
-                              {% assign add_to_cart_btn_lbl = 'products.product.add_to_cart' | t %}
-                            {% endif %}>
-                            <span class="d-block o-hidden p-relative">
-                              <span class="p-relative d-flex middle-xs center-xs ta-center btn-secondary__content">
-                                  <span class="js-product-form-spinner product-form-spinner p-absolute icon">{% render 'icon-spinner' %}</span>
-                                  <span class="js-product-form-submit-btn-text wb-break-word">{{ add_to_cart_btn_lbl }}</span>
-                              </span>
-                            </span>
-                          </button>
-                        </div>
-                        {% if block.settings.show_dynamic_checkout_buttons %}
-                          {{ form | payment_button }}
-                        {% endif %}
-                      </div>
-                    {%- endform -%}
-                  </sht-prd-frm>
-                </div>
-              </div>
-            </sht-sticky-prd-info>
-            {%- when 'extra_information' -%}
-            <div class="product__info ord-{{ forloop.index }} product__extra-info product__extra-info--{{ block.settings.display_style }}" {{ block.shopify_attributes }}>
-              {% if block.settings.enable_icon %}
-                {% capture custom_icon_first %}
-                  {%- liquid
-                    assign icon_svg = ''
-                    assign icon_source = block.settings.icon_source_1
-                    if icon_source == 'theme_library'
-                      render 'icon-loader', icon: block.settings.primary_options_icon, size: 36, class: "icon-custom--large h-100 w-100 d-block color-scheme"
-                    elsif icon_source == 'custom_img'
-                      assign custom_icon = 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder media of-cover js-image-lazy'
-                      assign custom_icon = block.settings.custom_img_1 | image_url: width: block.settings.custom_img_1.width | image_tag: widths: '250', sizes: '500px', alt: block.settings.primary_heading, class: 'media of-cover h-100 w-100'
-                      render 'image', image_item: custom_icon, image_wrap_classes: "icon-custom--large d-block", image_classes: "h-100 w-100"
-                    else
-                      assign icon_svg = block.settings.html_code_1
-                    endif
-                    -%}
-                    {%- if icon_svg != '' -%}<div class="icon-custom--large custom-icon h-100 w-100 {{ block.settings.extra_info_accent_scheme }}">{{- icon_svg -}}</div>{%- endif -%}
-                {% endcapture %}
-                {% capture custom_icon_second %}
-                  {%- liquid
-                      assign icon_svg = ''
-                      assign icon_source = block.settings.icon_source_2
-                      if icon_source == 'theme_library'
-                        render 'icon-loader', icon: block.settings.secondary_options_icon, size: 36, class: "icon-custom--large h-100 w-100 d-block color-scheme"
-                      elsif icon_source == 'custom_img'
-                        assign custom_icon = 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder media of-cover js-image-lazy'
-                        assign custom_icon = block.settings.custom_img_2 | image_url: width: block.settings.custom_img_2.width | image_tag: widths: '250', sizes: '500px', alt: block.settings.secondary_heading, class: 'media of-cover h-100 w-100'
-                        render 'image', image_item: custom_icon, image_wrap_classes: "icon-custom--large d-block", image_classes: "h-100 w-100"
-                      else
-                        assign icon_svg = block.settings.html_code_2
-                      endif
-                      -%}
-                      {%- if icon_svg != '' -%}<div class="icon-custom--large custom-icon h-100 w-100 {{ block.settings.extra_info_accent_scheme }}">{{- icon_svg -}}</div>{%- endif -%}
-                {% endcapture %}
-                {% capture custom_icon_third %}
-                  {%- liquid
-                      assign icon_svg = ''
-                      assign icon_source = block.settings.icon_source_3
-                      if icon_source == 'theme_library'
-                        render 'icon-loader', icon: block.settings.tertiary_options_icon, size: 36, class: "icon-custom--large h-100 w-100 d-block color-scheme"
-                      elsif icon_source == 'custom_img'
-                        assign custom_icon = 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder media of-cover js-image-lazy'
-                        assign custom_icon = block.settings.custom_img_3 | image_url: width: block.settings.custom_img_3.width | image_tag: widths: '250', sizes: '500px', alt: block.settings.tertiary_heading, class: 'media of-cover h-100 w-100'
-                        render 'image', image_item: custom_icon, image_wrap_classes: "icon-custom--large d-block", image_classes: "h-100 w-100"
-                      else
-                        assign icon_svg = block.settings.html_code_3
-                      endif
-                      -%}
-                      {%- if icon_svg != '' -%}<div class="icon-custom--large custom-icon h-100 w-100 {{ block.settings.extra_info_accent_scheme }} ">{{- icon_svg -}}</div>{%- endif -%}
-                {% endcapture %}
-                {% capture custom_icon_fourth %}
-                  {%- liquid
-                      assign icon_svg = ''
-                      assign icon_source = block.settings.icon_source_4
-                      if icon_source == 'theme_library'
-                        render 'icon-loader', icon: block.settings.quaternary_options_icon, size: 36, class: "icon-custom--large h-100 w-100 d-block color-scheme"
-                      elsif icon_source == 'custom_img'
-                        assign custom_icon = 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder media of-cover js-image-lazy'
-                        assign custom_icon = block.settings.custom_img_4 | image_url: width: block.settings.custom_img_4.width | image_tag: widths: '250', sizes: '500px', alt: block.settings.quaternary_heading, class: 'media of-cover h-100 w-100'
-                        render 'image', image_item: custom_icon, image_wrap_classes: "icon-custom--large d-block", image_classes: "h-100 w-100"
-                      else
-                        assign icon_svg = block.settings.html_code_4
-                      endif
-                      -%}
-                      {%- if icon_svg != '' -%}<div class="icon-custom--large custom-icon h-100 w-100 {{ block.settings.extra_info_accent_scheme }}">{{- icon_svg -}}</div>{%- endif -%}
-                {% endcapture %}
-              {% endif %}
-              {%- liquid
-                assign now =  "now" | date: "%N"
-                assign tabs_section_id = block.id | append: section.id | md5 | truncate: 12, ""
-                assign tab_id = "product-extra-tab-" | append: tabs_section_id | append: now
-                assign tab_aria_controls_prefix = "product-extra-tabs-" | append: tabs_section_id | append: now
-              -%}
-              {% if block.settings.display_style == 'collapsibles' %}
-                {% capture accordion_icons %}
-                  <span class="zi-1 btn btn-small btn-icon">
-                    {% render 'icon-plus', class: 'accordion__icon--plus p-absolute' %}
-                    {% render 'icon-minus', class: 'accordion__icon--minus p-absolute' %}
-                  </span>
-                {% endcapture %}
-                <sht-accordion data-properties='{"multiple": true}'>
-                  {%- if block.settings.primary_heading != blank -%}
-                    <div class="accordion__item js-accordion-item pt-16 pb-16">
-                      <div class="accordion__header">
-                        <button class="btn-plain w-100 js-accordion-trigger d-flex middle-xs p-relative pt-16 pb-16 p-zero c-pointer gap-12" id="accordion-primary-title-{{- block.id -}}" aria-expanded="false" aria-controls="accordion-primary-content-{{- block.id -}}">
-                          {{ custom_icon_first | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                          <span class="h5 m-zero flex-1 ta-left">{{ block.settings.primary_heading | escape }}</span>
-                          <span class="accordion__toggle zi-1 d-flex">{{ accordion_icons }}</span>
+          <!-- Size options buttons -->
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              <div class="mb-8 variant-option-group" data-option-index="{{ forloop.index0 }}" data-option-name="{{ option.name | escape }}">
+                <div class="mb-3 flex items-center justify-between">
+                  <span class="text-[10px] font-medium uppercase tracking-[0.3em] text-foreground/70">{{ option.name }}</span>
+                  {%- if option.name == 'Size' or option.name == 'size' -%}
+                    {%- if size_guide_block -%}
+                      <sht-dialog-open-btn class="no-js-hidden" data-dialog-id="{{ size_guide_dialog_id }}">
+                        <button type="button" class="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.3em] text-foreground/60 hover:text-crimson transition bg-transparent border-none cursor-pointer">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3">
+                            <path d="M5 16v-6"></path><path d="M9 16v-4"></path><path d="M13 16v-6"></path><path d="M17 16v-4"></path><path d="M21 16V8"></path><rect x="2" y="4" width="20" height="12" rx="2"></rect>
+                          </svg>
+                          Size chart
                         </button>
-                      </div>
-                      <div class="js-accordion-content accordion-content mb-24 rte pac-primary--{{ forloop.index }}-{{ block.id }}" id="accordion-primary-content-{{- block.id -}}" role="region" aria-describedby="product__extra-info-{{ block.id }}" tabindex="-1" style="max-height: 0;">
-                        {{- block.settings.primary_content -}}
-                      </div>
-                    </div>
-                  {% endif %}
-                  {%- if block.settings.secondary_heading != blank -%}
-                    <div class="accordion__item js-accordion-item pt-16 pb-16">
-                      <div class="accordion__header">
-                        <button class="btn-plain w-100 js-accordion-trigger d-flex middle-xs p-relative pt-16 pb-16 p-zero c-pointer gap-12" id="accordion-secondary-title-{{- block.id -}}" aria-expanded="false" aria-controls="accordion-secondary-content-{{- block.id -}}">
-                          {{ custom_icon_second | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                          <span class="h5 m-zero flex-1 ta-left">{{ block.settings.secondary_heading | escape }}</span>
-                          <span class="accordion__toggle zi-1 d-flex">{{ accordion_icons }}</span>
-                        </button>
-                      </div>
-                      <div class="js-accordion-content accordion-content mb-24 rte pac-secondary--{{ forloop.index }}-{{- block.id -}}" id="accordion-secondary-content-{{- block.id -}}" role="region" aria-describedby="product__extra-info-{{ block.id }}" tabindex="-1" style="max-height: 0;">
-                        {{- block.settings.secondary_content -}}
-                      </div>
-                    </div>
-                  {% endif %}
-                  {%- if block.settings.tertiary_heading != blank -%}
-                    <div class="accordion__item js-accordion-item pt-16 pb-16">
-                      <div class="accordion__header">
-                        <button class="btn-plain w-100 js-accordion-trigger d-flex middle-xs p-relative pt-16 pb-16 p-zero c-pointer gap-12" id="accordion-tertiary-title{{- block.id -}}" aria-expanded="false" aria-controls="accordion-tertiary-content-{{- block.id -}}">
-                          {{ custom_icon_third | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                          <span class="h5 m-zero flex-1 ta-left">{{ block.settings.tertiary_heading | escape }}</span>
-                          <span class="accordion__toggle zi-1 d-flex">{{ accordion_icons }}</span>
-                        </button>
-                      </div>
-                      <div class="js-accordion-content accordion-content mb-24 rte pac-tertiary--{{ forloop.index }}-{{- block.id -}}" id="accordion-tertiary-content-{{- block.id -}}" role="region" aria-describedby="product__extra-info-{{ block.id }}" tabindex="-1" style="max-height: 0;">
-                        {{- block.settings.tertiary_content -}}
-                      </div>
-                    </div>
-                  {% endif %}
-                  {%- if block.settings.quaternary_heading != blank -%}
-                    <div class="accordion__item js-accordion-item pt-16 pb-16">
-                      <div class="accordion__header">
-                        <button role="button" class="btn-plain w-100 js-accordion-trigger d-flex middle-xs p-relative pt-16 pb-16 p-zero c-pointer gap-12" id="accordion-quaternary-title{{- block.id -}}" aria-expanded="false" aria-controls="accordion-quaternary-content-{{- block.id -}}">
-                          {{ custom_icon_fourth | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                          <span class="h5 m-zero flex-1 ta-left">{{ block.settings.quaternary_heading | escape }}</span>
-                          <span class="accordion__toggle zi-1 d-flex">{{ accordion_icons }}</span>
-                        </button>
-                      </div>
-                      <div class="js-accordion-content accordion-content mb-24 rte pac-quaternary--{{ forloop.index }}-{{- block.id -}}" id="accordion-quaternary-content-{{- block.id -}}" role="region" aria-describedby="product__extra-info-{{ block.id }}" tabindex="-1" style="max-height: 0;">
-                        {{- block.settings.quaternary_content -}}
-                      </div>
-                    </div>
-                  {% endif %}
-                </sht-accordion>
-              {% elsif block.settings.display_style == 'tabs' %}
-                <div class="d-none d-block-md">
-                  <sht-tabs class="d-block o-hidden">
-                    <ul class="tab__header p-relative ox-auto disable-scrollbars ls-none ws-nowrap d-flex middle-xs" role="tablist">
-                      {%- if block.settings.primary_heading != blank -%}
-                        <li class="tab__item d-inline-block" role="presentation">
-                          <a class="tab__link h6 mb-0 d-block p-relative d-flex middle-xs color-light tab__link--active js-tab-link gap-12" role="tab" id="{{ tab_id }}-primary" href="#{{ tab_aria_controls_prefix }}-primary" aria-controls="{{ tab_aria_controls_prefix }}-primary">
-                            {{ custom_icon_first | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                            <span class="">{{ block.settings.primary_heading | escape }}</span>
-                          </a>
-                        </li>
-                      {%- endif -%}
-                      {%- if block.settings.secondary_heading != blank -%}
-                        <li class="tab__item d-inline-block" role="presentation">
-                          <a class="tab__link h6 mb-0 d-block p-relative d-flex middle-xs color-light js-tab-link gap-12" role="tab" id="{{ tab_id }}-secondary" href="#{{ tab_aria_controls_prefix }}-secondary" aria-controls="{{ tab_aria_controls_prefix }}-secondary">
-                            {{ custom_icon_second | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                            <span class="">{{ block.settings.secondary_heading | escape }}</span>
-                          </a>
-                        </li>
-                      {%- endif -%}
-                      {%- if block.settings.tertiary_heading != blank -%}
-                        <li class="tab__item d-inline-block" role="presentation">
-                          <a class="tab__link h6 mb-0 d-block p-relative d-flex middle-xs color-light js-tab-link gap-12" role="tab" id="{{ tab_id }}-tertiary" href="#{{ tab_aria_controls_prefix }}-tertiary" aria-controls="{{ tab_aria_controls_prefix }}-tertiary">
-                            {{ custom_icon_third | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                            <span class="">{{ block.settings.tertiary_heading | escape }}</span>
-                          </a>
-                        </li>
-                      {%- endif -%}
-                      {%- if block.settings.quaternary_heading != blank -%}
-                        <li class="tab__item d-inline-block" role="presentation">
-                          <a class="tab__link h6 mb-0 d-block p-relative d-flex middle-xs color-light js-tab-link gap-12" role="tab" id="{{ tab_id }}-quaternary" href="#{{ tab_aria_controls_prefix }}-quaternary" aria-controls="{{ tab_aria_controls_prefix }}-quaternary">
-                            {{ custom_icon_fourth | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                            <span class="">{{ block.settings.quaternary_heading | escape }}</span>
-                          </a>
-                        </li>
-                      {%- endif -%}
-                    </ul>
-                    <div class="tab__content">
-                      {%- if block.settings.primary_heading != blank -%}
-                        <div class="tab__panel tab__panel--active d-block js-tab-panel {{ tab_aria_controls_prefix }}-primary js-animate" data-tab-content-id="{{ tab_aria_controls_prefix }}-primary" aria-labelledby="{{ tab_id }}-primary" role="tabpanel">
-                          <div class="rte">{{- block.settings.primary_content -}}</div>
-                        </div>
-                      {%- endif -%}
-                      {%- if block.settings.secondary_heading != blank -%}
-                        <div class="tab__panel d-none js-tab-panel {{ tab_aria_controls_prefix }}-secondary js-animate" data-tab-content-id="{{ tab_aria_controls_prefix }}-secondary" aria-labelledby="{{ tab_id }}-secondary" role="tabpanel">
-                          <div class="rte">{{- block.settings.secondary_content -}}</div>
-                        </div>
-                      {%- endif -%}
-                      {%- if block.settings.tertiary_heading != blank -%}
-                        <div class="tab__panel d-none js-tab-panel {{ tab_aria_controls_prefix }}-tertiary js-animate" data-tab-content-id="{{ tab_aria_controls_prefix }}-tertiary" aria-labelledby="{{ tab_id }}-tertiary" role="tabpanel">
-                          <div class="rte">{{- block.settings.tertiary_content -}}</div>
-                        </div>
-                      {%- endif -%}
-                      {%- if block.settings.quaternary_heading != blank -%}
-                        <div class="tab__panel d-none js-tab-panel {{ tab_aria_controls_prefix }}-quaternary js-animate" data-tab-content-id="{{ tab_aria_controls_prefix }}-quaternary" aria-labelledby="{{ tab_id }}-quaternary" role="tabpanel">
-                          <div class="rte">{{- block.settings.quaternary_content -}}</div>
-                        </div>
-                      {%- endif -%}
-                    </div>
-                  </sht-tabs>
-                </div>
-                <div class="d-block d-none-md">
-                  <sht-accordion data-properties='{"multiple": true}'>
-                    {%- if block.settings.primary_heading != blank -%}
-                      <div class="accordion__item js-accordion-item pt-16 pb-16">
-                        <div class="accordion__header">
-                          <button class="btn-plain w-100 js-accordion-trigger d-flex middle-xs p-relative pt-16 pb-16 p-zero c-pointer gap-12" id="accordion-primary-title-{{- block.id -}}" aria-expanded="false" aria-controls="accordion-primary-content-{{- block.id -}}">
-                            {{ custom_icon_first | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                            <span class="h5 m-zero flex-1 ta-left">{{ block.settings.primary_heading | escape }}</span>
-                            <span class="accordion__toggle zi-1 d-flex"><span class="zi-1 btn btn-small btn-icon">{% render 'icon-plus', class: 'accordion__icon--plus p-absolute' %}{% render 'icon-minus', class: 'accordion__icon--minus p-absolute' %}</span></span>
-                          </button>
-                        </div>
-                        <div class="js-accordion-content accordion-content mb-24 rte pac-primary--{{ forloop.index }}-{{ block.id }}" id="accordion-primary-content-{{- block.id -}}" role="region" aria-describedby="product__extra-info-{{ block.id }}" tabindex="-1" style="max-height: 0;">
-                          {{- block.settings.primary_content -}}
-                        </div>
-                      </div>
+                      </sht-dialog-open-btn>
                     {%- endif -%}
-                    {%- if block.settings.secondary_heading != blank -%}
-                      <div class="accordion__item js-accordion-item pt-16 pb-16">
-                        <div class="accordion__header">
-                          <button class="btn-plain w-100 js-accordion-trigger d-flex middle-xs p-relative pt-16 pb-16 p-zero c-pointer gap-12" id="accordion-secondary-title-{{- block.id -}}" aria-expanded="false" aria-controls="accordion-secondary-content-{{- block.id -}}">
-                            {{ custom_icon_second | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                            <span class="h5 m-zero flex-1 ta-left">{{ block.settings.secondary_heading | escape }}</span>
-                            <span class="accordion__toggle zi-1 d-flex"><span class="zi-1 btn btn-small btn-icon">{% render 'icon-plus', class: 'accordion__icon--plus p-absolute' %}{% render 'icon-minus', class: 'accordion__icon--minus p-absolute' %}</span></span>
-                          </button>
-                        </div>
-                        <div class="js-accordion-content accordion-content mb-24 rte pac-secondary--{{ forloop.index }}-{{- block.id -}}" id="accordion-secondary-content-{{- block.id -}}" role="region" aria-describedby="product__extra-info-{{ block.id }}" tabindex="-1" style="max-height: 0;">
-                          {{- block.settings.secondary_content -}}
-                        </div>
-                      </div>
-                    {%- endif -%}
-                    {%- if block.settings.tertiary_heading != blank -%}
-                      <div class="accordion__item js-accordion-item pt-16 pb-16">
-                        <div class="accordion__header">
-                          <button class="btn-plain w-100 js-accordion-trigger d-flex middle-xs p-relative pt-16 pb-16 p-zero c-pointer gap-12" id="accordion-tertiary-title{{- block.id -}}" aria-expanded="false" aria-controls="accordion-tertiary-content-{{- block.id -}}">
-                            {{ custom_icon_third | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                            <span class="h5 m-zero flex-1 ta-left">{{ block.settings.tertiary_heading | escape }}</span>
-                            <span class="accordion__toggle zi-1 d-flex"><span class="zi-1 btn btn-small btn-icon">{% render 'icon-plus', class: 'accordion__icon--plus p-absolute' %}{% render 'icon-minus', class: 'accordion__icon--minus p-absolute' %}</span></span>
-                          </button>
-                        </div>
-                        <div class="js-accordion-content accordion-content mb-24 rte pac-tertiary--{{ forloop.index }}-{{- block.id -}}" id="accordion-tertiary-content-{{- block.id -}}" role="region" aria-describedby="product__extra-info-{{ block.id }}" tabindex="-1" style="max-height: 0;">
-                          {{- block.settings.tertiary_content -}}
-                        </div>
-                      </div>
-                    {%- endif -%}
-                    {%- if block.settings.quaternary_heading != blank -%}
-                      <div class="accordion__item js-accordion-item pt-16 pb-16">
-                        <div class="accordion__header">
-                          <button role="button" class="btn-plain w-100 js-accordion-trigger d-flex middle-xs p-relative pt-16 pb-16 p-zero c-pointer gap-12" id="accordion-quaternary-title{{- block.id -}}" aria-expanded="false" aria-controls="accordion-quaternary-content-{{- block.id -}}">
-                            {{ custom_icon_fourth | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}
-                            <span class="h5 m-zero flex-1 ta-left">{{ block.settings.quaternary_heading | escape }}</span>
-                            <span class="accordion__toggle zi-1 d-flex"><span class="zi-1 btn btn-small btn-icon">{% render 'icon-plus', class: 'accordion__icon--plus p-absolute' %}{% render 'icon-minus', class: 'accordion__icon--minus p-absolute' %}</span></span>
-                          </button>
-                        </div>
-                        <div class="js-accordion-content accordion-content mb-24 rte pac-quaternary--{{ forloop.index }}-{{- block.id -}}" id="accordion-quaternary-content-{{- block.id -}}" role="region" aria-describedby="product__extra-info-{{ block.id }}" tabindex="-1" style="max-height: 0;">
-                          {{- block.settings.quaternary_content -}}
-                        </div>
-                      </div>
-                    {%- endif -%}
-                  </sht-accordion>
-                </div>
-              {% else %}
-                <div>
-                  {%- if block.settings.primary_heading != blank -%}
-                    <div class="info-card__heading mb-12 d-grid gap-16 gap-md-24">
-                      {{ custom_icon_first | replace: 'color-scheme', block.settings.extra_info_accent_scheme }} <span class="h5">{{- block.settings.primary_heading | escape -}}</span>
-                    </div>
                   {%- endif -%}
-                  <div class="hide-empty text-block rte ">{{- block.settings.primary_content -}}</div>
                 </div>
-                <div>
-                  {%- if block.settings.secondary_heading != blank -%}
-                    <div class="info-card__heading mb-12 d-grid gap-16 gap-md-24">
-                      {{ custom_icon_second | replace: 'color-scheme', block.settings.extra_info_accent_scheme }} <span class="h5">{{- block.settings.secondary_heading | escape -}}</span>
-                    </div>
-                  {%- endif -%}
-                  <div class="hide-empty text-block rte">{{- block.settings.secondary_content -}}</div>
-                </div>
-                <div>
-                  {% if block.settings.tertiary_heading != blank %}
-                    <div class="info-card__heading mb-12 d-grid gap-16 gap-md-24">
-                      {{ custom_icon_third | replace: 'color-scheme', block.settings.extra_info_accent_scheme }} <span class="h5">{{- block.settings.tertiary_heading | escape -}}</span>
-                    </div>
-                  {% endif %}
-                  <div class="hide-empty text-block rte">{{- block.settings.tertiary_content -}}</div>
-                </div>
-                <div>
-                  {% if block.settings.quaternary_heading != blank %}
-                    <div class="info-card__heading mb-12 d-grid gap-16 gap-md-24">
-                      {{ custom_icon_fourth | replace: 'color-scheme', block.settings.extra_info_accent_scheme }}<span class="h5">{{- block.settings.quaternary_heading | escape -}}</span>
-                    </div>
-                  {% endif %}
-                  <div class="hide-empty text-block rte">{{- block.settings.quaternary_content -}}</div>
-                </div>
-              {% endif %}
-            </div>
-            {%- when 'pickup_availability' -%}
-              {%- liquid
-               assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true 
-               assign is_available = product.selected_or_first_available_variant.available
-               -%}
-              {% if is_available and pick_up_availabilities.size > 0%}
-                <div class="product__info ord-{{ forloop.index }}" {{ block.shopify_attributes }}>
-                  <sht-pickup-avail
-                    class="pickup-availability d-block no-js-hidden {{ block.settings.color_scheme }} pb-40 pl-24 pr-24 pt-32 style--paper-note p-relative"
-                    available
-                    data-base-url="{{ shop.url }}{{ routes.root_url }}"
-                    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
-                    data-has-only-default-variant="{{ product.has_only_default_variant }}">
-                    <template>
-                      <sht-pickup-avail-prwv class="d-flex top-xs pickup-availability__preview">
-                        {% render 'icon-check-mark' %}
-                        <div class="pickup-availability__info">
-                          <p>{{ 'products.product.pickup_availability.unavailable' | t }}</p>
-                          <button class="btn btn-small btn-plain">{{ 'products.product.pickup_availability.refresh' | t }}</button>
-                        </div>
-                      </sht-pickup-avail-prwv>
-                    </template>
-                  </sht-pickup-avail>
-                </div>
-              {% endif %}
-            {%- when 'product_cross_sell' -%}
-            <div class="product__info ord-{{ forloop.index }}" {{ block.shopify_attributes }}>
-              <h2 class="d-block h5 mb-24 mb-md-40 complementary-products__heading">{{ block.settings.heading }}</h2>
-              <sht-prd-recom class="complementary-products  product__info" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&intent=complementary">
-                <div class="cross-sell__items rw gap-unequal">
-                  {%- for recommendation in recommendations.products limit: block.settings.maximum_products_to_show -%}
-                    <div class="clm cross-sell__item" style="--w-xs: 6">{%- render 'card-product', product: recommendation, ratio: settings.product_card_image_ratio, show_second_image: settings.show_second_image, show_vendor: settings.show_product_vendor, show_color_swatch: settings.show_color_swatches, show_sale_badge: settings.show_sale_badge, item_per_row: section.settings.item_per_row, enable_quick_buy: false, section: section -%}</div>
+                <div class="flex flex-wrap gap-2">
+                  {%- for value in option.values -%}
+                    {%- assign is_selected = false -%}
+                    {%- if option.selected_value == value -%}
+                      {%- assign is_selected = true -%}
+                    {%- endif -%}
+                    <button
+                      type="button"
+                      data-value="{{ value | escape }}"
+                      class="variant-value-btn h-12 w-12 border text-xs font-bold uppercase tracking-wider transition-all cursor-pointer {% if is_selected %}border-crimson bg-crimson text-white{% else %}border-border/60 text-foreground hover:border-crimson bg-transparent{% endif %}"
+                    >
+                      {{ value }}
+                    </button>
                   {%- endfor -%}
                 </div>
-              </sht-prd-recom>
-            </div>
-            {%- when 'custom_text' -%}
-            <div class="product__info ord-{{ forloop.index }} hide-empty {{ block.settings.text_style | replace: 'color-light', 'color-light' | replace: 'body', 'color-text-regular' }} " {{ block.shopify_attributes }}>{{- block.settings.text -}}</div>
-            {%- when 'custom_liquid' -%}
-            <div class="product__info ord-{{ forloop.index }} hide-empty" {{ block.shopify_attributes }}>{{- block.settings.liquid_code -}}</div>
-            {%- when 'size_guide' -%}
-            {%- liquid
-                assign size_guide_dialog_id = block.id | append: section.id | md5 | truncate: 12, ""
-                assign size_guide_block = block
-                assign size_guide_cta = 'disabled'
-                if block.settings.content_source == "static-page" and block.settings.static_page != blank
-                  assign size_guide_cta = ''
-                endif
-                if block.settings.content_source == "product-metafield" and block.settings.product_metafield_name != blank
-                  assign size_guide_cta = ''
-                endif
-              %}
-              {% capture custom_icon_size_guide %}
-                {%- liquid
-                  assign icon_svg = ''
-                  assign icon_source = block.settings.icon_source_size_guide
-                  if icon_source == 'theme_library'
-                    render 'icon-loader', icon: block.settings.size_options_icon, size: 20, class: "icon-custom--small h-100 w-100 d-block ml-8"
-                  elsif icon_source == 'custom_img'
-                    assign custom_icon = 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder media of-cover js-image-lazy'
-                    assign custom_icon = block.settings.custom_img_size_guide | image_url: width: block.settings.custom_img_size_guide.width | image_tag: widths: '250', sizes: '500px', alt: block.settings.primary_heading, class: 'media of-cover h-100 w-100 d-block'
-                    render 'image', image_item: custom_icon, image_wrap_classes: "icon-custom--small d-block ml-8", image_classes: "h-100 w-100 d-block"
-                  else
-                    assign icon_svg = block.settings.html_code_size_guide
-                  endif
-                  -%}
-                  {%- if icon_svg != '' -%}
-                    <div class="icon-custom--small custom-icon h-100 w-100 ml-8">{{- icon_svg -}}</div>
-                  {%- endif -%}
-            {% endcapture %}
-            <div class="product__info ord-{{ forloop.index }}" {{ block.shopify_attributes }}>
-              <button class="btn btn-link fs-body bs-none" type="button" aria-haspopup="dialog" onclick="window.dialogSizeGuide{{ size_guide_dialog_id }}.showModal(this, true)" {{ size_guide_cta }}>
-                {{- block.settings.heading -}}
-                {{ custom_icon_size_guide }}
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
+
+          <!-- Quantity & CTA buttons -->
+          <div class="mt-8 flex flex-wrap items-stretch gap-3">
+            <div class="flex items-center border border-border/60 bg-transparent">
+              <button
+                type="button"
+                class="qty-btn-minus grid h-12 w-12 place-items-center text-foreground/70 hover:text-crimson transition bg-transparent border-none cursor-pointer"
+                aria-label="Decrease"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </button>
+              <span class="product-qty-display w-10 text-center text-sm font-medium tabular-nums text-foreground">1</span>
+              <input type="hidden" name="quantity" class="product-qty-input" value="1" />
+              <button
+                type="button"
+                class="qty-btn-plus grid h-12 w-12 place-items-center text-foreground/70 hover:text-crimson transition bg-transparent border-none cursor-pointer"
+                aria-label="Increase"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
               </button>
             </div>
-            {%- when 'popup_content' -%}
-            {%- liquid
-                assign popup_content_dialog_id = block.id | append: section.id | md5 | truncate: 12, ""
-                assign popup_content_block = block
-                assign size_popup_content_cta = 'disabled'
-                if block.settings.static_page != blank
-                  assign size_popup_content_cta = ''
-                endif
-              %}
-            <div class="product__info ord-{{ forloop.index }}" {{ block.shopify_attributes }}>
-              <button class="btn btn-link fs-body bs-none" type="button" aria-haspopup="dialog" onclick="window.dialogPopupContent{{ popup_content_dialog_id }}.showModal(this, true)" {{ size_popup_content_cta }}>{{- block.settings.text -}}</button>
-            </div>
-            {%- when 'product_rating' -%}
-              {% unless block.settings.star_rating_color.alpha == 0.0 or block.settings.star_rating_color == blank %}
-                {% assign main_product_star_rating_color = '--color-rating-star: rgba(' | append: block.settings.star_rating_color.red | append: ',' | append: block.settings.star_rating_color.green | append: ',' | append: block.settings.star_rating_color.blue | append: ', 1)' %}
-              {% endunless %}
-              <div class="mt-1x hide-empty ord-{{ forloop.index }}" {{ block.shopify_attributes }}>
-                {%- render 'product-rating', product: product, star_rating_color: false, quick_buy_star_rating_color: false, main_product_star_rating_color: main_product_star_rating_color -%}
+
+            {%- assign current_variant = product.selected_or_first_available_variant -%}
+            <button
+              type="submit"
+              name="add"
+              class="product-atc-submit-btn group relative flex-1 overflow-hidden border min-w-[200px] cursor-pointer bg-foreground text-ink"
+              {% unless current_variant.available %}disabled{% endunless %}
+              style="border: 1px solid var(--foreground);"
+            >
+              <span class="absolute inset-0 origin-left scale-x-0 bg-crimson transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"></span>
+              <span class="relative flex h-12 items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-[0.3em] transition-colors duration-500 group-hover:text-white atc-btn-text text-ink">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                {%- if current_variant.available -%}
+                  Add to cart
+                {%- else -%}
+                  Sold out
+                {%- endif -%}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              aria-label="Wishlist"
+              class="grid h-12 w-12 place-items-center border border-border/60 text-foreground/70 hover:text-crimson hover:border-crimson transition bg-transparent cursor-pointer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+          </div>
+        {%- endform -%}
+
+        <!-- Shipping tagline -->
+        <div class="mt-6 flex items-center gap-2 text-xs text-foreground/60">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 text-crimson">
+            <rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          Free worldwide shipping over $199
+        </div>
+
+        <!-- Accordions -->
+        <div class="mt-10 border-t border-border/60">
+          <!-- Tab 1: Description -->
+          <div class="border-b border-border/60 accordion-item">
+            <button type="button" class="accordion-trigger flex w-full items-center justify-between py-5 text-left font-bold text-[11px] uppercase tracking-[0.3em] cursor-pointer bg-transparent border-none">
+              <span class="text-foreground">Description</span>
+              <span class="accordion-icon relative grid h-5 w-5 place-items-center transition-transform duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-foreground"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </span>
+            </button>
+            <div class="accordion-panel grid overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" style="grid-template-rows: 0fr;">
+              <div class="min-h-0">
+                <div class="pb-5 pr-8 text-sm leading-relaxed text-foreground/65">
+                  {{ product.description }}
+                </div>
               </div>
-          {%- endcase -%}
-        {%- endfor -%}
+            </div>
+          </div>
+
+          <!-- Tab 2: Shipping & Returns -->
+          <div class="border-b border-border/60 accordion-item">
+            <button type="button" class="accordion-trigger flex w-full items-center justify-between py-5 text-left font-bold text-[11px] uppercase tracking-[0.3em] cursor-pointer bg-transparent border-none">
+              <span class="text-foreground">Shipping & Returns</span>
+              <span class="accordion-icon relative grid h-5 w-5 place-items-center transition-transform duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-foreground"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </span>
+            </button>
+            <div class="accordion-panel grid overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" style="grid-template-rows: 0fr;">
+              <div class="min-h-0">
+                <p class="pb-5 pr-8 text-sm leading-relaxed text-foreground/65">
+                  Free worldwide shipping on orders over $199. Express 2–4 days. 30-day returns on unworn pieces with tags intact. Drop pieces are final sale.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 3: Fabric & Care -->
+          <div class="border-b border-border/60 accordion-item">
+            <button type="button" class="accordion-trigger flex w-full items-center justify-between py-5 text-left font-bold text-[11px] uppercase tracking-[0.3em] cursor-pointer bg-transparent border-none">
+              <span class="text-foreground">Fabric & Care</span>
+              <span class="accordion-icon relative grid h-5 w-5 place-items-center transition-transform duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-foreground"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </span>
+            </button>
+            <div class="accordion-panel grid overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" style="grid-template-rows: 0fr;">
+              <div class="min-h-0">
+                <p class="pb-5 pr-8 text-sm leading-relaxed text-foreground/65">
+                  100% combed organic cotton. Cold wash inside-out. Hang dry to preserve print. Do not iron directly on graphics.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-  </div>
-  <div class="ctnr">
-    <div class="rw">
-      <div class="clm hide-empty" style="--w-xs: 12;">
-        <sht-cont-deferred class="d-block">
-          {% capture product_advanced_description %}
-            {% if section.settings.content_source == 'product-metafield' %}
-              <div class="mt-36 mt-md-56 hide-empty rte">{{- section.settings.product_metafield_name | default: '' -}}</div>
-            {% endif %}
-            {% if section.settings.content_source == 'static-page' %}
-              <div class="mt-36 mt-md-56 hide-empty rte">{{- section.settings.static_page.content | default: '' -}}</div>
-            {% endif %}
-          {% endcapture %}
-          <template>{{ product_advanced_description }}</template>
-          <noscript>{{ product_advanced_description }}</noscript>
-        </sht-cont-deferred>
-      </div>
-    </div>
-  </div>
+  </main>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Gallery switcher
+    const thumbBtns = document.querySelectorAll('.thumb-btn');
+    const mainImgs = document.querySelectorAll('.main-gallery-img');
+
+    function setActiveImage(index) {
+      thumbBtns.forEach(btn => {
+        if (btn.getAttribute('data-index') === index) {
+          btn.classList.remove('border-border/60');
+          btn.classList.add('border-crimson');
+        } else {
+          btn.classList.remove('border-crimson');
+          btn.classList.add('border-border/60');
+        }
+      });
+
+      mainImgs.forEach(img => {
+        if (img.getAttribute('data-index') === index) {
+          img.classList.remove('opacity-0');
+          img.classList.add('opacity-100');
+        } else {
+          img.classList.remove('opacity-100');
+          img.classList.add('opacity-0');
+        }
+      });
+    }
+
+    thumbBtns.forEach(btn => {
+      const idx = btn.getAttribute('data-index');
+      btn.addEventListener('mouseenter', () => setActiveImage(idx));
+      btn.addEventListener('click', () => setActiveImage(idx));
+    });
+
+    // 2. Quantity selector
+    const qtyDisplay = document.querySelector('.product-qty-display');
+    const qtyInput = document.querySelector('.product-qty-input');
+    const qtyMinus = document.querySelector('.qty-btn-minus');
+    const qtyPlus = document.querySelector('.qty-btn-plus');
+
+    if (qtyInput && qtyDisplay && qtyMinus && qtyPlus) {
+      qtyMinus.addEventListener('click', () => {
+        const val = parseInt(qtyInput.value) || 1;
+        const newVal = Math.max(1, val - 1);
+        qtyInput.value = newVal;
+        qtyDisplay.textContent = newVal;
+      });
+      qtyPlus.addEventListener('click', () => {
+        const val = parseInt(qtyInput.value) || 1;
+        const newVal = val + 1;
+        qtyInput.value = newVal;
+        qtyDisplay.textContent = newVal;
+      });
+    }
+
+    // 3. Variant selector
+    const variantSelect = document.getElementById('ProductSelect-{{ section.id }}');
+    const valueButtons = document.querySelectorAll('.variant-value-btn');
+    const priceDisplay = document.querySelector('.product-price-display');
+    const atcBtn = document.querySelector('.product-atc-submit-btn');
+    const atcText = document.querySelector('.atc-btn-text');
+
+    function updateSelectedVariant() {
+      const optionGroups = document.querySelectorAll('.variant-option-group');
+      const selectedOptions = [];
+      optionGroups.forEach(group => {
+        const activeBtn = group.querySelector('.variant-value-btn.border-crimson');
+        if (activeBtn) {
+          selectedOptions.push(activeBtn.getAttribute('data-value'));
+        }
+      });
+
+      const matchString = selectedOptions.join(',');
+
+      if (variantSelect) {
+        let matched = false;
+        Array.from(variantSelect.options).forEach(opt => {
+          const optString = opt.getAttribute('data-options');
+          if (optString === matchString) {
+            opt.selected = true;
+            matched = true;
+
+            if (priceDisplay) {
+              priceDisplay.textContent = opt.getAttribute('data-price');
+            }
+
+            const available = opt.getAttribute('data-available') === 'true';
+            if (atcBtn) {
+              if (available) {
+                atcBtn.removeAttribute('disabled');
+                if (atcText) {
+                  atcText.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                      <line x1="3" y1="6" x2="21" y2="6"></line>
+                      <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    Add to cart
+                  `;
+                }
+              } else {
+                atcBtn.setAttribute('disabled', 'disabled');
+                if (atcText) {
+                  atcText.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                      <line x1="3" y1="6" x2="21" y2="6"></line>
+                      <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    Sold out
+                  `;
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    valueButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const parentGroup = btn.closest('.variant-option-group');
+        if (parentGroup) {
+          parentGroup.querySelectorAll('.variant-value-btn').forEach(b => {
+            b.classList.remove('border-crimson', 'bg-crimson', 'text-white');
+            b.classList.add('border-border/60', 'text-foreground', 'bg-transparent');
+          });
+        }
+        btn.classList.remove('border-border/60', 'text-foreground', 'bg-transparent');
+        btn.classList.add('border-crimson', 'bg-crimson', 'text-white');
+        updateSelectedVariant();
+      });
+    });
+
+    // 4. Accordions
+    const accordions = document.querySelectorAll('.accordion-item');
+    accordions.forEach(item => {
+      const trigger = item.querySelector('.accordion-trigger');
+      const panel = item.querySelector('.accordion-panel');
+      const icon = item.querySelector('.accordion-icon');
+
+      trigger.addEventListener('click', () => {
+        const isOpen = panel.style.gridTemplateRows === '1fr';
+        
+        accordions.forEach(otherItem => {
+          otherItem.querySelector('.accordion-panel').style.gridTemplateRows = '0fr';
+          otherItem.querySelector('.accordion-icon').classList.remove('rotate-45', 'text-crimson');
+        });
+
+        if (!isOpen) {
+          panel.style.gridTemplateRows = '1fr';
+          icon.classList.add('rotate-45', 'text-crimson');
+        }
+      });
+    });
+  });
+</script>
 {%- liquid
-  if section.settings.show_sticky_purchasing_bar
-    render 'product-sticky-purchasing-bar', product: product, sticky_product_form_id: sticky_product_form_id, section: section, product_form_id: product_form_id, purchasing_bar_position: section.settings.purchasing_bar_position, sticky_media_ratio: section.settings.media_ratio, show_price: section.settings.show_price_sticky_bar, show_variants: section.settings.show_variants_sticky_bar
-  endif
   if size_guide_block
     render 'product-size-guide', size_guide_dialog_id: size_guide_dialog_id, size_guide_block: size_guide_block, size_guide_heading: size_guide_block.settings.heading
   endif
@@ -1133,6 +449,7 @@
   render 'js-loader', files: js_files
   render 'product-google-snippet', product: product
 -%}
+
 {% schema %}
 {
   "name": "t:general.product_details",

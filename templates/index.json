@@ -12,10 +12,7 @@
     "mitushi_hero_1": {
       "type": "mitushi-hero",
       "settings": {
-        "button_1_label": "Shop the Drop",
-        "button_1_link": "",
-        "button_2_label": "View Lookbook",
-        "button_2_link": ""
+        "hero_image": ""
       }
     },
     "mitushi_categories_1": {
@@ -24,28 +21,28 @@
         "cat_1": {
           "type": "category",
           "settings": {
-            "collection": "",
             "title": "Shirts",
             "japanese": "シャツ",
-            "count": "24 pieces"
+            "count": "24 pieces",
+            "image": ""
           }
         },
         "cat_2": {
           "type": "category",
           "settings": {
-            "collection": "",
             "title": "Shorts",
             "japanese": "ショーツ",
-            "count": "12 pieces"
+            "count": "12 pieces",
+            "image": ""
           }
         },
         "cat_3": {
           "type": "category",
           "settings": {
-            "collection": "",
             "title": "Tanks",
             "japanese": "タンク",
-            "count": "9 pieces"
+            "count": "9 pieces",
+            "image": ""
           }
         }
       },
@@ -62,60 +59,66 @@
         "prod_1": {
           "type": "product",
           "settings": {
-            "product_handle": "",
             "name": "Kanji Oversized Tee",
             "tag": "Ghost",
             "price": "89",
+            "front_image": "",
+            "back_image": "",
             "badge": "New"
           }
         },
         "prod_2": {
           "type": "product",
           "settings": {
-            "product_handle": "",
             "name": "Samurai Print Tee",
             "tag": "Crimson Warrior",
             "price": "95",
+            "front_image": "",
+            "back_image": "",
             "badge": "Hot"
           }
         },
         "prod_3": {
           "type": "product",
           "settings": {
-            "product_handle": "",
             "name": "Bone Tank",
             "tag": "Oni",
             "price": "65",
+            "front_image": "",
+            "back_image": "",
             "badge": ""
           }
         },
         "prod_4": {
           "type": "product",
           "settings": {
-            "product_handle": "",
             "name": "Striped Shorts",
             "tag": "Rising Sun",
             "price": "79",
+            "front_image": "",
+            "back_image": "",
             "badge": "Drop 03"
           }
         },
         "prod_5": {
           "type": "product",
           "settings": {
-            "product_handle": "",
             "name": "Tokyo Tee",
             "tag": "Night Series",
             "price": "89",
+            "front_image": "",
+            "back_image": "",
             "badge": ""
           }
         },
         "prod_6": {
           "type": "product",
           "settings": {
-            "product_handle": "",
             "name": "Onsen Shorts",
             "tag": "Mono",
             "price": "79",
+            "front_image": "",
+            "back_image": "",
             "badge": ""
           }
         }
@@ -129,44 +132,11 @@
         "prod_6"
       ],
       "settings": {}
-    },
-    "178039253347e0d4c5": {
-      "type": "apps",
-      "blocks": {
-        "instafeed_app_block_PUGGkK": {
-          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
-          "settings": {
-            "title": "",
-            "title_color": "",
-            "title_size_v2": 0,
-            "alignment": "center",
-            "instafeed_margin_top": 0,
-            "instafeed_margin_bottom": 0,
-            "instafeed_margin_sides": 0,
-            "show_instagram_link": false,
-            "link_alignment": "left",
-            "link_color": "#000000",
-            "background_color": "#28282b",
-            "feed_id": "",
-            "html_area": ""
-          }
-        }
-      },
-      "block_order": [
-        "instafeed_app_block_PUGGkK"
-      ],
-      "settings": {
-        "color_scheme": "scheme-2",
-        "enable_content_fullwidth": false,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false
-      }
     }
   },
   "order": [
     "mitushi_hero_1",
     "mitushi_categories_1",
-    "mitushi_carousel_1",
-    "178039253347e0d4c5"
+    "mitushi_carousel_1"
   ]
 }
