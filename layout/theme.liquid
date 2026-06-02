@@ -230,6 +230,54 @@
         color: #f7f7f8 !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
       }
+
+      /* Hide product count on collection page */
+      .filter-form__result-count,
+      .js-product-count {
+        display: none !important;
+      }
+
+      /* Sort-by: show only the arrow button, hide the select text visually */
+      .filter-form-sorting .field__select {
+        width: 44px !important;
+        min-width: 0 !important;
+      }
+
+      .filter-form-sorting .field--animation {
+        position: relative;
+        width: 44px !important;
+      }
+
+      .filter-form-sorting .field__text.js-collection-product-sort-by-field-select {
+        opacity: 0 !important;
+        width: 44px !important;
+        height: 44px !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 2 !important;
+        cursor: pointer !important;
+      }
+
+      .filter-form-sorting .btn.btn-icon.p-absolute {
+        position: relative !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 44px !important;
+        height: 44px !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        border-radius: 8px !important;
+        background: transparent !important;
+        color: #f7f7f8 !important;
+        right: auto !important;
+        top: auto !important;
+        pointer-events: none !important;
+      }
+
+      .filter-form__rerult-count__sorting {
+        justify-content: flex-end !important;
+      }
     </style>
     {% render 'style-variables' %}
     {{ content_for_header }}
