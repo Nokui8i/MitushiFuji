@@ -38,12 +38,168 @@
   {% assign submit_button_class= " center-md " %}
 {% endif %}
 
+<style>
+  .form-contact-wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    padding: 40px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    box-sizing: border-box !important;
+  }
+
+  @media (max-width: 576px) {
+    .form-contact-wrapper {
+      padding: 24px 16px !important;
+    }
+  }
+
+  .form-contact .field__label {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    margin-bottom: 8px !important;
+    display: block !important;
+    font-family: var(--font-sans) !important;
+    text-align: left !important;
+  }
+
+  .form-contact .field__text,
+  .form-contact textarea {
+    width: 100% !important;
+    background-color: rgba(0, 0, 0, 0.25) !important;
+    background: rgba(0, 0, 0, 0.25) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 6px !important;
+    padding: 14px 20px !important;
+    color: #f7f7f8 !important;
+    font-family: var(--font-sans) !important;
+    font-size: 14px !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-sizing: border-box !important;
+  }
+
+  .form-contact .field__text {
+    height: 52px !important;
+  }
+
+  .form-contact textarea {
+    min-height: 150px !important;
+    height: auto !important;
+    resize: vertical !important;
+  }
+
+  .form-contact .field__text::placeholder,
+  .form-contact textarea::placeholder {
+    color: rgba(255, 255, 255, 0.35) !important;
+  }
+
+  .form-contact .field__text:focus,
+  .form-contact textarea:focus {
+    border-color: var(--crimson) !important;
+    box-shadow: 0 0 16px rgba(204, 19, 42, 0.35) !important;
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    outline: none !important;
+  }
+
+  /* Disable theme's default animation underline */
+  .form-contact .field--animation::after {
+    display: none !important;
+  }
+
+  /* Style custom dropdown/select options */
+  .form-contact select.field__text {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    cursor: pointer !important;
+  }
+
+  .form-contact select.field__text option {
+    background-color: #121212 !important;
+    color: #f7f7f8 !important;
+  }
+
+  .form-contact .field__select svg {
+    color: rgba(255, 255, 255, 0.7) !important;
+    fill: currentColor !important;
+    transition: transform 0.3s ease !important;
+  }
+
+  .form-contact .field__select:hover svg {
+    color: var(--crimson) !important;
+  }
+
+  /* Submit Button styling */
+  .form-contact button[type="submit"] {
+    background-color: var(--crimson) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--crimson) !important;
+    padding: 16px 48px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.2em !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 6px !important;
+    min-height: 54px !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 20px rgba(204, 19, 42, 0.25) !important;
+    width: 100% !important; /* Full width button looks better on forms */
+  }
+
+  @media (min-width: 576px) {
+    .form-contact button[type="submit"] {
+      width: auto !important; /* Back to auto width on tablet/desktop */
+    }
+  }
+
+  .form-contact button[type="submit"]::before,
+  .form-contact button[type="submit"]::after {
+    display: none !important;
+  }
+
+  .form-contact button[type="submit"] .btn-primary__content {
+    color: #ffffff !important;
+  }
+
+  .form-contact button[type="submit"]:hover {
+    background-color: #ff1a3a !important;
+    border-color: #ff1a3a !important;
+    box-shadow: 0 0 24px rgba(204, 19, 42, 0.5) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  .form-contact button[type="submit"]:active {
+    transform: translateY(0) !important;
+  }
+
+  .form-contact .rw {
+    margin: 0 -12px !important;
+    row-gap: 24px !important;
+  }
+
+  .form-contact .clm {
+    padding: 0 12px !important;
+  }
+</style>
+
 <div class="section color-{{ section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} {% render 'animation-loader', section: section %}" data-ui-component="Contact Form Section" role="region" aria-labelledby="sectionHeading-{{ section_id }}">
   <div class="ctnr">
     {% render 'section-header', heading: section.settings.heading, content_align: 'ta-center' %}
     <div class="s-content rw center-xs r-gap-48 r-gap-sm-36 {% if section.settings.content_ordering == 'fd-row-reverse' %}{{ section.settings.content_ordering }}{% endif %}">
       <div class="clm m-zero-md js-animate anm" style="--w-xs:12;--w-sm:12;--w-md:8; --duration: .6s; --delay: .3s;">
-        {%- form 'contact', id: formID, class: 'form-contact' -%}
+        <div class="form-contact-wrapper">
+          {%- form 'contact', id: formID, class: 'form-contact' -%}
           {%- if form.posted_successfully? -%}
             <div class="d-flex middle-xs mb-32 center-xs {{ error_class }}">
               <div class="icon icon--small icon--success fs-0">
@@ -167,6 +323,7 @@
             </div>
           </div>
         {%- endform -%}
+        </div>
       </div>
       {{ form_image_html }}
     </div>
