@@ -4,13 +4,13 @@
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     background-color: var(--ink);
-    padding-top: 96px;
-    padding-bottom: 96px;
+    padding-top: 72px;
+    padding-bottom: 72px;
   }
 
   .mitushi-categories-container {
     margin: 0 auto;
-    max-width: 1400px;
+    max-width: 1360px;
     padding: 0 24px;
   }
 
@@ -18,7 +18,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 48px;
+    margin-bottom: 36px;
   }
 
   .mitushi-categories-title-group > div:first-child {
@@ -39,6 +39,12 @@
   }
 
   @media (min-width: 768px) {
+    .mitushi-categories-title-group > h2 {
+      font-size: 52px;
+    }
+  }
+
+  @media (min-width: 1200px) {
     .mitushi-categories-title-group > h2 {
       font-size: 56px;
     }
@@ -64,22 +70,33 @@
     }
   }
 
+  /* Same asymmetric layout on all breakpoints: large left + 2 stacked right */
   .mitushi-categories-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: minmax(108px, 36vw) minmax(108px, 36vw);
+    gap: 6px;
   }
 
   @media (min-width: 768px) {
     .mitushi-categories-grid {
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto auto;
+      grid-template-rows: 268px 268px;
+      gap: 12px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .mitushi-categories-grid {
+      grid-template-rows: 292px 292px;
+      gap: 12px;
     }
   }
 
   .mitushi-category-card {
     position: relative;
     display: block;
+    height: 100%;
+    min-height: 0;
     overflow: hidden;
     background-color: rgba(255, 255, 255, 0.05);
     text-decoration: none;
@@ -93,28 +110,14 @@
   }
 
   .mitushi-category-card.big {
-    grid-column: span 1;
-    grid-row: span 1;
-  }
-
-  @media (min-width: 768px) {
-    .mitushi-category-card.big {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
+    grid-column: span 2;
+    grid-row: span 2;
   }
 
   .mitushi-category-image-wrapper {
-    position: relative;
+    position: absolute;
+    inset: 0;
     overflow: hidden;
-    aspect-ratio: 4 / 5;
-  }
-
-  @media (min-width: 768px) {
-    .mitushi-category-card.big .mitushi-category-image-wrapper {
-      aspect-ratio: auto;
-      height: 100%;
-    }
   }
 
   .mitushi-category-image {
@@ -133,22 +136,31 @@
   .mitushi-category-overlay {
     position: absolute;
     inset: 0;
+    z-index: 1;
     background: linear-gradient(to top, #28282B, rgba(40, 40, 43, 0.2), transparent);
     opacity: 0.9;
+    pointer-events: none;
   }
 
   .mitushi-category-content {
     position: absolute;
     inset: 0;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 24px;
+    padding: 10px;
   }
 
   @media (min-width: 768px) {
     .mitushi-category-content {
-      padding: 32px;
+      padding: 24px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .mitushi-category-content {
+      padding: 28px;
     }
   }
 
@@ -160,15 +172,16 @@
 
   .mitushi-category-jp {
     font-family: var(--font-jp);
-    font-size: 14px;
+    font-size: clamp(9px, 2.5vw, 12px);
     color: rgba(255, 255, 255, 0.7);
+    line-height: 1.2;
   }
 
   .mitushi-category-badge {
     border: 1px solid rgba(247, 247, 248, 0.3);
-    padding: 4px 12px;
+    padding: 2px 6px;
     border-radius: 9999px;
-    font-size: 10px;
+    font-size: clamp(7px, 2vw, 9px);
     text-transform: uppercase;
     letter-spacing: 0.3em;
     color: rgba(247, 247, 248, 0.8);
@@ -181,11 +194,11 @@
   }
 
   .mitushi-category-count {
-    font-size: 10px;
+    font-size: clamp(7px, 2vw, 9px);
     text-transform: uppercase;
-    letter-spacing: 0.4em;
+    letter-spacing: 0.28em;
     color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
 
   .mitushi-category-bottom-row {
@@ -197,20 +210,27 @@
   .mitushi-category-name {
     font-family: var(--font-display);
     letter-spacing: 0.02em;
-    font-size: 32px;
+    font-size: clamp(1.25rem, 5.5vw, 1.75rem);
     font-weight: 700;
+    line-height: 0.95;
     color: #f7f7f8;
   }
 
   @media (min-width: 768px) {
     .mitushi-category-name {
-      font-size: 56px;
+      font-size: 48px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .mitushi-category-name {
+      font-size: 52px;
     }
   }
 
   .mitushi-category-arrow {
-    width: 32px;
-    height: 32px;
+    width: clamp(18px, 5vw, 28px);
+    height: clamp(18px, 5vw, 28px);
     color: #cc132a;
     opacity: 0;
     transform: translateX(8px);
@@ -225,6 +245,7 @@
   .mitushi-category-ring {
     position: absolute;
     inset: 0;
+    z-index: 3;
     border: 1px solid transparent;
     transition: border-color 0.3s;
     pointer-events: none;
@@ -232,6 +253,31 @@
 
   .mitushi-category-card:hover .mitushi-category-ring {
     border-color: rgba(204, 19, 42, 0.6);
+  }
+
+  @media (max-width: 767px) {
+    .mitushi-categories {
+      padding-top: 56px;
+      padding-bottom: 56px;
+    }
+
+    .mitushi-categories-container {
+      padding-inline: 1rem;
+    }
+
+    .mitushi-categories-header {
+      margin-bottom: 24px;
+    }
+
+    .mitushi-categories-title-group > h2 {
+      font-size: clamp(1.5rem, 8vw, 2rem);
+    }
+
+    .mitushi-categories-title-group > div:first-child {
+      font-size: 8px;
+      letter-spacing: 0.35em;
+      margin-bottom: 8px;
+    }
   }
 </style>
 
