@@ -63,17 +63,165 @@
       width: 2.5rem !important;
       height: 2.5rem !important;
     }
+
+    @media (max-width: 767px) {
+      #mainCartContainer {
+        padding: 1.25rem 1rem 2.5rem !important;
+      }
+
+      .mitushi-cart-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 1.75rem !important;
+        gap: 0.5rem;
+      }
+
+      .mitushi-cart-header-eyebrow {
+        margin-bottom: 0.5rem !important;
+        letter-spacing: 0.35em !important;
+      }
+
+      .mitushi-cart-header h1 {
+        font-size: clamp(1.75rem, 9vw, 2.25rem) !important;
+        line-height: 1.05;
+      }
+
+      .mitushi-cart-item-count {
+        margin-top: 0.35rem;
+        font-size: 11px !important;
+        letter-spacing: 0.28em;
+        color: rgba(247, 247, 248, 0.45);
+      }
+
+      #mainCartContainer .js-cart-items {
+        border: none;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      #mainCartContainer .cart-item {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.25rem 1rem !important;
+        margin: 0;
+        border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+      }
+
+      #mainCartContainer .cart-item > a {
+        width: 88px !important;
+        height: 104px !important;
+        flex-shrink: 0;
+        border-radius: 2px;
+      }
+
+      #mainCartContainer .cart-item__top {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.65rem;
+      }
+
+      #mainCartContainer .cart-item__price {
+        text-align: start !important;
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      #mainCartContainer .cart-item__price .font-display {
+        font-size: 1.125rem !important;
+      }
+
+      #mainCartContainer .cart-item__price > div:last-child {
+        margin-top: 0 !important;
+      }
+
+      #mainCartContainer .cart-item h3 {
+        font-size: 1.05rem !important;
+        line-height: 1.2;
+      }
+
+      #mainCartContainer .cart-item__controls {
+        width: 100%;
+        padding-top: 0.25rem;
+      }
+
+      #mainCartContainer .cart-item__controls .border {
+        border-color: rgba(255, 255, 255, 0.18) !important;
+      }
+
+      #mainCartContainer .cart-item__remove {
+        font-size: 11px !important;
+        letter-spacing: 0.22em !important;
+        color: rgba(247, 247, 248, 0.55) !important;
+        padding: 0.35rem 0;
+      }
+
+      .mitushi-cart-continue {
+        display: flex !important;
+        justify-content: center;
+        width: 100%;
+        margin-top: 1.5rem !important;
+        font-size: 11px !important;
+      }
+
+      .mitushi-cart-summary {
+        border: none !important;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+        padding: 1.5rem 1.25rem 1.35rem !important;
+        margin-top: 0.5rem;
+      }
+
+      .mitushi-cart-summary h2 {
+        text-align: center;
+        font-size: 1.35rem !important;
+        margin-bottom: 1.25rem !important;
+      }
+
+      .mitushi-cart-summary dl {
+        margin-top: 0 !important;
+      }
+
+      .mitushi-cart-summary .checkout-btn {
+        border-radius: 2px;
+      }
+
+      .mitushi-cart-summary .checkout-btn .relative {
+        height: 3.25rem !important;
+        font-size: 10px !important;
+        letter-spacing: 0.18em !important;
+        white-space: nowrap;
+        gap: 0.5rem !important;
+      }
+
+      .mitushi-cart-trust {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.65rem !important;
+        margin-top: 1rem !important;
+        font-size: 9px !important;
+        letter-spacing: 0.2em !important;
+      }
+
+      #mainCartContainer .grid {
+        gap: 1.5rem !important;
+      }
+    }
   </style>
   <main class="mx-auto max-w-[1400px] px-6 py-12" id="mainCartContainer">
     <sht-cart-frm class="cart-content section d-block">
       
       <!-- Cart Header Row -->
-      <div class="mb-10 flex items-end justify-between gap-6 {{ cart_empty_hide }}">
+      <div class="mitushi-cart-header mb-10 flex items-end justify-between gap-6 {{ cart_empty_hide }}">
         <div>
-          <div class="mb-3 text-[10px] font-medium uppercase tracking-[0.5em] text-crimson">
+          <div class="mitushi-cart-header-eyebrow mb-3 text-[10px] font-medium uppercase tracking-[0.5em] text-crimson">
             / Bag
           </div>
           <h1 class="font-display text-5xl md:text-6xl text-foreground">Your cart</h1>
+          <p class="mitushi-cart-item-count text-xs uppercase tracking-[0.3em] text-foreground/50 md:hidden">
+            <span class="js-cart-form-item_count">{{ cart.item_count }}</span> item{% if cart.item_count != 1 %}s{% endif %}
+          </p>
         </div>
         <div class="hidden text-xs uppercase tracking-[0.3em] text-foreground/50 md:block">
           <span class="js-cart-form-item_count">{{ cart.item_count }}</span> item{% if cart.item_count != 1 %}s{% endif %}
@@ -119,7 +267,7 @@
                       <div class="flex flex-1 flex-col justify-between gap-3">
                         
                         <!-- Top Row: Title, Tag, Size & Price -->
-                        <div class="flex items-start justify-between gap-3">
+                        <div class="cart-item__top flex items-start justify-between gap-3">
                           <div>
                             <!-- Title -->
                             <a href="{{ line_item.url }}">
@@ -144,7 +292,7 @@
                           </div>
 
                           <!-- Price Info (Aligned Right) -->
-                          <div class="text-right">
+                          <div class="cart-item__price text-right">
                             <div class="font-display text-lg text-foreground">
                               {{ line_item.final_line_price | money }}
                             </div>
@@ -155,7 +303,7 @@
                         </div>
 
                         <!-- Bottom Controls Row -->
-                        <div class="flex items-center justify-between">
+                        <div class="cart-item__controls flex items-center justify-between">
                           <!-- Quantity Input Wrapper -->
                           <div class="flex items-center border border-border/60">
                             <sht-qty-inp class="field_quantity flex items-center">
@@ -181,7 +329,7 @@
 
                           <!-- Remove Link -->
                           <sht-cart-rmv-btn data-index="{{ line_item.index | plus: 1 }}">
-                            <a href="{{ line_item.url_to_remove }}" class="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.3em] text-foreground/50 hover:text-crimson transition">
+                            <a href="{{ line_item.url_to_remove }}" class="cart-item__remove flex items-center gap-1.5 text-[10px] uppercase tracking-[0.3em] text-foreground/50 hover:text-crimson transition">
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5">
                                 <polyline points="3 6 5 6 21 6"></polyline>
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -199,7 +347,7 @@
               {%- endif -%}
 
               <!-- Continue Shopping Bottom Link -->
-              <a href="{{ routes.all_products_collection_url }}" class="mt-6 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-foreground/60 hover:text-crimson transition">
+              <a href="{{ routes.all_products_collection_url }}" class="mitushi-cart-continue mt-6 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-foreground/60 hover:text-crimson transition">
                 ← Continue shopping
               </a>
             </div>
@@ -207,7 +355,7 @@
 
           <!-- Right Column: Sidebar Order Summary -->
           <aside class="lg:sticky lg:top-28 lg:self-start js-cart-form-footer {% if cart == empty %}d-none{% endif %}">
-            <div class="border border-border/60 bg-card p-7 js-cart-form-content-cart-total">
+            <div class="mitushi-cart-summary border border-border/60 bg-card p-7 js-cart-form-content-cart-total">
               
               <!-- Title -->
               <h2 class="font-display text-2xl mb-4 text-foreground">Order summary</h2>
@@ -286,7 +434,7 @@
                 </div>
 
                 <!-- Secure Checkout Badges -->
-                <div class="mt-5 flex items-center justify-between text-[10px] uppercase tracking-[0.25em] text-foreground/50">
+                <div class="mitushi-cart-trust mt-5 flex items-center justify-between text-[10px] uppercase tracking-[0.25em] text-foreground/50">
                   <span class="flex items-center gap-1.5">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3">
                       <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
