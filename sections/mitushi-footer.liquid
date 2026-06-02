@@ -329,8 +329,6 @@
               <li><a href="#shirts">Shirts</a></li>
               <li><a href="#shorts">Shorts</a></li>
               <li><a href="#tanks">Tanks</a></li>
-              <li><a href="#">New arrivals</a></li>
-              <li><a href="#">Lookbook</a></li>
             {%- endif -%}
           </ul>
         </div>
@@ -390,17 +388,11 @@
             <a href="{{ link.url }}">{{ link.title }}</a>
           {%- endfor -%}
         {%- else -%}
-          {%- if shop.policies != blank -%}
-            {%- for policy in shop.policies -%}
-              {%- if policy != blank -%}
-                <a href="{{ policy.url }}">{{ policy.title }}</a>
-              {%- endif -%}
-            {%- endfor -%}
-          {%- else -%}
-            <a href="/pages/privacy-policy">Privacy Policy</a>
-            <a href="/pages/terms-of-service">Terms of Service</a>
-            <a href="/pages/copyrights">Copyrights</a>
-          {%- endif -%}
+          <a href="/policies/shipping-policy">Shipping Policy</a>
+          <a href="/policies/refund-policy">Refund Policy</a>
+          <a href="/policies/privacy-policy">Privacy Policy</a>
+          <a href="/policies/terms-of-service">Terms of Service</a>
+          <a href="/pages/copyrights">Copyrights</a>
         {%- endif -%}
       </div>
     </div>
