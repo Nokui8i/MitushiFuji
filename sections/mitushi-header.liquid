@@ -530,7 +530,7 @@ Combines a collapsible announcement bar with a sticky header.
             -%}
             <div class="group mitushi-nav-item">
               <a href="{% if is_products_link %}#{% else %}{{ link.url }}{% endif %}" {% if is_products_link %}onclick="return false;"{% endif %} class="mitushi-nav-link {% if link.active or link.child_active %}active{% endif %}">
-                {{ link.title }}
+                {% if is_products_link %}Products{% else %}{{ link.title }}{% endif %}
                 {% if link.links.size > 0 or is_products_link %}
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />

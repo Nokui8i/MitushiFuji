@@ -289,6 +289,44 @@
         justify-content: center !important;
         pointer-events: none !important;
       }
+      /* ── Product card hover frame ── */
+      .product-card,
+      .card--product {
+        border-radius: 8px !important;
+        transition: box-shadow 0.25s ease, transform 0.25s ease !important;
+        overflow: hidden;
+      }
+
+      .product-card:hover,
+      .card--product:hover {
+        box-shadow:
+          0 0 0 1.5px rgba(204, 19, 42, 0.7),
+          0 8px 32px rgba(0, 0, 0, 0.35) !important;
+        transform: translateY(-2px) !important;
+      }
+
+      /* Quick buy bar styling */
+      .product__quickbuy {
+        background: rgba(28, 28, 30, 0.95) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+      }
+
+      .product__quickbuy .btn-primary--animate,
+      .product__quickbuy .btn-primary {
+        background: #cc132a !important;
+        color: #fff !important;
+        border-color: #cc132a !important;
+        font-size: 1.15rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+      }
+
+      .product__quickbuy .btn-primary--animate:hover,
+      .product__quickbuy .btn-primary:hover {
+        background: #a30f22 !important;
+        border-color: #a30f22 !important;
+      }
     </style>
     {% render 'style-variables' %}
     {{ content_for_header }}
