@@ -91,14 +91,12 @@
           <span class="text-xs uppercase tracking-[0.3em] text-foreground/50">{{ cart.currency.iso_code }}</span>
         </div>
         
-        <!-- Short description -->
-        <p class="mt-6 max-w-md text-sm leading-relaxed text-foreground/70">
-          {%- if product.metafields.descriptors.subtitle != blank -%}
+        <!-- Short description / subtitle -->
+        {%- if product.metafields.descriptors.subtitle != blank -%}
+          <p class="mt-6 max-w-md text-sm leading-relaxed text-foreground/70">
             {{ product.metafields.descriptors.subtitle }}
-          {%- else -%}
-            {{ product.description | replace: '<br>', ' ' | replace: '</p>', ' ' | strip_html | truncatewords: 30 }}
-          {%- endif -%}
-        </p>
+          </p>
+        {%- endif -%}
 
         <!-- Product form -->
         {%- form 'product', product, id: 'product-form', class: 'mt-10', novalidate: 'novalidate' -%}
@@ -232,7 +230,11 @@
             <div class="accordion-panel grid overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" style="grid-template-rows: 0fr;">
               <div class="min-h-0">
                 <div class="pb-5 pr-8 text-sm leading-relaxed text-foreground/65">
-                  {{ product.description }}
+                  {%- if product.description != blank -%}
+                    {{ product.description }}
+                  {%- else -%}
+                    <p>No description available for this product.</p>
+                  {%- endif -%}
                 </div>
               </div>
             </div>
@@ -240,19 +242,25 @@
 
 
 
-          <!-- Tab 3: Fabric & Care -->
+          <!-- Tab 2: Fabric & Care -->
           <div class="border-b border-border/60 accordion-item">
             <button type="button" class="accordion-trigger flex w-full items-center justify-between py-5 text-left font-bold text-[11px] uppercase tracking-[0.3em] cursor-pointer bg-transparent border-none">
-              <span class="text-foreground">Fabric & Care</span>
+              <span class="text-foreground">Fabric &amp; Care</span>
               <span class="accordion-icon relative grid h-5 w-5 place-items-center transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-foreground"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
               </span>
             </button>
             <div class="accordion-panel grid overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" style="grid-template-rows: 0fr;">
               <div class="min-h-0">
-                <p class="pb-5 pr-8 text-sm leading-relaxed text-foreground/65">
-                  100% combed organic cotton. Cold wash inside-out. Hang dry to preserve print. Do not iron directly on graphics.
-                </p>
+                <div class="pb-5 pr-8 text-sm leading-relaxed text-foreground/65">
+                  {%- if product.metafields.custom.fabric_care != blank -%}
+                    {{ product.metafields.custom.fabric_care }}
+                  {%- else -%}
+                    <p><strong>Material:</strong> Heavyweight pre-shrunk 100% cotton.</p>
+                    <p><strong>Fit:</strong> Oversized / relaxed fit.</p>
+                    <p><strong>Care:</strong> Cold wash inside-out. Hang dry to preserve print. Do not iron directly on graphics.</p>
+                  {%- endif -%}
+                </div>
               </div>
             </div>
           </div>
