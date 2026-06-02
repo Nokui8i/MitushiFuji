@@ -1,12 +1,79 @@
-<sht-cart-noti id="cartNotificationPanel" class="js-cartNotificationPanel cart-notification w-100 zi-7 no-focus-visible left-0 right-0 d-block p-absolute visible-xs maw-100 opacity-1" tabindex="-1" hidden="true" style="display: none !important; visibility: hidden !important; opacity: 0 !important;">
+<sht-cart-noti id="cartNotificationPanel" class="js-cartNotificationPanel cart-notification no-focus-visible" tabindex="-1" hidden="true">
     <style>
-      #cartNotificationPanel,
-      .js-cartNotificationPanel,
-      sht-cart-noti {
-        display: none !important;
-        visibility: hidden !important;
+      #cartNotificationPanel.cart-notification {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        
+        position: absolute !important;
+        top: 100% !important;
+        right: 2rem !important;
+        width: 380px !important;
+        max-width: calc(100vw - 4rem) !important;
+        margin-top: 12px !important;
+        padding: 1.5rem !important;
+        
+        background: rgba(28, 28, 30, 0.96) !important;
+        backdrop-filter: blur(20px) saturate(160%) !important;
+        -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6) !important;
+        z-index: 9999 !important;
+        
+        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transform: translateY(0) !important;
+      }
+
+      #cartNotificationPanel.cart-notification[hidden] {
         opacity: 0 !important;
+        visibility: hidden !important;
+        transform: translateY(-12px) !important;
         pointer-events: none !important;
+      }
+
+      /* Styles for contents to look premium and aligned with Mitushi brand */
+      #cartNotificationPanel .cart-notification__links a.btn,
+      #cartNotificationPanel .cart-notification__links button.btn {
+        font-family: var(--font-display) !important;
+        font-size: 14px !important;
+        letter-spacing: 0.1em !important;
+        text-transform: uppercase !important;
+        border-radius: 6px !important;
+        padding: 12px 18px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.2s ease !important;
+      }
+
+      #cartNotificationPanel .btn-secondary--animate {
+        background: transparent !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: #f7f7f8 !important;
+      }
+      #cartNotificationPanel .btn-secondary--animate:hover {
+        border-color: #cc132a !important;
+        color: #cc132a !important;
+        background: rgba(204, 19, 42, 0.08) !important;
+      }
+
+      #cartNotificationPanel .btn-primary--animate {
+        background: #cc132a !important;
+        border: 1px solid #cc132a !important;
+        color: #fff !important;
+      }
+      #cartNotificationPanel .btn-primary--animate:hover {
+        background: #e61934 !important;
+        border-color: #e61934 !important;
+        box-shadow: 0 0 12px rgba(204, 19, 42, 0.4) !important;
+      }
+
+      #cartNotificationPanel .cart-notification-panel-content .cart-item {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        padding-bottom: 1rem !important;
+        margin-bottom: 1rem !important;
       }
     </style>
     <div data-type="cart-notification-panel-wrapper" class="js-cart-notification-panel-wrapper p-relative" >

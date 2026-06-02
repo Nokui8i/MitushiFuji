@@ -9,6 +9,7 @@ Combines a collapsible announcement bar with a sticky header.
       background: var(--ink);
       color: #f7f7f8;
       font-family: var(--font-sans);
+      position: relative;
     }
 
     .mitushi-announcement {
@@ -770,6 +771,7 @@ Combines a collapsible announcement bar with a sticky header.
     </div>
   </div>
 
+  {%- render 'cart-notification-panel' -%}
 </sht-header>
 
 <script>

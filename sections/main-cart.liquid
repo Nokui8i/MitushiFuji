@@ -230,6 +230,7 @@
                     </div>
                     <div class="h-1 w-full overflow-hidden bg-foreground/10">
                       <progress class="h-full bg-crimson transition-all duration-700 js-free-shipping-progress" style="width: {{ progress }}%; height: 4px; display: block; border: none; background: transparent; -webkit-appearance: none; appearance: none;" value="{{ cart.total_price }}" max="{{ free_shipping_threshold }}"></progress>
+                      <span class="js-free-shipping-progress-content d-none-important" style="display:none !important;"></span>
                     </div>
                   </sht-free-shipping-bar>
                 </div>
