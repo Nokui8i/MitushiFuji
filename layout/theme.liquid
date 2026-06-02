@@ -88,6 +88,25 @@
         text-transform: uppercase !important;
       }
 
+      /* Shopify cookie banner — keep compact body typography (not display headings) */
+      #shopify-pc__banner h1,
+      #shopify-pc__banner h2,
+      #shopify-pc__banner h3,
+      #shopify-pc-banner h1,
+      #shopify-pc-banner h2,
+      #shopify-pc-banner h3,
+      [id^="shopify-pc"] h1,
+      [id^="shopify-pc"] h2,
+      [id^="shopify-pc"] h3 {
+        font-family: var(--font-body-family) !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.2em !important;
+        text-transform: uppercase !important;
+        line-height: 1.3 !important;
+        margin: 0 0 8px !important;
+      }
+
       .font-display, .font-display * {
         font-family: var(--font-display) !important;
         letter-spacing: 0.02em !important;
