@@ -237,7 +237,17 @@
         display: none !important;
       }
 
-      /* Sort-by: show only the arrow button, hide the select text visually */
+      /* Hide the LEFT filter drawer button — keep only the right sort-by */
+      sht-coll-prd-drwer-opner.collection-drawer-open {
+        display: none !important;
+      }
+
+      /* Also hide the active filter tags row since filter button is hidden */
+      .js-active-filters {
+        display: none !important;
+      }
+
+      /* Sort-by arrow button: show only the arrow icon, hide the select text */
       .filter-form-sorting .field__select {
         width: 44px !important;
         min-width: 0 !important;
