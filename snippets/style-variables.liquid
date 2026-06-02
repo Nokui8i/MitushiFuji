@@ -4,16 +4,16 @@
 	assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
 	assign heading_font_bold = settings.type_header_font | font_modify: 'weight', 'bold'
 -%}
-{%- if settings.type_body_font != blank and settings.type_body_font.system? == false -%}
+{%- if settings.type_body_font != blank -%}
 	<link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
 {%- endif -%}
-{%- if body_font_bold != blank and body_font_bold.system? == false -%}
+{%- if body_font_bold != blank -%}
 	<link rel="preload" as="font" href="{{ body_font_bold | font_url }}" type="font/woff2" crossorigin>
 {%- endif -%}
-{%- if settings.type_header_font != blank and settings.type_header_font.system? == false -%}
+{%- if settings.type_header_font != blank -%}
 	<link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
 {%- endif -%}
- {%- if heading_font_bold != blank and heading_font_bold.system? == false -%}
+ {%- if heading_font_bold != blank -%}
 	<link rel="preload" as="font" href="{{ heading_font_bold | font_url }}" type="font/woff2" crossorigin>
 {%- endif -%}
 <style>

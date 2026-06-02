@@ -9,6 +9,12 @@
  */
 {
   "sections": {
+    "breadcrumb": {
+      "type": "breadcrumb",
+      "settings": {
+        "color_scheme": ""
+      }
+    },
     "main": {
       "type": "main-product",
       "blocks": {
@@ -269,6 +275,7 @@
     }
   },
   "order": [
+    "breadcrumb",
     "main",
     "collapsible_content_xg6FwX",
     "product-recommendation",

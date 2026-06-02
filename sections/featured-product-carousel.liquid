@@ -1,453 +1,104 @@
-<style>
-  .mitushi-product-carousel-wrapper {
-    background-color: #28282B !important;
-    color: #f7f7f8 !important;
-    padding: 0 !important;
-    display: block;
-    width: 100%;
-  }
+{%- liquid
+  assign md = 12.0 | divided_by : section.settings.items_per_row_on_desktop
 
-  .mitushi-product-carousel {
-    background-color: #28282B;
-    padding-top: 96px;
-    padding-bottom: 96px;
-  }
+  if section.settings.content_align == 'diagonal d-grid-md'
+    assign md = 6
+  endif
+  unless section.settings.section_mask_overlay_color.alpha == 0.0 or section.settings.section_mask_overlay_color == blank
+    assign overlay_color =  '--color-page-bg-rgb:' | append: section.settings.section_mask_overlay_color.red | append: ',' | append: section.settings.section_mask_overlay_color.green | append: ',' | append: section.settings.section_mask_overlay_color.blue
+  endunless
+  unless section.settings.section_content_overlay_color.alpha == 0.0 or section.settings.section_content_overlay_color == blank
+    assign content_color =  '--color-normal-text-rgb:' | append: section.settings.section_content_overlay_color.red | append: ',' | append: section.settings.section_content_overlay_color.green | append: ',' | append: section.settings.section_content_overlay_color.blue
+  endunless
+  if settings.enable_content_max_width
+    assign carousel_class = 'carousel-content-width o-hidden-md'
+  endif
 
-  .mitushi-carousel-container {
-    margin: 0 auto;
-    max-width: 1400px;
-    padding: 0 24px;
-  }
+  unless section.settings.star_rating_overlay.alpha == 0.0 or section.settings.star_rating_overlay == blank
+    assign rating_star_color = '--color-rating-star: rgba(' | append: section.settings.star_rating_overlay.red | append: ',' | append: section.settings.star_rating_overlay.green | append: ',' | append: section.settings.star_rating_overlay.blue | append: ', 1)'
+  endunless
 
-  .mitushi-carousel-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 40px;
-  }
-
-  .mitushi-carousel-title-group > div:first-child {
-    font-size: 10px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5em;
-    color: #cc132a;
-    margin-bottom: 12px;
-  }
-
-  .mitushi-carousel-title-group > h2 {
-    font-family: var(--font-display);
-    letter-spacing: 0.02em;
-    font-size: 32px;
-    font-weight: 700;
-    color: #f7f7f8;
-    margin: 0;
-  }
-
-  @media (min-width: 768px) {
-    .mitushi-carousel-title-group > h2 {
-      font-size: 56px;
-    }
-  }
-
-  .mitushi-carousel-controls {
-    display: flex;
-    gap: 8px;
-  }
-
-  .mitushi-carousel-btn {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: transparent;
-    color: #f7f7f8;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .mitushi-carousel-btn:hover {
-    border-color: #cc132a;
-    color: #cc132a;
-  }
-
-  .mitushi-carousel-track {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    padding-bottom: 16px;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  .mitushi-carousel-track::-webkit-scrollbar {
-    display: none;
-  }
-
-  .mitushi-product-card {
-    position: relative;
-    flex-shrink: 0;
-    width: 78vw;
-    snap-start: always;
-  }
-
-  @media (min-width: 640px) {
-    .mitushi-product-card {
-      width: 360px;
-    }
-  }
-
-  .mitushi-product-image-wrapper {
-    position: relative;
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .mitushi-product-front,
-  .mitushi-product-back {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: opacity 500ms;
-  }
-
-  .mitushi-product-back {
-    opacity: 0;
-  }
-
-  .mitushi-product-card:hover .mitushi-product-back {
-    opacity: 1;
-  }
-
-  .mitushi-product-card:hover .mitushi-product-front {
-    opacity: 0;
-  }
-
-  .mitushi-product-badge {
-    position: absolute;
-    left: 12px;
-    top: 12px;
-    background-color: #cc132a;
-    padding: 4px 10px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    color: #f7f7f8;
-    z-index: 10;
-  }
-
-  .mitushi-product-add-btn {
-    position: absolute;
-    right: 12px;
-    top: 12px;
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    background-color: rgba(247, 247, 248, 0.95);
-    color: #28282B;
-    border: none;
-    cursor: pointer;
-    opacity: 0;
-    transition: all 0.3s;
-    z-index: 10;
-  }
-
-  .mitushi-product-card:hover .mitushi-product-add-btn {
-    opacity: 1;
-  }
-
-  .mitushi-product-add-btn:hover {
-    background-color: #cc132a;
-    color: #f7f7f8;
-  }
-
-  .mitushi-product-cta {
-    position: absolute;
-    inset-x: 0;
-    bottom: 0;
-    background-color: rgba(40, 40, 43, 0.95);
-    padding: 16px;
-    backdrop-filter: blur(4px);
-    transform: translateY(100%);
-    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .mitushi-product-card:hover .mitushi-product-cta {
-    transform: translateY(0);
-  }
-
-  .mitushi-product-cta-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .mitushi-product-cta-info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .mitushi-product-cta-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  .mitushi-product-price {
-    font-family: var(--font-display);
-    letter-spacing: 0.02em;
-    font-size: 20px;
-    font-weight: 700;
-    color: #f7f7f8;
-  }
-
-  .mitushi-product-cart-btn {
-    background-color: #cc132a;
-    padding: 10px 16px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    color: #f7f7f8;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .mitushi-product-cart-btn:hover {
-    background-color: #ff1a3a;
-  }
-
-  .mitushi-product-info {
-    margin-top: 16px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-  }
-
-  .mitushi-product-details {
-    flex: 1;
-  }
-
-  .mitushi-product-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: #f7f7f8;
-    margin: 0;
-  }
-
-  .mitushi-product-tag {
-    margin-top: 6px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 0;
-  }
-
-  .mitushi-product-info-price {
-    font-family: var(--font-display);
-    letter-spacing: 0.02em;
-    font-size: 18px;
-    font-weight: 700;
-    color: #f7f7f8;
-  }
-</style>
-
-<div class="mitushi-product-carousel-wrapper" data-ui-component="Featured Product Carousel Section">
-  <section class="mitushi-product-carousel">
-    <div class="mitushi-carousel-container">
-      <div class="mitushi-carousel-header">
-        <div class="mitushi-carousel-title-group">
-          <div>/ 04 — Curated drops</div>
-          <h2>{{ section.settings.heading }}</h2>
-        </div>
-        <div class="mitushi-carousel-controls">
-          <button class="mitushi-carousel-btn" aria-label="Previous" onclick="scrollFeaturedCarousel(this, -1)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-              <path d="M15 19l-7-7 7-7"></path>
-            </svg>
-          </button>
-          <button class="mitushi-carousel-btn" aria-label="Next" onclick="scrollFeaturedCarousel(this, 1)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-              <path d="M9 5l7 7-7 7"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div class="mitushi-carousel-track">
-        {%- for prod_obj in section.settings.product_list -%}
-          {%- liquid
-            assign index_mod = forloop.index
-            assign prod_name = prod_obj.title
-            assign prod_tag = prod_obj.collections.first.title | default: prod_obj.vendor
-            assign prod_price = prod_obj.price | money_without_trailing_zeros
-            assign prod_url = prod_obj.url
-            assign variant_id = prod_obj.selected_or_first_available_variant.id
-
-            if prod_obj.featured_image != blank
-              assign front_img = prod_obj.featured_image | img_url: '360x450'
-            else
-              if index_mod == 1 or index_mod == 5
-                assign front_img = 'product-shirt-1.jpg' | asset_url
-              elsif index_mod == 2
-                assign front_img = 'product-shirt-2.jpg' | asset_url
-              elsif index_mod == 3
-                assign front_img = 'product-tank-1.jpg' | asset_url
-              else
-                assign front_img = 'product-shorts-1.jpg' | asset_url
-              endif
-            endif
-
-            if prod_obj.images[1] != blank
-              assign back_img = prod_obj.images[1] | img_url: '360x450'
-            elsif prod_obj.featured_image != blank
-              assign back_img = prod_obj.featured_image | img_url: '360x450'
-            else
-              if index_mod == 1 or index_mod == 5
-                assign back_img = 'product-shirt-1-back.jpg' | asset_url
-              elsif index_mod == 2
-                assign back_img = 'product-shirt-2-back.jpg' | asset_url
-              elsif index_mod == 3
-                assign back_img = 'product-tank-1-back.jpg' | asset_url
-              else
-                assign back_img = 'product-shorts-1-back.jpg' | asset_url
-              endif
-            endif
-
-            assign prod_badge = ''
-            if prod_obj.compare_at_price > prod_obj.price
-              assign prod_badge = 'SALE'
-            else
-              for tag in prod_obj.tags
-                assign tag_down = tag | downcase
-                if tag_down contains 'new'
-                  assign prod_badge = 'NEW'
-                  break
-                elsif tag_down contains 'hot'
-                  assign prod_badge = 'HOT'
-                  break
-                elsif tag_down contains 'drop'
-                  assign prod_badge = tag | uppercase
-                  break
+  assign card_content_inner = false
+  if section.settings.style_card == 'card'
+    assign card_content_inner = true
+  endif
+-%}
+<div class="fpc section color-{{- section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} {% render 'animation-loader', section: section %}" data-ui-component="Featured Product Carousel Section" role="region" aria-labelledby="sectionHeading-{{ section.id | md5 | truncate: 12, "" }}">
+  <div class="ctnr {{ section.settings.content_align }}">
+    {%- render 'section-header',
+      content_align: section.settings.content_align,
+      subheading: section.settings.subheading,
+      heading: section.settings.heading,
+      description: section.settings.description,
+      badge_text: section.settings.badge_text,
+      badge_position: section.settings.badge_position,
+      badge_shape: section.settings.badge_shape,
+      badge_color: section.settings.badge_color,
+      section: section
+    -%}
+    <div class="s-content">
+      <sht-carousel class="p-relative d-block {{ carousel_class }}">
+        <div aria-atomic="true" class="d-flex fw-nowrap carousel ox-auto p-relative scrollable scrollable-x disable-scrollbars js-carousel-items js-animate">
+          {%- for product in section.settings.product_list -%}
+            <sht-carousel-itm tabindex="0" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero anm anm-fadeInUp" role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}"
+              style="--w-xs:12;--w-sm:6;--w-md:{{- md -}}; --delay: {{ forloop.index | times: 0.05 -}}s; --duration: .6s; {{ overlay_color }}; {{ content_color }};" data-item-index="{{ forloop.index }}">
+              {% render 'card-product',
+                product: product,
+                show_vendor: settings.show_product_vendor,
+                show_color_swatch: settings.show_color_swatches,
+                show_sale_badge: settings.show_sale_badge,
+                enable_quick_buy: settings.enable_quick_buy,
+                ratio: section.settings.image_ratio,
+                card_content_inner: card_content_inner,
+                image_width: '320, 450, 550, 750',
+                overlay_opacity: section.settings.image_overlay_opacity,
+                section: section,
+                is_first: forloop.first,
+                show_ranking: section.settings.show_ranking,
+                ranking_badge_shape: section.settings.ranking_badge_shape,
+                ranking_badge_color: section.settings.ranking_badge_color,
+                ranking_badge_number: forloop.index,
+                color_rating_star: false,
+                star_rating_overlay: rating_star_color,
+                show_second_image: settings.show_second_image
+                %}
+            </sht-carousel-itm>
+          {%- else -%}
+            {%- for i in (1..5) -%}
+              {%- liquid
+                assign placeholder_index = forloop.index | modulo: 4
+                if placeholder_index == 0
+                  assign placeholder_index = 4
                 endif
-              endfor
-            endif
-          -%}
-
-          <article class="mitushi-product-card">
-            <div class="mitushi-product-image-wrapper">
-              <a href="{{ prod_url }}">
-                <img
-                  src="{{ front_img }}"
-                  alt="{{ prod_name | escape }}"
-                  loading="lazy"
-                  class="mitushi-product-front"
-                />
-                <img
-                  src="{{ back_img }}"
-                  alt="{{ prod_name | escape }} (back)"
-                  loading="lazy"
-                  class="mitushi-product-back"
-                />
-              </a>
-              {% if prod_badge != blank %}
-                <span class="mitushi-product-badge">{{ prod_badge }}</span>
-              {% endif %}
-              
-              <button class="mitushi-product-add-btn" aria-label="Add to cart" {% if variant_id != blank %}onclick="addProductToCart('{{ variant_id }}')"{% endif %}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-              </button>
-
-              <div class="mitushi-product-cta">
-                <div class="mitushi-product-cta-content">
-                  <div class="mitushi-product-cta-info">
-                    <div class="mitushi-product-cta-label">Quick add</div>
-                    <div class="mitushi-product-price">{{ prod_price }}</div>
-                  </div>
-                  <button class="mitushi-product-cart-btn" {% if variant_id != blank %}onclick="addProductToCart('{{ variant_id }}')"{% endif %}>Add to cart</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="mitushi-product-info">
-              <div class="mitushi-product-details">
-                <h3 class="mitushi-product-name">
-                  <a href="{{ prod_url }}" style="color: inherit; text-decoration: none;">{{ prod_name }}</a>
-                </h3>
-                <p class="mitushi-product-tag">{{ prod_tag }}</p>
-              </div>
-              <div class="mitushi-product-info-price">{{ prod_price }}</div>
-            </div>
-          </article>
-        {%- endfor -%}
-      </div>
+              -%}
+              <sht-carousel-itm tabindex="0" role="group" aria-roledescription="Slide" aria-label="{{ 'accessibility.slide' | t }} {{ forloop.index }} {{ 'accessibility.of' | t }} {{ forloop.length }}" class="carousel__item clm js-carousel-item p-relative scrollable-aln-start d-flex fd-column middle-xs fg-1 fs-0 p-zero anm anm-fadeInUp" style="--w-xs:12;--w-sm:6;--w-md:{{- md -}}; --delay: {{ forloop.index | times: 0.05 -}}s; --duration: .6s; {{ overlay_color }}; {{ content_color }};" data-item-index="{{ forloop.index }}">
+                {% render 'card-product-placeholder',
+                  ratio: section.settings.image_ratio,
+                  card_content_inner: card_content_inner,
+                  overlay_opacity:section.settings.image_overlay_opacity,
+                  show_ranking: section.settings.show_ranking,
+                  ranking_badge_shape: section.settings.ranking_badge_shape,
+                  ranking_badge_color: section.settings.ranking_badge_color,
+                  ranking_badge_number: forloop.index,
+                  style_card: section.settings.style_card,
+                  product_placeholder: placeholder_index
+                %}
+              </sht-carousel-itm>
+            {%- endfor -%}
+          {%- endfor -%}
+        </div>
+        <div class="carousel-pagination zi-1 middle-y w-100 p-absolute no-js-hidden {{ section.settings.show_navigation | default: 'd-none d-block-sm' | replace: 'true', '' }}">
+          <div class="p-absolute left-0">
+            <button type="button" data-step="1" class="js-carousel-prev-btn rtl-flip-x btn btn-primary--animate btn-icon btn-small p-absolute middle-y left-0" aria-label="{{ 'accessibility.previous_slide' | t }}" name="previous" disabled>{% render 'icon-chevron-left' %}</button>
+          </div>
+          <div class="p-absolute right-0">
+            <button type="button" data-step="1" class="js-carousel-next-btn rtl-flip-x btn btn-primary--animate btn-icon btn-small p-absolute middle-y right-0" aria-label="{{ 'accessibility.next_slide' | t }}" name="next" disabled>{% render 'icon-chevron-right' %}</button>
+          </div>
+        </div>
+      </sht-carousel>
     </div>
-  </section>
+  </div>
 </div>
-
-<script>
-  function scrollFeaturedCarousel(button, direction) {
-    const section = button.closest('.mitushi-product-carousel');
-    const track = section.querySelector('.mitushi-carousel-track');
-    if (track) {
-      track.scrollBy({ left: direction * 380, behavior: 'smooth' });
-    }
-  }
-
-  if (typeof window.addProductToCart !== 'function') {
-    window.addProductToCart = function(variantId) {
-      if (!variantId) return;
-      const formData = {
-        'items': [{
-          'id': variantId,
-          'quantity': 1
-        }]
-      };
-      fetch((window.Shopify && window.Shopify.routes && window.Shopify.routes.root) ? window.Shopify.routes.root + 'cart/add.js' : '/cart/add.js', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Product added successfully', data);
-        fetch(((window.Shopify && window.Shopify.routes && window.Shopify.routes.root) ? window.Shopify.routes.root + 'cart.js' : '/cart.js'))
-        .then(res => res.json())
-        .then(cart => {
-          const badges = document.querySelectorAll('.mitushi-cart-badge, .header__cart-count');
-          badges.forEach(badge => {
-            badge.textContent = cart.item_count;
-          });
-          document.dispatchEvent(new CustomEvent('cart:updated', {
-            detail: { cart: cart }
-          }));
-        });
-      })
-      .catch((error) => {
-        console.error('Error adding to cart:', error);
-      });
-    }
-  }
-</script>
-
 {% schema %}
 {
   "name": "t:general.featured_product_carousel",
