@@ -28,7 +28,7 @@
     "subheading_style": "badge badge--para",
     "enable_parallax_scrolling_prominent_badge": true,
     "optimize_page_performance": true,
-    "cart_type": "drawer",
+    "cart_type": "notification",
     "enable_cart_product_vendor": true,
     "show_discount_field": true,
     "enable_cart_order_notes": false,
