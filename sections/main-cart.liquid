@@ -1,314 +1,35 @@
-{{ 'cart.css' | asset_url | stylesheet_tag: preload: true }}
-<style>
-  .main-cart {
-    background-color: #28282B !important;
-    color: #f4f4f4 !important;
-    min-height: 80vh;
-    padding-top: 80px;
-    padding-bottom: 96px;
-    font-family: var(--font-sans) !important;
-  }
-  
-  .main-cart .ctnr {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-  
-  .main-cart h1.h2,
-  .main-cart h2,
-  .main-cart h3,
-  .main-cart h4,
-  .main-cart .h2,
-  .main-cart .h5,
-  .main-cart .h6 {
-    font-family: var(--font-display) !important;
-    letter-spacing: 0.04em !important;
-    color: #f4f4f4 !important;
-    text-transform: uppercase !important;
-  }
-
-  .main-cart h1.h2 {
-    font-size: 48px !important;
-    margin-bottom: 32px !important;
-    text-align: center;
-  }
-
-  @media (min-width: 768px) {
-    .main-cart h1.h2 {
-      font-size: 64px !important;
-    }
-  }
-
-  .main-cart a {
-    color: #f4f4f4 !important;
-    text-decoration: none !important;
-    transition: color 0.3s ease;
-  }
-
-  .main-cart a:hover {
-    color: #cc132a !important;
-  }
-
-  .main-cart .cart-content__headings {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
-    padding-bottom: 16px !important;
-    margin-bottom: 16px !important;
-    text-transform: uppercase;
-    font-size: 11px !important;
-    letter-spacing: 0.25em !important;
-    color: rgba(244, 244, 244, 0.5) !important;
-    font-weight: 500 !important;
-  }
-
-  .main-cart .cart-item {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-    padding: 24px 0 !important;
-  }
-
-  .main-cart .cart-item__product {
-    display: flex !important;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .main-cart .cart-item__product .media-wrapper {
-    width: 90px !important;
-    flex-shrink: 0;
-    aspect-ratio: 4 / 5 !important;
-    background-color: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  }
-
-  @media (min-width: 768px) {
-    .main-cart .cart-item__product .media-wrapper {
-      width: 120px !important;
-    }
-  }
-
-  .main-cart .cart-item__product a.h6 {
-    font-family: var(--font-sans) !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.02em !important;
-    text-transform: none !important;
-    margin-bottom: 8px !important;
-  }
-
-  .main-cart .cart-item__product .product-option {
-    font-size: 12px !important;
-    color: rgba(244, 244, 244, 0.6) !important;
-    margin-top: 4px;
-    letter-spacing: 0.05em;
-  }
-
-  .main-cart .field_quantity {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    border-radius: 0 !important;
-    height: 40px !important;
-    padding: 0 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-  }
-
-  .main-cart .field_quantity button {
-    background: transparent !important;
-    color: #f4f4f4 !important;
-    width: 36px !important;
-    height: 38px !important;
-    border: none !important;
-    display: grid !important;
-    place-items: center !important;
-    cursor: pointer !important;
-    transition: color 0.3s;
-  }
-
-  .main-cart .field_quantity button:hover {
-    color: #cc132a !important;
-  }
-
-  .main-cart .field_quantity input {
-    background: transparent !important;
-    color: #f4f4f4 !important;
-    border: none !important;
-    width: 40px !important;
-    height: 38px !important;
-    text-align: center !important;
-    font-family: var(--font-sans) !important;
-    font-weight: 600 !important;
-    font-size: 14px !important;
-    outline: none !important;
-  }
-
-  .main-cart .btn-secondary--animate {
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    background: transparent !important;
-    color: #f4f4f4 !important;
-    border-radius: 0 !important;
-    transition: all 0.3s !important;
-    height: 40px !important;
-    width: 40px !important;
-  }
-
-  .main-cart .btn-secondary--animate:hover {
-    border-color: #cc132a !important;
-    background-color: rgba(204, 19, 42, 0.1) !important;
-    color: #cc132a !important;
-  }
-
-  .main-cart .cart-item__price-wrapper {
-    font-family: var(--font-display) !important;
-    font-size: 20px !important;
-    letter-spacing: 0.02em !important;
-    color: #f4f4f4 !important;
-  }
-
-  .main-cart .cart-item__price-wrapper s {
-    font-size: 14px !important;
-    color: rgba(244, 244, 244, 0.4) !important;
-  }
-
-  .main-cart .cart-amount {
-    background-color: rgba(255, 255, 255, 0.02) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    padding: 32px 24px !important;
-    border-radius: 0 !important;
-  }
-
-  .main-cart .js-cart-total {
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-    padding-top: 24px !important;
-  }
-
-  .main-cart .js-cart-total h2 {
-    font-size: 20px !important;
-    font-weight: 600 !important;
-  }
-
-  .main-cart .js-cart-total p {
-    font-family: var(--font-display) !important;
-    font-size: 28px !important;
-    color: #f4f4f4 !important;
-  }
-
-  .main-cart .btn-primary--animate {
-    background-color: #cc132a !important;
-    border: 1px solid #cc132a !important;
-    color: #f4f4f4 !important;
-    font-family: var(--font-sans) !important;
-    font-size: 12px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.3em !important;
-    border-radius: 0 !important;
-    padding: 16px 24px !important;
-    height: auto !important;
-    transition: all 0.3s ease !important;
-  }
-
-  .main-cart .btn-primary--animate:hover {
-    background-color: #ff1a3a !important;
-    border-color: #ff1a3a !important;
-    box-shadow: 0 0 20px rgba(204, 19, 42, 0.4) !important;
-  }
-
-  .main-cart .cart__note summary {
-    margin-top: 16px !important;
-  }
-
-  .main-cart .cart__note summary span.btn-link {
-    color: rgba(244, 244, 244, 0.6) !important;
-    text-decoration: underline !important;
-    font-size: 12px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.1em !important;
-  }
-
-  .main-cart .cart__note summary span.btn-link:hover {
-    color: #cc132a !important;
-  }
-
-  .main-cart .cart__note textarea {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    color: #f4f4f4 !important;
-    border-radius: 0 !important;
-    outline: none !important;
-    padding: 12px !important;
-  }
-
-  .main-cart .cart__note textarea:focus {
-    border-color: #cc132a !important;
-  }
-
-  .main-cart .free-shipping-notification progress {
-    height: 6px !important;
-    border-radius: 0 !important;
-  }
-
-  .main-cart .free-shipping-notification progress::-webkit-progress-bar {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-  }
-
-  .main-cart .free-shipping-notification progress::-webkit-progress-value {
-    background-color: #cc132a !important;
-  }
-
-  /* Empty state styling */
-  .main-cart .ta-center {
-    padding: 48px 0;
-  }
-
-  .main-cart .ta-center p {
-    font-size: 16px;
-    color: rgba(244, 244, 244, 0.7);
-  }
-</style>
 {%- liquid
   if cart == empty
-    assign cart_empty_hide = 'd-none'
-    assign cart_empty_show = 'd-block'
+    assign cart_empty_hide = 'hidden'
+    assign cart_empty_show = 'block'
+  else
+    assign cart_empty_hide = 'block'
+    assign cart_empty_show = 'hidden'
   endif
-  capture icon_plus
-    render 'icon-plus', size: 20
-  endcapture
-
-  capture icon_minus
-    render 'icon-minus', size: 20
-  endcapture
-
-  capture icon_remove
-    render 'icon-remove'
-  endcapture
 -%}
-<div class="main-cart color-{{- section.settings.color_scheme }}" id="mainCart" data-ui-component="Main Cart Section">
-  <div class="ctnr" id="mainCartContainer">
-    <sht-cart-frm class="cart-content section d-block {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }}">
+<div class="bg-background text-foreground min-h-screen" id="mainCart" data-ui-component="Main Cart Section">
+  <main class="mx-auto max-w-[1400px] px-6 py-12" id="mainCartContainer">
+    <sht-cart-frm class="cart-content section d-block">
       
       <!-- Cart Header Row -->
-      <div class="s-header {{ cart_empty_hide }}">
-        <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; width: 100%;">
-          <div>
-            <div style="font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5em; color: #cc132a; margin-bottom: 12px;">
-              / Bag
-            </div>
-            <h1 class="font-display" style="font-family: var(--font-display) !important; font-size: 48px; margin: 0; text-transform: uppercase; color: #f4f4f4;">Your cart</h1>
+      <div class="mb-10 flex items-end justify-between gap-6 {{ cart_empty_hide }}">
+        <div>
+          <div class="mb-3 text-[10px] font-medium uppercase tracking-[0.5em] text-crimson">
+            / Bag
           </div>
-          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(244,244,244,0.5); font-weight: 600;">
-            <span class="js-cart-form-item_count">{{ cart.item_count }}</span> item{% if cart.item_count != 1 %}s{% endif %}
-          </div>
+          <h1 class="font-display text-5xl md:text-6xl text-foreground">Your cart</h1>
+        </div>
+        <div class="hidden text-xs uppercase tracking-[0.3em] text-foreground/50 md:block">
+          <span class="js-cart-form-item_count">{{ cart.item_count }}</span> item{% if cart.item_count != 1 %}s{% endif %}
         </div>
       </div>
 
       <!-- Empty State Header -->
-      <div class="s-header {{ cart_empty_show }}" style="text-align: center; padding: 48px 0;">
-        <div style="font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5em; color: #cc132a; margin-bottom: 12px;">
-          / Empty
-        </div>
-        <h1 class="font-display" style="font-family: var(--font-display) !important; font-size: 48px; margin-bottom: 16px; text-transform: uppercase; color: #f4f4f4;">Your bag is quiet</h1>
-        <p style="font-size: 14px; color: rgba(244,244,244,0.6); margin-bottom: 32px;">No drops yet. The next release won't wait.</p>
-        <a class="btn btn-primary--animate" href="{{ routes.all_products_collection_url }}" style="background-color: #cc132a !important; border: 1px solid #cc132a !important; color: #f4f4f4 !important; font-family: var(--font-sans) !important; font-size: 11px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.3em !important; border-radius: 0 !important; padding: 16px 32px !important; height: auto !important; display: inline-flex !important; align-items: center !important; gap: 8px !important;">
+      <div class="border border-border/60 py-24 text-center {{ cart_empty_show }}">
+        <div class="mb-4 text-[10px] uppercase tracking-[0.5em] text-crimson">/ Empty</div>
+        <h2 class="font-display text-4xl text-foreground">Your bag is quiet</h2>
+        <p class="mt-3 text-sm text-foreground/60">No drops yet. The next release won't wait.</p>
+        <a class="mt-8 inline-flex items-center gap-2 bg-crimson px-6 py-3 text-[11px] font-bold uppercase tracking-[0.3em] text-white hover:bg-crimson-glow transition" href="{{ routes.all_products_collection_url }}">
           Explore the drop
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;">
             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -319,46 +40,47 @@
 
       <!-- Cart Form -->
       <form action="{{ routes.cart_url }}" method="post" id="cartForm" class="{{ cart_empty_hide }}">
-        <div class="rw">
+        <div class="grid grid-cols-1 gap-10 lg:grid-cols-3">
           
           <!-- Left Column: Items List -->
-          <div class="pb-50 js-cart-form-wrapper clm" id="mainCartForm" data-section-id="{{ section.id }}" style="--w-xs: 12; --w-md: 8;">
+          <div class="pb-50 js-cart-form-wrapper lg:col-span-2" id="mainCartForm" data-section-id="{{ section.id }}">
             <div class="js-cart-form-content-cart-items">
               {%- if cart != empty -%}
-                <div class="cart-items js-cart-items" style="border-top: 1px solid rgba(255,255,255,0.08);">
+                <div class="border-y border-border/60 js-cart-items">
                   {% for line_item in cart.items %}
-                    <div class="cart-item" id="cartItem-{{ line_item.index | plus: 1 }}" style="display: flex !important; align-items: stretch !important; gap: 24px !important; border-bottom: 1px solid rgba(255,255,255,0.08) !important; padding: 24px 0 !important; width: 100% !important;">
+                    <div class="flex gap-5 border-b border-border/60 py-6 last:border-b-0 cart-item" id="cartItem-{{ line_item.index | plus: 1 }}">
                       
                       <!-- Item Image -->
-                      <a href="{{ line_item.url }}" style="display: block !important; width: 110px !important; flex-shrink: 0 !important; aspect-ratio: 4/5 !important; background-color: rgba(255,255,255,0.02) !important; border: 1px solid rgba(255,255,255,0.1) !important; overflow: hidden !important;">
+                      <a href="{{ line_item.url }}" class="block h-28 w-24 flex-shrink-0 overflow-hidden bg-card sm:h-32 sm:w-28">
                         {% if line_item.image %}
-                          <img src="{{ line_item.image | image_url: width: 300 }}" alt="{{ line_item.product.title | escape }}" style="width: 100%; height: 100%; object-fit: cover;" />
+                          <img src="{{ line_item.image | image_url: width: 300 }}" alt="{{ line_item.product.title | escape }}" class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
                         {% else %}
                           {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder' }}
                         {% endif %}
                       </a>
 
                       <!-- Item Details -->
-                      <div style="display: flex !important; flex-direction: column !important; justify-content: space-between !important; flex-grow: 1 !important; gap: 12px !important;">
+                      <div class="flex flex-1 flex-col justify-between gap-3">
                         
-                        <!-- Top Info Row -->
-                        <div style="display: flex !important; justify-content: space-between !important; align-items: flex-start !important; gap: 16px !important; width: 100% !important;">
+                        <!-- Top Row: Title, Tag, Size & Price -->
+                        <div class="flex items-start justify-between gap-3">
                           <div>
                             <!-- Title -->
-                            <a href="{{ line_item.url }}" style="font-family: var(--font-display) !important; font-size: 20px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.02em !important; line-height: 1.2 !important; display: block !important; color: #f4f4f4 !important; margin-bottom: 6px !important;">
-                              {{ line_item.product.title | escape }}
+                            <a href="{{ line_item.url }}">
+                              <h3 class="font-display text-xl leading-none text-foreground hover:text-crimson transition">{{ line_item.product.title | escape }}</h3>
                             </a>
                             <!-- Tag / Vendor -->
-                            <p style="font-size: 10px !important; text-transform: uppercase !important; letter-spacing: 0.3em !important; color: rgba(244,244,244,0.5) !important; margin: 0 0 8px 0 !important;">
+                            <p class="mt-1.5 text-[10px] uppercase tracking-[0.3em] text-foreground/50">
                               {{ line_item.product.vendor | default: "Mitushi" }}
                             </p>
                             <!-- Size Option -->
                             {%- if line_item.product.has_only_default_variant == false -%}
-                              <p style="font-size: 12px !important; color: rgba(244,244,244,0.7) !important; margin: 0 !important;">
+                              <p class="mt-2 text-xs text-foreground/70">
                                 Size 
-                                <span style="margin-left: 8px !important; display: inline-block !important; border: 1px solid rgba(255,255,255,0.15) !important; padding: 2px 8px !important; font-size: 10px !important; font-weight: 700 !important; letter-spacing: 0.05em !important; background: transparent !important; color: #f4f4f4 !important;">
+                                <span class="ml-1 inline-block border border-border/60 px-2 py-0.5 text-[10px] font-bold tracking-wider">
                                   {%- for option in line_item.options_with_values -%}
                                     {{ option.value }}
+                                    {%- unless forloop.last -%}, {%- endunless -%}
                                   {%- endfor -%}
                                 </span>
                               </p>
@@ -366,46 +88,45 @@
                           </div>
 
                           <!-- Price Info (Aligned Right) -->
-                          <div style="text-align: right !important;">
-                            <div class="cart-item__price-wrapper" style="font-family: var(--font-display) !important; font-size: 20px !important; color: #f4f4f4 !important; font-weight: 700 !important; letter-spacing: 0.02em !important;">
+                          <div class="text-right">
+                            <div class="font-display text-lg text-foreground">
                               {{ line_item.final_line_price | money }}
                             </div>
-                            <div style="font-size: 10px !important; text-transform: uppercase !important; letter-spacing: 0.25em !important; color: rgba(244,244,244,0.4) !important; margin-top: 4px !important;">
+                            <div class="text-[10px] uppercase tracking-[0.25em] text-foreground/40 mt-1">
                               {{ line_item.variant.price | money }} EA
                             </div>
                           </div>
                         </div>
 
                         <!-- Bottom Controls Row -->
-                        <div style="display: flex !important; align-items: center !important; justify-content: space-between !important; width: 100% !important;">
+                        <div class="flex items-center justify-between">
                           <!-- Quantity Input Wrapper -->
-                          <div class="cart-item__quantity" style="display: flex !important; align-items: center !important; margin: 0 !important;">
-                            <sht-qty-inp class="field_quantity d-inline-flex middle-xs center-xs" style="background-color: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.15) !important; border-radius: 0 !important; height: 36px !important; padding: 0 !important; display: inline-flex !important; align-items: center !important;">
-                              <button class="js-quantity-btn js-quantity-btn-minus btn btn-plain no-js-hidden" name="minus" data-name="minus" type="button" aria-label="{{ 'accessibility.minus' | t }}" style="background: transparent !important; color: #f4f4f4 !important; width: 32px !important; height: 34px !important; border: none !important; display: grid !important; place-items: center !important; cursor: pointer !important; transition: color 0.3s;">
-                                {{ icon_minus }}
+                          <div class="flex items-center border border-border/60">
+                            <sht-qty-inp class="field_quantity flex items-center">
+                              <button class="js-quantity-btn js-quantity-btn-minus grid h-9 w-9 place-items-center text-foreground/70 hover:text-crimson transition bg-transparent border-none cursor-pointer" name="minus" data-name="minus" type="button" aria-label="Decrease">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                               </button>
                               <input
-                                class="js-quantity-input input-number b-zero ta-center"
+                                class="js-quantity-input input-number w-8 text-center text-xs font-medium tabular-nums bg-transparent border-none outline-none focus:outline-none"
                                 type="number"
                                 name="updates[]"
                                 value="{{ line_item.quantity }}"
                                 data-cart-quantity="{{ cart | item_count_for_variant: line_item.variant.id }}"
                                 min="0"
-                                aria-label="{{ 'products.product.quantity.input_label' | t: product: line_item.product.title | escape }}"
+                                aria-label="{{ line_item.product.title | escape }}"
                                 id="quantity-{{ line_item.index | plus: 1 }}"
                                 data-index="{{ line_item.index | plus: 1 }}"
-                                style="background: transparent !important; color: #f4f4f4 !important; border: none !important; width: 32px !important; height: 34px !important; text-align: center !important; font-family: var(--font-sans) !important; font-weight: 600 !important; font-size: 13px !important; outline: none !important;"
                               >
-                              <button class="js-quantity-btn js-quantity-btn-plus btn btn-plain no-js-hidden" name="plus" data-name="plus" type="button" aria-label="{{ 'accessibility.plus' | t }}" style="background: transparent !important; color: #f4f4f4 !important; width: 32px !important; height: 34px !important; border: none !important; display: grid !important; place-items: center !important; cursor: pointer !important; transition: color 0.3s;">
-                                {{ icon_plus }}
+                              <button class="js-quantity-btn js-quantity-btn-plus grid h-9 w-9 place-items-center text-foreground/70 hover:text-crimson transition bg-transparent border-none cursor-pointer" name="plus" data-name="plus" type="button" aria-label="Increase">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                               </button>
                             </sht-qty-inp>
                           </div>
 
                           <!-- Remove Link -->
                           <sht-cart-rmv-btn data-index="{{ line_item.index | plus: 1 }}">
-                            <a href="{{ line_item.url_to_remove }}" class="cart-remove-link" style="display: inline-flex !important; align-items: center !important; gap: 6px !important; font-size: 10px !important; text-transform: uppercase !important; letter-spacing: 0.3em !important; color: rgba(244,244,244,0.5) !important; transition: color 0.3s ease !important; cursor: pointer !important;" aria-label="{{ 'accessibility.delete' | t }}">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;">
+                            <a href="{{ line_item.url_to_remove }}" class="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.3em] text-foreground/50 hover:text-crimson transition">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5">
                                 <polyline points="3 6 5 6 21 6"></polyline>
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                                 <line x1="10" y1="11" x2="10" y2="17"></line>
@@ -422,130 +143,102 @@
               {%- endif -%}
 
               <!-- Continue Shopping Bottom Link -->
-              <div style="margin-top: 24px;">
-                <a href="{{ routes.all_products_collection_url }}" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(244,244,244,0.6); display: inline-flex; align-items: center; gap: 8px; transition: color 0.3s;" onmouseover="this.style.color='#cc132a'" onmouseout="this.style.color='rgba(244,244,244,0.6)'">
-                  ← Continue shopping
-                </a>
-              </div>
-
-              <!-- Cart Note -->
-              {% if settings.enable_cart_order_notes and cart != empty %}
-                <div class="cart__note mt-24 mt-md-32">
-                  <details>
-                    <summary class="d-inline-block ls-none">
-                      <span class="btn btn-link">
-                        {{ 'general.cart.cart_note_title' | t }}
-                      </span>
-                    </summary>
-                    <sht-cart-note>
-                      <label class="visually-hidden" for="cartNote">{{ 'general.cart.cart_note_title' | t }}</label>
-                      <div class="field--animation">
-                        <textarea id="cartNote" class="textarea field__text w-100 mt-8" form="cartForm" name="note" placeholder="{{ 'general.cart.cart_note_placeholder' | t }}" rows="4">{{ cart.note }}</textarea>
-                      </div>
-                    </sht-cart-note>
-                  </details>
-                </div>
-              {% endif %}
+              <a href="{{ routes.all_products_collection_url }}" class="mt-6 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-foreground/60 hover:text-crimson transition">
+                ← Continue shopping
+              </a>
             </div>
           </div>
 
           <!-- Right Column: Sidebar Order Summary -->
-          <div class="js-cart-form-footer clm{% if cart == empty %} d-none{% endif %}" style="--w-xs: 12; --w-md: 4;">
-            <div class="cart-amount p-sticky top-0 js-cart-form-content-cart-total" style="background-color: rgba(255, 255, 255, 0.02) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; padding: 32px 24px !important; border-radius: 0 !important;">
+          <aside class="lg:sticky lg:top-28 lg:self-start js-cart-form-footer {% if cart == empty %}d-none{% endif %}">
+            <div class="border border-border/60 bg-card p-7 js-cart-form-content-cart-total">
               
               <!-- Title -->
-              <h2 style="font-family: var(--font-display) !important; font-size: 24px; margin: 0 0 20px 0; text-transform: uppercase; color: #f4f4f4; letter-spacing: 0.04em;">Order summary</h2>
-
-              <!-- Discount fields -->
-              {% if settings.show_discount_field and cart != empty %}
-                <div class="cart__discount rad-m border">
-                  {% render 'cart-discount', section: section %}
-                </div>
-              {% endif %}
+              <h2 class="font-display text-2xl mb-4 text-foreground">Order summary</h2>
 
               <!-- Free Shipping Bar -->
               {% if settings.cart_show_free_shipping_notification and settings.cart_minimum_order_price_for_free_shipping != blank %}
-                <div class="free-shipping-notification js-free-shipping-notification-message mb-20" style="margin-bottom: 24px !important;">
-                  {% render 'free-shipping-amount', cart: cart, section: section %}
+                <div class="js-free-shipping-notification-message mt-5 mb-5">
+                  {%- liquid
+                    assign free_shipping_threshold = settings.cart_minimum_order_price_for_free_shipping | times: 100
+                    assign remaining = free_shipping_threshold | minus: cart.total_price
+                    assign progress = cart.total_price | times: 100.0 | divided_by: free_shipping_threshold | at_most: 100
+                  -%}
+                  <sht-free-shipping-bar class="no-js-hidden" data-total-price="{{ cart.total_price }}" data-free-shipping-original-price="{{ settings.cart_minimum_order_price_for_free_shipping }}" data-free-shipping-price="{{ free_shipping_threshold }}">
+                    <div class="mb-2 text-[11px] uppercase tracking-[0.25em] text-foreground/70 js-free-shipping-message">
+                      {% if cart.total_price >= free_shipping_threshold %}
+                        <span class="text-crimson">★ You unlocked free shipping</span>
+                      {% else %}
+                        Add <span class="text-crimson">{{ remaining | money }}</span> for free shipping
+                      {% endif %}
+                    </div>
+                    <div class="h-1 w-full overflow-hidden bg-foreground/10">
+                      <progress class="h-full bg-crimson transition-all duration-700 js-free-shipping-progress" style="width: {{ progress }}%; height: 4px; display: block; border: none; background: transparent; -webkit-appearance: none; appearance: none;" value="{{ cart.total_price }}" max="{{ free_shipping_threshold }}"></progress>
+                    </div>
+                  </sht-free-shipping-bar>
                 </div>
               {% endif %}
 
               <!-- Subtotal & Shipping summary rows -->
-              <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 12px; font-size: 14px; color: rgba(244,244,244,0.7);">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span>Subtotal</span>
-                  <span style="color: #f4f4f4;">{{ cart.total_price | money }}</span>
+              <dl class="mt-6 space-y-3 text-sm">
+                <div class="flex items-center justify-between">
+                  <dt class="text-foreground/70">Subtotal</dt>
+                  <dd class="text-foreground font-semibold js-cart-total">{{ cart.total_price | money }}</dd>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span>Shipping</span>
-                  <span style="color: #cc132a; font-weight: 700;">
+                <div class="flex items-center justify-between">
+                  <dt class="text-foreground/70">Shipping</dt>
+                  <dd class="text-foreground font-semibold">
                     {%- liquid
-                      assign free_shipping_threshold = settings.cart_minimum_order_price_for_free_shipping | times: 100
                       if cart.total_price >= free_shipping_threshold
-                        echo 'FREE'
+                        echo '<span class="text-crimson font-bold">FREE</span>'
                       else
                         echo 'Calculated at checkout'
                       endif
                     -%}
-                  </span>
+                  </dd>
                 </div>
-                <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0;"></div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                  <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: #f4f4f4; font-weight: 600;">Total</span>
-                  <span style="font-family: var(--font-display) !important; font-size: 28px; color: #f4f4f4; letter-spacing: 0.02em;">{{ cart.total_price | money }}</span>
+                <div class="my-4 h-px bg-border/60"></div>
+                <div class="flex items-center justify-between">
+                  <dt class="text-[11px] uppercase tracking-[0.3em] text-foreground/70">Total</dt>
+                  <dd class="font-display text-2xl text-foreground">{{ cart.total_price | money }}</dd>
                 </div>
-              </div>
+              </dl>
 
-              <!-- Checkout Button and Badges -->
+              <!-- Checkout Button -->
               <div class="w-100">
-                <div class="cart__checkout mb-12">
-                  <noscript>
-                    <button type="submit" class="mb-8 w-100 btn btn-secondary--animate btn-large" form="cartForm">
-                      <span class="d-block o-hidden p-relative">
-                        <span class="btn-secondary__content">
-                          {{ 'sections.cart.update' | t }}
-                        </span>
-                      </span>
-                    </button>
-                  </noscript>
-                  
+                <div class="cart__checkout mt-7">
                   <button
                     type="submit"
-                    class="w-100 btn btn-primary--animate"
                     name="checkout"
+                    class="group relative block w-full overflow-hidden bg-crimson hover:bg-crimson-glow transition duration-300 checkout-btn cursor-pointer"
                     {% if cart == empty %}
                       disabled
                     {% endif %}
                     form="cartForm"
-                    style="background-color: #cc132a !important; border: 1px solid #cc132a !important; color: #f4f4f4 !important; font-family: var(--font-sans) !important; font-size: 12px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.35em !important; border-radius: 0 !important; height: 56px !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 12px !important; transition: all 0.3s ease !important; cursor: pointer !important; width: 100% !important;"
-                    onmouseover="this.style.backgroundColor='#ff1a3a'; this.style.borderColor='#ff1a3a'; this.style.boxShadow='0 0 20px rgba(204, 19, 42, 0.4)'"
-                    onmouseout="this.style.backgroundColor='#cc132a'; this.style.borderColor='#cc132a'; this.style.boxShadow='none'"
+                    style="border: none; outline: none;"
                   >
-                    Proceed to checkout
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
+                    <span class="absolute inset-0 origin-left scale-x-0 bg-crimson transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"></span>
+                    <span class="relative flex h-14 items-center justify-center gap-3 text-[12px] font-bold uppercase tracking-[0.35em] text-white">
+                      Proceed to checkout
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1.5">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </span>
                   </button>
-
-                  {%- if additional_checkout_buttons and settings.cart_enable_dynamic_checkout_button -%}
-                    <div class="mt-8 w-100">
-                      {{ content_for_additional_checkout_buttons }}
-                    </div>
-                  {%- endif -%}
                 </div>
 
                 <!-- Secure Checkout Badges -->
-                <div style="margin-top: 20px; display: flex; align-items: center; justify-content: space-between; font-size: 10px; text-transform: uppercase; letter-spacing: 0.25em; color: rgba(244,244,244,0.5);">
-                  <span style="display: inline-flex; align-items: center; gap: 6px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;">
+                <div class="mt-5 flex items-center justify-between text-[10px] uppercase tracking-[0.25em] text-foreground/50">
+                  <span class="flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3">
                       <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                       <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                     </svg>
                     Secure checkout
                   </span>
-                  <span style="display: inline-flex; align-items: center; gap: 6px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;">
+                  <span class="flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3">
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                     </svg>
                     30-day returns
@@ -555,32 +248,39 @@
                 <div class="js-cart-form-errors"></div>
               </div>
 
-              {% if settings.show_cart_tax_info %}
-                <small class="ta-center subtext color-light d-block ta-center text-block mt-12" style="font-size: 11px; color: rgba(244, 244, 244, 0.4); text-align: center; display: block; margin-top: 16px;">
-                  {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
-                    {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
-                  {%- elsif cart.taxes_included -%}
-                    {{ 'sections.cart.taxes_included_but_shipping_at_checkout' | t }}
-                  {%- elsif shop.shipping_policy.body != blank -%}
-                    {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
-                  {%- else -%}
-                    {{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}
-                  {%- endif -%}
-                </small>
-              {% endif %}
-
             </div>
-          </div>
+          </aside>
 
         </div>
       </form>
     </sht-cart-frm>
-  </div>
+  </main>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.querySelector('.checkout-btn');
+    if (btn) {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 16;
+        const y = ((e.clientY - rect.top) / rect.height - 0.5) * 10;
+        btn.style.transform = `translate(${x}px, ${y}px)`;
+        btn.style.transition = 'transform 0.1s ease';
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0px, 0px)';
+        btn.style.transition = 'transform 0.4s cubic-bezier(0.16,1,0.3,1)';
+      });
+    }
+  });
+</script>
+
 {%- liquid
   assign files = "component-cart.js" | split: ', '
   render 'js-loader', files: files
 -%}
+
 {% schema %}
 {
   "name": "t:general.cart_page",
