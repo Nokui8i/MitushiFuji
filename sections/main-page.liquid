@@ -98,12 +98,29 @@
     margin-bottom: 8px !important;
   }
 
+  /* Style subtitle to be centered and visible (light color) */
+  .mitushi-faq > p,
+  .mitushi-faq > div > p,
+  .mitushi-faq p:first-of-type,
   .mitushi-faq p.mitushi-faq__subtitle {
     text-align: center !important;
-    color: rgba(255, 255, 255, 0.5) !important;
-    font-size: 15px !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-size: 16px !important;
     margin-bottom: 40px !important;
     letter-spacing: 0.05em !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Remove any nested arrows or buttons inside the summary, leaving only our custom '+' */
+  .mitushi-faq summary button,
+  .mitushi-faq summary svg,
+  .mitushi-faq summary i,
+  .mitushi-faq summary .icon,
+  .mitushi-faq summary [class*="icon"],
+  .mitushi-faq summary [class*="arrow"],
+  .mitushi-faq summary [class*="chevron"] {
+    display: none !important;
   }
 </style>
 
