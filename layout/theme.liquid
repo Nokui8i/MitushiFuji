@@ -505,18 +505,7 @@
           }
         }
         
-        const response = await originalFetch.apply(this, args);
-        if (typeof urlString === 'string' && (urlString.includes('/cart/add') || urlString.includes('/cart/change') || urlString.includes('/cart/update') || urlString.includes('/cart/clear'))) {
-          originalFetch('/cart.js')
-            .then(res => res.json())
-            .then(cart => {
-              document.querySelectorAll('.mitushi-cart-badge').forEach(badge => {
-                badge.textContent = cart.item_count;
-              });
-            })
-            .catch(err => console.error('Error fetching cart.js:', err));
-        }
-        return response;
+        return originalFetch.apply(this, args);
       };
 
       if (window.navigator && window.navigator.sendBeacon) {

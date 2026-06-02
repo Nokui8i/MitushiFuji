@@ -1,6 +1,5 @@
 {% comment %}
-  Free shipping progress — $199 threshold (Mitushi promise).
-  Compatible with theme sht-free-shipping-bar JS for cart updates.
+  Free shipping progress — Mitushi cart (no sht-free-shipping-bar; theme JS overwrote copy & broke animation).
 {% endcomment %}
 {%- liquid
   assign fs_minimum = settings.cart_minimum_order_price_for_free_shipping | default: '199'
@@ -19,39 +18,35 @@
   endif
 -%}
 
-<div class="mitushi-freeship js-free-shipping-notification-message">
+<div
+  class="mitushi-freeship js-free-shipping-notification-message"
+  data-freeship-threshold="{{ free_shipping_threshold }}"
+>
   <div class="js-free-shipping-notification-value">
-  <sht-free-shipping-bar
-    class="mitushi-freeship__widget no-js-hidden"
-    data-total-price="{{ cart.total_price }}"
-    data-free-shipping-original-price="{{ fs_minimum }}"
-    data-free-shipping-price="{{ free_shipping_threshold }}"
-  >
-    <div class="mitushi-freeship__head">
-      <p class="mitushi-freeship__message js-free-shipping-message">
+    <div
+      class="mitushi-freeship__widget"
+      data-total-price="{{ cart.total_price }}"
+      data-free-shipping-price="{{ free_shipping_threshold }}"
+    >
+      <div class="mitushi-freeship__message-wrap mb-2 js-free-shipping-message">
         {%- if qualified -%}
-          <span class="mitushi-freeship__qualified">Free shipping unlocked</span>
+          <span class="text-crimson">★ You unlocked free shipping</span>
         {%- else -%}
-          Add <strong class="mitushi-freeship__amount">{{ remaining | money }}</strong> for free shipping <span class="mitushi-freeship__note">(orders over ${{ fs_minimum }})</span>
+          Add <span class="text-crimson mitushi-freeship__remaining">{{ remaining | money }}</span> for free shipping
         {%- endif -%}
-      </p>
-      <span class="mitushi-freeship__goal">{{ progress | round }}%</span>
+      </div>
+      <div class="mitushi-freeship__track" aria-hidden="true">
+        <div
+          class="mitushi-freeship__fill js-free-shipping-progress-visual{% if qualified %} is-complete{% endif %}"
+          style="width: {{ progress }}%;"
+        ></div>
+      </div>
+      <progress
+        class="mitushi-freeship__progress-native js-free-shipping-progress"
+        value="{{ cart.total_price }}"
+        max="{{ free_shipping_threshold }}"
+        aria-label="Free shipping progress"
+      ></progress>
     </div>
-
-    <div class="mitushi-freeship__track" aria-hidden="true">
-      <div
-        class="mitushi-freeship__fill js-free-shipping-progress-visual{% if qualified %} is-complete{% endif %}"
-        style="width: {{ progress }}%;"
-      ></div>
-    </div>
-
-    <progress
-      class="mitushi-freeship__progress-native js-free-shipping-progress"
-      value="{{ cart.total_price }}"
-      max="{{ free_shipping_threshold }}"
-      aria-label="Free shipping progress"
-    ></progress>
-    <span class="js-free-shipping-progress-content d-none-important" hidden></span>
-  </sht-free-shipping-bar>
   </div>
 </div>

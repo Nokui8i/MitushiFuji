@@ -75,55 +75,17 @@
       text-transform: none !important;
     }
 
-    .mitushi-freeship {
-      margin-bottom: 1.25rem;
-      padding: 1rem 1.1rem;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Free shipping bar — Lovable order summary (scratch_showcase cart.tsx) */
+    .mitushi-cart-summary .mitushi-freeship {
+      margin-top: 1.25rem;
     }
 
-    .mitushi-freeship__head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 0.75rem;
-      margin-bottom: 0.65rem;
-    }
-
-    .mitushi-freeship__message {
-      margin: 0;
+    .mitushi-freeship__message-wrap {
       font-size: 11px;
       line-height: 1.45;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
-      color: rgba(247, 247, 248, 0.72);
-    }
-
-    .mitushi-freeship__amount {
-      color: #f7f7f8;
-      font-weight: 700;
-    }
-
-    .mitushi-freeship__note {
-      display: block;
-      margin-top: 0.2rem;
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      color: rgba(247, 247, 248, 0.4);
-      text-transform: uppercase;
-    }
-
-    .mitushi-freeship__qualified {
-      color: #cc132a;
-      font-weight: 700;
-    }
-
-    .mitushi-freeship__goal {
-      flex-shrink: 0;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      color: rgba(247, 247, 248, 0.45);
+      color: rgba(247, 247, 248, 0.7);
     }
 
     .mitushi-freeship__track {
@@ -131,18 +93,23 @@
       width: 100%;
       overflow: hidden;
       background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
     }
 
     .mitushi-freeship__fill {
       display: block;
       height: 100%;
       width: 0;
-      background: linear-gradient(90deg, #cc132a 0%, #ff1a3a 100%);
-      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      background: #cc132a;
+      border-radius: inherit;
+      transition: width 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: width;
     }
 
-    .mitushi-freeship__fill.is-complete {
-      background: linear-gradient(90deg, #cc132a 0%, #e8a030 100%);
+    @media (prefers-reduced-motion: reduce) {
+      .mitushi-freeship__fill {
+        transition-duration: 0.01ms;
+      }
     }
 
     .mitushi-freeship__progress-native {
@@ -307,7 +274,11 @@
       .mitushi-cart-summary h2 {
         text-align: center;
         font-size: 1.35rem !important;
-        margin-bottom: 1.25rem !important;
+      }
+
+      .mitushi-cart-summary .mitushi-freeship {
+        margin-top: 1rem;
+        text-align: center;
       }
 
       .mitushi-cart-summary dl {
@@ -360,7 +331,7 @@
     <sht-cart-frm class="cart-content section d-block">
       
       <!-- Cart Header Row -->
-      <div class="mitushi-cart-header mb-10 flex items-end justify-between gap-6 {{ cart_empty_hide }}">
+      <div class="js-cart-page-header mitushi-cart-header mb-10 flex items-end justify-between gap-6 {{ cart_empty_hide }}">
         <div>
           <div class="mitushi-cart-header-eyebrow mb-3 text-[10px] font-medium uppercase tracking-[0.5em] text-crimson">
             / Bag
@@ -376,7 +347,7 @@
       </div>
 
       <!-- Empty State Header -->
-      <div class="border border-border/60 py-24 text-center {{ cart_empty_show }}">
+      <div class="js-cart-page-empty border border-border/60 py-24 text-center {{ cart_empty_show }}">
         <div class="mb-4 text-[10px] uppercase tracking-[0.5em] text-crimson">/ Empty</div>
         <h2 class="font-display text-4xl text-foreground">Your bag is quiet</h2>
         <p class="mt-3 text-sm text-foreground/60">No drops yet. The next release won't wait.</p>
@@ -390,7 +361,7 @@
       </div>
 
       <!-- Cart Form -->
-      <form action="{{ routes.cart_url }}" method="post" id="cartForm" class="{{ cart_empty_hide }}">
+      <form action="{{ routes.cart_url }}" method="post" id="cartForm" class="js-cart-page-form {{ cart_empty_hide }}">
         {%- liquid
           assign fs_minimum = settings.cart_minimum_order_price_for_free_shipping | default: '199'
           if fs_minimum == blank
@@ -399,7 +370,6 @@
           assign free_shipping_threshold = fs_minimum | times: 100
         -%}
         {%- if cart != empty -%}
-          {% render 'mitushi-free-shipping-bar' %}
           <div class="js-cart-form-errors" role="alert" aria-live="polite"></div>
         {%- endif -%}
         <div class="grid grid-cols-1 gap-10 lg:grid-cols-3">
@@ -410,7 +380,11 @@
               {%- if cart != empty -%}
                 <div class="border-y border-border/60 js-cart-items">
                   {% for line_item in cart.items %}
-                    <div class="flex gap-5 border-b border-border/60 py-6 last:border-b-0 cart-item sm:py-6" id="cartItem-{{ line_item.index | plus: 1 }}">
+                    <div
+                      class="flex gap-5 border-b border-border/60 py-6 last:border-b-0 cart-item sm:py-6"
+                      id="cartItem-{{ line_item.index | plus: 1 }}"
+                      data-unit-price="{{ line_item.variant.price }}"
+                    >
                       
                       <!-- Item Image -->
                       <a href="{{ line_item.url }}" class="cart-item__image block h-28 w-24 flex-shrink-0 overflow-hidden bg-card sm:h-32 sm:w-28">
@@ -512,7 +486,9 @@
             <div class="mitushi-cart-summary border border-border/60 bg-card p-7 js-cart-form-content-cart-total">
               
               <!-- Title -->
-              <h2 class="font-display text-2xl mb-4 text-foreground">Order summary</h2>
+              <h2 class="font-display text-2xl text-foreground">Order summary</h2>
+
+              {%- render 'mitushi-free-shipping-bar' -%}
 
               <!-- Subtotal & Shipping summary rows -->
               <dl class="mt-6 space-y-3 text-sm">
@@ -593,38 +569,54 @@
 
 <script>
   (function () {
-    function syncMitushiFreeshipFill(root) {
+    function formatMoney(cents) {
+      if (typeof SHTHelper !== 'undefined' && SHTHelper.formatMoney && window.theme_variables?.settings?.money_format) {
+        return SHTHelper.formatMoney(cents, window.theme_variables.settings.money_format);
+      }
+      if (typeof Shopify !== 'undefined' && Shopify.formatMoney) {
+        return Shopify.formatMoney(cents);
+      }
+      return '$' + (cents / 100).toFixed(2);
+    }
+
+    function getFreeshipRoot() {
+      return document.querySelector('#mainCartContainer .mitushi-freeship');
+    }
+
+    function updateProgress(totalCents) {
+      const root = getFreeshipRoot();
       if (!root) return;
       const bar = root.querySelector('.js-free-shipping-progress');
       const fill = root.querySelector('.js-free-shipping-progress-visual');
-      if (!bar || !fill) return;
-      const max = parseFloat(bar.getAttribute('max')) || 1;
-      const val = parseFloat(bar.value) || 0;
-      const pct = Math.min(100, Math.max(0, (val / max) * 100));
-      fill.style.width = pct + '%';
-      fill.classList.toggle('is-complete', val >= max);
+      const msg = root.querySelector('.mitushi-freeship__message-wrap');
+      const threshold = parseInt(root.dataset.freeshipThreshold, 10) || parseInt(bar?.getAttribute('max'), 10) || 19900;
+      const val = Math.max(0, totalCents || 0);
+      const pct = Math.min(100, Math.max(0, (val / threshold) * 100));
+      const remaining = Math.max(0, threshold - val);
+
+      if (bar) {
+        bar.value = val;
+        bar.max = threshold;
+      }
+      if (fill) {
+        fill.classList.toggle('is-complete', val >= threshold);
+        fill.style.width = pct + '%';
+      }
+      if (msg) {
+        if (val >= threshold) {
+          msg.innerHTML = '<span class="text-crimson">★ You unlocked free shipping</span>';
+        } else {
+          msg.innerHTML = 'Add <span class="text-crimson mitushi-freeship__remaining">' + formatMoney(remaining) + '</span> for free shipping';
+        }
+      }
     }
 
-    function initMitushiFreeship(scope) {
-      (scope || document).querySelectorAll('.mitushi-freeship').forEach(function (wrap) {
-        syncMitushiFreeshipFill(wrap);
-      });
-    }
+    window.MitushiCart = { updateProgress: updateProgress };
 
     document.addEventListener('DOMContentLoaded', function () {
-      initMitushiFreeship();
+      const bar = getFreeshipRoot()?.querySelector('.js-free-shipping-progress');
+      if (bar) updateProgress(parseFloat(bar.value) || 0);
     });
-
-    document.addEventListener('page:loaded', function () {
-      initMitushiFreeship();
-    });
-
-    const cartForm = document.getElementById('cartForm');
-    if (cartForm) {
-      new MutationObserver(function () {
-        initMitushiFreeship(cartForm);
-      }).observe(cartForm, { childList: true, subtree: true });
-    }
   })();
 
   document.addEventListener('DOMContentLoaded', () => {
