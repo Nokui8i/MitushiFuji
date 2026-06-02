@@ -113,6 +113,101 @@
       });
     </script>
     {%- render 'custom-css' -%}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ink: '#28282B',
+              bone: '#f4f4f4',
+              crimson: '#cc132a',
+              background: '#28282B',
+              foreground: '#f4f4f4',
+            },
+            fontFamily: {
+              display: ['Bebas Neue', 'sans-serif'],
+              sans: ['Inter', 'sans-serif'],
+              jp: ['Noto Serif JP', 'serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Global typography scale override to make everything larger */
+      html {
+        font-size: 86% !important;
+        background-color: #28282B !important;
+      }
+
+      /* Heading typography rules */
+      h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+        font-family: var(--font-display) !important;
+        text-transform: uppercase !important;
+      }
+
+      /* Breadcrumbs style */
+      .breadcrumb, .breadcrumbs {
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.3em !important;
+        color: rgba(244, 244, 244, 0.5) !important;
+      }
+
+      /* Filter drawer and Sort dropdown size overrides */
+      .js-collection-product-drawer-trigger, #SortByField, .facet-filters__label, .product-count {
+        font-size: 13px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.15em !important;
+        min-height: 48px !important;
+      }
+      
+      /* Custom helpers for product card quick add and hover image transition */
+      .mitushi-product-card {
+        position: relative;
+        overflow: hidden;
+        background: transparent;
+      }
+      .mitushi-product-card .card-media-wrapper {
+        position: relative;
+        aspect-ratio: 3/4;
+        overflow: hidden;
+      }
+      .mitushi-product-card img.alternate-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .mitushi-product-card:hover img.alternate-image {
+        opacity: 1;
+      }
+      .mitushi-product-card .quick-add-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        background: rgba(40, 40, 43, 0.9);
+        backdrop-filter: blur(8px);
+        padding: 12px;
+      }
+      .mitushi-product-card:hover .quick-add-overlay {
+        transform: translateY(0);
+      }
+
+      /* Loading bar override */
+      .loading-bar {
+        background-color: #28282B !important;
+        z-index: 9999 !important;
+      }
+    </style>
   </head>
 
   <body

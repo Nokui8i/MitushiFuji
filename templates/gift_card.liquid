@@ -29,12 +29,12 @@
     </style>
     {{ "giftcard.css" | asset_url | stylesheet_tag: preload: true }}
 
-    {%- unless settings.body_font? -%}
-      <link rel="preload" as="font" href="{{ settings.body_font | font_url }}" type="font/woff2" crossorigin>
-    {%- endunless -%}
-    {%- unless settings.heading_font? -%}
-      <link rel="preload" as="font" href="{{ settings.heading_font | font_url }}" type="font/woff2" crossorigin>
-    {%- endunless -%}
+    {%- if settings.type_body_font != blank and settings.type_body_font.system? == false -%}
+      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endif -%}
+    {%- if settings.type_header_font != blank and settings.type_header_font.system? == false -%}
+      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endif -%}
   </head>
 
   <body>
