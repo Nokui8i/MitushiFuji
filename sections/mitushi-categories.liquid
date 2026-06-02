@@ -277,6 +277,10 @@
             endfor
           endif
 
+          if col_obj == blank
+            continue
+          endif
+
           if col_obj != blank
             assign col_url = col_obj.url
             assign col_title = col_obj.title
