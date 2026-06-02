@@ -96,6 +96,104 @@
       .font-jp, .font-jp * {
         font-family: var(--font-jp) !important;
       }
+
+      /* Global Dark Theme Overrides */
+      :root {
+        --color-page-bg: #28282B !important;
+        --color-page-bg-rgb: 40, 40, 43 !important;
+        --gradient-background: #28282B !important;
+        --color-normal-text: #f7f7f8 !important;
+        --color-normal-text-rgb: 247, 247, 248 !important;
+        --color-border: rgba(255, 255, 255, 0.12) !important;
+        --color-divider: rgba(255, 255, 255, 0.12) !important;
+      }
+
+      body, html, #page {
+        background-color: #28282B !important;
+        background: #28282B !important;
+        color: #f7f7f8 !important;
+      }
+
+      /* Heading colors */
+      h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .headline {
+        color: #f7f7f8 !important;
+      }
+
+      /* Links */
+      a {
+        color: inherit;
+        transition: color 0.3s;
+      }
+      a:hover {
+        color: #cc132a !important;
+      }
+
+      /* Form elements and select dropdowns */
+      select, option, input, textarea {
+        background-color: #28282B !important;
+        color: #f7f7f8 !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+      }
+
+      /* Breadcrumbs */
+      .breadcrumb, .breadcrumb * {
+        color: rgba(255, 255, 255, 0.8) !important;
+      }
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.8) !important;
+        text-decoration: underline !important;
+        text-underline-offset: 4px;
+      }
+      .breadcrumb a:hover {
+        color: #cc132a !important;
+      }
+      .breadcrumb li + li::before {
+        color: rgba(255, 255, 255, 0.4) !important;
+      }
+
+      /* Text and labels */
+      .color-light, .subtext, .field__label, .filter-form__result-count, .js-product-count {
+        color: rgba(255, 255, 255, 0.6) !important;
+      }
+
+      /* Selection filter tags / active filters */
+      .tag, .filter-form--tag a {
+        background-color: #38383B !important;
+        color: #f7f7f8 !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      }
+      
+      .tag:hover, .filter-form--tag a:hover {
+        border-color: #cc132a !important;
+        color: #cc132a !important;
+      }
+
+      /* Filter buttons, dropdown fields */
+      .btn-secondary, .btn-secondary--animate {
+        background-color: transparent !important;
+        color: #f7f7f8 !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      }
+      .btn-secondary:hover, .btn-secondary--animate:hover {
+        border-color: #cc132a !important;
+        color: #cc132a !important;
+      }
+      
+      /* Card backgrounds and text colors */
+      .card-product, .card, .product-card, .card-collection {
+        background-color: transparent !important;
+        color: #f7f7f8 !important;
+      }
+      
+      .price, .price-item {
+        color: #f7f7f8 !important;
+      }
+
+      /* Filter labels and headings */
+      .filter-form__summary {
+        color: #f7f7f8 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
     </style>
     {% render 'style-variables' %}
     {{ content_for_header }}
