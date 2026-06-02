@@ -64,6 +64,10 @@
       height: 2.5rem !important;
     }
 
+    #mainCartContainer .cart-item__unit-price {
+      display: none !important;
+    }
+
     @media (max-width: 767px) {
       #mainCartContainer {
         padding: 1.25rem 1rem 2.5rem !important;
@@ -101,54 +105,99 @@
 
       #mainCartContainer .cart-item {
         flex-direction: row;
-        align-items: flex-start;
-        gap: 1rem;
-        padding: 1.25rem 1rem !important;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 0.85rem !important;
         margin: 0;
         border-bottom-color: rgba(255, 255, 255, 0.08) !important;
       }
 
       #mainCartContainer .cart-item > a {
-        width: 88px !important;
-        height: 104px !important;
+        width: 108px !important;
+        height: 128px !important;
         flex-shrink: 0;
         border-radius: 2px;
       }
 
+      #mainCartContainer .cart-item__details {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.5rem;
+      }
+
       #mainCartContainer .cart-item__top {
         flex-direction: column;
-        align-items: flex-start !important;
-        gap: 0.65rem;
+        align-items: center !important;
+        text-align: center;
+        gap: 0.35rem;
+        width: 100%;
+      }
+
+      #mainCartContainer .cart-item__info {
+        width: 100%;
+        text-align: center;
+      }
+
+      #mainCartContainer .cart-item__info > a {
+        display: block;
       }
 
       #mainCartContainer .cart-item__price {
-        text-align: start !important;
-        display: flex;
-        align-items: baseline;
-        gap: 0.5rem;
-        flex-wrap: wrap;
+        text-align: center !important;
+        width: 100%;
       }
 
       #mainCartContainer .cart-item__price .font-display {
-        font-size: 1.125rem !important;
-      }
-
-      #mainCartContainer .cart-item__price > div:last-child {
-        margin-top: 0 !important;
+        font-size: 1.2rem !important;
       }
 
       #mainCartContainer .cart-item h3 {
-        font-size: 1.05rem !important;
-        line-height: 1.2;
+        font-size: clamp(1.2rem, 5.2vw, 1.45rem) !important;
+        line-height: 1.15;
+      }
+
+      #mainCartContainer .cart-item__info .text-\[10px\] {
+        margin-top: 0.25rem !important;
+      }
+
+      #mainCartContainer .cart-item__info .text-xs {
+        margin-top: 0.35rem !important;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.25rem;
       }
 
       #mainCartContainer .cart-item__controls {
         width: 100%;
-        padding-top: 0.25rem;
+        padding-top: 0;
+        justify-content: center;
+        gap: 0.75rem;
       }
 
-      #mainCartContainer .cart-item__controls .border {
+      #mainCartContainer .cart-item__qty {
         border-color: rgba(255, 255, 255, 0.18) !important;
+      }
+
+      #mainCartContainer .cart-item__qty .field_quantity button {
+        width: 1.65rem !important;
+        height: 1.65rem !important;
+      }
+
+      #mainCartContainer .cart-item__qty .js-quantity-input {
+        width: 1.5rem !important;
+        font-size: 11px !important;
+        padding: 0 !important;
+      }
+
+      #mainCartContainer .cart-item__qty .js-quantity-btn svg {
+        width: 10px !important;
+        height: 10px !important;
       }
 
       #mainCartContainer .cart-item__remove {
@@ -252,10 +301,10 @@
               {%- if cart != empty -%}
                 <div class="border-y border-border/60 js-cart-items">
                   {% for line_item in cart.items %}
-                    <div class="flex gap-5 border-b border-border/60 py-6 last:border-b-0 cart-item" id="cartItem-{{ line_item.index | plus: 1 }}">
+                    <div class="flex gap-5 border-b border-border/60 py-6 last:border-b-0 cart-item sm:py-6" id="cartItem-{{ line_item.index | plus: 1 }}">
                       
                       <!-- Item Image -->
-                      <a href="{{ line_item.url }}" class="block h-28 w-24 flex-shrink-0 overflow-hidden bg-card sm:h-32 sm:w-28">
+                      <a href="{{ line_item.url }}" class="cart-item__image block h-28 w-24 flex-shrink-0 overflow-hidden bg-card sm:h-32 sm:w-28">
                         {% if line_item.image %}
                           <img src="{{ line_item.image | image_url: width: 300 }}" alt="{{ line_item.product.title | escape }}" class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
                         {% else %}
@@ -264,11 +313,11 @@
                       </a>
 
                       <!-- Item Details -->
-                      <div class="flex flex-1 flex-col justify-between gap-3">
+                      <div class="cart-item__details flex flex-1 flex-col justify-between gap-3">
                         
                         <!-- Top Row: Title, Tag, Size & Price -->
                         <div class="cart-item__top flex items-start justify-between gap-3">
-                          <div>
+                          <div class="cart-item__info">
                             <!-- Title -->
                             <a href="{{ line_item.url }}">
                               <h3 class="font-display text-xl leading-none text-foreground hover:text-crimson transition">{{ line_item.product.title | escape }}</h3>
@@ -296,7 +345,7 @@
                             <div class="font-display text-lg text-foreground">
                               {{ line_item.final_line_price | money }}
                             </div>
-                            <div class="text-[10px] uppercase tracking-[0.25em] text-foreground/40 mt-1">
+                            <div class="cart-item__unit-price text-[10px] uppercase tracking-[0.25em] text-foreground/40 mt-1 hidden">
                               {{ line_item.variant.price | money }} EA
                             </div>
                           </div>
@@ -305,7 +354,7 @@
                         <!-- Bottom Controls Row -->
                         <div class="cart-item__controls flex items-center justify-between">
                           <!-- Quantity Input Wrapper -->
-                          <div class="flex items-center border border-border/60">
+                          <div class="cart-item__qty flex items-center border border-border/60">
                             <sht-qty-inp class="field_quantity flex items-center">
                               <button class="js-quantity-btn js-quantity-btn-minus grid h-9 w-9 place-items-center text-foreground/70 hover:text-crimson transition bg-transparent border-none cursor-pointer" name="minus" data-name="minus" type="button" aria-label="Decrease">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
