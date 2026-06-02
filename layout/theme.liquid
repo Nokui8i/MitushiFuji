@@ -114,6 +114,38 @@
         color: #f7f7f8 !important;
       }
 
+      html {
+        font-size: 71% !important;
+      }
+
+      /* Enlarge custom sections text sizes slightly and convert to rem to scale automatically */
+      .mitushi-product-name {
+        font-size: 1.6rem !important;
+      }
+      .mitushi-product-tag {
+        font-size: 1.35rem !important;
+      }
+      .mitushi-product-info-price {
+        font-size: 2.0rem !important;
+      }
+      .mitushi-product-price {
+        font-size: 2.2rem !important;
+      }
+      .mitushi-product-badge {
+        font-size: 1.15rem !important;
+      }
+      .mitushi-carousel-title-group > div:first-child {
+        font-size: 1.15rem !important;
+      }
+      .mitushi-carousel-title-group > h2 {
+        font-size: 3.6rem !important;
+      }
+      @media (min-width: 768px) {
+        .mitushi-carousel-title-group > h2 {
+          font-size: 6.2rem !important;
+        }
+      }
+
       /* Heading colors */
       h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .headline {
         color: #f7f7f8 !important;
@@ -138,7 +170,6 @@
       /* Breadcrumbs */
       .breadcrumb, .breadcrumb * {
         color: rgba(255, 255, 255, 0.8) !important;
-        font-size: 15px !important;
       }
       .breadcrumb a {
         color: rgba(255, 255, 255, 0.8) !important;
@@ -152,13 +183,9 @@
         color: rgba(255, 255, 255, 0.4) !important;
       }
 
-      /* Text and labels sizing */
-      .color-light, .subtext, .field__label, .filter-form__item label {
+      /* Text and labels */
+      .color-light, .subtext, .field__label, .filter-form__result-count, .js-product-count {
         color: rgba(255, 255, 255, 0.6) !important;
-        font-size: 15px !important;
-      }
-      .filter-form__result-count, .js-product-count {
-        display: none !important;
       }
 
       /* Selection filter tags / active filters */
@@ -166,7 +193,6 @@
         background-color: #38383B !important;
         color: #f7f7f8 !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        font-size: 15px !important;
       }
       
       .tag:hover, .filter-form--tag a:hover {
@@ -174,114 +200,31 @@
         color: #cc132a !important;
       }
 
-      /* Hide all filter drawer triggers, tag blocks, and vertical filter sidebar completely */
-      .filter--vertical,
-      .filter--horizontal,
-      .filter-form-tag,
-      .collection-drawer-open, 
-      .filter-drawer-open, 
-      .js-collection-product-drawer-trigger,
-      sht-coll-prd-drwer-opner,
-      #filterCollectionProductDrawer {
-        display: none !important;
-      }
-
-      /* Sorting select element custom styling without white borders */
-      .filter-form-sorting,
-      .filter-form-sorting *,
-      .field__select,
-      .field__select *,
-      #SortByField,
-      #SortByField * {
-        border: none !important;
-        box-shadow: none !important;
-        outline: none !important;
+      /* Filter buttons, dropdown fields */
+      .btn-secondary, .btn-secondary--animate {
         background-color: transparent !important;
-        font-size: 16px !important;
         color: #f7f7f8 !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      }
+      .btn-secondary:hover, .btn-secondary--animate:hover {
+        border-color: #cc132a !important;
+        color: #cc132a !important;
       }
       
-      .filter-form-sorting select option {
-        background-color: #28282B !important;
-        color: #f7f7f8 !important;
-      }
-
-      /* Sorting select toolbar full width styling */
-      .filter-form__rerult-count__sorting {
-        width: 100% !important;
-        max-width: 100% !important;
-        flex: 1 1 100% !important;
-        display: flex !important;
-        justify-content: flex-end !important;
-        align-items: center !important;
-      }
-      
-      /* Card backgrounds, margins, and custom hover red borders */
+      /* Card backgrounds and text colors */
       .card-product, .card, .product-card, .card-collection {
         background-color: transparent !important;
         color: #f7f7f8 !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        transition: all 0.3s ease !important;
-        padding: 0px !important;
-        border-radius: 4px !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: flex-start !important;
       }
       
-      .card-product:hover, .card:hover, .product-card:hover, .card-collection:hover {
-        border-color: rgba(204, 19, 42, 0.6) !important;
-        box-shadow: 0 0 12px rgba(204, 19, 42, 0.4) !important;
-      }
-
-      /* Force columns and cards on grid layout to take natural height without extra bottom gap */
-      .products.rw .clm {
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: flex-start !important;
-      }
-      .products.rw .product-card,
-      .products.rw .card-product {
-        height: auto !important;
-        align-self: flex-start !important;
-        width: 100% !important;
-        max-width: 320px !important;
-        margin: 0 auto !important;
-      }
-      
-      /* Target price text sizes on cards */
-      .product-card .price, .product-card .price-item,
-      .card-product .price, .card-product .price-item {
+      .price, .price-item {
         color: #f7f7f8 !important;
-        font-size: 18px !important;
-        font-weight: 700 !important;
-      }
-
-      /* Target heading sizes on cards */
-      .product-card .card__heading, .product-card .card__heading a,
-      .card-product .card__heading, .card-product .card__heading a {
-        font-size: 22px !important;
-        font-weight: 700 !important;
-        text-transform: uppercase !important;
-        color: #f7f7f8 !important;
-        letter-spacing: 0.05em !important;
-      }
-
-      .card__content {
-        padding: 12px 8px 8px 8px !important;
       }
 
       /* Filter labels and headings */
       .filter-form__summary {
         color: #f7f7f8 !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-        font-size: 15px !important;
-      }
-      
-      /* Drawer Apply / Clear buttons borders override */
-      .drawer__footer button, .drawer__footer a {
-        border: none !important;
-        box-shadow: none !important;
       }
     </style>
     {% render 'style-variables' %}
