@@ -1,0 +1,9 @@
+# Mitushi Fuji — Shopify CLI
+# Start: shopify theme dev -e default
+# If localhost shows "connection needs to be verified", use PREVIEW_URL below instead.
+
+[environments.default]
+store = "mitushii.myshopify.com"
+theme = "191649022235"
+live-reload = "off"
+port = "9293"

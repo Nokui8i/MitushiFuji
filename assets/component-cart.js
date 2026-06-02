@@ -280,7 +280,7 @@ class SHTCartForm extends SHTCustomComponent {
     this._pending = { line, qty, buttonName };
     clearTimeout(this._sendTimer);
 
-    const delay = options.immediate ? 280 : 450;
+    const delay = options.immediate ? 450 : 600;
     this._sendTimer = setTimeout(() => {
       if (!this._pending) return;
       const payload = this._pending;

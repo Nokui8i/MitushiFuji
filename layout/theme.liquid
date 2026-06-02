@@ -496,15 +496,23 @@
         const url = args[0];
         const urlString = typeof url === 'string' ? url : (url && url.url ? url.url : '');
         
-        if (urlString && (urlString.includes('api/collect') || urlString.includes('analytics') || urlString.includes('shopify-perf-kit'))) {
-          if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+        if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+          if (
+            urlString && (
+              urlString.includes('api/collect') ||
+              urlString.includes('analytics') ||
+              urlString.includes('shopify-perf-kit') ||
+              urlString.includes('/gift_cards/') ||
+              urlString.includes('cdn-cgi/challenge-platform')
+            )
+          ) {
             return new Response(JSON.stringify({ status: 'blocked_locally' }), {
               status: 200,
               headers: { 'Content-Type': 'application/json' }
             });
           }
         }
-        
+
         return originalFetch.apply(this, args);
       };
 
