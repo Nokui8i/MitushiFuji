@@ -259,8 +259,8 @@
   <div class="mitushi-carousel-container">
     <div class="mitushi-carousel-header">
       <div class="mitushi-carousel-title-group">
-        <div>/ 02 — Latest drop</div>
-        <h2>Featured pieces</h2>
+        <div>{{ section.settings.subheading | default: '/ 02 — Latest drop' }}</div>
+        <h2>{{ section.settings.heading | default: 'Featured pieces' }}</h2>
       </div>
       <div class="mitushi-carousel-controls">
         <button class="mitushi-carousel-btn" aria-label="Previous" onclick="scrollCarousel(-1)">
@@ -362,12 +362,7 @@
             {% endif %}
             {% endcomment %}
             
-            <button class="mitushi-product-add-btn" aria-label="Add to cart" {% if variant_id != blank %}onclick="addProductToCart('{{ variant_id }}')"{% endif %}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </button>
+
 
             <div class="mitushi-product-cta">
               <div class="mitushi-product-cta-content">
@@ -445,6 +440,20 @@
 {% schema %}
 {
   "name": "Product Carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "/ 02 — Latest drop"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured pieces"
+    }
+  ],
   "blocks": [
     {
       "type": "product",

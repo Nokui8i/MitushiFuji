@@ -259,30 +259,26 @@ Combines a collapsible announcement bar with a sticky header.
       gap: 0.5rem;
     }
 
-    .mitushi-flag {
+    .mitushi-country-flag {
       display: inline-flex;
-      width: 1.5rem;
-      height: 1rem;
+      width: 1.25rem;
+      height: 0.83rem;
       border-radius: 0.125rem;
       overflow: hidden;
-      position: relative;
-      background: #0038b8;
-    }
-
-    .mitushi-flag::before {
-      content: '✡';
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 9px;
-      color: #fff;
+      object-fit: cover;
+      vertical-align: middle;
     }
 
     .mitushi-cart-button {
       position: relative;
-      padding: 0.75rem;
+      padding: 0.75rem !important;
+      border: 1px solid transparent !important;
+    }
+
+    .mitushi-cart-button:hover {
+      border-color: transparent !important;
+      background: rgba(204, 19, 42, 0.08) !important;
+      color: #cc132a !important;
     }
 
     .mitushi-cart-badge {
@@ -370,15 +366,15 @@ Combines a collapsible announcement bar with a sticky header.
     .mitushi-search-btn {
       color: rgba(255, 255, 255, 0.8);
       background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid transparent !important;
       border-radius: 9999px;
-      padding: 0.625rem;
+      padding: 0.75rem;
       cursor: pointer;
       transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
     }
 
     .mitushi-search-btn:hover {
-      border-color: rgba(204, 19, 42, 0.6);
+      border-color: transparent !important;
       background: rgba(204, 19, 42, 0.08);
       color: #cc132a;
     }
@@ -694,35 +690,34 @@ Combines a collapsible announcement bar with a sticky header.
 
       <div class="mitushi-utilities flex items-center gap-1">
 
-        {%- if section.settings.show_currency_selector and shop.enabled_currencies.size > 1 -%}
+        {%- if section.settings.show_currency_selector and localization.available_countries.size > 1 -%}
           <div class="mitushi-currency-wrapper" id="mitushi-currency-wrapper">
             <button type="button" class="mitushi-currency-button" id="mitushi-currency-btn" aria-expanded="false" aria-haspopup="listbox">
-              <span class="mitushi-flag"></span>
-              <span class="font-medium tracking-wide" id="mitushi-currency-label">{{ cart.currency.iso_code }}</span>
+              {{ localization.country | image_url: width: 36, height: 24 | image_tag: class: 'mitushi-country-flag', loading: 'lazy', fetchpriority: 'auto', decoding: 'async' }}
+              <span class="font-medium tracking-wide" id="mitushi-currency-label" style="margin-left:0.5rem;">{{ localization.country.currency.iso_code }}</span>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true" style="margin-left:0.25rem; transition: transform 0.2s ease;" id="mitushi-currency-arrow">
                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
               </svg>
             </button>
             <div class="mitushi-currency-dropdown" id="mitushi-currency-dropdown" hidden>
-              <form action="/cart/update" method="post" id="mitushi-currency-form">
-                {%- for currency in shop.enabled_currencies -%}
+              {%- form 'localization', id: 'mitushi-currency-form' -%}
+                {%- for country in localization.available_countries -%}
                   <button
                     type="submit"
-                    name="updates[]"
-                    class="mitushi-currency-option {% if currency == cart.currency %}active{% endif %}"
-                    onclick="this.form.action='/currency/billing_address'; document.getElementById('currency_code_input').value='{{ currency.iso_code }}'; return true;"
+                    name="country_code"
+                    value="{{ country.iso_code }}"
+                    class="mitushi-currency-option {% if country.iso_code == localization.country.iso_code %}active{% endif %}"
                   >
-                    {{ currency.iso_code }} &mdash; {{ currency.symbol }}
+                    {{ country.currency.iso_code }} &mdash; {{ country.name }}
                   </button>
                 {%- endfor -%}
-                <input type="hidden" name="currency" id="currency_code_input" value="{{ cart.currency.iso_code }}">
-              </form>
+              {%- endform -%}
             </div>
           </div>
         {%- elsif section.settings.show_currency_selector -%}
           <button type="button" class="mitushi-currency-button">
-            <span class="mitushi-flag"></span>
-            <span class="font-medium tracking-wide">{{ cart.currency.iso_code }}</span>
+            {{ localization.country | image_url: width: 36, height: 24 | image_tag: class: 'mitushi-country-flag', loading: 'lazy', fetchpriority: 'auto', decoding: 'async' }}
+            <span class="font-medium tracking-wide" style="margin-left:0.5rem;">{{ localization.country.currency.iso_code }}</span>
           </button>
         {%- endif -%}
 

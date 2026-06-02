@@ -239,10 +239,12 @@
   <div class="mitushi-categories-container">
     <div class="mitushi-categories-header">
       <div class="mitushi-categories-title-group">
-        <div>/ 01 — Collections</div>
-        <h2>Shop by category</h2>
+        <div>{{ section.settings.subheading | default: '/ 01 — Collections' }}</div>
+        <h2>{{ section.settings.heading | default: 'Shop by category' }}</h2>
       </div>
-      <a href="#" class="mitushi-categories-view-all">View all →</a>
+      {% if section.settings.view_all_label != blank %}
+        <a href="{{ section.settings.view_all_link | default: '#' }}" class="mitushi-categories-view-all">{{ section.settings.view_all_label }}</a>
+      {% endif %}
     </div>
 
     <div class="mitushi-categories-grid">
@@ -339,6 +341,31 @@
 {% schema %}
 {
   "name": "Categories Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "/ 01 — Collections"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by category"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View All Label",
+      "default": "View all →"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View All Link"
+    }
+  ],
   "blocks": [
     {
       "type": "category",

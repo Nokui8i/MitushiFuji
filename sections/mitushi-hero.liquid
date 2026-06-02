@@ -1,7 +1,7 @@
 <style>
   .mitushi-hero {
     position: relative;
-    min-height: 88vh;
+    min-height: 92vh;
     width: 100%;
     overflow: hidden;
     background-color: var(--ink);
@@ -9,6 +9,7 @@
     font-family: var(--font-sans);
     display: flex;
     align-items: center;
+    perspective: 1400px;
   }
 
   .mitushi-hero-backdrop {
@@ -16,6 +17,8 @@
     inset: 0;
     background: radial-gradient(55% 60% at 70% 50%, rgba(204, 19, 42, 0.18) 0%, transparent 70%);
     pointer-events: none;
+    will-change: transform;
+    transform: translate3d(0, calc(var(--scroll-progress, 0) * 48px), 0);
   }
 
   .mitushi-hero-grid {
@@ -27,6 +30,28 @@
     mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
     -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
     pointer-events: none;
+    will-change: transform;
+    transform: translate3d(0, calc(var(--scroll-progress, 0) * 18px), 0);
+  }
+
+  /* Big ghost background text */
+  .mitushi-hero-ghost-text {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate3d(0, calc(var(--scroll-progress, 0) * 72px), 0);
+    will-change: transform;
+    font-family: var(--font-display);
+    font-size: clamp(10rem, 28vw, 26rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--bone);
+    opacity: 0.08;
+    user-select: none;
   }
 
   .mitushi-hero-badge-left {
@@ -58,7 +83,8 @@
     position: absolute;
     left: 32px;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translate3d(0, calc(-50% + var(--scroll-progress, 0) * 60px), 0);
+    will-change: transform;
     z-index: 20;
     font-family: var(--font-jp);
     font-size: 11px;
@@ -101,6 +127,9 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    will-change: transform, opacity;
+    transform: translate3d(0, calc(var(--scroll-progress, 0) * -90px), 0);
+    opacity: calc(1 - var(--scroll-progress, 0) * 1.2);
   }
 
   .mitushi-hero-live-badge {
@@ -125,6 +154,12 @@
     border-radius: 50%;
     background-color: var(--crimson);
     box-shadow: 0 0 10px var(--crimson);
+    animation: mitushi-pulse 2s infinite;
+  }
+
+  @keyframes mitushi-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
   }
 
   .mitushi-hero-title {
@@ -135,13 +170,24 @@
     margin: 0 0 24px 0;
   }
 
-  .mitushi-hero-title .text-crimson {
-    color: var(--crimson);
+  .mitushi-hero-title span {
+    display: block;
+    will-change: transform;
   }
 
-  .mitushi-hero-title .text-stroke {
+  .mitushi-hero-title .title-line-1 {
+    transform: translate3d(0, calc(var(--scroll-progress, 0) * -36px), 0);
+  }
+
+  .mitushi-hero-title .title-line-2 {
+    color: var(--crimson);
+    transform: translate3d(0, calc(var(--scroll-progress, 0) * -90px), 0);
+  }
+
+  .mitushi-hero-title .title-line-3 {
     -webkit-text-stroke: 1px var(--bone);
     color: transparent;
+    transform: translate3d(0, calc(var(--scroll-progress, 0) * -144px), 0);
   }
 
   .mitushi-hero-desc {
@@ -187,20 +233,6 @@
     transform: translateX(4px);
   }
 
-  .mitushi-hero-btn-secondary {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    color: rgba(244, 244, 244, 0.8);
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-
-  .mitushi-hero-btn-secondary:hover {
-    color: var(--crimson);
-  }
-
   /* Stats row */
   .mitushi-hero-stats {
     display: flex;
@@ -230,19 +262,30 @@
     background-color: rgba(244, 244, 244, 0.15);
   }
 
-  /* Right Column Image */
+  /* Right Column Image & 3D Stage */
   .mitushi-hero-media {
     position: relative;
     width: 100%;
     max-width: 520px;
     margin: 0 auto;
+    perspective: 1200px;
+  }
+
+  .mitushi-hero-image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    transition: transform 0.3s ease-out;
+    will-change: transform;
+    transform: translate3d(0, calc(var(--scroll-progress, 0) * -60px), 0) rotateX(calc(var(--tilt-y, 0) * -8deg)) rotateY(calc(var(--tilt-x, 0) * 12deg));
+    transform-style: preserve-3d;
+    z-index: 2;
   }
 
   .mitushi-hero-red-sun {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
     width: 78%;
     height: 78%;
     border-radius: 50%;
@@ -250,14 +293,22 @@
     filter: blur(1px);
     pointer-events: none;
     z-index: 1;
+    will-change: transform;
+    transform: translate3d(calc(-50% + var(--tilt-x, 0) * -30px), calc(-50% + var(--tilt-y, 0) * -30px), -80px) scale(calc(1 + var(--scroll-progress, 0) * 0.35));
   }
 
-  .mitushi-hero-image-wrapper {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
-    z-index: 2;
+  .mitushi-hero-glow-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 88%;
+    height: 88%;
+    border-radius: 50%;
+    border: 1px solid rgba(204, 19, 42, 0.4);
+    pointer-events: none;
+    will-change: transform;
+    transform: translate(-50%, -50%) translateZ(-40px) scale(calc(1 + var(--scroll-progress, 0) * 0.2));
+    box-shadow: 0 0 80px rgba(204, 19, 42, 0.35);
   }
 
   .mitushi-hero-image {
@@ -266,9 +317,11 @@
     object-fit: cover;
     mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+    will-change: transform;
+    transform: translateZ(40px) translate3d(calc(var(--tilt-x, 0) * 12px), calc(var(--tilt-y, 0) * 12px), 0);
   }
 
-  /* Angled badges */
+  /* Angled badges (floating in 3D) */
   .mitushi-hero-badge-float {
     position: absolute;
     z-index: 10;
@@ -276,20 +329,20 @@
     backdrop-filter: blur(8px);
     border: 1px solid rgba(244, 244, 244, 0.15);
     padding: 12px 16px;
-    transition: all 0.3s ease;
+    will-change: transform;
   }
 
   .mitushi-hero-badge-float.top-right {
     top: 10%;
     right: -16px;
-    transform: rotate(6deg);
     border-color: rgba(204, 19, 42, 0.6);
+    transform: translate3d(calc(var(--tilt-x, 0) * 40px), calc(var(--tilt-y, 0) * 40px), 100px) rotate(6deg);
   }
 
   .mitushi-hero-badge-float.bottom-left {
     bottom: 10%;
     left: -16px;
-    transform: rotate(-6deg);
+    transform: translate3d(calc(var(--tilt-x, 0) * 30px), calc(var(--tilt-y, 0) * 30px), 80px) rotate(-6deg);
   }
 
   .mitushi-hero-badge-float .badge-label {
@@ -309,6 +362,42 @@
     color: var(--bone);
     margin-top: 2px;
   }
+
+  /* Scroll Indicator */
+  .mitushi-hero-scroll-indicator {
+    pointer-events: none;
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: rgba(244, 244, 244, 0.5);
+    opacity: calc(1 - var(--scroll-progress, 0) * 2);
+    will-change: opacity;
+  }
+
+  .scroll-indicator-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .scroll-line {
+    display: block;
+    height: 32px;
+    width: 1px;
+    background-color: var(--crimson);
+    animation: scroll-line-pulse 2s infinite;
+  }
+
+  @keyframes scroll-line-pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
 </style>
 
 <section class="mitushi-hero" id="home">
@@ -318,60 +407,72 @@
   <!-- Grid background -->
   <div class="mitushi-hero-grid" aria-hidden="true"></div>
 
+  <!-- Ghost Text -->
+  <div class="mitushi-hero-ghost-text" aria-hidden="true">MITUSHI</div>
+
   <!-- Corner badges -->
-  <div class="mitushi-hero-badge-left">FW · 26 / Drop 03</div>
-  <div class="mitushi-hero-badge-right">Tokyo — Tel Aviv</div>
+  <div class="mitushi-hero-badge-left">{{ section.settings.badge_left_text | default: 'FW · 26 / Drop 03' }}</div>
+  <div class="mitushi-hero-badge-right">{{ section.settings.badge_right_text | default: 'Tokyo — Tel Aviv' }}</div>
 
   <!-- Japanese vertical text -->
-  <div class="mitushi-hero-vertical-jp">匠 · 二〇二六</div>
+  <div class="mitushi-hero-vertical-jp">{{ section.settings.vertical_jp_text | default: '匠 · 二〇二六' }}</div>
 
   <div class="mitushi-hero-container">
     <!-- Left Column: Copy -->
     <div class="mitushi-hero-copy">
-      <div class="mitushi-hero-live-badge">
-        <span class="mitushi-hero-live-dot"></span>
-        New Drop · Live Now
-      </div>
+      {% if section.settings.badge_text != blank %}
+        <div class="mitushi-hero-live-badge">
+          <span class="mitushi-hero-live-dot"></span>
+          {{ section.settings.badge_text }}
+        </div>
+      {% endif %}
+      
       <h1 class="mitushi-hero-title">
-        Wear the<br>
-        <span class="text-crimson">Legend</span><br>
-        <span class="text-stroke">In Silence</span>
+        <span class="title-line-1">{{ section.settings.title_line_1 | default: 'Wear the' }}</span>
+        <span class="title-line-2">{{ section.settings.title_line_2 | default: 'Legend' }}</span>
+        <span class="title-line-3">{{ section.settings.title_line_3 | default: 'In Silence' }}</span>
       </h1>
-      <p class="mitushi-hero-desc">
-        Limited-edition anime streetwear engineered in Tokyo silhouettes.
-        Heavyweight cotton, pigment-dyed, built to outlive the season.
-      </p>
+      
+      {% if section.settings.description != blank %}
+        <p class="mitushi-hero-desc">
+          {{ section.settings.description }}
+        </p>
+      {% endif %}
+      
       <div class="mitushi-hero-buttons">
         <a href="{{ section.settings.button_1_link | default: '/collections/all' }}" class="mitushi-hero-btn-primary">
           {{ section.settings.button_1_label | default: 'Shop the Drop' }} <span>→</span>
         </a>
-        <a href="{{ section.settings.button_2_link | default: '/pages/look-book' }}" class="mitushi-hero-btn-secondary">
-          {{ section.settings.button_2_label | default: 'View Lookbook' }}
-        </a>
       </div>
 
-      <div class="mitushi-hero-stats">
-        <div class="mitushi-hero-stat-item">
-          <div class="stat-num">03</div>
-          <div>Active Drops</div>
+      {% if section.settings.show_stats %}
+        <div class="mitushi-hero-stats">
+          <div class="mitushi-hero-stat-item">
+            <div class="stat-num">{{ section.settings.stat_1_num | default: '03' }}</div>
+            <div>{{ section.settings.stat_1_label | default: 'Active Drops' }}</div>
+          </div>
+          <div class="mitushi-hero-stats-divider"></div>
+          <div class="mitushi-hero-stat-item">
+            <div class="stat-num">{{ section.settings.stat_2_num | default: '48H' }}</div>
+            <div>{{ section.settings.stat_2_label | default: 'Until Restock' }}</div>
+          </div>
+          <div class="mitushi-hero-stats-divider"></div>
+          <div class="mitushi-hero-stat-item">
+            <div class="stat-num crimson">{{ section.settings.stat_3_num | default: '夢' }}</div>
+            <div>{{ section.settings.stat_3_label | default: 'Dreams FW26' }}</div>
+          </div>
         </div>
-        <div class="mitushi-hero-stats-divider"></div>
-        <div class="mitushi-hero-stat-item">
-          <div class="stat-num">48H</div>
-          <div>Until Restock</div>
-        </div>
-        <div class="mitushi-hero-stats-divider"></div>
-        <div class="mitushi-hero-stat-item">
-          <div class="stat-num crimson">夢</div>
-          <div>Dreams FW26</div>
-        </div>
-      </div>
+      {% endif %}
     </div>
 
-    <!-- Right Column: Media (Image & Red Sun Backdrop) -->
+    <!-- Right Column: Media (Image & Backdrops) -->
     <div class="mitushi-hero-media">
-      <div class="mitushi-hero-red-sun"></div>
       <div class="mitushi-hero-image-wrapper">
+        <!-- deep red sun backdrop inside 3D stage -->
+        <div class="mitushi-hero-red-sun" aria-hidden="true"></div>
+        <!-- glow ring inside 3D stage -->
+        <div class="mitushi-hero-glow-ring" aria-hidden="true"></div>
+
         {% if section.settings.hero_image != blank %}
           {% assign hero_img_url = section.settings.hero_image | img_url: '520x650' %}
         {% else %}
@@ -384,20 +485,63 @@
           height="650"
           class="mitushi-hero-image"
         />
-      </div>
 
-      <!-- Floating Badges -->
-      <div class="mitushi-hero-badge-float top-right">
-        <div class="badge-label">Limited</div>
-        <div class="badge-val">/ 300</div>
-      </div>
-      <div class="mitushi-hero-badge-float bottom-left">
-        <div class="badge-label">Drop 03</div>
-        <div class="badge-val">夢 DREAMS</div>
+        <!-- Floating Badges in 3D stage -->
+        <div class="mitushi-hero-badge-float top-right">
+          <div class="badge-label">{{ section.settings.float_badge_2_label | default: 'Limited' }}</div>
+          <div class="badge-val">{{ section.settings.float_badge_2_val | default: '/ 300' }}</div>
+        </div>
+        <div class="mitushi-hero-badge-float bottom-left">
+          <div class="badge-label">{{ section.settings.float_badge_1_label | default: 'Drop 03' }}</div>
+          <div class="badge-val">{{ section.settings.float_badge_1_val | default: '夢 DREAMS' }}</div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Scroll Indicator -->
+  <div class="mitushi-hero-scroll-indicator" aria-hidden="true">
+    <div class="scroll-indicator-inner">
+      <span>Scroll</span>
+      <span class="scroll-line"></span>
+    </div>
+  </div>
 </section>
+
+<script>
+  (function() {
+    const section = document.querySelector('.mitushi-hero');
+    if (!section) return;
+
+    // Scroll parallax tracking
+    const onScroll = () => {
+      const rect = section.getBoundingClientRect();
+      const height = rect.height || 1;
+      const progress = Math.max(0, Math.min(1, -rect.top / height));
+      section.style.setProperty('--scroll-progress', progress);
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // 3D tilt tracking
+    const media = section.querySelector('.mitushi-hero-media');
+    if (media) {
+      media.addEventListener('mousemove', (e) => {
+        const r = media.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        section.style.setProperty('--tilt-x', px);
+        section.style.setProperty('--tilt-y', py);
+      });
+
+      media.addEventListener('mouseleave', () => {
+        section.style.setProperty('--tilt-x', '0');
+        section.style.setProperty('--tilt-y', '0');
+      });
+    }
+  })();
+</script>
 
 {% schema %}
 {
@@ -410,25 +554,136 @@
     },
     {
       "type": "text",
+      "id": "badge_text",
+      "label": "Live Badge Text",
+      "default": "New Drop · Live Now"
+    },
+    {
+      "type": "text",
+      "id": "title_line_1",
+      "label": "Title Line 1",
+      "default": "Wear the"
+    },
+    {
+      "type": "text",
+      "id": "title_line_2",
+      "label": "Title Line 2 (Accented)",
+      "default": "Legend"
+    },
+    {
+      "type": "text",
+      "id": "title_line_3",
+      "label": "Title Line 3 (Outline)",
+      "default": "In Silence"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Limited-edition anime streetwear engineered in Tokyo silhouettes. Heavyweight cotton, pigment-dyed, built to outlive the season."
+    },
+    {
+      "type": "text",
       "id": "button_1_label",
-      "label": "Button 1 Label",
+      "label": "Button Label",
       "default": "Shop the Drop"
     },
     {
       "type": "url",
       "id": "button_1_link",
-      "label": "Button 1 Link"
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Metadata & Badges"
     },
     {
       "type": "text",
-      "id": "button_2_label",
-      "label": "Button 2 Label",
-      "default": "View Lookbook"
+      "id": "badge_left_text",
+      "label": "Top-Left Corner Text",
+      "default": "FW · 26 / Drop 03"
     },
     {
-      "type": "url",
-      "id": "button_2_link",
-      "label": "Button 2 Link"
+      "type": "text",
+      "id": "badge_right_text",
+      "label": "Top-Right Corner Text",
+      "default": "Tokyo — Tel Aviv"
+    },
+    {
+      "type": "text",
+      "id": "vertical_jp_text",
+      "label": "Vertical Japanese Text",
+      "default": "匠 · 二〇二六"
+    },
+    {
+      "type": "text",
+      "id": "float_badge_1_label",
+      "label": "Floating Badge 1 Label",
+      "default": "Drop 03"
+    },
+    {
+      "type": "text",
+      "id": "float_badge_1_val",
+      "label": "Floating Badge 1 Value",
+      "default": "夢 DREAMS"
+    },
+    {
+      "type": "text",
+      "id": "float_badge_2_label",
+      "label": "Floating Badge 2 Label",
+      "default": "Limited"
+    },
+    {
+      "type": "text",
+      "id": "float_badge_2_val",
+      "label": "Floating Badge 2 Value",
+      "default": "/ 300"
+    },
+    {
+      "type": "header",
+      "content": "Stats Row"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "label": "Show Stats Row",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "stat_1_num",
+      "label": "Stat 1 Number",
+      "default": "03"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Stat 1 Label",
+      "default": "Active Drops"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_num",
+      "label": "Stat 2 Number",
+      "default": "48H"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Stat 2 Label",
+      "default": "Until Restock"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_num",
+      "label": "Stat 3 Number (Accented)",
+      "default": "夢"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Stat 3 Label",
+      "default": "Dreams FW26"
     }
   ],
   "presets": [
