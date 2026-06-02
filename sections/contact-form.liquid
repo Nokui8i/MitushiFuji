@@ -191,9 +191,25 @@
   .form-contact .clm {
     padding: 0 12px !important;
   }
+
+  /* Custom spacing and typography refinements for the Contact page */
+  .contact-section-custom {
+    padding-block-start: calc(var(--spacing) * 6) !important; /* Extra spacing below navigation header */
+  }
+
+  .contact-section-custom .s-header {
+    padding-bottom: 32px !important; /* Space between title and contact form card */
+  }
+
+  .contact-section-custom .s-header__title {
+    font-size: 34px !important; /* Increased title size */
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+  }
 </style>
 
-<div class="section color-{{ section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} {% render 'animation-loader', section: section %}" data-ui-component="Contact Form Section" role="region" aria-labelledby="sectionHeading-{{ section_id }}">
+<div class="section contact-section-custom color-{{ section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} {% render 'animation-loader', section: section %}" data-ui-component="Contact Form Section" role="region" aria-labelledby="sectionHeading-{{ section_id }}">
   <div class="ctnr">
     {% render 'section-header', heading: section.settings.heading, content_align: 'ta-center' %}
     <div class="s-content rw center-xs r-gap-48 r-gap-sm-36 {% if section.settings.content_ordering == 'fd-row-reverse' %}{{ section.settings.content_ordering }}{% endif %}">
