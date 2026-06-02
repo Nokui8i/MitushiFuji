@@ -352,9 +352,11 @@
                 class="mitushi-product-back"
               />
             </a>
+            {% comment %}
             {% if block.settings.badge != blank %}
               <span class="mitushi-product-badge">{{ block.settings.badge }}</span>
             {% endif %}
+            {% endcomment %}
             
             <button class="mitushi-product-add-btn" aria-label="Add to cart" {% if variant_id != blank %}onclick="addProductToCart('{{ variant_id }}')"{% endif %}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
