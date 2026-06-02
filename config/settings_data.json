@@ -32,7 +32,7 @@
     "enable_cart_product_vendor": true,
     "show_discount_field": true,
     "enable_cart_order_notes": false,
-    "cart_show_free_shipping_notification": true,
+    "cart_show_free_shipping_notification": false,
     "cart_minimum_order_price_for_free_shipping": "199",
     "product_information_new_in_date_limit": 10,
     "color_badge_text": "#ffffff",
