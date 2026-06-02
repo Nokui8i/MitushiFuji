@@ -511,16 +511,35 @@ Combines a collapsible announcement bar with a sticky header.
         {%- assign menu_links = linklists[section.settings.menu].links -%}
         {%- if menu_links != blank -%}
           {% for link in menu_links %}
+            {%- liquid
+              assign is_products_link = false
+              assign link_title_down = link.title | downcase
+              if link_title_down == 'products' or link_title_down == 'categories' or link_title_down == 'collections'
+                assign is_products_link = true
+              endif
+            -%}
             <div class="group mitushi-nav-item">
               <a href="{{ link.url }}" class="mitushi-nav-link {% if link.active or link.child_active %}active{% endif %}">
                 {{ link.title }}
-                {% if link.links.size > 0 %}
+                {% if link.links.size > 0 or is_products_link %}
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
                   </svg>
                 {% endif %}
               </a>
-              {% if link.links.size > 0 %}
+              {% if is_products_link %}
+                <div class="mitushi-dropdown-trigger">
+                  <div class="mitushi-dropdown-menu">
+                    {% for collection in collections %}
+                      {% unless collection.handle == 'all' or collection.handle == 'frontpage' %}
+                        <a href="{{ collection.url }}" class="mitushi-dropdown-link">
+                          {{ collection.title }}
+                        </a>
+                      {% endunless %}
+                    {% endfor %}
+                  </div>
+                </div>
+              {% elsif link.links.size > 0 %}
                 <div class="mitushi-dropdown-trigger">
                   <div class="mitushi-dropdown-menu">
                     {% for childlink in link.links %}
@@ -535,16 +554,35 @@ Combines a collapsible announcement bar with a sticky header.
           {% endfor %}
         {%- else -%}
           {% for block in section.blocks %}
+            {%- liquid
+              assign is_products_block = false
+              assign block_label_down = block.settings.label | downcase
+              if block_label_down == 'products' or block_label_down == 'categories' or block_label_down == 'collections'
+                assign is_products_block = true
+              endif
+            -%}
             <div class="group mitushi-nav-item" {{ block.shopify_attributes }}>
               <a href="{{ block.settings.href }}" class="mitushi-nav-link {% if block.settings.active %}active{% endif %}">
                 {{ block.settings.label }}
-                {% if block.settings.dropdown_items != blank %}
+                {% if block.settings.dropdown_items != blank or is_products_block %}
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
                   </svg>
                 {% endif %}
               </a>
-              {% if block.settings.dropdown_items != blank %}
+              {% if is_products_block %}
+                <div class="mitushi-dropdown-trigger">
+                  <div class="mitushi-dropdown-menu">
+                    {% for collection in collections %}
+                      {% unless collection.handle == 'all' or collection.handle == 'frontpage' %}
+                        <a href="{{ collection.url }}" class="mitushi-dropdown-link">
+                          {{ collection.title }}
+                        </a>
+                      {% endunless %}
+                    {% endfor %}
+                  </div>
+                </div>
+              {% elsif block.settings.dropdown_items != blank %}
                 <div class="mitushi-dropdown-trigger">
                   <div class="mitushi-dropdown-menu">
                     {% assign dropdown_links = block.settings.dropdown_items | split: '\n' %}
