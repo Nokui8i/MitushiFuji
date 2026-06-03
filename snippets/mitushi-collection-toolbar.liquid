@@ -1,0 +1,120 @@
+{% comment %}
+  Collection/search toolbar: page title, breadcrumbs + sort (mobile).
+{% endcomment %}
+<style>
+  body.template-collection .mitushi-breadcrumb-wrap,
+  body.template-search .mitushi-breadcrumb-wrap,
+  body.template-list-collections .mitushi-breadcrumb-wrap {
+    padding-top: 24px !important;
+    padding-bottom: 12px !important;
+  }
+
+  .mitushi-collection-page-header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .mitushi-collection-toolbar-row {
+    margin: 0 0 10px;
+    width: 100%;
+  }
+
+  .mitushi-collection-page-head {
+    margin: 0;
+    text-align: center;
+    width: 100%;
+  }
+
+  .mitushi-collection-page-title {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-display, inherit);
+    font-size: clamp(1.65rem, 7.5vw, 2.1rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #f7f7f8;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    body.template-collection .mitushi-breadcrumb-wrap,
+    body.template-search .mitushi-breadcrumb-wrap,
+    body.template-list-collections .mitushi-breadcrumb-wrap {
+      padding-top: 32px !important;
+      padding-bottom: 16px !important;
+    }
+
+    .mitushi-collection-toolbar-row {
+      margin-bottom: 16px;
+    }
+
+    .mitushi-collection-page-title {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      letter-spacing: 0.08em;
+    }
+  }
+
+  .mitushi-collection-toolbar-row--solo .breadcrumb {
+    width: 100% !important;
+  }
+
+  .mitushi-collection-toolbar-row:not(.mitushi-collection-toolbar-row--solo) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .mitushi-collection-toolbar-row .breadcrumb {
+    flex: 1;
+    min-width: 0;
+    width: auto !important;
+  }
+
+  .mitushi-collection-toolbar-row--solo .breadcrumb {
+    flex: 1 1 100%;
+    width: 100% !important;
+  }
+
+  .mitushi-collection-toolbar-row .breadcrumb ul {
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+
+  .mitushi-collection-toolbar-slot {
+    flex-shrink: 0;
+    align-self: center;
+    margin-inline-start: auto;
+    position: relative;
+    z-index: 30;
+  }
+
+  .mitushi-breadcrumb-wrap {
+    overflow: visible !important;
+  }
+
+  body.template-collection .main-collection-product .mitushi-sort-in-main,
+  body.template-search sht-srch .mitushi-sort-in-main {
+    display: none !important;
+  }
+
+  .mitushi-collection-toolbar-slot .mitushi-sort-dropdown {
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  @media (max-width: 767px) {
+    body.template-collection .main-collection-product .filter-form-container,
+    body.template-search sht-srch .filter-form-container {
+      display: none !important;
+    }
+
+    .mitushi-sort-desktop-only {
+      display: none !important;
+    }
+  }
+
+</style>

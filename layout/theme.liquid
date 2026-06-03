@@ -143,10 +143,11 @@
 
       /* Enlarge custom sections text sizes slightly and convert to rem to scale automatically */
       .mitushi-product-name {
-        font-size: 1.15rem !important;
+        font-size: 1.25rem !important;
+        font-weight: 700 !important;
       }
       .mitushi-product-tag {
-        font-size: 0.95rem !important;
+        font-size: 0.75rem !important;
       }
       .mitushi-product-info-price {
         font-size: 1.25rem !important;
@@ -166,6 +167,15 @@
       @media (min-width: 768px) {
         .mitushi-carousel-title-group > h2 {
           font-size: 3rem !important;
+        }
+        .mitushi-product-name {
+          font-size: 1.5rem !important;
+        }
+        .mitushi-product-tag {
+          font-size: 0.8125rem !important;
+        }
+        .mitushi-product-info-price {
+          font-size: 1.5rem !important;
         }
       }
 
@@ -270,44 +280,41 @@
         justify-content: flex-end !important;
       }
 
-      /* Sort-by: nice frame + single arrow */
-      .filter-form-sorting sht-coll-prd-sort-by-field.field__select {
-        border: 1px solid rgba(255, 255, 255, 0.22) !important;
-        border-radius: 8px !important;
-        overflow: hidden !important;
-        background: rgba(255, 255, 255, 0.04) !important;
-        transition: border-color 0.2s ease !important;
+      @media (max-width: 767px) {
+        body.template-product .mitushi-breadcrumb-wrap {
+          padding-top: 8px !important;
+          padding-bottom: 6px !important;
+        }
+
+        body.template-collection .mitushi-breadcrumb-wrap .breadcrumb,
+        body.template-collection .mitushi-breadcrumb-wrap .breadcrumb a,
+        body.template-collection .mitushi-breadcrumb-wrap .breadcrumb .color-light,
+        body.template-search .mitushi-breadcrumb-wrap .breadcrumb,
+        body.template-search .mitushi-breadcrumb-wrap .breadcrumb a,
+        body.template-search .mitushi-breadcrumb-wrap .breadcrumb .color-light {
+          font-size: 11px !important;
+          line-height: 1.35 !important;
+          letter-spacing: 0.02em !important;
+        }
+
+        body.template-collection .mitushi-breadcrumb-wrap .breadcrumb ul,
+        body.template-search .mitushi-breadcrumb-wrap .breadcrumb ul {
+          gap: 4px 6px !important;
+          row-gap: 4px !important;
+        }
+
+        body.template-collection .mitushi-breadcrumb-wrap .breadcrumb svg,
+        body.template-search .mitushi-breadcrumb-wrap .breadcrumb svg {
+          width: 10px !important;
+          height: 10px !important;
+        }
+
+        body.template-collection .main-collection-product .ctnr,
+        body.template-search sht-srch .ctnr {
+          padding-inline: 1rem !important;
+        }
       }
 
-      .filter-form-sorting sht-coll-prd-sort-by-field.field__select:hover {
-        border-color: rgba(204, 19, 42, 0.5) !important;
-      }
-
-      /* Remove native browser arrow from select */
-      .filter-form-sorting .js-collection-product-sort-by-field-select {
-        -webkit-appearance: none !important;
-        -moz-appearance: none !important;
-        appearance: none !important;
-        padding-right: 36px !important;
-        padding-left: 14px !important;
-        font-size: 1.3rem !important;
-        font-weight: 500 !important;
-        letter-spacing: 0.03em !important;
-        color: #f7f7f8 !important;
-        background: transparent !important;
-        border: none !important;
-        cursor: pointer !important;
-      }
-
-      /* Single custom arrow — tighter and closer */
-      .filter-form-sorting .btn.btn-icon.p-absolute {
-        right: 6px !important;
-        width: 24px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        pointer-events: none !important;
-      }
       /* ── Product card: price closer + thin frame ── */
       .product-card,
       .card--product {
@@ -319,7 +326,7 @@
 
       .product-card:hover,
       .card--product:hover {
-        border-color: rgba(255, 255, 255, 0.25) !important;
+        border-color: rgba(204, 19, 42, 0.6) !important;
       }
 
       /* Bring price closer to the product name */
@@ -581,6 +588,9 @@
     -%}
     <ul hidden><li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li><li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li></ul>
     <script id="theme-file-js" src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+    {%- if request.page_type == 'collection' or request.page_type == 'search' -%}
+      <script src="{{ 'mitushi-sort-dropdown.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
     <script src="{{ 'component-drag-scroll.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'component-hotspot-link.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'component-number-animation.js' | asset_url }}" defer="defer"></script>

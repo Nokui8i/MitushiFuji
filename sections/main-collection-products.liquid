@@ -1,5 +1,6 @@
 
 {{ 'filter-drawer.css' | asset_url | stylesheet_tag: preload: true }}
+{% render 'mitushi-collection-card-styles' %}
 {% liquid
   assign col_mobile = 12 | divided_by: section.settings.items_per_row_on_mobile
   assign col_md = 12.0 | divided_by: section.settings.items_per_row_on_desktop
@@ -333,7 +334,7 @@
     </div>
     <div class="rw layout--{{- section.settings.desktop_filter_and_sort_layout }}">
       <div class="clm mah-fit-content" style="{{ filter_width }}">
-        <div class="filter-form-container {% if collection.products.size == 0 %} filter__rerult-no-product {% endif %} rw {{ desktop_filter_gap }} top-xs mb-4x">
+        <div class="filter-form-container mitushi-sort-desktop-only {% if collection.products.size == 0 %} filter__rerult-no-product {% endif %} rw {{ desktop_filter_gap }} top-xs mb-4x">
         <div class="filter-form-tag {% unless section.settings.enable_filtering %} hidden-xs {% endunless %} clm d-flex fd-column fd-column-sm top-sm gap-md-zero" style="--w-xs: 12; {{ col_width }}">
             <sht-coll-prd-drwer-opner class="collection-drawer-open filter-drawer-open d-block no-js-hidden fs-0 {{ hide_filter }}">
               <button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="filterDrawer" class="js-collection-product-drawer-trigger btn btn-large btn-secondary--animate d-flex middle-xs center-xs w-100">
@@ -385,25 +386,8 @@
                 {%- endif -%}
               </p>
             </div>
-            <div class="filter-form-sorting js-filter-form-sorting fs-0 {% if section.settings.enable_sort == false %} d-none{% endif %}">
-              <sht-coll-prd-sort-by-field class="field__select p-relative p-zero d-block">
-                <div class="field--animation">
-                  <select name="sort_by" aria-label="{{ 'accessibility.sort_by_label' | t }}" class="field__text js-collection-product-sort-by-field-select w-100 h-100 c-pointer" form="mainCollectionProductFiltersForm" id="SortByField" aria-describedby="a11y-refresh-page-message">
-                    {%- for option in collection.sort_options -%}
-                      {%- liquid
-                        assign option_selected = ''
-                        if option.value == sort_by
-                          assign option_selected = ' selected="selected"'
-                        endif
-                      -%}
-                      <option value="{{ option.value | escape }}" {{ option_selected }}>{{ option.name | escape }}</option>
-                    {%- endfor -%}
-                  </select>
-                </div>
-                <span class="btn btn-large btn-icon p-absolute right-0 pe-none top-0">
-                  {% render 'icon-arrow-animation' %}
-                </span>
-              </sht-coll-prd-sort-by-field>
+            <div class="{% if section.settings.enable_sort == false %} d-none{% endif %}">
+              {% render 'mitushi-sort-select', context: 'collection', variant: 'desktop', select_id: 'SortByField' %}
               <noscript>
                 <button type="submit" class="btn btn-primary btn-small center-xs ta-center w-100 mt-4" form="mainCollectionProductFiltersForm">{{ 'sections.main_collection_product.filter_form.sort_button' | t }}</button>
               </noscript>
@@ -426,9 +410,16 @@
         {%- else -%}
           <h2 class="visually-hidden">{{ collection.title | escape }}</h2>
           {%- paginate collection.products by section.settings.item_per_page -%}
-            <div id="loadMoreContainer" class="products rw gap-unequal js-product-grid js-animate anm" data-id="{{ section.id }}" role="region" aria-label="{{- 'accessibility.collection_results' | t -}}">
+            <div
+              id="loadMoreContainer"
+              class="products rw gap-unequal js-product-grid js-animate anm mitushi-collection-products-grid"
+              style="--mitushi-grid-cols-mobile: {{ section.settings.items_per_row_on_mobile }}; --mitushi-grid-cols-desktop: {{ section.settings.items_per_row_on_desktop }};"
+              data-id="{{ section.id }}"
+              role="region"
+              aria-label="{{- 'accessibility.collection_results' | t -}}"
+            >
               {%- for product in collection.products -%}
-                <div class="clm js-seq-animate anm anm-fadeInUp" style="--w-xs: {{ col_mobile }}; {{ item_width }} --duration: .6s;">
+                <div class="clm mitushi-collection-product-item js-seq-animate anm anm-fadeInUp" style="--w-xs: {{ col_mobile }}; {{ item_width }} --duration: .6s;">
                   {% render 'card-product', product: product, show_vendor: settings.show_product_vendor, show_color_swatch: settings.show_color_swatches, show_sale_badge: settings.show_sale_badge, enable_quick_buy: settings.enable_quick_buy, item_per_row: col_mobile, show_second_image: settings.show_second_image, ratio: settings.product_card_image_ratio, card_content_inner: card_content_inner, section: section, is_first: forloop.first %}
                 </div>
               {%- endfor -%}

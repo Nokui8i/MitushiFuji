@@ -252,19 +252,22 @@
   }
 
   .mitushi-product-name {
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1.3;
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    font-size: clamp(0.9375rem, 3.4vw, 1.0625rem);
+    font-weight: 700;
+    line-height: 1.2;
     color: #f7f7f8;
     margin: 0;
   }
 
   .mitushi-product-tag {
-    margin-top: 4px;
-    font-size: 11px;
+    margin-top: 3px;
+    font-size: clamp(0.625rem, 2.2vw, 0.6875rem);
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.16em;
+    color: rgba(255, 255, 255, 0.45);
     margin-bottom: 0;
   }
 
@@ -276,6 +279,21 @@
     line-height: 1;
     color: #f7f7f8;
     flex-shrink: 0;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-product-name {
+      font-size: 1.125rem;
+      line-height: 1.25;
+    }
+
+    .mitushi-product-tag {
+      font-size: 0.6875rem;
+    }
+
+    .mitushi-product-info-price {
+      font-size: 20px;
+    }
   }
 
   @media (max-width: 767px) {

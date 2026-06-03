@@ -6,4 +6,4 @@
 store = "mitushii.myshopify.com"
 theme = "191649022235"
 live-reload = "off"
-port = "9293"
+port = "9292"

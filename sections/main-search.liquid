@@ -1,4 +1,5 @@
 {{ 'filter-drawer.css' | asset_url | stylesheet_tag }}
+{% render 'mitushi-collection-card-styles' %}
 {%- liquid
   assign sort_by = search.sort_by | default: search.default_sort_by
   assign placeholder = 'detailed-apparel-1' | placeholder_svg_tag: 'js-image-lazy placeholder media'
@@ -124,7 +125,7 @@
         {%- if search_performed -%}
           {% if search.filters != empty %}
             <div class="filter-form clm js-filter-form-container mah-fit-content" style="{{ filter_width }}">
-              <div class="filter-form-container rw top-xs r-gap-24 mb-32 mb-sm-36 mb-md-4x">
+              <div class="filter-form-container mitushi-sort-desktop-only rw top-xs r-gap-24 mb-32 mb-sm-36 mb-md-4x">
                 {% if section.settings.enable_filtering %}
                   <div
                     class="filter-form-tag {% unless section.settings.enable_filtering %} hidden-xs {% endunless %} clm d-flex fd-column fd-row-sm fd-column-md middle-sm top-md gap-16 gap-md-zero"
@@ -213,50 +214,16 @@
                     {%- endif -%}
                   </div>
                   {% if section.settings.enable_sort %}
-                    <div class="js-filter-form-sorting">
-                      <div class="field">
-                        <sht-srch-sort-by-field class="field__select p-relative pdg-0 d-block">
-                          <div class="field--animation">
-                            <select
-                              name="sort_by"
-                              aria-label="{{ 'accessibility.sort_by_label' | t }}"
-                              class="js-main-search-sort-by-field-select w-100 h-100 field__text"
-                              form="mainSearchFiltersForm"
-                              id="SortByField"
-                              aria-describedby="a11y-refresh-page-message"
-                            >
-
-                            {%- for option in search.sort_options -%}
-                              {%- liquid
-                                assign option_selected = ''
-                                if option.value == sort_by
-                                  assign option_selected = ' selected="selected"'
-                                endif
-                              -%}
-                              <option
-                                value="{{ option.value | escape }}"
-                                {{ option_selected }}
-                              >
-                                {{ option.name | escape }}
-                              </option>
-                            {%- endfor -%}
-                          </select>
-                          <span class="btn btn-large btn-icon p-absolute right-0 pe-none top-0">
-                            {% render 'icon-arrow-animation' %}
-                          </span>
-                        </div>
-                        </sht-srch-sort-by-field>
-                      </div>
-                      <noscript>
-                        <button
-                          type="submit"
-                          class="btn btn-primary btn-small w-100 mt-4"
-                          form="mainSearchFiltersForm"
-                        >
-                          {{ 'general.search.sort_button' | t }}
-                        </button>
-                      </noscript>
-                    </div>
+                    {% render 'mitushi-sort-select', context: 'search', variant: 'desktop', select_id: 'SortByField' %}
+                    <noscript>
+                      <button
+                        type="submit"
+                        class="btn btn-primary btn-small w-100 mt-4"
+                        form="mainSearchFiltersForm"
+                      >
+                        {{ 'general.search.sort_button' | t }}
+                      </button>
+                    </noscript>
                   {% endif %}
                 </div>
               </div>
@@ -265,12 +232,17 @@
           <div id="mainSearchContainer" class="clm" style="{{- content_width -}}" role="region" aria-label="{{ 'general.search.title' | t }}" aria-live="polite">
             <div class="results js-main-search-result-grid" data-id="{{ section.id }}">
               {%- paginate search.results by section.settings.item_per_page -%}
-                <div id="loadMoreContainer" class="rw gap-unequal" role="list">
+                <div
+                  id="loadMoreContainer"
+                  class="rw gap-unequal mitushi-collection-products-grid"
+                  style="--mitushi-grid-cols-mobile: {{ section.settings.items_per_row_on_mobile }}; --mitushi-grid-cols-desktop: 2;"
+                  role="list"
+                >
                   {%- for item in search.results -%}
                     {%- case item.object_type -%}
                       {%- when 'product' -%}
                         <div
-                          role="listitem" class="main-search_result main-search_result--{{ item.object_type }} js-main-search-result-{{- item.object_type }} clm"
+                          role="listitem" class="main-search_result main-search_result--{{ item.object_type }} js-main-search-result-{{- item.object_type }} clm mitushi-collection-product-item"
                           style="--w-xs: {{- col_mobile -}}; {{- item_width -}} "
                         >
                           {% render 'card-product', product: item, show_vendor: settings.show_product_vendor, show_color_swatch: settings.show_color_swatches, show_sale_badge: settings.show_sale_badge, enable_quick_buy: settings.enable_quick_buy, show_second_image: settings.show_second_image, ratio: settings.product_card_image_ratio, card_content_inner: card_content_inner, section: section, is_first: forloop.first %}

@@ -1,0 +1,166 @@
+{% comment %}
+  Custom sort dropdown (collection / search).
+  @param context - 'collection' | 'search'
+  @param variant - 'mobile' | 'desktop'
+  @param select_id - unique id for native select
+{% endcomment %}
+{%- liquid
+  if context == 'search'
+    assign sort_by = search.sort_by | default: search.default_sort_by
+    assign sort_form_id = 'mainSearchFiltersForm'
+    assign sort_select_class = 'js-main-search-sort-by-field-select'
+  else
+    assign sort_by = collection.sort_by | default: collection.default_sort_by
+    assign sort_form_id = 'mainCollectionProductFiltersForm'
+    assign sort_select_class = 'js-collection-product-sort-by-field-select'
+  endif
+
+  assign select_id = select_id | default: 'SortByField'
+  assign selected_label = ''
+
+  if context == 'search'
+    for option in search.sort_options
+      if option.value == sort_by
+        assign selected_label = option.name
+      endif
+    endfor
+  else
+    for option in collection.sort_options
+      if option.value == sort_by
+        assign selected_label = option.name
+      endif
+    endfor
+  endif
+
+  assign wrapper_class = 'filter-form-sorting js-filter-form-sorting mitushi-sort-dropdown'
+  if variant == 'mobile'
+    assign wrapper_class = wrapper_class | append: ' mitushi-sort-mobile-only mitushi-sort-toolbar'
+  endif
+  if variant == 'desktop'
+    assign wrapper_class = wrapper_class | append: ' mitushi-sort-in-main'
+  endif
+-%}
+
+<div class="{{ wrapper_class }}" data-mitushi-sort-dropdown>
+  {%- capture sort_dropdown_controls -%}
+    <select
+      name="sort_by"
+      aria-label="{{ 'accessibility.sort_by_label' | t }}"
+      class="field__text mitushi-sort-dropdown__native {{ sort_select_class }} c-pointer"
+      form="{{ sort_form_id }}"
+      id="{{ select_id }}"
+      aria-describedby="a11y-refresh-page-message"
+      tabindex="-1"
+    >
+      {%- if context == 'search' -%}
+        {%- for option in search.sort_options -%}
+          {%- liquid
+            assign option_selected = ''
+            if option.value == sort_by
+              assign option_selected = ' selected="selected"'
+            endif
+          -%}
+          <option value="{{ option.value | escape }}" {{ option_selected }}>{{ option.name | escape }}</option>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for option in collection.sort_options -%}
+          {%- liquid
+            assign option_selected = ''
+            if option.value == sort_by
+              assign option_selected = ' selected="selected"'
+            endif
+          -%}
+          <option value="{{ option.value | escape }}" {{ option_selected }}>{{ option.name | escape }}</option>
+        {%- endfor -%}
+      {%- endif -%}
+    </select>
+
+    <button
+      type="button"
+      class="mitushi-sort-dropdown__trigger"
+      aria-haspopup="listbox"
+      aria-expanded="false"
+      aria-controls="{{ select_id }}-panel"
+      id="{{ select_id }}-trigger"
+    >
+      <span class="mitushi-sort-dropdown__value">{{ selected_label | escape }}</span>
+      <span class="mitushi-sort-dropdown__chevron" aria-hidden="true">
+        {% render 'icon-arrow-animation' %}
+      </span>
+    </button>
+
+    <div
+      class="mitushi-sort-dropdown__panel"
+      id="{{ select_id }}-panel"
+      role="listbox"
+      aria-labelledby="{{ select_id }}-trigger"
+      aria-hidden="true"
+    >
+      <ul class="mitushi-sort-dropdown__list">
+        {%- if context == 'search' -%}
+          {%- for option in search.sort_options -%}
+            <li class="mitushi-sort-dropdown__item" role="none">
+              <button
+                type="button"
+                class="mitushi-sort-dropdown__option{% if option.value == sort_by %} is-active{% endif %}"
+                role="option"
+                aria-selected="{% if option.value == sort_by %}true{% else %}false{% endif %}"
+                data-value="{{ option.value | escape }}"
+              >
+                <span class="mitushi-sort-dropdown__option-label">{{ option.name | escape }}</span>
+                <span class="mitushi-sort-dropdown__check" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </button>
+            </li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for option in collection.sort_options -%}
+            <li class="mitushi-sort-dropdown__item" role="none">
+              <button
+                type="button"
+                class="mitushi-sort-dropdown__option{% if option.value == sort_by %} is-active{% endif %}"
+                role="option"
+                aria-selected="{% if option.value == sort_by %}true{% else %}false{% endif %}"
+                data-value="{{ option.value | escape }}"
+              >
+                <span class="mitushi-sort-dropdown__option-label">{{ option.name | escape }}</span>
+                <span class="mitushi-sort-dropdown__check" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </button>
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+    </div>
+  {%- endcapture -%}
+
+  {%- if context == 'search' -%}
+    <sht-srch-sort-by-field class="mitushi-sort-dropdown__host field__select p-relative d-block">
+      {{ sort_dropdown_controls }}
+    </sht-srch-sort-by-field>
+  {%- else -%}
+    <sht-coll-prd-sort-by-field class="mitushi-sort-dropdown__host field__select p-relative d-block">
+      {{ sort_dropdown_controls }}
+    </sht-coll-prd-sort-by-field>
+  {%- endif -%}
+
+  <noscript>
+    <style>
+      .mitushi-sort-dropdown__trigger,
+      .mitushi-sort-dropdown__panel { display: none !important; }
+      .mitushi-sort-dropdown__native {
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        opacity: 1 !important;
+        clip: auto !important;
+      }
+    </style>
+  </noscript>
+</div>

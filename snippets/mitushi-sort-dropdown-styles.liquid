@@ -1,0 +1,211 @@
+<style>
+  /* Native select hidden when custom UI is ready */
+  .mitushi-sort-dropdown.is-ready .mitushi-sort-dropdown__native {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .mitushi-sort-dropdown {
+    font-size: 11px;
+    position: relative;
+  }
+
+  .mitushi-sort-dropdown__host {
+    border: none !important;
+    background: transparent !important;
+    overflow: visible !important;
+    position: relative;
+  }
+
+  .mitushi-sort-dropdown__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    color: #f7f7f8;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.35;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+
+  .mitushi-sort-dropdown__trigger:hover,
+  .mitushi-sort-dropdown.is-open .mitushi-sort-dropdown__trigger {
+    color: #cc132a;
+  }
+
+  .mitushi-sort-dropdown__chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mitushi-sort-dropdown__chevron svg {
+    width: 10px;
+    height: 10px;
+    display: block;
+  }
+
+  .mitushi-sort-dropdown.is-open .mitushi-sort-dropdown__chevron {
+    transform: rotate(180deg);
+  }
+
+  .mitushi-sort-dropdown__panel {
+    position: absolute;
+    z-index: 120;
+    inset-inline-end: 0;
+    top: calc(100% + 6px);
+    min-width: min(240px, 82vw);
+    max-width: 300px;
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.25),
+      0 16px 40px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px) scale(0.98);
+    transform-origin: top end;
+    transition:
+      opacity 0.2s ease,
+      transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0.2s ease;
+  }
+
+  .mitushi-sort-dropdown.is-open .mitushi-sort-dropdown__panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+
+  .mitushi-sort-dropdown__panel[aria-hidden='true'] {
+    pointer-events: none;
+  }
+
+  .mitushi-sort-dropdown__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: min(320px, 55vh);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .mitushi-sort-dropdown__list::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .mitushi-sort-dropdown__list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+
+  .mitushi-sort-dropdown__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    padding: 7px 11px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: rgba(247, 247, 248, 0.88);
+    font-size: 14px;
+    font-weight: 450;
+    line-height: 1.25;
+    text-align: start;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .mitushi-sort-dropdown__option:hover,
+  .mitushi-sort-dropdown__option:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.06);
+    color: #f7f7f8;
+  }
+
+  .mitushi-sort-dropdown__option.is-active {
+    background: rgba(204, 19, 42, 0.14);
+    color: #f7f7f8;
+    font-weight: 550;
+  }
+
+  .mitushi-sort-dropdown__check {
+    display: none;
+    flex-shrink: 0;
+    color: #cc132a;
+  }
+
+  .mitushi-sort-dropdown__option.is-active .mitushi-sort-dropdown__check {
+    display: inline-flex;
+  }
+
+  .mitushi-sort-dropdown__option-label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mitushi-collection-toolbar-slot .mitushi-sort-dropdown__trigger {
+    font-size: 12px;
+    font-weight: 550;
+    gap: 7px;
+  }
+
+  .mitushi-collection-toolbar-slot .mitushi-sort-dropdown__chevron svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .mitushi-collection-toolbar-slot .mitushi-sort-dropdown__panel {
+    min-width: min(252px, 86vw);
+    max-width: 320px;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-collection-toolbar-slot .mitushi-sort-dropdown__trigger {
+      font-size: 14px;
+      letter-spacing: 0.03em;
+    }
+
+    .mitushi-collection-toolbar-slot .mitushi-sort-dropdown__chevron svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .mitushi-collection-toolbar-slot .mitushi-sort-dropdown__option {
+      font-size: 14.5px;
+      padding: 6px 12px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .mitushi-collection-toolbar-slot .mitushi-sort-dropdown__trigger {
+      font-size: 12px !important;
+    }
+  }
+</style>

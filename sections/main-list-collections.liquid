@@ -8,22 +8,16 @@
   endif
 
   -%}
-<div class="section has-animation color-{{ section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }}" data-ui-component="Main List Collections">
+<div class="section mitushi-list-collections has-animation color-{{ section.settings.color_scheme }} {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }}" data-ui-component="Main List Collections">
   <div class="ctnr {{ section.settings.content_alignment }}">
-    <div class="s-header">
-      <h1 class="h2 m-zero">
-        {{ page_title }}
-      </h1>
-      <h2 class="visually-hidden">
-        {{ page_title }}
-      </h2>
-
+    <div class="s-header visually-hidden">
+      <h1 class="h2 m-zero">{{ page_title }}</h1>
     </div>
     {%- paginate collections by section.settings.item_per_page -%}
     <div class="s-content">
-      <div id="loadMoreContainer" class="rw gap-unequal">
+      <div id="loadMoreContainer" class="rw gap-unequal mitushi-list-collections-grid">
         {%- for collection in collections -%}
-          <div class="clm js-seq-animate anm anm-fadeInUp" style="--w-xs:{{ col_mobile }};--w-sm:6;--w-md:{{- md -}}; --duration: .6s;">
+          <div class="clm mitushi-list-collections-item js-seq-animate anm anm-fadeInUp" style="--w-xs:{{ col_mobile }};--w-sm:6;--w-md:{{- md -}}; --duration: .6s;">
             {% render 'card-collection',
               collection: collection,
               media_ratio: settings.collection_image_ratio,

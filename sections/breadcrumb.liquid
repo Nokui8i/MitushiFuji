@@ -1,15 +1,17 @@
 {%- liquid
   assign template = template | split: '.' | first
   assign classes = classes | default: ''
-
-  capture separate
-    echo '<li>'
-    render 'icon-chevron-right', size: 12, class: 'd-block rtl-flip-x'
-    echo '</li>'
-  endcapture
 -%}
-<div class="ctnr color-{{ section.settings.color_scheme }}">
-  <nav class="breadcrumb w-100 subtext {{ classes }}" aria-label="Breadcrumb">
+{%- capture separate -%}
+<li>
+{%- render 'icon-chevron-right', size: 12, class: 'd-block rtl-flip-x' -%}
+</li>
+{%- endcapture -%}
+<div class="ctnr mitushi-breadcrumb-wrap color-{{ section.settings.color_scheme }}">
+  {%- if template == 'collection' or template == 'search' or template == 'list-collections' -%}
+  <div class="mitushi-collection-page-header">
+  <div class="mitushi-collection-toolbar-row{% if template == 'list-collections' %} mitushi-collection-toolbar-row--solo{% endif %}">
+  <nav class="breadcrumb subtext {{ classes }}" aria-label="Breadcrumb">
     <ul class="ls-none d-flex middle-xs fw-wrap">
       <li>
         <a class="td-underline" href="/">{{ "accessibility.home" | t }}</a>
@@ -82,6 +84,10 @@
           <li>
             <span class="color-light" aria-current="page">{{ 'templates.breadcrumb.search' | t }}</span>
           </li>
+        {%- when 'list-collections' -%}
+          <li>
+            <span class="color-light" aria-current="page">{{ 'templates.breadcrumb.collections' | t }}</span>
+          </li>
         {%- else -%}
           <li>
             <span class="color-light" aria-current="page">{{ page_title }}</span>
@@ -89,7 +95,99 @@
       {%- endcase -%}
     </ul>
   </nav>
+  {%- if template == 'collection' or template == 'search' -%}
+    <div class="mitushi-collection-toolbar-slot">
+      {%- if template == 'collection' -%}
+        {% render 'mitushi-sort-inline', context: 'collection' %}
+      {%- else -%}
+        {% render 'mitushi-sort-inline', context: 'search' %}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  </div>
+  {%- if template == 'collection' and collection.handle -%}
+    <header class="mitushi-collection-page-head">
+      <h1 class="mitushi-collection-page-title">
+        {%- if current_tags -%}
+          {{ collection.title }} · {{ current_tags | join: ' + ' }}
+        {%- else -%}
+          {{ collection.title }}
+        {%- endif -%}
+      </h1>
+    </header>
+  {%- elsif template == 'search' -%}
+    <header class="mitushi-collection-page-head">
+      <h1 class="mitushi-collection-page-title">{{ 'templates.breadcrumb.search' | t }}</h1>
+    </header>
+  {%- elsif template == 'list-collections' -%}
+    <header class="mitushi-collection-page-head">
+      <h1 class="mitushi-collection-page-title">{{ 'templates.breadcrumb.collections' | t }}</h1>
+    </header>
+  {%- endif -%}
+  </div>
+  {%- else -%}
+  <nav class="breadcrumb w-100 subtext {{ classes }}" aria-label="Breadcrumb">
+    <ul class="ls-none d-flex middle-xs fw-wrap">
+      <li>
+        <a class="td-underline" href="/">{{ "accessibility.home" | t }}</a>
+      </li>
+      {{ separate }}
+      {%- case template -%}
+        {%- when 'page' -%}
+          <li>
+            <span class="color-light" aria-current="page">{{ page.title }}</span>
+          </li>
+        {%- when 'product' -%}
+          {%- if collection.url -%}
+            <li>
+              {{ collection.title | link_to: collection.url, class: 'td-underline' }}
+            </li>
+            {{ separate }}
+          {%- endif -%}
+          <li>
+            <span class="color-light" aria-current="page">{{ product.title }}</span>
+          </li>
+        {%- when 'blog' -%}
+          {%- if current_tags -%}
+            <li>
+              {{ blog.title | link_to: blog.url, class: 'td-underline' }}
+            </li>
+            {{ separate }}
+            <li>
+              {%- capture tag_url -%}{{- blog.url -}}/tagged/{{- current_tags | join: "+" }}{%- endcapture -%}
+              <a class="td-underline color-light" href="{{ tag_url }}" aria-current="page">{{ current_tags | join: " + " }}</a>
+            </li>
+          {%- else -%}
+            <li>
+              <span class="color-light" aria-current="page">{{ blog.title }}</span>
+            </li>
+          {%- endif -%}
+        {%- when 'article' -%}
+          <li>
+            {{ blog.title | link_to: blog.url, class: 'td-underline' }}
+          </li>
+          {{ separate }}
+          <li>
+            <span class="color-light" aria-current="page">{{ article.title }}</span>
+          </li>
+        {%- else -%}
+          <li>
+            <span class="color-light" aria-current="page">{{ page_title }}</span>
+          </li>
+      {%- endcase -%}
+    </ul>
+  </nav>
+  {%- endif -%}
 </div>
+{%- if template == 'collection' or template == 'search' or template == 'list-collections' -%}
+  {% render 'mitushi-collection-toolbar' %}
+{%- endif -%}
+{%- if template == 'collection' or template == 'search' -%}
+  {% render 'mitushi-sort-dropdown-styles' %}
+{%- endif -%}
+{%- if template == 'list-collections' -%}
+  {% render 'mitushi-list-collections-styles' %}
+{%- endif -%}
 {% schema %}
 {
   "name": "t:general.breadcrumb",
