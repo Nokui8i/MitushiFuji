@@ -130,8 +130,7 @@
     },
     {
       "type": "header",
-      "content": "Form column — text",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
+      "content": "Form column — text"
     },
     {
       "type": "text",
@@ -199,8 +198,7 @@
     },
     {
       "type": "header",
-      "content": "Success state",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
+      "content": "Success state"
     },
     {
       "type": "text",
@@ -218,8 +216,7 @@
     },
     {
       "type": "header",
-      "content": "Mobile logo (form column)",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
+      "content": "Mobile logo (form column)"
     },
     {
       "type": "image_picker",
@@ -230,8 +227,7 @@
     },
     {
       "type": "header",
-      "content": "Left visual column (desktop)",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
+      "content": "Left visual column (desktop)"
     },
     {
       "type": "text",
@@ -256,8 +252,7 @@
     },
     {
       "type": "header",
-      "content": "Typography & spacing",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
+      "content": "Typography & spacing"
     },
     {
       "type": "range",
@@ -476,8 +471,12 @@
     },
     {
       "type": "header",
-      "content": "Classic layout (blocks)",
-      "info": "Only used when inner-circle popup is disabled."
+      "content": "Classic layout (blocks)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Only used when inner-circle popup is disabled.",
+      "visible_if": "{{ section.settings.use_beautiful_design == false }}"
     },
     {
       "type": "select",
@@ -594,8 +593,7 @@
     },
     {
       "type": "header",
-      "content": "Classic popup width",
-      "visible_if": "{{ section.settings.use_beautiful_design == false }}"
+      "content": "t:general.size"
     },
     {
       "type": "range",
