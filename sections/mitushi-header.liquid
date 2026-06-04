@@ -17,14 +17,15 @@ Combines a collapsible announcement bar with a sticky header.
       background: #cc132a;
       color: #fff;
       height: 0;
-      opacity: 0;
+      max-height: 0;
+      opacity: 1;
       pointer-events: none;
-      transition: opacity 0.2s ease;
+      transition: none;
     }
 
     .mitushi-announcement.is-open {
       height: 36px;
-      opacity: 1;
+      max-height: 36px;
       pointer-events: auto;
     }
 
@@ -65,7 +66,7 @@ Combines a collapsible announcement bar with a sticky header.
 
     .mitushi-sticky-header {
       border-bottom: 1px solid transparent;
-      transition: all 0.3s ease;
+      transition: background 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
       background: #28282B;
     }
 
@@ -1070,13 +1071,26 @@ Combines a collapsible announcement bar with a sticky header.
     var announcementBar = document.getElementById('mitushi-announcement-bar');
     var stickyHeader = document.getElementById('mitushi-sticky-header');
     var announceOpen = true;
-    var lastScrollY = window.scrollY || 0;
-    var ANNOUNCE_OPEN_Y = 72;
-    var ANNOUNCE_CLOSE_Y = 96;
-    var ANNOUNCE_OPEN_WHILE_SCROLL_UP_Y = 140;
+    var SCROLL_TOP_THRESHOLD = 8;
+    var ANNOUNCE_BAR_HEIGHT = 36;
+    var scrollTicking = false;
+
+    function getAnnouncementHeight() {
+      if (!announcementBar) return ANNOUNCE_BAR_HEIGHT;
+      var inner = announcementBar.querySelector('.mitushi-announcement-inner');
+      return inner && inner.offsetHeight ? inner.offsetHeight : ANNOUNCE_BAR_HEIGHT;
+    }
 
     function setAnnouncementOpen(open) {
       if (!announcementBar || announceOpen === open) return;
+
+      var scrollY = window.scrollY || window.pageYOffset;
+      var barHeight = getAnnouncementHeight();
+
+      if (!open && announceOpen && scrollY > 0 && scrollY <= barHeight + SCROLL_TOP_THRESHOLD) {
+        window.scrollTo(0, 0);
+      }
+
       announceOpen = open;
       announcementBar.classList.toggle('is-open', open);
       announcementBar.setAttribute('aria-hidden', open ? 'false' : 'true');
@@ -1084,32 +1098,26 @@ Combines a collapsible announcement bar with a sticky header.
 
     function updateScrollState() {
       var scrollY = window.scrollY || window.pageYOffset;
-      var scrollingUp = scrollY < lastScrollY;
-      var scrolled = scrollY > 12;
+      var atTop = scrollY <= SCROLL_TOP_THRESHOLD;
 
-      if (announcementBar) {
-        if (scrollY <= ANNOUNCE_OPEN_Y) {
-          setAnnouncementOpen(true);
-        } else if (scrollingUp && scrollY <= ANNOUNCE_OPEN_WHILE_SCROLL_UP_Y) {
-          setAnnouncementOpen(true);
-        } else if (scrollY >= ANNOUNCE_CLOSE_Y) {
-          setAnnouncementOpen(false);
-        }
-      }
+      setAnnouncementOpen(atTop);
 
       if (stickyHeader) {
-        if (scrolled) {
-          stickyHeader.classList.add('scrolled');
-        } else {
-          stickyHeader.classList.remove('scrolled');
-        }
+        stickyHeader.classList.toggle('scrolled', !atTop);
       }
+    }
 
-      lastScrollY = scrollY;
+    function onScroll() {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      window.requestAnimationFrame(function () {
+        updateScrollState();
+        scrollTicking = false;
+      });
     }
 
     updateScrollState();
-    window.addEventListener('scroll', updateScrollState, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
     
     // Also run on DOMContentLoaded just in case it is still loading
     if (document.readyState === 'loading') {
