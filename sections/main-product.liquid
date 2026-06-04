@@ -61,21 +61,6 @@
                 class="main-gallery-img absolute inset-0 h-full w-full object-cover transition-opacity duration-500 {% if forloop.first %}opacity-100{% else %}opacity-0{% endif %}"
               />
             {%- endfor -%}
-            
-            {%- assign has_drop_tag = false -%}
-            {%- for tag in product.tags -%}
-              {%- if tag contains 'Drop' or tag contains 'drop' -%}
-                <span class="absolute left-4 top-4 bg-crimson px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.3em] text-white">
-                  {{ tag | escape }}
-                </span>
-                {%- assign has_drop_tag = true -%}
-              {%- endif -%}
-            {%- endfor -%}
-            {%- unless has_drop_tag -%}
-              <span class="absolute left-4 top-4 bg-crimson px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.3em] text-white">
-                Drop 03
-              </span>
-            {%- endunless -%}
           </div>
         </div>
       </div>
@@ -87,7 +72,7 @@
         </div>
         <h1 class="font-display text-5xl md:text-6xl leading-none text-foreground uppercase">{{ product.title }}</h1>
         <div class="mt-4 flex items-baseline gap-3">
-          <span class="font-display text-3xl text-crimson product-price-display">{{ product.selected_or_first_available_variant.price | money }}</span>
+          <span class="font-display text-3xl text-foreground product-price-display">{{ product.selected_or_first_available_variant.price | money }}</span>
           <span class="text-xs uppercase tracking-[0.3em] text-foreground/50">{{ cart.currency.iso_code }}</span>
         </div>
         

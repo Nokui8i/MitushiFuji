@@ -1,494 +1,563 @@
 {% comment %}
-Beautiful Newsletter Popup Design
-Two-column layout: Left (black content), Right (white image)
+  Mitushi inner-circle newsletter popup (from mitushi-stellar-showcase).
 {% endcomment %}
 
 {%- liquid
   assign form_id = 'beautifulNewsletterForm' | append: section.id
-  assign logo_image = section.settings.logo_image
-  assign logo_text = section.settings.logo_text | default: shop.name
-  assign headline_main = section.settings.headline_main | default: 'EXCLUSIVE DISCOUNT'
-  assign headline_sub = section.settings.headline_sub
-  assign description_text = section.settings.description_text | default: 'Join the family and get exclusive email-only offers by signing up.'
-  assign email_label = section.settings.email_label | default: 'ENTER YOUR EMAIL'
-  assign button_text = section.settings.button_text | default: 'UNLOCK YOUR OFFER'
-  assign popup_width = section.settings.popup_width | default: 70
-  assign popup_height = section.settings.popup_height | default: 70
-  assign logo_size = section.settings.logo_size | default: 32
-  assign headline_main_size = section.settings.headline_main_size | default: 48
-  assign headline_sub_size = section.settings.headline_sub_size | default: 18
-  assign description_size = section.settings.description_size | default: 14
-  assign email_label_size = section.settings.email_label_size | default: 12
-  assign email_input_size = section.settings.email_input_size | default: 16
-  assign email_input_padding = section.settings.email_input_padding | default: 16
-  assign button_font_size = section.settings.button_font_size | default: 14
-  assign button_padding = section.settings.button_padding | default: 18
+  assign eyebrow = section.settings.headline_main | default: 'Exclusive discounts'
+  assign title_before = section.settings.headline_sub | default: 'Join the'
+  assign title_highlight = section.settings.logo_text | default: 'MITUSHI'
+  assign title_after = ' inner circle.'
+  assign description_text = section.settings.description_text | default: 'Early access, limited drops, and special offers — straight to your inbox.'
+  assign email_label = section.settings.email_label | default: 'Enter your email'
+  assign button_text = section.settings.button_text | default: 'Join the family'
+  assign legal_text = section.settings.description_legal | default: 'By subscribing, you agree to receive marketing emails from Mitushi. Unsubscribe anytime.'
+  assign dismiss_text = section.settings.dismiss_text | default: "No thanks, I'll pass"
+  assign success_title = section.settings.success_title | default: 'Welcome to the family.'
+  assign success_message = section.settings.success_message | default: 'Check your inbox — your code is on the way.'
+  assign visual_jp = section.settings.visual_jp | default: 'ミツシ・インナーサークル'
+  assign visual_mark = section.settings.visual_mark | default: 'MITUSHI'
+  assign visual_tag = section.settings.visual_tag | default: 'Inner circle'
+
+  comment
+    Match header: mitushi-header uses mitushi-logo.png when no theme image is set.
+  endcomment
+  assign popup_logo_url = 'mitushi-logo.png' | asset_url
+  assign popup_logo_alt = shop.name
 -%}
 
 <style>
-  .beautiful-newsletter-popup {
-    width: {{ popup_width }}vw;
-    max-width: 95vw;
-    height: {{ popup_height }}vh;
-    max-height: 95vh;
-    margin: 0 auto;
-    background: #ffffff;
-    border-radius: clamp(4px, 1%, 8px);
-    overflow: hidden;
+  .mitushi-nl-popup {
     position: relative;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup {
-      width: 95vw !important;
-      max-width: 95vw !important;
-      height: auto !important;
-      min-height: auto;
-      max-height: 95vh;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .beautiful-newsletter-popup {
-      width: 100vw !important;
-      max-width: 100vw !important;
-      height: auto !important;
-      min-height: auto;
-      max-height: 100vh;
-      border-radius: 0;
-    }
-  }
-  
-  @media (min-width: 1200px) {
-    .beautiful-newsletter-popup {
-      max-width: {{ popup_width | times: 12 | round }}px;
-    }
-  }
-  
-  @media (min-width: 1920px) {
-    .beautiful-newsletter-popup {
-      max-width: {{ popup_width | times: 19.2 | round }}px;
-      max-height: {{ popup_height | times: 10.8 | round }}px;
-    }
-  }
-  
-  .beautiful-newsletter-popup__container {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    height: 100%;
-  }
-  
-  @media (min-width: 750px) {
-    .beautiful-newsletter-popup__container {
-      flex-direction: row;
-    }
-  }
-  
-  .beautiful-newsletter-popup__left {
-    background: #000000;
-    color: #ffffff;
-    padding: 8% 6%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    position: relative;
-    flex: 1;
-    min-height: 100%;
-    height: 100%;
+    width: min(940px, 95vw);
+    max-height: 92vh;
+    overflow-x: hidden;
     overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #28282b;
+    color: #f7f7f8;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+    animation: mitushi-nl-popup-in 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__left {
-      padding: 10% 8%;
-      min-height: auto;
-      width: 100%;
-      flex: 1 1 100%;
-      height: auto;
+
+  @media (max-width: 767px) {
+    .mitushi-nl-popup {
+      width: 100vw;
+      max-width: 100vw;
+      max-height: 96vh;
+      border-inline: none;
     }
   }
-  
-  @media (max-width: 480px) {
-    .beautiful-newsletter-popup__left {
-      padding: 10% 5%;
+
+  @keyframes mitushi-nl-popup-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
     }
   }
-  
-  .beautiful-newsletter-popup__close {
+
+  @media (min-width: 640px) {
+    @keyframes mitushi-nl-popup-in {
+      from {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
+
+  .mitushi-nl-popup__close {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    background: #000000;
-    border: none;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: 12px;
+    right: 12px;
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(40, 40, 43, 0.85);
+    color: rgba(247, 247, 248, 0.75);
+    backdrop-filter: blur(8px);
     cursor: pointer;
-    z-index: 10;
-    color: #ffffff;
-    font-size: 20px;
-    line-height: 1;
-    transition: transform 0.2s;
+    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__close {
-      top: 12px;
-      right: 12px;
-      width: 32px;
-      height: 32px;
-      font-size: 18px;
+
+  .mitushi-nl-popup__close:hover {
+    border-color: #cc132a;
+    background: #cc132a;
+    color: #f7f7f8;
+  }
+
+  .mitushi-nl-popup__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-nl-popup__grid {
+      grid-template-columns: 1fr 1fr;
     }
   }
-  
-  @media (max-width: 480px) {
-    .beautiful-newsletter-popup__close {
-      top: 10px;
-      right: 10px;
-      width: 30px;
-      height: 30px;
-      font-size: 16px;
-    }
-  }
-  
-  .beautiful-newsletter-popup__close:hover {
-    transform: scale(1.1);
-  }
-  
-  .beautiful-newsletter-popup__logo {
-    font-size: {{ logo_size }}px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    color: #ffffff;
-    text-transform: uppercase;
-  }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__logo {
-      font-size: {{ logo_size | times: 0.8 | round }}px;
-      margin-bottom: 15px;
-    }
-  }
-  
-  .beautiful-newsletter-popup__logo .logo-accent {
-    color: #ff0000;
-  }
-  
-  .beautiful-newsletter-popup__logo img {
-    max-width: 100%;
-    height: auto;
-    max-height: {{ logo_size | times: 2 }}px;
-    display: block;
-  }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__logo img {
-      max-height: {{ logo_size | times: 1.5 }}px;
-    }
-  }
-  
-  .beautiful-newsletter-popup__headline-main {
-    font-size: {{ headline_main_size }}px;
-    font-weight: 900;
-    color: #ff0000;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 15px;
-    line-height: 1.1;
-  }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__headline-main {
-      font-size: {{ headline_main_size | times: 0.7 | round }}px;
-      margin-bottom: 12px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .beautiful-newsletter-popup__headline-main {
-      font-size: {{ headline_main_size | times: 0.6 | round }}px;
-    }
-  }
-  
-  .beautiful-newsletter-popup__headline-sub {
-    font-size: {{ headline_sub_size }}px;
-    font-weight: 600;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    line-height: 1.3;
-  }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__headline-sub {
-      font-size: {{ headline_sub_size | times: 0.9 | round }}px;
-      margin-bottom: 15px;
-    }
-  }
-  
-  .beautiful-newsletter-popup__description {
-    font-size: {{ description_size }}px;
-    color: #ffffff;
-    margin-bottom: 30px;
-    max-width: 100%;
-    width: 100%;
-    line-height: 1.6;
-  }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__description {
-      font-size: {{ description_size | times: 0.95 | round }}px;
-      margin-bottom: 20px;
-    }
-  }
-  
-  .beautiful-newsletter-popup__form {
-    width: 100%;
-    max-width: 100%;
-  }
-  
-  .beautiful-newsletter-popup__email-label {
-    display: block;
-    font-size: {{ email_label_size }}px;
-    font-weight: 600;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-    text-align: left;
-  }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__email-label {
-      font-size: {{ email_label_size | times: 0.95 | round }}px;
-      margin-bottom: 8px;
-    }
-  }
-  
-  .beautiful-newsletter-popup__email-input {
-    width: 100%;
-    padding: {{ email_input_padding }}px {{ email_input_padding | times: 1.2 | round }}px;
-    background: #ffffff;
-    border: 2px solid #000000;
-    color: #000000;
-    font-size: {{ email_input_size }}px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-    border-radius: 0;
-  }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__email-input {
-      padding: {{ email_input_padding | times: 0.9 | round }}px {{ email_input_padding }}px;
-      font-size: {{ email_input_size | times: 0.95 | round }}px;
-      margin-bottom: 12px;
-    }
-  }
-  
-  .beautiful-newsletter-popup__email-input::placeholder {
-    color: #999999;
-  }
-  
-  .beautiful-newsletter-popup__email-input:focus {
-    outline: none;
-    border-color: #ff0000;
-  }
-  
-  .beautiful-newsletter-popup__button {
-    width: 100%;
-    padding: {{ button_padding }}px {{ button_padding | times: 1.5 | round }}px;
-    background: #ff0000;
-    color: #ffffff;
-    border: none;
-    font-size: {{ button_font_size }}px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    border-radius: 0;
-  }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__button {
-      padding: {{ button_padding | times: 0.9 | round }}px {{ button_padding | times: 1.2 | round }}px;
-      font-size: {{ button_font_size | times: 0.95 | round }}px;
-    }
-  }
-  
-  .beautiful-newsletter-popup__button:hover {
-    background: #cc0000;
-    transform: translateY(-2px);
-  }
-  
-  .beautiful-newsletter-popup__right {
-    background: #ffffff;
+
+  .mitushi-nl-popup__visual {
+    display: none;
     position: relative;
+    min-height: 460px;
     overflow: hidden;
-    flex: 1;
-    min-height: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: linear-gradient(135deg, #1a1a1c 0%, #28282b 50%, #0f0f10 100%);
+    flex-shrink: 0;
   }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__right {
-      display: none !important;
+
+  @media (min-width: 768px) {
+    .mitushi-nl-popup__visual {
+      display: block;
     }
   }
-  
-  .beautiful-newsletter-popup__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+
+  .mitushi-nl-popup__visual-glow {
     position: absolute;
-    top: 0;
-    left: 0;
+    left: 50%;
+    top: 50%;
+    width: min(280px, 85vw);
+    height: min(280px, 85vw);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: rgba(204, 19, 42, 0.8);
+    filter: blur(48px);
+    opacity: 0.6;
+    pointer-events: none;
   }
-  
-  .beautiful-newsletter-popup__error,
-  .beautiful-newsletter-popup__success {
+
+  @media (min-width: 768px) {
+    .mitushi-nl-popup__visual-glow {
+      left: -64px;
+      top: 50%;
+      width: 420px;
+      height: 420px;
+      transform: translateY(-50%);
+      filter: blur(64px);
+    }
+  }
+
+  .mitushi-nl-popup__visual-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 140px;
+    height: 140px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid rgba(204, 19, 42, 0.8);
+    background: rgba(204, 19, 42, 0.3);
+    pointer-events: none;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-nl-popup__visual-ring {
+      left: 40px;
+      width: 224px;
+      height: 224px;
+      transform: translateY(-50%);
+    }
+  }
+
+  .mitushi-nl-popup__visual-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+    background-image:
+      linear-gradient(to right, #f4f4f4 1px, transparent 1px),
+      linear-gradient(to bottom, #f4f4f4 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .mitushi-nl-popup__visual-jp {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: rgba(247, 247, 248, 0.6);
+    writing-mode: vertical-rl;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-nl-popup__visual-jp {
+      left: 24px;
+      top: 24px;
+      font-size: 11px;
+      letter-spacing: 0.5em;
+    }
+  }
+
+  .mitushi-nl-popup__visual-center {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .mitushi-nl-popup__visual-mark {
+    font-family: var(--font-display, inherit);
+    font-size: clamp(2.75rem, 14vw, 4rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(247, 247, 248, 0.85);
+    text-stroke: 1px rgba(247, 247, 248, 0.85);
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-nl-popup__visual-mark {
+      font-size: clamp(4rem, 9vw, 7rem);
+    }
+  }
+
+  .mitushi-nl-popup__visual-tag {
+    margin-top: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: #cc132a;
+  }
+
+  .mitushi-nl-popup__panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px 20px 28px;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-nl-popup__panel {
+      padding: 40px;
+    }
+  }
+
+  .mitushi-nl-popup__brand {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-nl-popup__brand {
+      display: none;
+    }
+  }
+
+  .mitushi-nl-popup__brand-glow {
+    position: absolute;
+    inset: -8px -20%;
+    border-radius: 999px;
+    background: radial-gradient(ellipse at center, rgba(204, 19, 42, 0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .mitushi-nl-popup__brand-logo {
+    position: relative;
+    z-index: 1;
+    display: block;
+    height: 56px;
+    width: auto;
+    max-width: min(220px, 72vw);
+    object-fit: contain;
+    filter: brightness(2.2) contrast(1.25);
+  }
+
+  .mitushi-nl-popup__eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: #cc132a;
+  }
+
+  .mitushi-nl-popup__title {
+    margin: 12px 0 0;
+    font-family: var(--font-display, inherit);
+    font-size: clamp(1.75rem, 5vw, 2.25rem);
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    color: #f7f7f8;
+    font-weight: 700;
+  }
+
+  .mitushi-nl-popup__title span {
+    color: #cc132a;
+  }
+
+  .mitushi-nl-popup__desc {
+    margin: 16px 0 0;
+    max-width: 22rem;
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(247, 247, 248, 0.7);
+  }
+
+  .mitushi-nl-popup__form {
+    margin-top: 28px;
+  }
+
+  .mitushi-nl-popup__label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(247, 247, 248, 0.8);
+  }
+
+  .mitushi-nl-popup__input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #1d1d1f;
+    color: #f7f7f8;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  .mitushi-nl-popup__input:focus {
+    border-color: #cc132a;
+  }
+
+  .mitushi-nl-popup__submit {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 14px 16px;
+    border: none;
+    background: #cc132a;
+    color: #f7f7f8;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .mitushi-nl-popup__submit:hover {
+    background: #ff1a3a;
+  }
+
+  .mitushi-nl-popup__submit svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+  }
+
+  .mitushi-nl-popup__submit:hover svg {
+    transform: translateX(4px);
+  }
+
+  .mitushi-nl-popup__dismiss {
+    display: block;
+    margin-top: 20px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(247, 247, 248, 0.4);
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .mitushi-nl-popup__dismiss:hover {
+    color: rgba(247, 247, 248, 0.7);
+  }
+
+  .mitushi-nl-popup__legal {
+    margin: 24px 0 0;
+    font-size: 10px;
+    line-height: 1.6;
+    color: rgba(247, 247, 248, 0.4);
+  }
+
+  .mitushi-nl-popup__success {
+    padding: 40px 0;
+    text-align: center;
+  }
+
+  .mitushi-nl-popup__success-icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: #cc132a;
+    color: #f7f7f8;
+  }
+
+  .mitushi-nl-popup__success-title {
+    margin: 20px 0 0;
+    font-family: var(--font-display, inherit);
+    font-size: 1.75rem;
+    letter-spacing: 0.02em;
+    color: #f7f7f8;
+  }
+
+  .mitushi-nl-popup__success-msg {
+    margin: 8px 0 0;
+    font-size: 14px;
+    color: rgba(247, 247, 248, 0.7);
+  }
+
+  .mitushi-nl-popup__error {
     margin-top: 12px;
     padding: 10px 12px;
-    border-radius: 4px;
+    border: 1px solid rgba(204, 19, 42, 0.5);
+    background: rgba(204, 19, 42, 0.12);
+    color: #f7f7f8;
     font-size: 13px;
-    text-align: left;
+    text-align: start;
   }
-  
-  @media (max-width: 749px) {
-    .beautiful-newsletter-popup__error,
-    .beautiful-newsletter-popup__success {
-      font-size: 12px;
-      padding: 8px 10px;
-    }
+
+  .mitushi-nl-popup__bar {
+    height: 4px;
+    background: linear-gradient(to right, transparent, #cc132a, transparent);
   }
-  
-  .beautiful-newsletter-popup__error {
-    background: rgba(255, 0, 0, 0.1);
-    color: #ff0000;
-    border: 1px solid #ff0000;
+
+  .mitushi-nl-popup.is-success .mitushi-nl-popup__form-view {
+    display: none;
   }
-  
-  .beautiful-newsletter-popup__success {
-    background: rgba(0, 255, 0, 0.1);
-    color: #00ff00;
-    border: 1px solid #00ff00;
+
+  .mitushi-nl-popup:not(.is-success) .mitushi-nl-popup__success-view {
+    display: none;
   }
 </style>
 
-<div class="beautiful-newsletter-popup h-100 d-flex fd-column">
-  <button class="beautiful-newsletter-popup__close js-popup-close-btn" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
-    ×
+<div class="mitushi-nl-popup{% if form.posted_successfully? %} is-success{% endif %}" data-mitushi-nl-popup>
+  <button class="mitushi-nl-popup__close js-popup-close-btn" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M18 6L6 18M6 6l12 12"/>
+    </svg>
   </button>
-  
-  <div class="beautiful-newsletter-popup__container">
-    <!-- Left Column: Content -->
-    <div class="beautiful-newsletter-popup__left">
-      <div class="beautiful-newsletter-popup__logo">
-        {% if logo_image %}
-          {%- liquid
-            assign logo_alt = logo_image.alt | default: shop.name
-            assign logo_url = logo_image | image_url: width: 300
-          -%}
-          <img src="{{ logo_url }}" alt="{{ logo_alt }}" loading="eager">
-        {% else %}
-          {{ logo_text | replace: 'Q', '<span class="logo-accent">Q</span>' }}
-        {% endif %}
+
+  <div class="mitushi-nl-popup__grid">
+    <div class="mitushi-nl-popup__visual" aria-hidden="true">
+      <div class="mitushi-nl-popup__visual-glow"></div>
+      <div class="mitushi-nl-popup__visual-ring"></div>
+      <div class="mitushi-nl-popup__visual-grid"></div>
+      <div class="mitushi-nl-popup__visual-jp">{{ visual_jp }}</div>
+      <div class="mitushi-nl-popup__visual-center">
+        <div>
+          <div class="mitushi-nl-popup__visual-mark">{{ visual_mark }}</div>
+          <div class="mitushi-nl-popup__visual-tag">{{ visual_tag }}</div>
+        </div>
       </div>
-      
-      <h2 class="beautiful-newsletter-popup__headline-main">
-        {{ headline_main }}
-      </h2>
-      
-      {% if headline_sub != blank %}
-        <p class="beautiful-newsletter-popup__headline-sub">
-          {{ headline_sub }}
-        </p>
-      {% endif %}
-      
-      <p class="beautiful-newsletter-popup__description">
-        {{ description_text }}
-      </p>
-      
-      <div class="beautiful-newsletter-popup__form">
-        {%- form 'customer', id: form_id -%}
+    </div>
+
+    <div class="mitushi-nl-popup__panel">
+      <div class="mitushi-nl-popup__brand">
+        <span class="mitushi-nl-popup__brand-glow" aria-hidden="true"></span>
+        <img
+          src="{{ popup_logo_url }}"
+          alt="{{ popup_logo_alt | escape }}"
+          class="mitushi-nl-popup__brand-logo"
+          width="220"
+          height="44"
+          loading="eager"
+        >
+      </div>
+
+      <div class="mitushi-nl-popup__form-view">
+        <div class="mitushi-nl-popup__eyebrow">{{ eyebrow }}</div>
+        <h2 id="mitushi-newsletter-title-{{ section.id }}" class="mitushi-nl-popup__title">
+          {{ title_before }} <span>{{ title_highlight }}</span>{{ title_after }}
+        </h2>
+        <p class="mitushi-nl-popup__desc">{{ description_text | newline_to_br }}</p>
+
+        {%- form 'customer', id: form_id, class: 'mitushi-nl-popup__form' -%}
           <input type="hidden" name="contact[tags]" value="newsletter">
-          
-          <label for="email-{{ form_id }}" class="beautiful-newsletter-popup__email-label">
-            {{ email_label }}
-          </label>
-          
-          <input 
+
+          <label for="email-{{ form_id }}" class="mitushi-nl-popup__label">{{ email_label }}</label>
+          <input
             id="email-{{ form_id }}"
-            type="email" 
-            name="contact[email]" 
-            class="beautiful-newsletter-popup__email-input"
-            value="{{ form.email }}" 
-            placeholder="Email"
+            type="email"
+            name="contact[email]"
+            class="mitushi-nl-popup__input"
+            value="{{ form.email }}"
             aria-required="true"
             autocorrect="off"
             autocapitalize="off"
             autocomplete="email"
-            {% if form.errors %} 
-              autofocus 
-              aria-invalid="true" 
-              aria-describedby="{{ form_id }}-error" 
-            {% elsif form.posted_successfully? %} 
-              aria-describedby="{{ form_id }}-success"
+            {% if form.errors %}
+              autofocus
+              aria-invalid="true"
+              aria-describedby="{{ form_id }}-error"
             {% endif %}
             required
           >
-          
-          <button type="submit" class="beautiful-newsletter-popup__button">
+
+          <button type="submit" class="mitushi-nl-popup__submit">
             {{ button_text }}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
           </button>
-          
+
           {%- if form.errors -%}
-            <div id="{{ form_id }}-error" class="beautiful-newsletter-popup__error" role="alert">
-              {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
-            </div>
-          {%- endif -%}
-          
-          {%- if form.posted_successfully? -%}
-            <div id="{{ form_id }}-success" class="beautiful-newsletter-popup__success" role="alert">
-              {{ 'general.newsletter.success' | t }}
+            <div id="{{ form_id }}-error" class="mitushi-nl-popup__error" role="alert">
+              {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
             </div>
           {%- endif -%}
         {%- endform -%}
+
+        <button type="button" class="mitushi-nl-popup__dismiss js-popup-close-btn" data-dismiss="modal">
+          {{ dismiss_text }}
+        </button>
+
+        <p class="mitushi-nl-popup__legal">{{ legal_text }}</p>
+      </div>
+
+      <div class="mitushi-nl-popup__success-view">
+        <div class="mitushi-nl-popup__success">
+          <div class="mitushi-nl-popup__success-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12l5 5L19 7"/>
+            </svg>
+          </div>
+          <h2 class="mitushi-nl-popup__success-title">{{ success_title }}</h2>
+          <p class="mitushi-nl-popup__success-msg">{{ success_message }}</p>
+        </div>
       </div>
     </div>
-    
-    <!-- Right Column: Image -->
-    <div class="beautiful-newsletter-popup__right">
-      {% if section.settings.right_image %}
-        {%- liquid
-          assign image_alt = section.settings.right_image.alt | default: 'Newsletter'
-          assign image_url = section.settings.right_image | image_url: width: 800
-        -%}
-        <img 
-          src="{{ image_url }}" 
-          alt="{{ image_alt }}"
-          class="beautiful-newsletter-popup__image"
-          loading="eager"
-        >
-      {% else %}
-        <div style="width: 100%; height: 100%; background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999; font-size: 18px;">
-          Image Placeholder
-        </div>
-      {% endif %}
-      
-    </div>
   </div>
+
+  <div class="mitushi-nl-popup__bar" aria-hidden="true"></div>
 </div>
+
+<script>
+  (function () {
+    var popup = document.querySelector('[data-mitushi-nl-popup].is-success');
+    if (!popup) return;
+    window.setTimeout(function () {
+      var close = popup.querySelector('.js-popup-close-btn');
+      if (close) close.click();
+    }, 1800);
+  })();
+</script>

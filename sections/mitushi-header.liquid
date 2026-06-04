@@ -16,9 +16,16 @@ Combines a collapsible announcement bar with a sticky header.
       overflow: hidden;
       background: #cc132a;
       color: #fff;
-      transition: height 0.5s ease-out, opacity 0.5s ease-out;
+      height: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .mitushi-announcement.is-open {
       height: 36px;
       opacity: 1;
+      pointer-events: auto;
     }
 
     .mitushi-announcement-inner {
@@ -763,7 +770,7 @@ Combines a collapsible announcement bar with a sticky header.
     }
   </style>
 
-  <div id="mitushi-announcement-bar" class="mitushi-announcement" aria-hidden="false">
+  <div id="mitushi-announcement-bar" class="mitushi-announcement is-open" aria-hidden="false">
     <div class="mitushi-announcement-inner">
       <div class="mitushi-marquee">
         {% for i in (1..section.settings.announcement_repeat_count) %}
@@ -1062,16 +1069,32 @@ Combines a collapsible announcement bar with a sticky header.
   (function () {
     var announcementBar = document.getElementById('mitushi-announcement-bar');
     var stickyHeader = document.getElementById('mitushi-sticky-header');
+    var announceOpen = true;
+    var lastScrollY = window.scrollY || 0;
+    var ANNOUNCE_OPEN_Y = 72;
+    var ANNOUNCE_CLOSE_Y = 96;
+    var ANNOUNCE_OPEN_WHILE_SCROLL_UP_Y = 140;
+
+    function setAnnouncementOpen(open) {
+      if (!announcementBar || announceOpen === open) return;
+      announceOpen = open;
+      announcementBar.classList.toggle('is-open', open);
+      announcementBar.setAttribute('aria-hidden', open ? 'false' : 'true');
+    }
 
     function updateScrollState() {
       var scrollY = window.scrollY || window.pageYOffset;
-      var atTop = scrollY < 4;
+      var scrollingUp = scrollY < lastScrollY;
       var scrolled = scrollY > 12;
 
       if (announcementBar) {
-        announcementBar.style.height = atTop ? '36px' : '0px';
-        announcementBar.style.opacity = atTop ? '1' : '0';
-        announcementBar.setAttribute('aria-hidden', atTop ? 'false' : 'true');
+        if (scrollY <= ANNOUNCE_OPEN_Y) {
+          setAnnouncementOpen(true);
+        } else if (scrollingUp && scrollY <= ANNOUNCE_OPEN_WHILE_SCROLL_UP_Y) {
+          setAnnouncementOpen(true);
+        } else if (scrollY >= ANNOUNCE_CLOSE_Y) {
+          setAnnouncementOpen(false);
+        }
       }
 
       if (stickyHeader) {
@@ -1081,6 +1104,8 @@ Combines a collapsible announcement bar with a sticky header.
           stickyHeader.classList.remove('scrolled');
         }
       }
+
+      lastScrollY = scrollY;
     }
 
     updateScrollState();
