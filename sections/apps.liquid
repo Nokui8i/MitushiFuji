@@ -1,58 +1,213 @@
-<div class="o-hidden section {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} color-{{- section.settings.color_scheme }}" data-ui-component="Apps Section">
-  <div class="{{ section.settings.enable_content_fullwidth | default: 'ctnr' | replace: 'true', '' }} w-100">
-    {%- for block in section.blocks -%}
-      {% render block %}
-    {%- endfor -%}
-  </div>
+{%- assign use_mitushi_layout = section.settings.enable_mitushi_layout | default: true -%}
+{%- assign show_header = section.settings.show_section_header | default: true -%}
+
+{%- if use_mitushi_layout -%}
+  {%- render 'mitushi-instafeed-section-styles', section: section -%}
+{%- endif -%}
+
+<div
+  class="o-hidden section mitushi-apps-section-wrap {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} color-{{- section.settings.color_scheme -}}"
+  data-ui-component="Apps Section"
+>
+  {%- if use_mitushi_layout -%}
+    <div class="mitushi-apps-section w-100">
+      <div class="mitushi-apps-container">
+        {%- if show_header -%}
+          {%- if section.settings.subheading != blank or section.settings.heading != blank -%}
+            <header class="mitushi-apps-header">
+              <div class="mitushi-apps-title-group">
+                {%- if section.settings.subheading != blank -%}
+                  <p class="mitushi-apps-eyebrow">{{ section.settings.subheading }}</p>
+                {%- endif -%}
+                {%- if section.settings.heading != blank -%}
+                  <h2 class="mitushi-apps-heading">{{ section.settings.heading }}</h2>
+                {%- endif -%}
+              </div>
+              {%- if section.settings.show_instagram_link and section.settings.instagram_url != blank -%}
+                <a
+                  class="mitushi-apps-instagram-link"
+                  href="{{ section.settings.instagram_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {{ section.settings.instagram_link_label | default: 'Follow on Instagram' }}
+                </a>
+              {%- endif -%}
+            </header>
+          {%- endif -%}
+        {%- endif -%}
+
+        <div class="mitushi-apps-feed">
+          {%- for block in section.blocks -%}
+            {% render block %}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  {%- else -%}
+    <div class="{{ section.settings.enable_content_fullwidth | default: 'ctnr' | replace: 'true', '' }} w-100">
+      {%- for block in section.blocks -%}
+        {% render block %}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
 </div>
 
 {% schema %}
-  {
-    "name": "t:general.apps",
-    "settings": [
-      {
-        "type": "header",
-        "content": "t:general.general"
-      },
-      {
-        "type": "color_scheme",
-        "id": "color_scheme",
-        "label": "t:general.color_scheme",
-        "default": "scheme-1"
-      },
-      {
-        "type": "header",
-        "content": "t:general.layout"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_content_fullwidth",
-        "label": "t:general.enable_layout_fullwidth",
-        "info": "t:general.layout_fullwidth_info",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "remove_padding_top",
-        "default": false,
-        "label": "t:general.remove_padding_top"
-      },
-      {
-        "type": "checkbox",
-        "id": "remove_padding_bottom",
-        "default": false,
-        "label": "t:general.remove_padding_bottom"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "@app"
-      }
-    ],
-    "presets": [
-      {
-        "name": "t:general.apps"
-      }
-    ]
-  }
+{
+  "name": "t:general.apps",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:general.general"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:general.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Mitushi layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mitushi_layout",
+      "label": "Use Mitushi section styling",
+      "default": true,
+      "info": "Adds headline, spacing, and grid gaps for Instafeed and other app blocks."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section_header",
+      "label": "Show section header",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Eyebrow",
+      "default": "/ 03 — Instagram"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "From the feed"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_instagram_link",
+      "label": "Show Instagram link",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram profile URL"
+    },
+    {
+      "type": "text",
+      "id": "instagram_link_label",
+      "label": "Instagram link text",
+      "default": "Follow on Instagram"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & grid"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Gap between posts",
+      "min": 4,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "min": 2,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "Image corner radius",
+      "min": 0,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "t:general.layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_content_fullwidth",
+      "label": "t:general.enable_layout_fullwidth",
+      "info": "t:general.layout_fullwidth_info",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_top",
+      "default": false,
+      "label": "t:general.remove_padding_top"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding_bottom",
+      "default": false,
+      "label": "t:general.remove_padding_bottom"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.apps"
+    }
+  ]
+}
 {% endschema %}
