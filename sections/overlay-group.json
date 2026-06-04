@@ -11,6 +11,63 @@
   "type": "custom.overlay",
   "name": "Overlay Group",
   "sections": {
+    "newsletter_popup": {
+      "type": "newsletter-popup",
+      "blocks": {},
+      "block_order": [],
+      "custom_css": [],
+      "settings": {
+        "color_scheme": "",
+        "use_beautiful_design": true,
+        "headline_main": "Exclusive discounts",
+        "headline_sub": "Join the",
+        "logo_text": "MITUSHI",
+        "title_after": " inner circle.",
+        "description_text": "Early access, limited drops, and special offers — straight to your inbox.",
+        "email_label": "Enter your email",
+        "button_text": "Join the family",
+        "dismiss_text": "No thanks, I'll pass",
+        "description_legal": "By subscribing, you agree to receive marketing emails from Mitushi. Unsubscribe anytime.",
+        "success_title": "Welcome to the family.",
+        "success_message": "Check your inbox — your code is on the way.",
+        "logo_image": "",
+        "visual_jp": "ミツシ・インナーサークル",
+        "visual_mark": "MITUSHI",
+        "visual_tag": "Inner circle",
+        "logo_size": 56,
+        "headline_main_size": 10,
+        "headline_sub_size": 36,
+        "description_size": 14,
+        "email_label_size": 10,
+        "email_input_size": 14,
+        "email_input_padding": 12,
+        "button_font_size": 11,
+        "button_padding": 14,
+        "popup_width": 70,
+        "popup_height": 85,
+        "trigger": "delay-after-page-load",
+        "delay_until": 4,
+        "delay_time": "session",
+        "delay_days": 30,
+        "show_only_on_index": true,
+        "show_only_for_visitors": false,
+        "desktop_direction": "fd-row-md",
+        "enable_vertical_on_mobile": true,
+        "desktop_alignment": "start-xs",
+        "desktop_alignment_vertical": "middle-xs",
+        "desktop_position": "bottom-xs",
+        "desktop_position_vertical": "center-xs",
+        "desktop_gap": 12,
+        "width": 37,
+        "enable_sticky_popup": false,
+        "sticky_popup_text": "Get 20% off",
+        "sticky_popup_alignment": "right",
+        "sticky_popup_position": "bottom",
+        "sticky_popup_color": "rgba(0,0,0,0)",
+        "sticky_popup_background": "rgba(0,0,0,0)",
+        "show_close_button": true
+      }
+    },
     "quick_search": {
       "type": "quick-search",
       "settings": {
@@ -34,6 +91,7 @@
     }
   },
   "order": [
+    "newsletter_popup",
     "quick_search"
   ]
 }
