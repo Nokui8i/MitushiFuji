@@ -12,6 +12,17 @@
 >
   {%- if use_mitushi_layout -%}
     <div class="mitushi-apps-section w-100">
+      {%- if section.settings.show_hero_background -%}
+        <div class="mitushi-apps-backdrop" aria-hidden="true"></div>
+        <div class="mitushi-apps-grid" aria-hidden="true"></div>
+        {%- if section.settings.ghost_text != blank -%}
+          <div class="mitushi-apps-ghost" aria-hidden="true">{{ section.settings.ghost_text }}</div>
+        {%- endif -%}
+        {%- if section.settings.vertical_jp != blank -%}
+          <div class="mitushi-apps-vertical-jp" aria-hidden="true">{{ section.settings.vertical_jp }}</div>
+        {%- endif -%}
+      {%- endif -%}
+
       <div class="mitushi-apps-container">
         {%- if show_header -%}
           {%- if section.settings.subheading != blank or section.settings.heading != blank -%}
@@ -26,22 +37,27 @@
               </div>
               {%- if section.settings.show_instagram_link and instagram_url != blank -%}
                 <a
-                  class="mitushi-apps-instagram-link"
+                  class="mitushi-apps-instagram-link{% if section.settings.cta_style == 'filled' %} mitushi-apps-instagram-link--filled{% endif %}"
                   href="{{ instagram_url }}"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {{ section.settings.instagram_link_label | default: 'Follow on Instagram' }}
+                  <span>{{ section.settings.instagram_link_label | default: 'Follow on Instagram' }}</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6"/>
+                  </svg>
                 </a>
               {%- endif -%}
             </header>
           {%- endif -%}
         {%- endif -%}
 
-        <div class="mitushi-apps-feed">
-          {%- for block in section.blocks -%}
-            {% render block %}
-          {%- endfor -%}
+        <div class="mitushi-apps-feed-wrap">
+          <div class="mitushi-apps-feed">
+            {%- for block in section.blocks -%}
+              {% render block %}
+            {%- endfor -%}
+          </div>
         </div>
       </div>
     </div>
@@ -115,8 +131,41 @@
       "default": "Follow on Instagram"
     },
     {
+      "type": "select",
+      "id": "cta_style",
+      "label": "Button style",
+      "options": [
+        { "value": "outline", "label": "Outline" },
+        { "value": "filled", "label": "Filled crimson" }
+      ],
+      "default": "outline"
+    },
+    {
+      "type": "header",
+      "content": "Hero-style background"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hero_background",
+      "label": "Show grid and crimson glow (like hero)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "ghost_text",
+      "label": "Background ghost text",
+      "default": "FEED",
+      "info": "Large outlined text behind the section. Leave empty to hide."
+    },
+    {
+      "type": "text",
+      "id": "vertical_jp",
+      "label": "Vertical side text (desktop)",
+      "default": "ミツシ・フィード"
+    },
+    {
       "type": "paragraph",
-      "content": "Post layout, gaps, and tile shape are set in the Instafeed app block — not here — so the feed keeps its original look."
+      "content": "Post layout and tile shape are controlled in the Instafeed app block — not here."
     },
     {
       "type": "header",
