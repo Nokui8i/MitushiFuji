@@ -36,14 +36,25 @@
                 {%- endif -%}
               </div>
               {%- if section.settings.show_instagram_link and instagram_url != blank -%}
+                {%- assign cta_style = section.settings.cta_style | default: 'split' -%}
                 <a
-                  class="mitushi-apps-instagram-link{% if section.settings.cta_style == 'outline' %} mitushi-apps-instagram-link--outline{% endif %}"
+                  class="mitushi-ig-cta mitushi-ig-cta--{{ cta_style }}"
                   href="{{ instagram_url }}"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {{ section.settings.instagram_link_label | default: 'Follow on Instagram' }}
-                  <span class="mitushi-apps-instagram-link__arrow" aria-hidden="true">→</span>
+                  <span class="mitushi-ig-cta__label">{{ section.settings.instagram_link_label | default: 'Follow on Instagram' }}</span>
+                  <span class="mitushi-ig-cta__icon" aria-hidden="true">
+                    {%- if cta_style == 'split' -%}
+                      <svg class="mitushi-ig-cta__ig" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                        <rect x="3" y="3" width="18" height="18" rx="5"/>
+                        <circle cx="12" cy="12" r="4"/>
+                        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                      </svg>
+                    {%- else -%}
+                      <span class="mitushi-ig-cta__arrow">→</span>
+                    {%- endif -%}
+                  </span>
                 </a>
               {%- endif -%}
             </header>
@@ -133,10 +144,11 @@
       "id": "cta_style",
       "label": "Button style",
       "options": [
-        { "value": "outline", "label": "Outline" },
-        { "value": "filled", "label": "Filled crimson" }
+        { "value": "split", "label": "Split panel + IG icon" },
+        { "value": "solid", "label": "Solid block (like hero)" },
+        { "value": "minimal", "label": "Minimal underline" }
       ],
-      "default": "filled"
+      "default": "split"
     },
     {
       "type": "header",
