@@ -1,5 +1,6 @@
 {%- assign use_mitushi_layout = section.settings.enable_mitushi_layout | default: true -%}
 {%- assign show_header = section.settings.show_section_header | default: true -%}
+{%- assign instagram_url = section.settings.instagram_url | default: settings.social_instagram_link -%}
 
 {%- if use_mitushi_layout -%}
   {%- render 'mitushi-instafeed-section-styles', section: section -%}
@@ -23,10 +24,10 @@
                   <h2 class="mitushi-apps-heading">{{ section.settings.heading }}</h2>
                 {%- endif -%}
               </div>
-              {%- if section.settings.show_instagram_link and section.settings.instagram_url != blank -%}
+              {%- if section.settings.show_instagram_link and instagram_url != blank -%}
                 <a
                   class="mitushi-apps-instagram-link"
-                  href="{{ section.settings.instagram_url }}"
+                  href="{{ instagram_url }}"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
