@@ -1,5 +1,6 @@
 {% comment %}
-  Mitushi styling for Apps sections (Instafeed) — scoped to section.id.
+  Mitushi Apps section — header + section chrome only.
+  Instafeed tile shape, grid, and images are controlled by the Instafeed app.
 {% endcomment %}
 <style>
   #shopify-section-{{ section.id }} .mitushi-apps-section {
@@ -70,61 +71,20 @@
     width: 100%;
   }
 
-  /* Instafeed app layout */
-  #shopify-section-{{ section.id }} #insta-feed,
-  #shopify-section-{{ section.id }} .instafeed-shopify {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
+  /* Align feed to section width — do not override Instafeed tiles */
+  #shopify-section-{{ section.id }} .mitushi-apps-feed > * {
+    max-width: 100%;
   }
 
-  #shopify-section-{{ section.id }} .instafeed-new-layout-container,
-  #shopify-section-{{ section.id }} .instafeed-new-layout-wrapper {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
+  #shopify-section-{{ section.id }} .mitushi-apps-feed .page-width,
+  #shopify-section-{{ section.id }} .mitushi-apps-feed [class*='page-width'] {
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
   }
 
-  #shopify-section-{{ section.id }} .instafeed-new-layout-wrapper {
-    display: grid !important;
-    gap: {{ section.settings.grid_gap | default: 12 }}px !important;
-    grid-template-columns: repeat({{ section.settings.columns_mobile | default: 2 }}, minmax(0, 1fr)) !important;
-  }
-
-  @media (min-width: 768px) {
-    #shopify-section-{{ section.id }} .instafeed-new-layout-wrapper {
-      grid-template-columns: repeat({{ section.settings.columns_desktop | default: 3 }}, minmax(0, 1fr)) !important;
-    }
-  }
-
-  #shopify-section-{{ section.id }} .instafeed-new-layout-item {
-    width: 100% !important;
-    margin: 0 !important;
-    overflow: hidden;
-    border-radius: {{ section.settings.image_radius | default: 4 }}px;
-    background: #1a1a1c;
-  }
-
-  #shopify-section-{{ section.id }} .instafeed-new-layout-item img,
-  #shopify-section-{{ section.id }} #insta-feed img {
-    display: block;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    aspect-ratio: 1 / 1;
-  }
-
-  /* Hide empty Instafeed title when theme header is used */
   #shopify-section-{{ section.id }} .instafeed-new-layout-container > h2:empty,
   #shopify-section-{{ section.id }} #insta-feed > h2:empty {
-    display: none !important;
-  }
-
-  #shopify-section-{{ section.id }} .page-width:has(#insta-feed),
-  #shopify-section-{{ section.id }} [class*="page-width"]:has(#insta-feed) {
-    max-width: 100% !important;
-    padding: 0 !important;
+    display: none;
   }
 </style>
