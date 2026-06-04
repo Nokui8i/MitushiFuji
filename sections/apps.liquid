@@ -37,15 +37,13 @@
               </div>
               {%- if section.settings.show_instagram_link and instagram_url != blank -%}
                 <a
-                  class="mitushi-apps-instagram-link{% if section.settings.cta_style == 'filled' %} mitushi-apps-instagram-link--filled{% endif %}"
+                  class="mitushi-apps-instagram-link{% if section.settings.cta_style == 'outline' %} mitushi-apps-instagram-link--outline{% endif %}"
                   href="{{ instagram_url }}"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span>{{ section.settings.instagram_link_label | default: 'Follow on Instagram' }}</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path d="M5 12h14M13 6l6 6-6 6"/>
-                  </svg>
+                  {{ section.settings.instagram_link_label | default: 'Follow on Instagram' }}
+                  <span class="mitushi-apps-instagram-link__arrow" aria-hidden="true">→</span>
                 </a>
               {%- endif -%}
             </header>
@@ -138,7 +136,7 @@
         { "value": "outline", "label": "Outline" },
         { "value": "filled", "label": "Filled crimson" }
       ],
-      "default": "outline"
+      "default": "filled"
     },
     {
       "type": "header",

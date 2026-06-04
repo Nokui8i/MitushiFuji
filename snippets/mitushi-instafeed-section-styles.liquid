@@ -118,48 +118,65 @@
     color: #f7f7f8;
   }
 
+  /* Primary CTA — matches hero "Shop the Drop" */
   #shopify-section-{{ section.id }} .mitushi-apps-instagram-link {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 12px;
     flex-shrink: 0;
-    font-size: 10px;
+    min-height: 48px;
+    padding: 16px 28px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.32em;
+    line-height: 1;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     text-decoration: none;
-    color: rgba(247, 247, 248, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    padding: 14px 20px;
-    background: rgba(15, 15, 16, 0.5);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+    color: var(--bone, #f7f7f8);
+    background-color: var(--crimson, #cc132a);
+    border: 1px solid var(--crimson, #cc132a);
+    box-shadow: 0 4px 24px rgba(204, 19, 42, 0.35);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   }
 
-  #shopify-section-{{ section.id }} .mitushi-apps-instagram-link svg {
-    transition: transform 0.25s ease;
+  #shopify-section-{{ section.id }} .mitushi-apps-instagram-link__arrow {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0;
+    transition: transform 0.3s ease;
   }
 
   #shopify-section-{{ section.id }} .mitushi-apps-instagram-link:hover {
-    border-color: #cc132a;
-    color: #f7f7f8;
+    background-color: #e0152f;
+    border-color: #e0152f;
+    box-shadow: 0 0 32px rgba(204, 19, 42, 0.65);
     transform: translateY(-1px);
   }
 
-  #shopify-section-{{ section.id }} .mitushi-apps-instagram-link:hover svg {
-    transform: translateX(3px);
+  #shopify-section-{{ section.id }} .mitushi-apps-instagram-link:hover .mitushi-apps-instagram-link__arrow {
+    transform: translateX(4px);
   }
 
-  #shopify-section-{{ section.id }} .mitushi-apps-instagram-link--filled {
-    border-color: #cc132a;
-    background: #cc132a;
+  #shopify-section-{{ section.id }} .mitushi-apps-instagram-link:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 16px rgba(204, 19, 42, 0.45);
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-instagram-link--outline {
     color: #f7f7f8;
+    background: rgba(15, 15, 16, 0.65);
+    border-color: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
-  #shopify-section-{{ section.id }} .mitushi-apps-instagram-link--filled:hover {
-    background: #ff1a3a;
-    border-color: #ff1a3a;
+  #shopify-section-{{ section.id }} .mitushi-apps-instagram-link--outline:hover {
+    background: rgba(204, 19, 42, 0.15);
+    border-color: #cc132a;
+    box-shadow: 0 0 28px rgba(204, 19, 42, 0.4);
   }
 
   #shopify-section-{{ section.id }} .mitushi-apps-feed-wrap {

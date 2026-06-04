@@ -186,7 +186,7 @@
         "show_instagram_link": true,
         "instagram_url": "https://www.instagram.com/",
         "instagram_link_label": "Follow on Instagram",
-        "cta_style": "outline",
+        "cta_style": "filled",
         "show_hero_background": true,
         "ghost_text": "FEED",
         "vertical_jp": "ミツシ・フィード",
