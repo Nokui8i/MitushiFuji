@@ -12,7 +12,27 @@
     "mitushi_hero_1": {
       "type": "mitushi-hero",
       "settings": {
-        "hero_image": ""
+        "badge_text": "New Drop · Live Now",
+        "title_line_1": "Wear the",
+        "title_line_2": "Legend",
+        "title_line_3": "In Silence",
+        "description": "Limited-edition anime streetwear engineered in Tokyo silhouettes. Heavyweight cotton, pigment-dyed, built to outlive the season.",
+        "button_1_label": "Shop the Drop",
+        "button_1_link": "",
+        "badge_left_text": "FW · 26 / Drop 03",
+        "badge_right_text": "Tokyo — Tel Aviv",
+        "vertical_jp_text": "匠 · 二〇二六",
+        "float_badge_1_label": "Drop 03",
+        "float_badge_1_val": "夢 DREAMS",
+        "float_badge_2_label": "Limited",
+        "float_badge_2_val": "/ 300",
+        "show_stats": true,
+        "stat_1_num": "03",
+        "stat_1_label": "Active Drops",
+        "stat_2_num": "48H",
+        "stat_2_label": "Until Restock",
+        "stat_3_num": "夢",
+        "stat_3_label": "Dreams FW26"
       }
     },
     "mitushi_categories_1": {
@@ -21,28 +41,25 @@
         "cat_1": {
           "type": "category",
           "settings": {
+            "collection": "",
             "title": "Shirts",
-            "japanese": "シャツ",
-            "count": "24 pieces",
-            "image": ""
+            "japanese": "シャツ"
           }
         },
         "cat_2": {
           "type": "category",
           "settings": {
+            "collection": "",
             "title": "Shorts",
-            "japanese": "ショーツ",
-            "count": "12 pieces",
-            "image": ""
+            "japanese": "ショーツ"
           }
         },
         "cat_3": {
           "type": "category",
           "settings": {
+            "collection": "",
             "title": "Tanks",
-            "japanese": "タンク",
-            "count": "9 pieces",
-            "image": ""
+            "japanese": "タンク"
           }
         }
       },
@@ -51,7 +68,12 @@
         "cat_2",
         "cat_3"
       ],
-      "settings": {}
+      "settings": {
+        "subheading": "/ 01 — Collections",
+        "heading": "Shop by category",
+        "view_all_label": "View all →",
+        "view_all_link": ""
+      }
     },
     "mitushi_carousel_1": {
       "type": "mitushi-product-carousel",
@@ -59,66 +81,60 @@
         "prod_1": {
           "type": "product",
           "settings": {
+            "product_handle": "",
             "name": "Kanji Oversized Tee",
             "tag": "Ghost",
             "price": "89",
-            "front_image": "",
-            "back_image": "",
             "badge": "New"
           }
         },
         "prod_2": {
           "type": "product",
           "settings": {
+            "product_handle": "",
             "name": "Samurai Print Tee",
             "tag": "Crimson Warrior",
             "price": "95",
-            "front_image": "",
-            "back_image": "",
             "badge": "Hot"
           }
         },
         "prod_3": {
           "type": "product",
           "settings": {
+            "product_handle": "",
             "name": "Bone Tank",
             "tag": "Oni",
             "price": "65",
-            "front_image": "",
-            "back_image": "",
             "badge": ""
           }
         },
         "prod_4": {
           "type": "product",
           "settings": {
+            "product_handle": "",
             "name": "Striped Shorts",
             "tag": "Rising Sun",
             "price": "79",
-            "front_image": "",
-            "back_image": "",
             "badge": "Drop 03"
           }
         },
         "prod_5": {
           "type": "product",
           "settings": {
+            "product_handle": "",
             "name": "Tokyo Tee",
             "tag": "Night Series",
             "price": "89",
-            "front_image": "",
-            "back_image": "",
             "badge": ""
           }
         },
         "prod_6": {
           "type": "product",
           "settings": {
+            "product_handle": "",
             "name": "Onsen Shorts",
             "tag": "Mono",
             "price": "79",
-            "front_image": "",
-            "back_image": "",
             "badge": ""
           }
         }
@@ -131,12 +147,48 @@
         "prod_5",
         "prod_6"
       ],
-      "settings": {}
+      "settings": {
+        "subheading": "/ 02 — Latest drop",
+        "heading": "Featured pieces"
+      }
+    },
+    "178055456171e92778": {
+      "type": "apps",
+      "blocks": {
+        "instafeed_app_block_WiebpD": {
+          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
+          "settings": {
+            "title": "",
+            "title_color": "",
+            "title_size_v2": 0,
+            "alignment": "center",
+            "instafeed_margin_top": 0,
+            "instafeed_margin_bottom": 0,
+            "instafeed_margin_sides": 0,
+            "show_instagram_link": false,
+            "link_alignment": "left",
+            "link_color": "#000000",
+            "background_color": "",
+            "feed_id": "",
+            "html_area": ""
+          }
+        }
+      },
+      "block_order": [
+        "instafeed_app_block_WiebpD"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "enable_content_fullwidth": false,
+        "remove_padding_top": false,
+        "remove_padding_bottom": false
+      }
     }
   },
   "order": [
     "mitushi_hero_1",
     "mitushi_categories_1",
-    "mitushi_carousel_1"
+    "mitushi_carousel_1",
+    "178055456171e92778"
   ]
 }

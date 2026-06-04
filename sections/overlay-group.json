@@ -13,8 +13,6 @@
   "sections": {
     "newsletter_popup": {
       "type": "newsletter-popup",
-      "blocks": {},
-      "block_order": [],
       "custom_css": [],
       "settings": {
         "color_scheme": "",
