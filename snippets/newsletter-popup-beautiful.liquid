@@ -4,33 +4,61 @@
 
 {%- liquid
   assign form_id = 'beautifulNewsletterForm' | append: section.id
-  assign eyebrow = section.settings.headline_main | default: 'Exclusive discounts'
-  assign title_before = section.settings.headline_sub | default: 'Join the'
-  assign title_highlight = section.settings.logo_text | default: 'MITUSHI'
-  assign title_after = ' inner circle.'
-  assign description_text = section.settings.description_text | default: 'Early access, limited drops, and special offers — straight to your inbox.'
-  assign email_label = section.settings.email_label | default: 'Enter your email'
-  assign button_text = section.settings.button_text | default: 'Join the family'
-  assign legal_text = section.settings.description_legal | default: 'By subscribing, you agree to receive marketing emails from Mitushi. Unsubscribe anytime.'
-  assign dismiss_text = section.settings.dismiss_text | default: "No thanks, I'll pass"
-  assign success_title = section.settings.success_title | default: 'Welcome to the family.'
-  assign success_message = section.settings.success_message | default: 'Check your inbox — your code is on the way.'
-  assign visual_jp = section.settings.visual_jp | default: 'ミツシ・インナーサークル'
-  assign visual_mark = section.settings.visual_mark | default: 'MITUSHI'
-  assign visual_tag = section.settings.visual_tag | default: 'Inner circle'
+  assign eyebrow = section.settings.headline_main
+  assign title_before = section.settings.headline_sub
+  assign title_highlight = section.settings.logo_text
+  assign title_after = section.settings.title_after
+  assign description_text = section.settings.description_text
+  assign email_label = section.settings.email_label
+  assign button_text = section.settings.button_text
+  assign legal_text = section.settings.description_legal
+  assign dismiss_text = section.settings.dismiss_text
+  assign success_title = section.settings.success_title
+  assign success_message = section.settings.success_message
+  assign visual_jp = section.settings.visual_jp
+  assign visual_mark = section.settings.visual_mark
+  assign visual_tag = section.settings.visual_tag
 
-  comment
-    Match header: mitushi-header uses mitushi-logo.png when no theme image is set.
-  endcomment
-  assign popup_logo_url = 'mitushi-logo.png' | asset_url
-  assign popup_logo_alt = shop.name
+  assign popup_logo_height = section.settings.logo_size | default: 56
+  assign eyebrow_size = section.settings.headline_main_size | default: 10
+  assign title_size = section.settings.headline_sub_size | default: 36
+  assign desc_size = section.settings.description_size | default: 14
+  assign email_label_size = section.settings.email_label_size | default: 10
+  assign email_input_size = section.settings.email_input_size | default: 14
+  assign email_input_padding = section.settings.email_input_padding | default: 12
+  assign button_font_size = section.settings.button_font_size | default: 11
+  assign button_padding = section.settings.button_padding | default: 14
+  assign popup_width_pct = section.settings.popup_width | default: 70
+  assign popup_height_pct = section.settings.popup_height | default: 85
+
+  if section.settings.logo_image != blank
+    assign popup_logo_url = section.settings.logo_image | image_url: width: 440
+    assign popup_logo_alt = section.settings.logo_image.alt | default: shop.name
+  else
+    assign popup_logo_url = 'mitushi-logo.png' | asset_url
+    assign popup_logo_alt = shop.name
+  endif
 -%}
 
 <style>
+  #shopify-section-{{ section.id }} .mitushi-nl-popup {
+    --nl-popup-width: {{ popup_width_pct }}vw;
+    --nl-popup-max-height: {{ popup_height_pct }}vh;
+    --nl-logo-height: {{ popup_logo_height }}px;
+    --nl-eyebrow-size: {{ eyebrow_size }}px;
+    --nl-title-size: {{ title_size }}px;
+    --nl-desc-size: {{ desc_size }}px;
+    --nl-email-label-size: {{ email_label_size }}px;
+    --nl-input-size: {{ email_input_size }}px;
+    --nl-input-padding: {{ email_input_padding }}px;
+    --nl-button-size: {{ button_font_size }}px;
+    --nl-button-padding: {{ button_padding }}px;
+  }
+
   .mitushi-nl-popup {
     position: relative;
-    width: min(940px, 95vw);
-    max-height: 92vh;
+    width: min(940px, var(--nl-popup-width, 95vw), 95vw);
+    max-height: min(var(--nl-popup-max-height, 92vh), 92vh);
     overflow-x: hidden;
     overflow-y: auto;
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -271,7 +299,7 @@
     position: relative;
     z-index: 1;
     display: block;
-    height: 56px;
+    height: var(--nl-logo-height, 56px);
     width: auto;
     max-width: min(220px, 72vw);
     object-fit: contain;
@@ -279,7 +307,7 @@
   }
 
   .mitushi-nl-popup__eyebrow {
-    font-size: 10px;
+    font-size: var(--nl-eyebrow-size, 10px);
     font-weight: 700;
     letter-spacing: 0.5em;
     text-transform: uppercase;
@@ -289,7 +317,7 @@
   .mitushi-nl-popup__title {
     margin: 12px 0 0;
     font-family: var(--font-display, inherit);
-    font-size: clamp(1.75rem, 5vw, 2.25rem);
+    font-size: clamp(var(--nl-title-size, 1.75rem), 5vw, var(--nl-title-size, 2.25rem));
     line-height: 1.05;
     letter-spacing: 0.02em;
     color: #f7f7f8;
@@ -303,7 +331,7 @@
   .mitushi-nl-popup__desc {
     margin: 16px 0 0;
     max-width: 22rem;
-    font-size: 14px;
+    font-size: var(--nl-desc-size, 14px);
     line-height: 1.65;
     color: rgba(247, 247, 248, 0.7);
   }
@@ -315,7 +343,7 @@
   .mitushi-nl-popup__label {
     display: block;
     margin-bottom: 8px;
-    font-size: 10px;
+    font-size: var(--nl-email-label-size, 10px);
     font-weight: 700;
     letter-spacing: 0.4em;
     text-transform: uppercase;
@@ -324,11 +352,11 @@
 
   .mitushi-nl-popup__input {
     width: 100%;
-    padding: 12px 16px;
+    padding: var(--nl-input-padding, 12px) 16px;
     border: 1px solid rgba(255, 255, 255, 0.14);
     background: #1d1d1f;
     color: #f7f7f8;
-    font-size: 14px;
+    font-size: var(--nl-input-size, 14px);
     outline: none;
     transition: border-color 0.2s ease;
     box-sizing: border-box;
@@ -345,11 +373,11 @@
     justify-content: center;
     gap: 8px;
     margin-top: 12px;
-    padding: 14px 16px;
+    padding: var(--nl-button-padding, 14px) 16px;
     border: none;
     background: #cc132a;
     color: #f7f7f8;
-    font-size: 11px;
+    font-size: var(--nl-button-size, 11px);
     font-weight: 700;
     letter-spacing: 0.3em;
     text-transform: uppercase;
@@ -485,11 +513,21 @@
       </div>
 
       <div class="mitushi-nl-popup__form-view">
-        <div class="mitushi-nl-popup__eyebrow">{{ eyebrow }}</div>
-        <h2 id="mitushi-newsletter-title-{{ section.id }}" class="mitushi-nl-popup__title">
-          {{ title_before }} <span>{{ title_highlight }}</span>{{ title_after }}
-        </h2>
-        <p class="mitushi-nl-popup__desc">{{ description_text | newline_to_br }}</p>
+        {%- if eyebrow != blank -%}
+          <div class="mitushi-nl-popup__eyebrow">{{ eyebrow }}</div>
+        {%- endif -%}
+        {%- if title_before != blank or title_highlight != blank or title_after != blank -%}
+          <h2 id="mitushi-newsletter-title-{{ section.id }}" class="mitushi-nl-popup__title">
+            {{- title_before -}}
+            {%- if title_highlight != blank -%}
+              <span>{{ title_highlight }}</span>
+            {%- endif -%}
+            {{- title_after -}}
+          </h2>
+        {%- endif -%}
+        {%- if description_text != blank -%}
+          <p class="mitushi-nl-popup__desc">{{ description_text | newline_to_br }}</p>
+        {%- endif -%}
 
         {%- form 'customer', id: form_id, class: 'mitushi-nl-popup__form' -%}
           <input type="hidden" name="contact[tags]" value="newsletter">
@@ -527,11 +565,15 @@
           {%- endif -%}
         {%- endform -%}
 
-        <button type="button" class="mitushi-nl-popup__dismiss js-popup-close-btn" data-dismiss="modal">
-          {{ dismiss_text }}
-        </button>
+        {%- if dismiss_text != blank -%}
+          <button type="button" class="mitushi-nl-popup__dismiss js-popup-close-btn" data-dismiss="modal">
+            {{ dismiss_text }}
+          </button>
+        {%- endif -%}
 
-        <p class="mitushi-nl-popup__legal">{{ legal_text }}</p>
+        {%- if legal_text != blank -%}
+          <p class="mitushi-nl-popup__legal">{{ legal_text }}</p>
+        {%- endif -%}
       </div>
 
       <div class="mitushi-nl-popup__success-view">

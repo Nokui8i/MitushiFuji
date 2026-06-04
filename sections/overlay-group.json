@@ -13,165 +13,38 @@
   "sections": {
     "newsletter_popup": {
       "type": "newsletter-popup",
-      "blocks": {
-        "group_Ewd38c": {
-          "type": "group",
-          "name": "t:general.group",
-          "settings": {
-            "color_scheme": "",
-            "overlay_opacity": 30,
-            "mask_overlay_color": "",
-            "content_overlay_color": "",
-            "background_media": "none",
-            "video_source": "external",
-            "external_video": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-            "enable_video_loop": true,
-            "video_controller_color": "transparent",
-            "desktop_direction": "fd-column-md",
-            "content_alignment_desktop_vertical": "ta-left-md top-md",
-            "content_position_desktop_vertical": "center-md",
-            "content_alignment_desktop_horizontal": "ta-center-md center-md",
-            "content_position_desktop_horizontal": "middle-md",
-            "gap_desktop": 24,
-            "mobile_direction": "fd-column",
-            "content_alignment_mobile_vertical": "ta-center middle-xs",
-            "content_position_mobile_vertical": "start-xs",
-            "content_alignment_mobile_horizontal": "ta-left start-xs",
-            "content_position_mobile_horizontal": "top-xs",
-            "gap_mobile": 12,
-            "width": "100%",
-            "custom_width": 20,
-            "mobile_width": "100%",
-            "mobile_custom_width": 0,
-            "height": "100%",
-            "custom_height": 100,
-            "padding_top": 0,
-            "padding_bottom": 0,
-            "padding_left": 0,
-            "padding_right": 0,
-            "link": ""
-          },
-          "blocks": {
-            "image_aNmmUf": {
-              "type": "image",
-              "name": "t:general.image",
-              "settings": {
-                "image_ratio": "original",
-                "desktop_width": 100,
-                "mobile_width": 100,
-                "height": "fill",
-                "link": ""
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_aNmmUf"
-          ]
-        },
-        "group_pEqw8R": {
-          "type": "group",
-          "name": "t:general.group",
-          "settings": {
-            "color_scheme": "scheme-1",
-            "overlay_opacity": 8,
-            "mask_overlay_color": "",
-            "content_overlay_color": "",
-            "background_media": "none",
-            "video_source": "external",
-            "external_video": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-            "enable_video_loop": true,
-            "video_controller_color": "transparent",
-            "desktop_direction": "fd-column-md",
-            "content_alignment_desktop_vertical": "ta-center-md middle-md",
-            "content_position_desktop_vertical": "start-md",
-            "content_alignment_desktop_horizontal": "ta-left-md start-md",
-            "content_position_desktop_horizontal": "top-md",
-            "gap_desktop": 9,
-            "mobile_direction": "fd-column",
-            "content_alignment_mobile_vertical": "ta-center middle-xs",
-            "content_position_mobile_vertical": "center-xs",
-            "content_alignment_mobile_horizontal": "ta-left start-xs",
-            "content_position_mobile_horizontal": "top-xs",
-            "gap_mobile": 12,
-            "width": "100%",
-            "custom_width": 0,
-            "mobile_width": "100%",
-            "mobile_custom_width": 0,
-            "height": "100%",
-            "custom_height": 0,
-            "padding_top": 24,
-            "padding_bottom": 24,
-            "padding_left": 24,
-            "padding_right": 24,
-            "link": ""
-          },
-          "blocks": {
-            "heading_iH7cij": {
-              "type": "heading",
-              "name": "t:general.heading",
-              "settings": {
-                "heading": "Sign up for our newsletter",
-                "heading_size": "1"
-              },
-              "blocks": {}
-            },
-            "description_F74WAg": {
-              "type": "description",
-              "name": "t:general.description",
-              "settings": {
-                "description": "<p>Subscribe now to get the latest news, exclusive offers, and helpful tips every week!</p>"
-              },
-              "blocks": {}
-            },
-            "newsletter_form_JzyAyH": {
-              "type": "newsletter-form",
-              "name": "t:general.newsletter_form",
-              "settings": {
-                "button_label": "Subscribe",
-                "button_style": "primary",
-                "width": "fill",
-                "custom_width": 100,
-                "mobile_width": "fill",
-                "mobile_custom_width": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "heading_iH7cij",
-            "description_F74WAg",
-            "newsletter_form_JzyAyH"
-          ]
-        }
-      },
-      "block_order": [
-        "group_Ewd38c",
-        "group_pEqw8R"
-      ],
+      "blocks": {},
+      "block_order": [],
       "custom_css": [],
       "settings": {
         "color_scheme": "",
         "use_beautiful_design": true,
-        "logo_image": "shopify://shop_images/mitushi_logo_transparent_trimmed_2000w.png",
-        "logo_text": "MITUSHI",
         "headline_main": "Exclusive discounts",
         "headline_sub": "Join the",
+        "logo_text": "MITUSHI",
+        "title_after": " inner circle.",
         "description_text": "Early access, limited drops, and special offers — straight to your inbox.",
-        "email_label": "ENTER YOUR EMAIL",
-        "button_text": "JOIN THE FAMILY",
-        "right_image": "shopify://shop_images/3_jpg.webp",
-        "logo_size": 17,
-        "headline_main_size": 23,
-        "headline_sub_size": 21,
+        "email_label": "Enter your email",
+        "button_text": "Join the family",
+        "dismiss_text": "No thanks, I'll pass",
+        "description_legal": "By subscribing, you agree to receive marketing emails from Mitushi. Unsubscribe anytime.",
+        "success_title": "Welcome to the family.",
+        "success_message": "Check your inbox — your code is on the way.",
+        "logo_image": "",
+        "visual_jp": "ミツシ・インナーサークル",
+        "visual_mark": "MITUSHI",
+        "visual_tag": "Inner circle",
+        "logo_size": 56,
+        "headline_main_size": 10,
+        "headline_sub_size": 36,
         "description_size": 14,
-        "email_label_size": 11,
-        "email_input_size": 12,
+        "email_label_size": 10,
+        "email_input_size": 14,
         "email_input_padding": 12,
-        "button_font_size": 14,
+        "button_font_size": 11,
         "button_padding": 14,
-        "popup_width": 50,
-        "popup_height": 50,
+        "popup_width": 70,
+        "popup_height": 85,
         "trigger": "delay-after-page-load",
         "delay_until": 4,
         "delay_time": "session",
