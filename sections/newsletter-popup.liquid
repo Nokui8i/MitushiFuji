@@ -29,64 +29,28 @@
           z-index: 999999 !important;
         }
       </style>
-      {% if section.settings.use_beautiful_design %}
-        <style>
-          sht-newsletter-popup {
-            background: transparent !important;
-            position: relative;
-            z-index: 99999 !important;
-          }
-          .newsletter-popup-overlay {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            background: rgba(0, 0, 0, 0.75) !important;
-            z-index: 99998 !important;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-          }
-          .popup-container {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            background: transparent !important;
-            z-index: 99999 !important;
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-          }
-        </style>
-      {% endif %}
       <div class="popup-container p-relative color-{{ section.settings.color_scheme }} h-100 d-flex middle-xs center-xs" style="--width-md: {{ section.settings.width }}%;">
-        {% if section.settings.use_beautiful_design %}
-          {%- render 'newsletter-popup-beautiful', section: section -%}
+        {% if section.settings.enable_sticky_popup %}
+          <button class="btn btn-small btn-icon btn-secondary btn-custom p-absolute js-popup-close-btn zi-9 right-12 top-12" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
+            {%- render 'icon-minus' -%}
+          </button>
         {% else %}
-          {% if section.settings.enable_sticky_popup %}
-            <button class="btn btn-small btn-icon btn-secondary btn-custom p-absolute js-popup-close-btn zi-9 right-12 top-12" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
-              {%- render 'icon-minus' -%}
+          <div class="p-absolute  zi-9 right-12 top-12">
+            <button class="btn btn-small btn-icon btn-secondary--animate js-popup-close-btn" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
+              {%- render 'icon-close' -%}
             </button>
-          {% else %}
-            <div class="p-absolute  zi-9 right-12 top-12">
-              <button class="btn btn-small btn-icon btn-secondary--animate js-popup-close-btn" type="button" data-dismiss="modal" aria-label="{{ 'accessibility.close_popup' | t }}">
-                {%- render 'icon-close' -%}
-              </button>
-            </div>
-          {% endif %}
-
-          <div class="newsletter-popup__content w-100 h-100 scrollbar">
-            <div class="newsletter-popup__content-container d-flex {{ vertical_layout }} {{ section.settings.desktop_direction }} h-100" style="gap: {{ section.settings.desktop_gap }}px;" data-deferred-content>
-              <!-- Content will be loaded here when popup opens -->
-            </div>
           </div>
-          
-          <template class="js-newsletter-content-template">
-            {{ children }}
-          </template>
         {% endif %}
+
+        <div class="newsletter-popup__content w-100 h-100 scrollbar">
+          <div class="newsletter-popup__content-container d-flex {{ vertical_layout }} {{ section.settings.desktop_direction }} h-100" style="gap: {{ section.settings.desktop_gap }}px;" data-deferred-content>
+            <!-- Content will be loaded here when popup opens -->
+          </div>
+        </div>
+
+        <template class="js-newsletter-content-template">
+          {{ children }}
+        </template>
       </div>
       <div class="newsletter-popup-overlay js-newsletter-popup-overlay"></div>
     </sht-newsletter-popup>
@@ -117,282 +81,6 @@
       "default": "scheme-1"
     },
     {
-      "type": "checkbox",
-      "id": "use_beautiful_design",
-      "label": "Use Mitushi inner-circle popup",
-      "default": true,
-      "info": "When enabled, all content is controlled by the settings below. Sidebar blocks are ignored."
-    },
-    {
-      "type": "paragraph",
-      "content": "Edit copy, visuals, and timing in the sections below. Group/Image blocks in the sidebar only apply if you turn off the inner-circle popup.",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "header",
-      "content": "Form column — text",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "text",
-      "id": "headline_main",
-      "label": "Eyebrow (small red line)",
-      "default": "Exclusive discounts",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "text",
-      "id": "headline_sub",
-      "label": "Title — text before highlight",
-      "default": "Join the",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "text",
-      "id": "logo_text",
-      "label": "Title — highlighted word",
-      "default": "MITUSHI",
-      "info": "Shown in crimson inside the main title (e.g. JOIN THE MITUSHI inner circle).",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "text",
-      "id": "title_after",
-      "label": "Title — text after highlight",
-      "default": " inner circle.",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "textarea",
-      "id": "description_text",
-      "label": "Description",
-      "default": "Early access, limited drops, and special offers — straight to your inbox.",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "text",
-      "id": "email_label",
-      "label": "Email field label",
-      "default": "Enter your email",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Submit button text",
-      "default": "Join the family",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "text",
-      "id": "dismiss_text",
-      "label": "Dismiss link text",
-      "default": "No thanks, I'll pass",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "textarea",
-      "id": "description_legal",
-      "label": "Legal / privacy line",
-      "default": "By subscribing, you agree to receive marketing emails from Mitushi. Unsubscribe anytime.",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "header",
-      "content": "Success state",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "text",
-      "id": "success_title",
-      "label": "Success title",
-      "default": "Welcome to the family.",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "textarea",
-      "id": "success_message",
-      "label": "Success message",
-      "default": "Check your inbox — your code is on the way.",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "header",
-      "content": "Mobile logo (form column)",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "image_picker",
-      "id": "logo_image",
-      "label": "Logo image",
-      "info": "Shown on mobile above the form. Leave empty to use the same default logo as the site header (mitushi-logo.png).",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "header",
-      "content": "Left visual column (desktop)",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "text",
-      "id": "visual_jp",
-      "label": "Vertical side text",
-      "default": "ミツシ・インナーサークル",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "text",
-      "id": "visual_mark",
-      "label": "Large outlined word",
-      "default": "MITUSHI",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "text",
-      "id": "visual_tag",
-      "label": "Tag under outlined word",
-      "default": "Inner circle",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "header",
-      "content": "Typography & spacing",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "range",
-      "id": "logo_size",
-      "label": "Mobile logo height",
-      "min": 32,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "default": 56,
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "range",
-      "id": "headline_main_size",
-      "label": "Eyebrow size",
-      "min": 8,
-      "max": 16,
-      "step": 1,
-      "unit": "px",
-      "default": 10,
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "range",
-      "id": "headline_sub_size",
-      "label": "Main title size",
-      "min": 20,
-      "max": 48,
-      "step": 1,
-      "unit": "px",
-      "default": 36,
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "range",
-      "id": "description_size",
-      "label": "Description Size",
-      "min": 10,
-      "max": 24,
-      "step": 1,
-      "unit": "px",
-      "default": 14,
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "range",
-      "id": "email_label_size",
-      "label": "Email Label Size",
-      "min": 8,
-      "max": 20,
-      "step": 1,
-      "unit": "px",
-      "default": 12,
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "header",
-      "content": "Form Element Sizes"
-    },
-    {
-      "type": "range",
-      "id": "email_input_size",
-      "label": "Email Input Font Size",
-      "min": 12,
-      "max": 24,
-      "step": 1,
-      "unit": "px",
-      "default": 16,
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "range",
-      "id": "email_input_padding",
-      "label": "Email Input Padding",
-      "min": 8,
-      "max": 30,
-      "step": 1,
-      "unit": "px",
-      "default": 16,
-      "info": "Vertical padding for email input field",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "range",
-      "id": "button_font_size",
-      "label": "Button Font Size",
-      "min": 10,
-      "max": 24,
-      "step": 1,
-      "unit": "px",
-      "default": 14,
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "range",
-      "id": "button_padding",
-      "label": "Button Padding",
-      "min": 10,
-      "max": 40,
-      "step": 1,
-      "unit": "px",
-      "default": 18,
-      "info": "Vertical padding for button",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "header",
-      "content": "Popup Size"
-    },
-    {
-      "type": "range",
-      "id": "popup_width",
-      "label": "Popup Width (%)",
-      "min": 40,
-      "max": 95,
-      "step": 5,
-      "unit": "%",
-      "default": 70,
-      "info": "Control the width of the popup (40% to 95%)",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
-      "type": "range",
-      "id": "popup_height",
-      "label": "Popup Height (%)",
-      "min": 40,
-      "max": 95,
-      "step": 5,
-      "unit": "%",
-      "default": 70,
-      "info": "Control the height of the popup (40% to 95%)",
-      "visible_if": "{{ section.settings.use_beautiful_design }}"
-    },
-    {
       "type": "paragraph",
       "content": "t:general.newsletter_popup_info"
     },
@@ -415,7 +103,7 @@
           "label": "t:general.delay_after_page_load"
         }
       ],
-      "default": "delay-after-page-load"
+      "default": "reaching-to-footer"
     },
     {
       "type": "range",
@@ -476,8 +164,7 @@
     },
     {
       "type": "header",
-      "content": "Classic layout (blocks)",
-      "info": "Only used when inner-circle popup is disabled."
+      "content": "t:general.layout"
     },
     {
       "type": "select",
@@ -493,15 +180,14 @@
           "label": "t:general.horizontal"
         }
       ],
-      "default": "fd-column-md",
-      "visible_if": "{{ section.settings.use_beautiful_design == false }}"
+      "default": "fd-column-md"
     },
     {
       "type": "checkbox",
       "id": "enable_vertical_on_mobile",
       "label": "t:general.vertical_on_mobile",
       "default": true,
-      "visible_if": "{{ section.settings.use_beautiful_design == false and section.settings.desktop_direction == 'fd-row-md' }}"
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
     },
     {
       "type": "select",
@@ -522,7 +208,7 @@
         }
       ],
       "default": "start-xs",
-      "visible_if": "{{ section.settings.use_beautiful_design == false and section.settings.desktop_direction == 'fd-row-md' }}"
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
 
     },
     {
@@ -544,7 +230,7 @@
         }
       ],
       "default": "bottom-md",
-      "visible_if": "{{ section.settings.use_beautiful_design == false and section.settings.desktop_direction == 'fd-column-md' }}"
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-column-md' }}"
 
     },
     {
@@ -562,7 +248,7 @@
         }
       ],
       "default": "middle-xs",
-      "visible_if": "{{ section.settings.use_beautiful_design == false and section.settings.desktop_direction == 'fd-row-md' }}"
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-row-md' }}"
     },
     {
       "type": "select",
@@ -579,7 +265,7 @@
         }
       ],
       "default": "center-md middle-xs",
-      "visible_if": "{{ section.settings.use_beautiful_design == false and section.settings.desktop_direction == 'fd-column-md' }}"
+      "visible_if": "{{ section.settings.desktop_direction == 'fd-column-md' }}"
     },
     {
       "type": "range",
@@ -589,13 +275,11 @@
       "min": 0,
       "max": 100,
       "step": 1,
-      "unit": "px",
-      "visible_if": "{{ section.settings.use_beautiful_design == false }}"
+      "unit": "px"
     },
     {
       "type": "header",
-      "content": "Classic popup width",
-      "visible_if": "{{ section.settings.use_beautiful_design == false }}"
+      "content": "t:general.size"
     },
     {
       "type": "range",
@@ -605,8 +289,7 @@
       "max": 100,
       "step": 1,
       "unit": "%",
-      "default": 50,
-      "visible_if": "{{ section.settings.use_beautiful_design == false }}"
+      "default": 50
     },
     {
       "type": "header",
