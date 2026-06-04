@@ -4,6 +4,6 @@
 
 [environments.default]
 store = "mitushii.myshopify.com"
-theme = "191649022235"
+theme = "191750701339"
 live-reload = "off"
 port = "9292"
