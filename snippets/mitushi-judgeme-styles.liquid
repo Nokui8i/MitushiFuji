@@ -1,0 +1,228 @@
+<style>
+  /* Judge.me — Mitushi dark theme */
+  .mitushi-reviews-page,
+  .mitushi-judgeme-all-reviews-wrap {
+    --jdgm-star-color: #ffb82d;
+    --jdgm-text: rgba(255, 255, 255, 0.92);
+    --jdgm-muted: rgba(255, 255, 255, 0.55);
+    --jdgm-border: rgba(255, 255, 255, 0.1);
+    --jdgm-surface: rgba(255, 255, 255, 0.04);
+    --jdgm-accent: #cc132a;
+  }
+
+  .mitushi-judgeme-all-reviews-wrap,
+  .mitushi-judgeme-all-reviews,
+  .mitushi-judgeme-all-reviews .jdgm-widget {
+    color: var(--jdgm-text);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Preserve Judge.me icon font — theme global fonts must not override stars */
+  .mitushi-judgeme-all-reviews .jdgm-star,
+  .mitushi-judgeme-all-reviews .jdgm-star:before,
+  .mitushi-judgeme-all-reviews .jdgm-rev__rating .jdgm-star,
+  .mitushi-judgeme-all-reviews .jdgm-rev__rating .jdgm-star:before,
+  .mitushi-judgeme-all-reviews .jdgm-histogram .jdgm-star,
+  .mitushi-judgeme-all-reviews .jdgm-histogram .jdgm-star:before {
+    font-family: 'JudgemeStar' !important;
+    color: var(--jdgm-star-color) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    speak: never;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-widget {
+    color: var(--jdgm-text) !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-rev-widg__header,
+  .mitushi-judgeme-all-reviews .jdgm-all-reviews-page__header {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 24px !important;
+    margin-bottom: 28px !important;
+    padding-bottom: 24px !important;
+    border-bottom: 1px solid var(--jdgm-border) !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-rev-widg__summary,
+  .mitushi-judgeme-all-reviews .jdgm-all-reviews-page__summary {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 12px 20px !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-rev-widg__summary-average {
+    font-size: 42px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    color: #fff !important;
+    font-family: var(--font-display), inherit !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-rev-widg__summary-text,
+  .mitushi-judgeme-all-reviews .jdgm-all-reviews-page__summary-text {
+    color: var(--jdgm-muted) !important;
+    font-size: 13px !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  /* Histogram rows */
+  .mitushi-judgeme-all-reviews .jdgm-histogram {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    min-width: 240px !important;
+    flex: 1 1 240px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-histogram__row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-histogram__star {
+    flex: 0 0 72px !important;
+    color: var(--jdgm-muted) !important;
+    font-size: 11px !important;
+    white-space: nowrap !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-histogram__bar {
+    flex: 1 1 auto !important;
+    height: 8px !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    overflow: hidden !important;
+    position: relative !important;
+    display: block !important;
+    min-width: 80px !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-histogram__bar-content {
+    display: block !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    border-radius: 999px !important;
+    background: linear-gradient(90deg, #cc132a, #ffb82d) !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-histogram__percentage,
+  .mitushi-judgeme-all-reviews .jdgm-histogram__frequency {
+    flex: 0 0 auto !important;
+    color: var(--jdgm-muted) !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    min-width: 28px !important;
+    text-align: end !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-rev-widg__no-reviews,
+  .mitushi-judgeme-all-reviews .jdgm-rev-widg__write-review-link,
+  .mitushi-judgeme-all-reviews .jdgm-write-rev-link {
+    color: var(--jdgm-muted) !important;
+    font-size: 15px !important;
+    text-align: center !important;
+    display: block !important;
+    margin: 12px 0 28px !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-rev {
+    background: var(--jdgm-surface) !important;
+    border: 1px solid var(--jdgm-border) !important;
+    border-radius: 10px !important;
+    padding: 20px 24px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-rev__author {
+    color: #fff !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-rev__body,
+  .mitushi-judgeme-all-reviews .jdgm-rev__content {
+    color: var(--jdgm-muted) !important;
+    line-height: 1.75 !important;
+    font-size: 14px !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-rev__timestamp {
+    color: rgba(255, 255, 255, 0.35) !important;
+    font-size: 11px !important;
+  }
+
+  .mitushi-judgeme-all-reviews input,
+  .mitushi-judgeme-all-reviews select,
+  .mitushi-judgeme-all-reviews textarea {
+    background: rgba(0, 0, 0, 0.35) !important;
+    border: 1px solid var(--jdgm-border) !important;
+    border-radius: 6px !important;
+    color: #fff !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-btn,
+  .mitushi-judgeme-all-reviews .jdgm-write-rev-link.jdgm-write-rev-link {
+    background: var(--jdgm-accent) !important;
+    border: none !important;
+    border-radius: 6px !important;
+    color: #fff !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    padding: 12px 24px !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-rev-widg__sort-wrapper,
+  .mitushi-judgeme-all-reviews .jdgm-all-reviews__filters {
+    border-color: var(--jdgm-border) !important;
+    margin-bottom: 20px !important;
+  }
+
+  .mitushi-judgeme-all-reviews .jdgm-rev__prod-link {
+    color: var(--jdgm-accent) !important;
+  }
+
+  .mitushi-product-rating .jdgm-preview-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  @media (max-width: 768px) {
+    .mitushi-judgeme-all-reviews .jdgm-rev-widg__header,
+    .mitushi-judgeme-all-reviews .jdgm-all-reviews-page__header {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+    }
+
+    .mitushi-judgeme-all-reviews .jdgm-histogram {
+      width: 100% !important;
+    }
+  }
+</style>

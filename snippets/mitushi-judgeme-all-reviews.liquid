@@ -1,21 +1,27 @@
-{% comment %}
-  Judge.me All Reviews Page — uses shop metafields (no judgeme_widgets snippet required).
-{% endcomment %}
-<div id="judgeme_all_reviews_page" class="mitushi-judgeme-all-reviews">
-  {%- if shop.metafields.judgeme.all_reviews_header != blank -%}
-    <style class="jdgm-settings-style">.jdgm-all-reviews-widget{ display: none }</style>
-    {{ shop.metafields.judgeme.all_reviews_header }}
-    {%- assign prefix = 'all_reviews_' -%}
-    {%- for count in (0..65535) -%}
-      {%- assign metafield_key = prefix | append: count -%}
-      {%- assign current_metafield = shop.metafields.judgeme[metafield_key] -%}
-      {%- unless current_metafield -%}{%- break -%}{%- endunless -%}
-      {{ current_metafield }}
-    {%- endfor -%}
-  {%- else -%}
-    <p class="mitushi-reviews-page__empty">
-      Reviews will appear here once Judge.me is connected.
-      In Judge.me go to <strong>Settings → Widgets</strong> and enable <strong>All Reviews Page</strong>, then refresh.
-    </p>
-  {%- endif -%}
-</div>
+{% comment %}
+  Judge.me All Reviews Page — shop metafields (no judgeme_widgets snippet required).
+{% endcomment %}
+<div
+  id="judgeme_all_reviews_page"
+  class="page clearfix jdgm-all-reviews-page mitushi-judgeme-all-reviews"
+>
+  {%- if shop.metafields.judgeme.all_reviews_header != blank -%}
+    <style class="jdgm-settings-style">.jdgm-all-reviews-widget{ display: none }</style>
+    {{ shop.metafields.judgeme.all_reviews_header }}
+    {%- assign prefix = 'all_reviews_' -%}
+    {%- for count in (0..65535) -%}
+      {%- assign metafield_key = prefix | append: count -%}
+      {%- assign current_metafield = shop.metafields.judgeme[metafield_key] -%}
+      {%- unless current_metafield -%}{%- break -%}{%- endunless -%}
+      {{ current_metafield }}
+    {%- endfor -%}
+  {%- else -%}
+    <div class="mitushi-reviews-page__empty">
+      <p class="mitushi-reviews-page__empty-title">No reviews yet</p>
+      <p class="mitushi-reviews-page__empty-text">
+        Enable <strong>All Reviews Page</strong> in Judge.me under
+        <strong>Settings → Widgets</strong>, then refresh this page.
+      </p>
+    </div>
+  {%- endif -%}
+</div>

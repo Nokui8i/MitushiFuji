@@ -52,6 +52,22 @@
     letter-spacing: 0.05em;
   }
 
+  .mitushi-reviews-page__empty-title {
+    margin: 0 0 10px;
+    font-family: var(--font-display), inherit;
+    font-size: 22px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .mitushi-reviews-page__empty-text {
+    margin: 0;
+    line-height: 1.7;
+    max-width: 420px;
+    margin-inline: auto;
+  }
+
   @media (max-width: 768px) {
     .mitushi-reviews-page {
       padding: 32px 0 56px;
@@ -71,9 +87,7 @@
 <section class="mitushi-reviews-page" data-ui-component="Mitushi Reviews Section">
   <div class="mitushi-reviews-page__inner">
     <header class="mitushi-reviews-page__hero">
-      <h1 class="mitushi-reviews-page__title">
-        {{ section.settings.heading | default: 'Reviews' | escape }}
-      </h1>
+      <h1 class="mitushi-reviews-page__title">Reviews</h1>
     </header>
 
     <div class="mitushi-reviews-page__widget mitushi-judgeme-all-reviews-wrap">
