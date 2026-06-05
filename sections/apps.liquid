@@ -2,13 +2,17 @@
 {%- assign has_reviews_block = false -%}
 {%- for block in section.blocks -%}
   {%- assign block_type = block.type | downcase -%}
-  {%- if block_type contains 'instafeed' -%}
+  {%- assign block_id = block.id | downcase -%}
+  {%- if block_type contains 'instafeed' or block_id contains 'instafeed' -%}
     {%- assign has_instafeed_block = true -%}
   {%- endif -%}
-  {%- if block_type contains 'loox' or block_type contains 'judge' or block_type contains 'reviews' or block_type contains 'yotpo' or block_type contains 'stamped' -%}
+  {%- if block_type contains 'loox' or block_type contains 'judge' or block_type contains 'reviews' or block_type contains 'yotpo' or block_type contains 'stamped' or block_id contains 'loox' or block_id contains 'judge' or block_id contains 'reviews' -%}
     {%- assign has_reviews_block = true -%}
   {%- endif -%}
 {%- endfor -%}
+{%- if has_instafeed_block == false and section.settings.ghost_text == 'FEED' and section.settings.show_instagram_link -%}
+  {%- assign has_instafeed_block = true -%}
+{%- endif -%}
 {%- assign reviews_only = false -%}
 {%- if has_reviews_block and has_instafeed_block == false -%}
   {%- assign reviews_only = true -%}
@@ -68,7 +72,7 @@
   data-ui-component="Apps Section"
 >
   {%- if use_mitushi_layout -%}
-    <div class="mitushi-apps-section w-100{% if reviews_only %} mitushi-apps-section--reviews{% endif %}">
+    <div class="mitushi-apps-section w-100{% if has_instafeed_block %} mitushi-apps-section--instafeed{% endif %}{% if reviews_only %} mitushi-apps-section--reviews{% endif %}">
       {%- if section.settings.show_hero_background -%}
         <div class="mitushi-apps-backdrop" aria-hidden="true"></div>
         <div class="mitushi-apps-grid" aria-hidden="true"></div>

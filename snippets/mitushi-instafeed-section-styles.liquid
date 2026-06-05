@@ -118,11 +118,13 @@
     align-items: flex-end;
     justify-content: space-between;
     gap: 20px;
+    text-align: start;
   }
 
   #shopify-section-{{ section.id }} .mitushi-apps-title-group {
     flex: 1;
     min-width: 0;
+    text-align: start;
   }
 
   #shopify-section-{{ section.id }} .mitushi-apps-eyebrow--crimson {
@@ -134,8 +136,20 @@
     color: #cc132a !important;
   }
 
+  #shopify-section-{{ section.id }} .mitushi-apps-header--instafeed .mitushi-apps-eyebrow--crimson {
+    color: #cc132a !important;
+  }
+
   #shopify-section-{{ section.id }} .mitushi-apps-header--instafeed .mitushi-apps-heading {
     flex: none;
+    text-align: start;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-header--instafeed .mitushi-ig-cta {
+    position: relative;
+    z-index: 3;
+    visibility: visible;
+    opacity: 1;
   }
 
   #shopify-section-{{ section.id }} .mitushi-apps-heading {
@@ -441,5 +455,20 @@
     width: 100%;
     text-align: center !important;
     margin-inline: auto;
+  }
+
+  /* Centered layout must not apply to Instafeed */
+  #shopify-section-{{ section.id }} .mitushi-apps-header--instafeed.mitushi-apps-header--centered,
+  #shopify-section-{{ section.id }} .mitushi-apps-header--instafeed {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-end !important;
+    text-align: start !important;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-header--instafeed.mitushi-apps-header--centered .mitushi-apps-eyebrow,
+  #shopify-section-{{ section.id }} .mitushi-apps-header--instafeed .mitushi-apps-eyebrow--crimson {
+    text-align: start !important;
+    color: #cc132a !important;
   }
 </style>
