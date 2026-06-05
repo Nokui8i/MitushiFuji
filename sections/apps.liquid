@@ -41,8 +41,13 @@
   {%- assign show_ig_link = false -%}
 {%- endif -%}
 
+{%- assign center_header = false -%}
+{%- unless has_instafeed_block -%}
+  {%- assign center_header = true -%}
+{%- endunless -%}
+
 {%- if use_mitushi_layout -%}
-  {%- render 'mitushi-instafeed-section-styles', section: section, reviews_only: reviews_only -%}
+  {%- render 'mitushi-instafeed-section-styles', section: section -%}
 {%- endif -%}
 
 <div
@@ -65,7 +70,7 @@
       <div class="mitushi-apps-container">
         {%- if show_header -%}
           {%- if display_subheading != blank or display_heading != blank -%}
-            <header class="mitushi-apps-header">
+            <header class="mitushi-apps-header{% if center_header %} mitushi-apps-header--centered{% endif %}">
               {%- if display_subheading != blank -%}
                 <p class="mitushi-apps-eyebrow">{{ display_subheading }}</p>
               {%- endif -%}

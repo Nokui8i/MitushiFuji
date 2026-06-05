@@ -93,26 +93,6 @@
     border-bottom: none;
   }
 
-  {%- if reviews_only -%}
-  #shopify-section-{{ section.id }} .mitushi-apps-section--reviews .mitushi-apps-header {
-    text-align: center;
-  }
-
-  #shopify-section-{{ section.id }} .mitushi-apps-section--reviews .mitushi-apps-eyebrow {
-    text-align: center;
-  }
-
-  #shopify-section-{{ section.id }} .mitushi-apps-section--reviews .mitushi-apps-header-row {
-    justify-content: center;
-  }
-
-  #shopify-section-{{ section.id }} .mitushi-apps-section--reviews .mitushi-apps-heading {
-    flex: none;
-    width: 100%;
-    text-align: center;
-  }
-  {%- endif -%}
-
   #shopify-section-{{ section.id }} .mitushi-apps-header-row {
     display: flex;
     align-items: flex-end;
@@ -400,5 +380,31 @@
   #shopify-section-{{ section.id }} .instafeed-new-layout-container > h2:empty,
   #shopify-section-{{ section.id }} #insta-feed > h2:empty {
     display: none;
+  }
+
+  /* Centered header — reviews and other non-Instafeed app sections */
+  #shopify-section-{{ section.id }} .mitushi-apps-header--centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-header--centered .mitushi-apps-eyebrow {
+    text-align: center;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-header--centered .mitushi-apps-header-row {
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-header--centered .mitushi-apps-heading {
+    flex: none !important;
+    width: 100%;
+    text-align: center !important;
+    margin-inline: auto;
   }
 </style>
