@@ -1,25 +1,23 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
-{
-  "sections": {
-    "reviews": {
-      "type": "mitushi-reviews",
-      "settings": {
-        "show_demo_reviews": true,
-        "demo_review_count": 8,
-        "show_heading": false,
-        "heading": "Reviews"
-      }
-    }
-  },
-  "order": [
-    "reviews"
-  ]
-}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "reviews": {
+      "type": "mitushi-reviews",
+      "settings": {
+        "show_heading": false,
+        "heading": "Reviews"
+      }
+    }
+  },
+  "order": [
+    "reviews"
+  ]
+}
