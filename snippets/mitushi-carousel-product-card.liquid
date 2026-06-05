@@ -1,0 +1,90 @@
+{%- liquid
+  assign prod_name = prod_obj.title
+  assign prod_tag = prod_obj.collections.first.title | default: prod_obj.vendor
+  assign prod_price = prod_obj.price | money
+  assign prod_url = prod_obj.url
+  assign variant = prod_obj.selected_or_first_available_variant
+  assign variant_id = variant.id
+  assign is_available = variant.available
+
+  if block != blank and block.settings.front_image != blank
+    assign front_img = block.settings.front_image | image_url: width: 720
+  elsif prod_obj.featured_image != blank
+    assign front_img = prod_obj.featured_image | image_url: width: 720
+  else
+    assign front_img = ''
+  endif
+
+  if block != blank and block.settings.back_image != blank
+    assign back_img = block.settings.back_image | image_url: width: 720
+  elsif prod_obj.images[1] != blank
+    assign back_img = prod_obj.images[1] | image_url: width: 720
+  elsif prod_obj.featured_image != blank
+    assign back_img = prod_obj.featured_image | image_url: width: 720
+  else
+    assign back_img = front_img
+  endif
+-%}
+
+<article class="mitushi-product-card"{% if block %}{{ block.shopify_attributes }}{% endif %}>
+  <div class="mitushi-product-image-wrapper">
+    <a href="{{ prod_url }}">
+      {%- if front_img != blank -%}
+        <img
+          src="{{ front_img }}"
+          alt="{{ prod_name | escape }}"
+          loading="lazy"
+          width="360"
+          height="450"
+          class="mitushi-product-front"
+        />
+        <img
+          src="{{ back_img }}"
+          alt="{{ prod_name | escape }} (back)"
+          loading="lazy"
+          width="360"
+          height="450"
+          class="mitushi-product-back"
+        />
+      {%- else -%}
+        {{ 'product-apparel-1' | placeholder_svg_tag: 'mitushi-product-front placeholder-svg' }}
+      {%- endif -%}
+    </a>
+
+    {%- if block != blank and block.settings.badge != blank -%}
+      <span class="mitushi-product-badge">{{ block.settings.badge }}</span>
+    {%- elsif prod_obj.compare_at_price > prod_obj.price -%}
+      <span class="mitushi-product-badge">Sale</span>
+    {%- elsif prod_obj.available == false -%}
+      <span class="mitushi-product-badge">Sold out</span>
+    {%- endif -%}
+
+    <div class="mitushi-product-cta">
+      <div class="mitushi-product-cta-content">
+        <div class="mitushi-product-cta-info">
+          <div class="mitushi-product-cta-label">Quick add</div>
+          <div class="mitushi-product-price">{{ prod_price }}</div>
+        </div>
+        {%- if is_available and variant_id != blank -%}
+          <button
+            type="button"
+            class="mitushi-product-cart-btn"
+            onclick="addProductToCart('{{ variant_id }}', this)"
+          >Add to cart</button>
+        {%- else -%}
+          <a href="{{ prod_url }}" class="mitushi-product-cart-btn" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">View</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="mitushi-product-info">
+    <div class="mitushi-product-details">
+      <h3 class="mitushi-product-name">
+        <a href="{{ prod_url }}" style="color: inherit; text-decoration: none;">{{ prod_name }}</a>
+      </h3>
+      <p class="mitushi-product-tag">{{ prod_tag }}</p>
+    </div>
+    <div class="mitushi-product-info-price">{{ prod_price }}</div>
+  </div>
+</article>

@@ -47,79 +47,11 @@
     },
     "mitushi_carousel_1": {
       "type": "mitushi-product-carousel",
-      "blocks": {
-        "prod_1": {
-          "type": "product",
-          "settings": {
-            "product_handle": "",
-            "name": "Kanji Oversized Tee",
-            "tag": "Ghost",
-            "price": "89",
-            "badge": "New"
-          }
-        },
-        "prod_2": {
-          "type": "product",
-          "settings": {
-            "product_handle": "",
-            "name": "Samurai Print Tee",
-            "tag": "Crimson Warrior",
-            "price": "95",
-            "badge": "Hot"
-          }
-        },
-        "prod_3": {
-          "type": "product",
-          "settings": {
-            "product_handle": "",
-            "name": "Bone Tank",
-            "tag": "Oni",
-            "price": "65",
-            "badge": ""
-          }
-        },
-        "prod_4": {
-          "type": "product",
-          "settings": {
-            "product_handle": "",
-            "name": "Striped Shorts",
-            "tag": "Rising Sun",
-            "price": "79",
-            "badge": "Drop 03"
-          }
-        },
-        "prod_5": {
-          "type": "product",
-          "settings": {
-            "product_handle": "",
-            "name": "Tokyo Tee",
-            "tag": "Night Series",
-            "price": "89",
-            "badge": ""
-          }
-        },
-        "prod_6": {
-          "type": "product",
-          "settings": {
-            "product_handle": "",
-            "name": "Onsen Shorts",
-            "tag": "Mono",
-            "price": "79",
-            "badge": ""
-          }
-        }
-      },
-      "block_order": [
-        "prod_1",
-        "prod_2",
-        "prod_3",
-        "prod_4",
-        "prod_5",
-        "prod_6"
-      ],
       "settings": {
         "subheading": "/ 02 — Latest drop",
-        "heading": "Featured pieces"
+        "heading": "Featured pieces",
+        "collection": "all",
+        "products_to_show": 8
       }
     },
     "178055456171e92778": {

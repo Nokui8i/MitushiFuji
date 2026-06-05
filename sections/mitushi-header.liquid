@@ -852,9 +852,19 @@ Combines a collapsible announcement bar with a sticky header.
   <div id="mitushi-announcement-bar" class="mitushi-announcement is-open" aria-hidden="false">
     <div class="mitushi-announcement-inner">
       <div class="mitushi-marquee">
+        {%- liquid
+          if section.settings.announcement_text_primary != blank
+            assign announce_primary = section.settings.announcement_text_primary
+          elsif settings.cart_show_free_shipping_notification and settings.cart_minimum_order_price_for_free_shipping != blank
+            assign free_ship_threshold = settings.cart_minimum_order_price_for_free_shipping | times: 100
+            assign announce_primary = 'Free shipping on orders over ' | append: free_ship_threshold | money
+          else
+            assign announce_primary = shop.name
+          endif
+        -%}
         {% for i in (1..section.settings.announcement_repeat_count) %}
           <span>
-            {{ section.settings.announcement_text_primary }}
+            {{ announce_primary }}
             <span aria-hidden>✦</span>
             {{ section.settings.announcement_text_secondary }}
             <span aria-hidden>✦</span>
@@ -913,7 +923,7 @@ Combines a collapsible announcement bar with a sticky header.
               endif
             -%}
             <div class="group mitushi-nav-item">
-              <a href="{% if is_products_link %}#{% else %}{{ link.url }}{% endif %}" {% if is_products_link %}onclick="return false;"{% endif %} class="mitushi-nav-link {% if link.active or link.child_active %}active{% endif %}">
+              <a href="{% if is_products_link %}{{ routes.all_products_collection_url }}{% else %}{{ link.url }}{% endif %}" class="mitushi-nav-link {% if link.active or link.child_active %}active{% endif %}">
                 {% if is_products_link %}Products{% else %}{{ link.title }}{% endif %}
                 {% if link.links.size > 0 or is_products_link %}
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
@@ -960,7 +970,7 @@ Combines a collapsible announcement bar with a sticky header.
             {%- if should_render_categories -%}
               {%- assign categories_rendered = true -%}
               <div class="group mitushi-nav-item">
-                <a href="#" onclick="return false;" class="mitushi-nav-link">
+                <a href="{{ routes.all_products_collection_url }}" class="mitushi-nav-link">
                   PRODUCTS
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
@@ -1000,7 +1010,7 @@ Combines a collapsible announcement bar with a sticky header.
               endif
             -%}
             <div class="group mitushi-nav-item" {{ block.shopify_attributes }}>
-              <a href="{% if is_products_block %}#{% else %}{{ block.settings.href }}{% endif %}" {% if is_products_block %}onclick="return false;"{% endif %} class="mitushi-nav-link {% if block.settings.active %}active{% endif %}">
+              <a href="{% if is_products_block %}{{ routes.all_products_collection_url }}{% else %}{{ block.settings.href }}{% endif %}" class="mitushi-nav-link {% if block.settings.active %}active{% endif %}">
                 {{ block.settings.label }}
                 {% if block.settings.dropdown_items != blank or is_products_block %}
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
@@ -1052,7 +1062,7 @@ Combines a collapsible announcement bar with a sticky header.
             {%- if should_render_categories_block -%}
               {%- assign categories_rendered_block = true -%}
               <div class="group mitushi-nav-item">
-                <a href="#" onclick="return false;" class="mitushi-nav-link">
+                <a href="{{ routes.all_products_collection_url }}" class="mitushi-nav-link">
                   PRODUCTS
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-3 w-3" width="12" height="12" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:middle;">
                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />

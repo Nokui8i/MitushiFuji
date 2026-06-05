@@ -1,6 +1,21 @@
 {% render 'mitushi-carousel-styles' %}
 
-<section class="mitushi-product-carousel">
+{%- liquid
+  assign source_collection = section.settings.collection
+  if source_collection == blank
+    assign source_collection = collections.all
+  endif
+
+  assign has_product_blocks = false
+  for block in section.blocks
+    if block.settings.product_handle != blank
+      assign has_product_blocks = true
+      break
+    endif
+  endfor
+-%}
+
+<section class="mitushi-product-carousel" id="products">
   <div class="mitushi-carousel-container">
     <div class="mitushi-carousel-header">
       <div class="mitushi-carousel-title-group">
@@ -8,12 +23,12 @@
         <h2>{{ section.settings.heading | default: 'Featured pieces' }}</h2>
       </div>
       <div class="mitushi-carousel-controls">
-        <button class="mitushi-carousel-btn" aria-label="Previous" onclick="scrollCarousel(-1)">
+        <button type="button" class="mitushi-carousel-btn" aria-label="Previous" onclick="scrollCarousel(-1)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
             <path d="M15 19l-7-7 7-7"></path>
           </svg>
         </button>
-        <button class="mitushi-carousel-btn" aria-label="Next" onclick="scrollCarousel(1)">
+        <button type="button" class="mitushi-carousel-btn" aria-label="Next" onclick="scrollCarousel(1)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
             <path d="M9 5l7 7-7 7"></path>
           </svg>
@@ -21,116 +36,27 @@
       </div>
     </div>
     <div class="mitushi-carousel-track" id="carouselTrack">
-      {% for block in section.blocks %}
-        {%- liquid
-          assign index_mod = forloop.index
-          assign prod_obj = block.settings.product_handle
-          if prod_obj.title == blank and block.settings.product_handle != blank
-            assign prod_obj = all_products[block.settings.product_handle]
-          endif
-          if prod_obj == blank
-            assign fallback_index = forloop.index0
-            assign prod_obj = collections.all.products[fallback_index]
-          endif
-          if prod_obj == blank
-            continue
-          endif
-
-          assign prod_name = block.settings.name
-          assign prod_tag = block.settings.tag
-          assign prod_price = block.settings.price | prepend: '$'
-          assign prod_url = '#'
-          assign variant_id = ''
-
-          if prod_obj != blank
-            assign prod_name = prod_obj.title
-            assign prod_tag = prod_obj.collections.first.title | default: prod_obj.vendor
-            assign prod_price = prod_obj.price | money_without_trailing_zeros
-            assign prod_url = prod_obj.url
-            assign variant_id = prod_obj.selected_or_first_available_variant.id
-          endif
-
-          if block.settings.front_image != blank
-            assign front_img = block.settings.front_image | img_url: '360x450'
-          elsif prod_obj != blank and prod_obj.featured_image != blank
-            assign front_img = prod_obj.featured_image | img_url: '360x450'
-          else
-            if index_mod == 1 or index_mod == 5
-              assign front_img = 'product-shirt-1.jpg' | asset_url
-            elsif index_mod == 2
-              assign front_img = 'product-shirt-2.jpg' | asset_url
-            elsif index_mod == 3
-              assign front_img = 'product-tank-1.jpg' | asset_url
-            else
-              assign front_img = 'product-shorts-1.jpg' | asset_url
-            endif
-          endif
-
-          if block.settings.back_image != blank
-            assign back_img = block.settings.back_image | img_url: '360x450'
-          elsif prod_obj != blank and prod_obj.images[1] != blank
-            assign back_img = prod_obj.images[1] | img_url: '360x450'
-          elsif prod_obj != blank and prod_obj.featured_image != blank
-            assign back_img = prod_obj.featured_image | img_url: '360x450'
-          else
-            if index_mod == 1 or index_mod == 5
-              assign back_img = 'product-shirt-1-back.jpg' | asset_url
-            elsif index_mod == 2
-              assign back_img = 'product-shirt-2-back.jpg' | asset_url
-            elsif index_mod == 3
-              assign back_img = 'product-tank-1-back.jpg' | asset_url
-            else
-              assign back_img = 'product-shorts-1-back.jpg' | asset_url
-            endif
-          endif
-        -%}
-
-        <article class="mitushi-product-card" {{ block.shopify_attributes }}>
-          <div class="mitushi-product-image-wrapper">
-            <a href="{{ prod_url }}">
-              <img
-                src="{{ front_img }}"
-                alt="{{ prod_name | escape }}"
-                loading="lazy"
-                class="mitushi-product-front"
-              />
-              <img
-                src="{{ back_img }}"
-                alt="{{ prod_name | escape }} (back)"
-                loading="lazy"
-                class="mitushi-product-back"
-              />
-            </a>
-            {% comment %}
-            {% if block.settings.badge != blank %}
-              <span class="mitushi-product-badge">{{ block.settings.badge }}</span>
-            {% endif %}
-            {% endcomment %}
-            
-
-
-            <div class="mitushi-product-cta">
-              <div class="mitushi-product-cta-content">
-                <div class="mitushi-product-cta-info">
-                  <div class="mitushi-product-cta-label">Quick add</div>
-                  <div class="mitushi-product-price">{{ prod_price }}</div>
-                </div>
-                <button class="mitushi-product-cart-btn" {% if variant_id != blank %}onclick="addProductToCart('{{ variant_id }}')"{% endif %}>Add to cart</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="mitushi-product-info">
-            <div class="mitushi-product-details">
-              <h3 class="mitushi-product-name">
-                <a href="{{ prod_url }}" style="color: inherit; text-decoration: none;">{{ prod_name }}</a>
-              </h3>
-              <p class="mitushi-product-tag">{{ prod_tag }}</p>
-            </div>
-            <div class="mitushi-product-info-price">{{ prod_price }}</div>
-          </div>
-        </article>
-      {% endfor %}
+      {%- if has_product_blocks -%}
+        {%- for block in section.blocks -%}
+          {%- assign prod_obj = block.settings.product_handle -%}
+          {%- if prod_obj == blank -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- render 'mitushi-carousel-product-card',
+            prod_obj: prod_obj,
+            block: block,
+            index_mod: forloop.index
+          -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for prod_obj in source_collection.products limit: section.settings.products_to_show -%}
+          {%- render 'mitushi-carousel-product-card',
+            prod_obj: prod_obj,
+            block: nil,
+            index_mod: forloop.index
+          -%}
+        {%- endfor -%}
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -143,44 +69,6 @@
     const gap = 12;
     const amount = card ? card.offsetWidth + gap : 300;
     track.scrollBy({ left: direction * amount, behavior: 'smooth' });
-  }
-
-  function addProductToCart(variantId) {
-    if (!variantId) return;
-    const formData = {
-      'items': [{
-        'id': variantId,
-        'quantity': 1
-      }]
-    };
-    fetch((window.Shopify && window.Shopify.routes && window.Shopify.routes.root) ? window.Shopify.routes.root + 'cart/add.js' : '/cart/add.js', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Product added successfully', data);
-      
-      // Fetch the updated cart state to refresh the badges
-      fetch(((window.Shopify && window.Shopify.routes && window.Shopify.routes.root) ? window.Shopify.routes.root + 'cart.js' : '/cart.js'))
-      .then(res => res.json())
-      .then(cart => {
-        const badges = document.querySelectorAll('.mitushi-cart-badge, .header__cart-count');
-        badges.forEach(badge => {
-          badge.textContent = cart.item_count;
-        });
-        
-        document.dispatchEvent(new CustomEvent('cart:updated', {
-          detail: { cart: cart }
-        }));
-      });
-    })
-    .catch((error) => {
-      console.error('Error adding to cart:', error);
-    });
   }
 </script>
 
@@ -199,45 +87,32 @@
       "id": "heading",
       "label": "Heading",
       "default": "Featured pieces"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection (Shopify)",
+      "info": "Products are loaded from this collection. Leave empty to use all products."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
     }
   ],
   "blocks": [
     {
       "type": "product",
-      "name": "Product",
+      "name": "Product (manual override)",
       "settings": [
         {
           "type": "product",
           "id": "product_handle",
           "label": "Select Product"
-        },
-        {
-          "type": "text",
-          "id": "name",
-          "label": "Fallback/Override Name",
-          "default": "Product Name"
-        },
-        {
-          "type": "text",
-          "id": "tag",
-          "label": "Fallback/Override Tag",
-          "default": "Collection Name"
-        },
-        {
-          "type": "text",
-          "id": "price",
-          "label": "Fallback Price (if no product)",
-          "default": "89"
-        },
-        {
-          "type": "image_picker",
-          "id": "front_image",
-          "label": "Front Image Override"
-        },
-        {
-          "type": "image_picker",
-          "id": "back_image",
-          "label": "Back Image Override"
         },
         {
           "type": "text",
