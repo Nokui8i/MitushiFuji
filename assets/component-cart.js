@@ -127,10 +127,18 @@ class SHTCartForm extends SHTCustomComponent {
     return total;
   }
 
-  syncCartCountBadges(itemCount) {
+  estimateCartItemCount() {
+    let total = 0;
+    this.querySelectorAll(".cart-item .js-quantity-input").forEach((input) => {
+      total += parseInt(input.value, 10) || 0;
+    });
+    return total;
+  }
+
+  syncCartCountBadges(itemCount, options = {}) {
     if (typeof itemCount !== "number") return;
     if (window.MitushiCartFeedback?.setCount) {
-      window.MitushiCartFeedback.setCount(itemCount);
+      window.MitushiCartFeedback.setCount(itemCount, options);
       return;
     }
     document.querySelectorAll(".mitushi-cart-badge, .js-cart-form-item_count, .cart-count-number").forEach((el) => {
@@ -334,6 +342,8 @@ class SHTCartForm extends SHTCustomComponent {
     if (summaryTotal) summaryTotal.textContent = formatted;
 
     if (window.MitushiCart?.updateProgress) window.MitushiCart.updateProgress(total);
+
+    this.syncCartCountBadges(this.estimateCartItemCount(), { animate: true });
   }
 
   cartJsUrl() {
@@ -387,7 +397,7 @@ class SHTCartForm extends SHTCustomComponent {
       this.applyOptimisticUI(lineIndex, qty);
     }
 
-    const delay = options.immediate ? 750 : 900;
+    const delay = options.immediate ? 280 : 500;
     this._sendTimer = setTimeout(() => {
       if (!this._pending) return;
       const payload = this._pending;
