@@ -560,13 +560,10 @@
 
           showStockError('');
 
-          if (cartNotification && typeof cartNotification.renderContents === 'function') {
-            cartNotification.renderContents(data, true, atcBtn);
-          }
-
-          const headerCartStatus = document.getElementById('headerCartStatus');
-          if (headerCartStatus) {
-            headerCartStatus.classList.add('header-cart-status--animate');
+          if (window.MitushiCartFeedback?.onAdded) {
+            window.MitushiCartFeedback.onAdded(data, atcBtn);
+          } else if (cartNotification && typeof cartNotification.renderContents === 'function') {
+            cartNotification.renderContents(data, false, atcBtn);
           }
         })
         .catch(() => {

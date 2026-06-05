@@ -18,12 +18,13 @@ customElements.define("sht-cart-note", SHTCartNote);
 class SHTCartRemoveButton extends SHTCustomComponent {
   constructor() {
     super();
-    this.addEventListener("click", (t) => {
-      t.preventDefault();
+    this.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const form = this.closest("sht-cart-frm");
-      const row = this.closest(".cart-item");
-      form.removeLineOptimistic(this.dataset.index, row);
-      form.queueQuantityUpdate(this.dataset.index, 0, null, { immediate: true });
+      if (form?.removeCartLine) {
+        form.removeCartLine(this.dataset.index);
+      }
     });
   }
 }
@@ -38,11 +39,20 @@ class SHTCartForm extends SHTCustomComponent {
     this._pending = null;
     this._requestGen = 0;
     this._cartSyncPromise = null;
+    this._changeBusy = false;
+    this._changeQueued = null;
     this.bindEventHandlers();
   }
 
   bindEventHandlers() {
     this.addEventListener("change", (e) => this.onChange(e));
+    this.addEventListener("click", (e) => {
+      const removeBtn = e.target.closest("[data-cart-remove]");
+      if (!removeBtn) return;
+      e.preventDefault();
+      const lineIndex = removeBtn.closest("sht-cart-rmv-btn")?.dataset?.index;
+      if (lineIndex) this.removeCartLine(lineIndex);
+    });
   }
 
   onChange(e) {
@@ -119,8 +129,15 @@ class SHTCartForm extends SHTCustomComponent {
 
   syncCartCountBadges(itemCount) {
     if (typeof itemCount !== "number") return;
+    if (window.MitushiCartFeedback?.setCount) {
+      window.MitushiCartFeedback.setCount(itemCount);
+      return;
+    }
     document.querySelectorAll(".mitushi-cart-badge, .js-cart-form-item_count, .cart-count-number").forEach((el) => {
       el.textContent = itemCount;
+      if (el.classList?.contains("mitushi-cart-badge")) {
+        el.classList.toggle("is-empty", itemCount === 0);
+      }
     });
   }
 
@@ -169,17 +186,47 @@ class SHTCartForm extends SHTCustomComponent {
     }
   }
 
-  removeLineOptimistic(lineIndex, rowEl) {
-    const row = rowEl || document.getElementById("cartItem-" + lineIndex);
-    if (row) row.remove();
+  setLineRemovingState(lineIndex, isRemoving) {
+    const row = document.getElementById("cartItem-" + lineIndex);
+    const btn = row?.querySelector("[data-cart-remove]");
+    if (row) row.classList.toggle("is-removing", isRemoving);
+    if (btn) {
+      btn.classList.toggle("is-removing", isRemoving);
+      btn.disabled = isRemoving;
+    }
+  }
 
-    const remaining = this.querySelectorAll(".cart-item").length;
-    if (remaining === 0) {
-      this.renderEmptyCart();
-      return;
+  cancelPendingUpdates() {
+    clearTimeout(this._sendTimer);
+    this._pending = null;
+  }
+
+  async removeCartLine(lineIndex) {
+    const line = parseInt(lineIndex, 10);
+    if (!line) return;
+
+    const row = document.getElementById("cartItem-" + line);
+    if (row?.classList.contains("is-removing")) return;
+
+    this.cancelPendingUpdates();
+    this._changeQueued = { lineIndex: line, quantity: 0, buttonName: null };
+
+    if (this._changeBusy) return;
+
+    await this.flushCartChangeQueue();
+  }
+
+  async flushCartChangeQueue() {
+    if (this._changeBusy || !this._changeQueued) return;
+
+    const { lineIndex, quantity, buttonName } = this._changeQueued;
+    this._changeQueued = null;
+
+    if (quantity === 0) {
+      this.setLineRemovingState(lineIndex, true);
     }
 
-    this.applyOptimisticUI(lineIndex, 0);
+    await this.sendQuantityUpdate(lineIndex, quantity, buttonName);
   }
 
   async refreshCartItemsSection() {
@@ -289,12 +336,16 @@ class SHTCartForm extends SHTCustomComponent {
     if (window.MitushiCart?.updateProgress) window.MitushiCart.updateProgress(total);
   }
 
+  cartJsUrl() {
+    const root = window.Shopify?.routes?.root || "/";
+    return (root.endsWith("/") ? root : root + "/") + "cart.js";
+  }
+
   async fetchCartState() {
     if (this._cartSyncPromise) return this._cartSyncPromise;
 
     this._cartSyncPromise = (async () => {
-      const root = window.Shopify?.routes?.root || "/";
-      const res = await fetch(root + "cart.js");
+      const res = await fetch(this.cartJsUrl(), { credentials: "same-origin" });
       if (res.status === 429) {
         throw new Error("rate_limited");
       }
@@ -320,25 +371,41 @@ class SHTCartForm extends SHTCustomComponent {
       errorEl.textContent = "";
     }
 
-    if (qty > 0) {
-      this.applyOptimisticUI(lineIndex, qty);
-    }
-
     this._pending = { line, qty, buttonName };
     clearTimeout(this._sendTimer);
 
-    const delay = options.immediate ? 450 : 600;
+    if (qty === 0) {
+      this._changeQueued = { lineIndex: line, quantity: 0, buttonName };
+      this.flushCartChangeQueue();
+      return;
+    }
+
+    if (qty > 0) {
+      const row = document.getElementById("cartItem-" + lineIndex);
+      const input = row?.querySelector(".js-quantity-input");
+      if (input) input.value = qty;
+      this.applyOptimisticUI(lineIndex, qty);
+    }
+
+    const delay = options.immediate ? 750 : 900;
     this._sendTimer = setTimeout(() => {
       if (!this._pending) return;
       const payload = this._pending;
       this._pending = null;
-      this.sendQuantityUpdate(payload.line, payload.qty, payload.buttonName);
+      this.enqueueQuantitySend(payload.line, payload.qty, payload.buttonName);
     }, delay);
+  }
+
+  enqueueQuantitySend(lineIndex, quantity, buttonName) {
+    this._changeQueued = { lineIndex, quantity, buttonName };
+    this.flushCartChangeQueue();
   }
 
   sendQuantityUpdate(lineIndex, quantity, buttonName) {
     const requestGen = ++this._requestGen;
     const errorEl = this.$(".js-cart-form-errors");
+    const isRemove = quantity === 0;
+    this._changeBusy = true;
 
     const body = JSON.stringify({
       line: lineIndex,
@@ -346,7 +413,14 @@ class SHTCartForm extends SHTCustomComponent {
     });
 
     const changeUrl = window.routes.cart_change_js_url || (window.routes.cart_change_url + ".js");
-    fetch("" + changeUrl, { ...SHTHelper.fetchConfigJSON, body })
+    const fetchOpts = {
+      ...SHTHelper.fetchConfigJSON,
+      body,
+      credentials: "same-origin",
+    };
+    if (quantity === 0) fetchOpts.keepalive = true;
+
+    return fetch("" + changeUrl, fetchOpts)
       .then(async (res) => {
         const text = await res.text();
         let data = null;
@@ -361,6 +435,11 @@ class SHTCartForm extends SHTCustomComponent {
         if (res.status === 429) {
           if (errorEl) {
             errorEl.textContent = "Too many updates — wait a moment and refresh the page.";
+          }
+          try {
+            await this.applyCartState(await this.fetchCartState());
+          } catch (e) {
+            /* skip */
           }
           return;
         }
@@ -392,17 +471,23 @@ class SHTCartForm extends SHTCustomComponent {
           return;
         }
 
-        if (data?.items) {
+        if (data?.items || typeof data?.item_count === "number") {
           await this.applyCartState(data);
+        } else {
+          try {
+            await this.applyCartState(await this.fetchCartState());
+          } catch (e) {
+            /* skip */
+          }
         }
 
         const lineItem = SHTHelper.qid("cartItem-" + lineIndex);
         const focusBtn = lineItem?.querySelector(".js-quantity-btn-" + buttonName);
         if (focusBtn) focusBtn.focus();
 
-        if (this.cartDrawerForm?.renderContents) {
+        if (this.cartDrawerForm?.renderContents && data) {
           try {
-            this.cartDrawerForm.renderContents(cart);
+            this.cartDrawerForm.renderContents(data);
           } catch (err) {
             /* optional */
           }
@@ -416,6 +501,11 @@ class SHTCartForm extends SHTCustomComponent {
         } catch (e) {
           /* ignore */
         }
+      })
+      .finally(() => {
+        if (isRemove) this.setLineRemovingState(lineIndex, false);
+        this._changeBusy = false;
+        this.flushCartChangeQueue();
       });
   }
 }
