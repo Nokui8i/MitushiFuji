@@ -1,6 +1,45 @@
+{%- assign has_instafeed_block = false -%}
+{%- assign has_reviews_block = false -%}
+{%- for block in section.blocks -%}
+  {%- assign block_type = block.type | downcase -%}
+  {%- if block_type contains 'instafeed' -%}
+    {%- assign has_instafeed_block = true -%}
+  {%- endif -%}
+  {%- if block_type contains 'loox' or block_type contains 'judge' or block_type contains 'reviews' or block_type contains 'yotpo' or block_type contains 'stamped' -%}
+    {%- assign has_reviews_block = true -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign reviews_only = false -%}
+{%- if has_reviews_block and has_instafeed_block == false -%}
+  {%- assign reviews_only = true -%}
+{%- endif -%}
+
 {%- assign use_mitushi_layout = section.settings.enable_mitushi_layout | default: true -%}
 {%- assign show_header = section.settings.show_section_header | default: true -%}
 {%- assign instagram_url = section.settings.instagram_url | default: settings.social_instagram_link -%}
+{%- assign display_subheading = section.settings.subheading -%}
+{%- assign display_heading = section.settings.heading -%}
+{%- assign display_ghost = section.settings.ghost_text -%}
+{%- assign display_vertical_jp = section.settings.vertical_jp -%}
+{%- assign show_ig_link = section.settings.show_instagram_link -%}
+
+{%- if reviews_only -%}
+  {%- assign show_ig_link = false -%}
+  {%- if display_subheading == 'From Instagram' or display_subheading == blank -%}
+    {%- assign display_subheading = 'Customer Reviews' -%}
+  {%- endif -%}
+  {%- if display_heading == 'From Instagram' -%}
+    {%- assign display_heading = 'Reviews' -%}
+  {%- endif -%}
+  {%- if display_ghost == 'FEED' -%}
+    {%- assign display_ghost = 'REVIEWS' -%}
+  {%- endif -%}
+  {%- if display_vertical_jp == 'ミツシ・フィード' -%}
+    {%- assign display_vertical_jp = 'レビュー' -%}
+  {%- endif -%}
+{%- elsif has_instafeed_block == false -%}
+  {%- assign show_ig_link = false -%}
+{%- endif -%}
 
 {%- if use_mitushi_layout -%}
   {%- render 'mitushi-instafeed-section-styles', section: section -%}
@@ -15,26 +54,26 @@
       {%- if section.settings.show_hero_background -%}
         <div class="mitushi-apps-backdrop" aria-hidden="true"></div>
         <div class="mitushi-apps-grid" aria-hidden="true"></div>
-        {%- if section.settings.ghost_text != blank -%}
-          <div class="mitushi-apps-ghost" aria-hidden="true">{{ section.settings.ghost_text }}</div>
+        {%- if display_ghost != blank -%}
+          <div class="mitushi-apps-ghost" aria-hidden="true">{{ display_ghost }}</div>
         {%- endif -%}
-        {%- if section.settings.vertical_jp != blank -%}
-          <div class="mitushi-apps-vertical-jp" aria-hidden="true">{{ section.settings.vertical_jp }}</div>
+        {%- if display_vertical_jp != blank -%}
+          <div class="mitushi-apps-vertical-jp" aria-hidden="true">{{ display_vertical_jp }}</div>
         {%- endif -%}
       {%- endif -%}
 
       <div class="mitushi-apps-container">
         {%- if show_header -%}
-          {%- if section.settings.subheading != blank or section.settings.heading != blank -%}
+          {%- if display_subheading != blank or display_heading != blank -%}
             <header class="mitushi-apps-header">
-              {%- if section.settings.subheading != blank -%}
-                <p class="mitushi-apps-eyebrow">{{ section.settings.subheading }}</p>
+              {%- if display_subheading != blank -%}
+                <p class="mitushi-apps-eyebrow">{{ display_subheading }}</p>
               {%- endif -%}
               <div class="mitushi-apps-header-row">
-                {%- if section.settings.heading != blank -%}
-                  <h2 class="mitushi-apps-heading">{{ section.settings.heading }}</h2>
+                {%- if display_heading != blank -%}
+                  <h2 class="mitushi-apps-heading">{{ display_heading }}</h2>
                 {%- endif -%}
-              {%- if section.settings.show_instagram_link and instagram_url != blank -%}
+              {%- if show_ig_link and instagram_url != blank -%}
                 {%- assign cta_style = section.settings.cta_style | default: 'split' -%}
                 <a
                   class="mitushi-ig-cta mitushi-ig-cta--{{ cta_style }}"
@@ -105,7 +144,7 @@
       "id": "enable_mitushi_layout",
       "label": "Use Mitushi section styling",
       "default": true,
-      "info": "Adds headline, spacing, and grid gaps for Instafeed and other app blocks."
+      "info": "Adds headline, spacing, and grid gaps for app blocks. Instagram header and CTA appear only when an Instafeed block is present; reviews apps use Reviews styling automatically."
     },
     {
       "type": "checkbox",
