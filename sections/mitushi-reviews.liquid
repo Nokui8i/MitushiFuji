@@ -101,11 +101,14 @@
       {%- endif -%}
     </header>
 
-    <div class="mitushi-reviews-page__widget">
-      {% render 'mitushi-judgeme-all-reviews' %}
-      <noscript>
-        <p class="mitushi-reviews-page__empty">Enable JavaScript to view customer reviews.</p>
-      </noscript>
+    <div class="mitushi-reviews-page__widget mitushi-judgeme-all-reviews-wrap">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {% render block %}
+        {%- endfor -%}
+      {%- else -%}
+        {% render 'mitushi-judgeme-all-reviews' %}
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -115,6 +118,11 @@
   "name": "Mitushi Reviews",
   "tag": "section",
   "class": "mitushi-reviews-section",
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
   "settings": [
     {
       "type": "text",
