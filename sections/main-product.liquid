@@ -111,7 +111,7 @@
                   <span class="text-[10px] font-medium uppercase tracking-[0.3em] text-foreground/70">{{ option.name }}</span>
                   {%- if option.name == 'Size' or option.name == 'size' -%}
                     {%- if size_guide_block -%}
-                      <sht-dialog-open-btn class="no-js-hidden" data-dialog-id="{{ size_guide_dialog_id }}">
+                      <sht-dialog-open-btn class="no-js-hidden" data-dialog-id="dialogSizeGuide{{ size_guide_dialog_id }}">
                         <button type="button" class="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.3em] text-foreground/60 hover:text-crimson transition bg-transparent border-none cursor-pointer">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3">
                             <path d="M5 16v-6"></path><path d="M9 16v-4"></path><path d="M13 16v-6"></path><path d="M17 16v-4"></path><path d="M21 16V8"></path><rect x="2" y="4" width="20" height="12" rx="2"></rect>

@@ -8,18 +8,25 @@
         </button>
       </div>
       <div class="dialog__body js-dialog-body">
-          <template>
-            {% if size_guide_block.settings.content_source == 'product-metafield' %}
-              <div class="hide-empty rte">
-                {{- size_guide_block.settings.product_metafield_name | default: '' -}}
-              </div>
-            {% endif %}
-            {% if size_guide_block.settings.content_source == 'static-page' %}
-              <div class="hide-empty rte">
-                {{- size_guide_block.settings.static_page.content | default: '' -}}
-              </div>
-            {% endif %}
-          </template>
+        {%- if size_guide_block.settings.content_source == 'product-metafield' and size_guide_block.settings.product_metafield_name != blank -%}
+          {%- liquid
+            assign size_guide_metafield_parts = size_guide_block.settings.product_metafield_name | split: '.'
+            assign size_guide_metafield_namespace = size_guide_metafield_parts | first
+            assign size_guide_metafield_key = size_guide_metafield_parts | last
+            assign size_guide_metafield_value = product.metafields[size_guide_metafield_namespace][size_guide_metafield_key]
+          -%}
+          <div class="hide-empty rte">
+            {%- if size_guide_metafield_value.type == 'page_reference' -%}
+              {{ size_guide_metafield_value.value.content }}
+            {%- else -%}
+              {{ size_guide_metafield_value }}
+            {%- endif -%}
+          </div>
+        {%- elsif size_guide_block.settings.content_source == 'static-page' and size_guide_block.settings.static_page != blank -%}
+          <div class="hide-empty rte">
+            {{- size_guide_block.settings.static_page.content -}}
+          </div>
+        {%- endif -%}
       </div>
       <div class="dialog__footer d-none">
         <button type="button" aria-label="{{- "accessibility.close_modal" | t -}}" class="js-dialog-close-btn js-dialog-close-btn--last d-none">{{- "accessibility.close_modal" | t -}}</button>

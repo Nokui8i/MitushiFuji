@@ -201,8 +201,21 @@
       this.addEventListener("click", (e) => {
         if (e.target === this || e.target.classList.contains("js-dialog-overlay")) this.close();
       });
+      this.querySelectorAll(".js-dialog-close-btn").forEach((btn) => {
+        btn.addEventListener("click", () => this.close());
+      });
+      const id = this.id;
+      if (id) window[id] = this;
     }
     open(opener) {
+      const body = this.querySelector(".js-dialog-body");
+      if (body && !body.dataset.rendered) {
+        const tpl = body.querySelector("template");
+        if (tpl?.content) {
+          body.appendChild(tpl.content.cloneNode(true));
+          body.dataset.rendered = "true";
+        }
+      }
       this.removeAttribute("hidden");
       this._opener = opener;
       document.body.classList.add("dialog-open");
