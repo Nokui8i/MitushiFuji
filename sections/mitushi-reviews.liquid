@@ -1,129 +1,130 @@
-{% comment %}
-  Mitushi Reviews Page — Judge.me All Reviews (like ANIQI /pages/reviews)
-{% endcomment %}
-
-{% render 'mitushi-judgeme-styles' %}
-
-<style>
-  .mitushi-reviews-page {
-    background: var(--ink, #28282b);
-    color: #f7f7f8;
-    padding: 48px 0 80px;
-    min-height: 60vh;
-  }
-
-  .mitushi-reviews-page__inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  .mitushi-reviews-page__hero {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-
-  .mitushi-reviews-page__title {
-    font-family: var(--font-display), inherit;
-    font-size: clamp(32px, 4.5vw, 44px);
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #ffffff;
-    margin: 0;
-    line-height: 1.1;
-  }
-
-  .mitushi-reviews-page__widget {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
-    padding: 32px 28px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
-  }
-
-  .mitushi-reviews-page__empty {
-    text-align: center;
-    padding: 48px 24px;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 14px;
-    letter-spacing: 0.05em;
-  }
-
-  .mitushi-reviews-page__empty-title {
-    margin: 0 0 10px;
-    font-family: var(--font-display), inherit;
-    font-size: 22px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #fff;
-  }
-
-  .mitushi-reviews-page__empty-text {
-    margin: 0;
-    line-height: 1.7;
-    max-width: 420px;
-    margin-inline: auto;
-  }
-
-  @media (max-width: 768px) {
-    .mitushi-reviews-page {
-      padding: 32px 0 56px;
-    }
-
-    .mitushi-reviews-page__widget {
-      padding: 20px 16px;
-      border-radius: 8px;
-    }
-
-    .mitushi-reviews-page__hero {
-      margin-bottom: 32px;
-    }
-  }
-</style>
-
-<section class="mitushi-reviews-page" data-ui-component="Mitushi Reviews Section">
-  <div class="mitushi-reviews-page__inner">
-    <header class="mitushi-reviews-page__hero">
-      <h1 class="mitushi-reviews-page__title">Reviews</h1>
-    </header>
-
-    <div class="mitushi-reviews-page__widget mitushi-judgeme-all-reviews-wrap">
-      {%- if section.blocks.size > 0 -%}
-        {%- for block in section.blocks -%}
-          {% render block %}
-        {%- endfor -%}
-      {%- else -%}
-        {% render 'mitushi-judgeme-all-reviews' %}
-      {%- endif -%}
-    </div>
-  </div>
-</section>
-
-{% schema %}
-{
-  "name": "Mitushi Reviews",
-  "tag": "section",
-  "class": "mitushi-reviews-section",
-  "blocks": [
-    {
-      "type": "@app"
-    }
-  ],
-  "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Reviews"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Mitushi Reviews"
-    }
-  ]
-}
-{% endschema %}
+{% comment %}
+  Mitushi Reviews Page — ANIQI-style photo grid via Judge.me Reviews Grid app block.
+  Reviews are collected by email after purchase, not written on this page.
+{% endcomment %}
+
+{% render 'mitushi-judgeme-styles' %}
+
+<style>
+  .mitushi-reviews-page {
+    background: var(--ink, #28282b);
+    color: #f7f7f8;
+    padding: 32px 0 72px;
+    min-height: 60vh;
+  }
+
+  .mitushi-reviews-page__inner {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .mitushi-reviews-page__hero {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .mitushi-reviews-page__title {
+    font-family: var(--font-display), inherit;
+    font-size: clamp(28px, 3.5vw, 36px);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .mitushi-reviews-page__widget {
+    width: 100%;
+  }
+
+  .mitushi-reviews-page__widget--framed {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 24px 20px;
+  }
+
+  .mitushi-reviews-page__setup {
+    text-align: center;
+    padding: 40px 24px;
+    border: 1px dashed rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .mitushi-reviews-page__setup strong {
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .mitushi-reviews-page {
+      padding: 24px 0 56px;
+    }
+
+    .mitushi-reviews-page__inner {
+      padding: 0 16px;
+    }
+  }
+</style>
+
+<section class="mitushi-reviews-page" data-ui-component="Mitushi Reviews Section">
+  <div class="mitushi-reviews-page__inner">
+    {%- if section.settings.show_heading -%}
+      <header class="mitushi-reviews-page__hero">
+        <h1 class="mitushi-reviews-page__title">{{ section.settings.heading | default: 'Reviews' | escape }}</h1>
+      </header>
+    {%- endif -%}
+
+    <div class="mitushi-reviews-page__widget mitushi-judgeme-all-reviews-wrap{% unless section.blocks.size > 0 %} mitushi-reviews-page__widget--framed{% endunless %}">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          <div {{ block.shopify_attributes }}>
+            {% render block %}
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {% render 'mitushi-judgeme-all-reviews' %}
+        <div class="mitushi-reviews-page__setup" hidden>
+          Add the Judge.me <strong>Reviews Grid</strong> app block to this section in the theme editor.
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Mitushi Reviews",
+  "tag": "section",
+  "class": "mitushi-reviews-section",
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show page heading",
+      "default": false,
+      "info": "ANIQI-style pages usually show only the review count inside the widget."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Reviews"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mitushi Reviews"
+    }
+  ]
+}
+{% endschema %}

@@ -12,6 +12,7 @@
     "reviews": {
       "type": "mitushi-reviews",
       "settings": {
+        "show_heading": false,
         "heading": "Reviews"
       }
     }
