@@ -35,6 +35,7 @@
     "cart_show_free_shipping_notification": true,
     "cart_minimum_order_price_for_free_shipping": "199",
     "product_information_new_in_date_limit": 10,
+    "product_rating_app": "judge_me",
     "color_badge_text": "#ffffff",
     "color_sale_badge": "#121212",
     "color_sold_out_badge_text": "#121212",
@@ -44,7 +45,6 @@
     "enable_fit_image_to_container": true,
     "show_second_image": true,
     "show_product_vendor": false,
-    "product_rating_app": "judge_me",
     "show_color_swatches": true,
     "enable_quick_buy": true,
     "custom_badge_metafield": "custom.badge",
@@ -214,6 +214,13 @@
       }
     },
     "content_for_index": [],
+    "blocks": {
+      "14060646107696862457": {
+        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {}
+      }
+    },
     "color_schemes": {
       "scheme-1": {
         "settings": {
