@@ -853,21 +853,25 @@ Combines a collapsible announcement bar with a sticky header.
     <div class="mitushi-announcement-inner">
       <div class="mitushi-marquee">
         {%- liquid
-          if section.settings.announcement_text_primary != blank
-            assign announce_primary = section.settings.announcement_text_primary
-          elsif settings.cart_show_free_shipping_notification and settings.cart_minimum_order_price_for_free_shipping != blank
-            assign free_ship_threshold = settings.cart_minimum_order_price_for_free_shipping | times: 100
-            assign announce_primary = 'Free shipping on orders over ' | append: free_ship_threshold | money
-          else
+          assign announce_primary = section.settings.announcement_text_primary | strip
+          assign announce_secondary = section.settings.announcement_text_secondary | strip
+
+          if announce_primary == blank and section.settings.announcement_use_free_shipping
+            assign free_ship_cents = settings.cart_minimum_order_price_for_free_shipping | times: 100
+            assign free_ship_money = free_ship_cents | money
+            assign announce_primary = 'Free shipping on orders over ' | append: free_ship_money
+          elsif announce_primary == blank
             assign announce_primary = shop.name
           endif
         -%}
         {% for i in (1..section.settings.announcement_repeat_count) %}
           <span>
             {{ announce_primary }}
-            <span aria-hidden>✦</span>
-            {{ section.settings.announcement_text_secondary }}
-            <span aria-hidden>✦</span>
+            {%- if announce_secondary != blank -%}
+              <span aria-hidden>✦</span>
+              {{ announce_secondary }}
+              <span aria-hidden>✦</span>
+            {%- endif -%}
           </span>
         {% endfor %}
       </div>
@@ -1372,16 +1376,29 @@ Combines a collapsible announcement bar with a sticky header.
       "default": "main-menu"
     },
     {
+      "type": "header",
+      "content": "Announcement bar (top marquee)"
+    },
+    {
       "type": "text",
       "id": "announcement_text_primary",
-      "label": "Announcement text primary",
-      "default": "Free shipping on orders over $199"
+      "label": "Announcement text — line 1",
+      "default": "FREE SHIPPING ON ORDERS OVER $199",
+      "info": "Main scrolling message. Edit this to change what visitors see in the red bar."
     },
     {
       "type": "text",
       "id": "announcement_text_secondary",
-      "label": "Announcement text secondary",
-      "default": "新作コレクション"
+      "label": "Announcement text — line 2 (optional)",
+      "default": "新作コレクション",
+      "info": "Second phrase after ✦ (e.g. 新作コレクション = New Collection). Leave empty to hide."
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_use_free_shipping",
+      "label": "Auto free-shipping text when line 1 is empty",
+      "default": false,
+      "info": "Only used if line 1 is blank. Uses your cart free-shipping threshold from theme settings."
     },
     {
       "type": "number",

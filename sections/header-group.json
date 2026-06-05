@@ -19,7 +19,8 @@
         "logo_link": "",
         "menu": "main-menu",
         "announcement_text_primary": "FREE SHIPPING ON ORDERS OVER $199",
-        "announcement_text_secondary": "",
+        "announcement_text_secondary": "新作コレクション",
+        "announcement_use_free_shipping": false,
         "announcement_repeat_count": 8
       }
     }
