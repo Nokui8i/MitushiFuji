@@ -93,6 +93,9 @@
                 {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
                 data-price="{{ variant.price | money }}"
                 data-available="{{ variant.available }}"
+                data-inventory="{{ variant.inventory_quantity }}"
+                data-inventory-policy="{{ variant.inventory_policy }}"
+                data-inventory-management="{{ variant.inventory_management }}"
                 data-options="{%- for opt in variant.options -%}{{ opt | escape }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}"
               >
                 {{ variant.title }}
@@ -192,6 +195,12 @@
               </svg>
             </button>
           </div>
+
+          <div
+            class="product-cart-stock-error hidden mt-3 px-3 py-2.5 text-center text-[11px] font-medium uppercase tracking-[0.06em] text-[#ff6b6b] bg-[rgba(255,107,107,0.08)] border border-[rgba(255,107,107,0.25)]"
+            role="alert"
+            aria-live="polite"
+          ></div>
         {%- endform -%}
 
         <!-- Shipping tagline -->
@@ -295,24 +304,69 @@
     const qtyInput = document.querySelector('.product-qty-input');
     const qtyMinus = document.querySelector('.qty-btn-minus');
     const qtyPlus = document.querySelector('.qty-btn-plus');
+    const stockErrorEl = document.querySelector('.product-cart-stock-error');
+    const variantSelect = document.getElementById('ProductSelect-{{ section.id }}');
+
+    function getSelectedVariantOption() {
+      return variantSelect?.options[variantSelect.selectedIndex] || null;
+    }
+
+    function getVariantStockCap() {
+      const opt = getSelectedVariantOption();
+      if (!opt) return null;
+      const management = opt.getAttribute('data-inventory-management');
+      const policy = opt.getAttribute('data-inventory-policy');
+      const inv = parseInt(opt.getAttribute('data-inventory'), 10);
+      if (management && policy === 'deny' && !isNaN(inv) && inv >= 0) return inv;
+      return null;
+    }
+
+    function showStockError(message) {
+      if (!stockErrorEl) return;
+      if (!message) {
+        stockErrorEl.textContent = '';
+        stockErrorEl.classList.add('hidden');
+        return;
+      }
+      stockErrorEl.textContent = message;
+      stockErrorEl.classList.remove('hidden');
+    }
+
+    function formatStockMessage(template, count) {
+      if (!template) return 'Only ' + count + ' available.';
+      return template.replace('[count]', String(count)).replace('{{ count }}', String(count));
+    }
+
+    function setProductQuantity(value, options = {}) {
+      if (!qtyInput || !qtyDisplay) return 1;
+      const cap = getVariantStockCap();
+      let qty = parseInt(value, 10) || 1;
+      qty = Math.max(1, qty);
+      if (cap !== null && qty > cap) {
+        qty = cap;
+        if (options.showError !== false) {
+          showStockError(formatStockMessage(SHTLanguage?.cart?.INVENTORY_LIMIT_UPDATE, cap));
+        }
+      } else if (options.clearError) {
+        showStockError('');
+      }
+      qtyInput.value = qty;
+      qtyDisplay.textContent = qty;
+      return qty;
+    }
 
     if (qtyInput && qtyDisplay && qtyMinus && qtyPlus) {
       qtyMinus.addEventListener('click', () => {
         const val = parseInt(qtyInput.value) || 1;
-        const newVal = Math.max(1, val - 1);
-        qtyInput.value = newVal;
-        qtyDisplay.textContent = newVal;
+        setProductQuantity(val - 1, { clearError: true });
       });
       qtyPlus.addEventListener('click', () => {
         const val = parseInt(qtyInput.value) || 1;
-        const newVal = val + 1;
-        qtyInput.value = newVal;
-        qtyDisplay.textContent = newVal;
+        setProductQuantity(val + 1);
       });
     }
 
     // 3. Variant selector
-    const variantSelect = document.getElementById('ProductSelect-{{ section.id }}');
     const valueButtons = document.querySelectorAll('.variant-value-btn');
     const priceDisplay = document.querySelector('.product-price-display');
     const atcBtn = document.querySelector('.product-atc-submit-btn');
@@ -343,6 +397,7 @@
             }
 
             const available = opt.getAttribute('data-available') === 'true';
+            setProductQuantity(qtyInput?.value || 1, { clearError: true });
             if (atcBtn) {
               if (available) {
                 atcBtn.removeAttribute('disabled');
@@ -447,7 +502,22 @@
         
         const cartNotification = document.getElementById('cartNotificationPanel');
         const formData = new FormData(productForm);
-        
+        const requestedQty = setProductQuantity(qtyInput?.value || 1);
+        formData.set('quantity', String(requestedQty));
+
+        const stockCap = getVariantStockCap();
+        if (stockCap !== null && requestedQty > stockCap) {
+          showStockError(formatStockMessage(SHTLanguage?.cart?.INVENTORY_LIMIT_UPDATE, stockCap));
+          if (atcBtn) {
+            atcBtn.removeAttribute('disabled');
+            atcBtn.style.opacity = '1';
+          }
+          if (atcText) atcText.innerHTML = originalText;
+          return;
+        }
+
+        showStockError('');
+
         // Include sections to render for the cart notification popup
         if (cartNotification && typeof cartNotification.getSectionsToRender === 'function') {
           const sectionsToRender = cartNotification.getSectionsToRender() || [];
@@ -456,33 +526,53 @@
           });
           formData.append('sections_url', window.location.pathname);
         }
-        
-        fetch(window.routes?.cart_add_url || '/cart/add.js', {
+
+        const addUrl = window.routes?.cart_add_js_url || ((window.routes?.cart_add_url || '/cart/add') + '.js');
+
+        fetch(addUrl, {
           method: 'POST',
           body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === 422 || data.status === 'bad_request' || data.description) {
-            alert(data.description || data.message || 'Error adding to cart');
-          } else {
-            // Successfully added!
-            if (cartNotification && typeof cartNotification.renderContents === 'function') {
-              cartNotification.renderContents(data, true, atcBtn);
-            }
-            
-            // Trigger header cart status animation & update if necessary
-            const headerCartStatus = document.getElementById('headerCartStatus');
-            if (headerCartStatus) {
-              headerCartStatus.classList.add('header-cart-status--animate');
-            }
+        .then(async (response) => {
+          const text = await response.text();
+          let data = null;
+          try {
+            data = text ? JSON.parse(text) : null;
+          } catch (e) {
+            throw new Error('invalid_json');
+          }
+          return { response, data };
+        })
+        .then(({ response, data }) => {
+          const isError = !response.ok || data?.status === 422 || data?.status === 'bad_request';
+          if (isError) {
+            const raw = data?.description || data?.message || SHTLanguage?.cart?.ERROR || 'Could not add to cart';
+            const cap = getVariantStockCap();
+            const match = String(raw).match(/(\d+)/);
+            const count = cap !== null ? cap : (match ? parseInt(match[1], 10) : null);
+            const message =
+              count !== null && /only|maximum|available|added/i.test(raw)
+                ? formatStockMessage(SHTLanguage?.cart?.INVENTORY_LIMIT_ADD, count)
+                : raw;
+            showStockError(message);
+            return;
+          }
+
+          showStockError('');
+
+          if (cartNotification && typeof cartNotification.renderContents === 'function') {
+            cartNotification.renderContents(data, true, atcBtn);
+          }
+
+          const headerCartStatus = document.getElementById('headerCartStatus');
+          if (headerCartStatus) {
+            headerCartStatus.classList.add('header-cart-status--animate');
           }
         })
-        .catch(error => {
-          console.error('Error adding to cart:', error);
+        .catch(() => {
+          showStockError(SHTLanguage?.cart?.ERROR || 'Could not add to cart. Please try again.');
         })
         .finally(() => {
-          // Restore button state
           if (atcBtn) {
             atcBtn.removeAttribute('disabled');
             atcBtn.style.opacity = '1';

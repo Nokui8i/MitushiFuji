@@ -220,6 +220,8 @@
 	   "update": "Update",
 	   "empty": "Your cart is empty",
 	   "cart_quantity_error": "You can only add {{ quantity }} of this item to your cart.",
+	   "inventory_limit_update": "Only {{ count }} in stock — that's the maximum for this item.",
+	   "inventory_limit_add": "Only {{ count }} available — we added the maximum to your cart.",
 	   "cart_error": "There was an error while updating your cart. Please try again.",
 	   "free_shipping_notification_html": "You're <b>{{ remaining_amount }}</b> away from free shipping",
 	   "free_shipping_notification_qualified": "Your order qualifies for free shipping",

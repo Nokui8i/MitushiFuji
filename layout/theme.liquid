@@ -359,7 +359,9 @@
       window.routes = {
         root_url: `{{ routes.root_url }}`,
         cart_add_url: `{{ routes.cart_add_url }}`,
+        cart_add_js_url: `{{ routes.cart_add_url }}.js`,
         cart_change_url: `{{ routes.cart_change_url }}`,
+        cart_change_js_url: `{{ routes.cart_change_url }}.js`,
         cart_update_url: `{{ routes.cart_update_url }}`,
         predictive_search_url: `{{ routes.predictive_search_url }}`,
         cart_url: `{{ routes.cart_url }}`
@@ -383,6 +385,8 @@
       SHTLanguage.cart = {
         ERROR: `{{ 'sections.cart.cart_error' | t }}`,
         QUANTITY_ERROR: `{{ 'sections.cart.cart_quantity_error' | t: quantity: '[quantity]' }}`,
+        INVENTORY_LIMIT_UPDATE: `{{ 'sections.cart.inventory_limit_update' | t: count: '[count]' }}`,
+        INVENTORY_LIMIT_ADD: `{{ 'sections.cart.inventory_limit_add' | t: count: '[count]' }}`,
       };
 
       SHTLanguage.free_shipping_bar = {

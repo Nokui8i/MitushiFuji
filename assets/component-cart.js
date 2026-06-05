@@ -57,6 +57,46 @@ class SHTCartForm extends SHTCustomComponent {
     this.queueQuantityUpdate(lineIndex, qty, buttonName, { immediate });
   }
 
+  getLineInventoryMax(lineIndex) {
+    const row = document.getElementById("cartItem-" + lineIndex);
+    if (!row) return null;
+    const raw = row.dataset.inventoryMax || row.querySelector(".js-quantity-input")?.getAttribute("max");
+    const max = parseInt(raw, 10);
+    return !isNaN(max) && max > 0 ? max : null;
+  }
+
+  formatStockMessage(template, count) {
+    if (!template) return "Only " + count + " in stock.";
+    return template.replace("[count]", String(count)).replace("{{ count }}", String(count));
+  }
+
+  normalizeStockError(message, lineIndex) {
+    if (!message) return SHTLanguage.cart.ERROR;
+    const max = this.getLineInventoryMax(lineIndex);
+    const match = String(message).match(/(\d+)/);
+    const count = max !== null ? max : match ? parseInt(match[1], 10) : null;
+    if (count !== null && /only|maximum|available|added|quantity/i.test(message)) {
+      return this.formatStockMessage(SHTLanguage.cart.INVENTORY_LIMIT_UPDATE, count);
+    }
+    return message;
+  }
+
+  clampLineQuantity(lineIndex, quantity) {
+    const row = document.getElementById("cartItem-" + lineIndex);
+    const input = row?.querySelector(".js-quantity-input");
+    let qty = parseInt(quantity, 10);
+    if (isNaN(qty) || qty < 0) return { qty: 0, clamped: false };
+
+    const max = this.getLineInventoryMax(lineIndex);
+    if (max !== null && qty > max) {
+      qty = max;
+      if (input) input.value = max;
+      return { qty, clamped: true, max };
+    }
+
+    return { qty, clamped: false, max };
+  }
+
   formatMoney(cents) {
     if (typeof SHTHelper?.formatMoney === "function" && window.theme_variables?.settings?.money_format) {
       return SHTHelper.formatMoney(cents, window.theme_variables.settings.money_format);
@@ -269,9 +309,16 @@ class SHTCartForm extends SHTCustomComponent {
 
   queueQuantityUpdate(lineIndex, quantity, buttonName, options = {}) {
     const line = parseInt(lineIndex, 10);
-    const qty = parseInt(quantity, 10);
+    const errorEl = this.$(".js-cart-form-errors");
+    const { qty, clamped, max } = this.clampLineQuantity(lineIndex, quantity);
 
     if (!line || isNaN(qty) || qty < 0) return;
+
+    if (clamped && errorEl && max !== null) {
+      errorEl.textContent = this.formatStockMessage(SHTLanguage.cart.INVENTORY_LIMIT_UPDATE, max);
+    } else if (errorEl && !clamped) {
+      errorEl.textContent = "";
+    }
 
     if (qty > 0) {
       this.applyOptimisticUI(lineIndex, qty);
@@ -298,7 +345,8 @@ class SHTCartForm extends SHTCustomComponent {
       quantity: quantity,
     });
 
-    fetch("" + window.routes.cart_change_url, { ...SHTHelper.fetchConfigJSON, body })
+    const changeUrl = window.routes.cart_change_js_url || (window.routes.cart_change_url + ".js");
+    fetch("" + changeUrl, { ...SHTHelper.fetchConfigJSON, body })
       .then(async (res) => {
         const text = await res.text();
         let data = null;
@@ -318,8 +366,9 @@ class SHTCartForm extends SHTCustomComponent {
         }
 
         if (!res.ok) {
-          const message =
+          const raw =
             data?.description || data?.message || (typeof data?.errors === "string" ? data.errors : null);
+          const message = this.normalizeStockError(raw, lineIndex);
           if (errorEl) {
             errorEl.textContent = message || SHTLanguage.cart.ERROR;
           }

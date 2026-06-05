@@ -380,10 +380,17 @@
               {%- if cart != empty -%}
                 <div class="border-y border-border/60 js-cart-items">
                   {% for line_item in cart.items %}
+                    {%- liquid
+                      assign line_inventory_max = nil
+                      if line_item.variant.inventory_management != nil and line_item.variant.inventory_policy == 'deny'
+                        assign line_inventory_max = line_item.variant.inventory_quantity
+                      endif
+                    -%}
                     <div
                       class="flex gap-5 border-b border-border/60 py-6 last:border-b-0 cart-item sm:py-6"
                       id="cartItem-{{ line_item.index | plus: 1 }}"
                       data-unit-price="{{ line_item.variant.price }}"
+                      {% if line_inventory_max %}data-inventory-max="{{ line_inventory_max }}"{% endif %}
                     >
                       
                       <!-- Item Image -->
@@ -445,6 +452,7 @@
                                 value="{{ line_item.quantity }}"
                                 data-cart-quantity="{{ cart | item_count_for_variant: line_item.variant.id }}"
                                 min="0"
+                                {% if line_inventory_max %}max="{{ line_inventory_max }}" data-inventory-max="{{ line_inventory_max }}"{% endif %}
                                 aria-label="{{ line_item.product.title | escape }}"
                                 id="quantity-{{ line_item.index | plus: 1 }}"
                                 data-index="{{ line_item.index | plus: 1 }}"
