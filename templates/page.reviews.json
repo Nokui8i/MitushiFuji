@@ -26,7 +26,7 @@
 
       "settings": {
 
-        "show_demo_reviews": true,
+        "show_demo_reviews": false,
 
         "demo_review_count": 8,
 
