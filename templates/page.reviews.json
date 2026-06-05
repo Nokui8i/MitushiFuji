@@ -17,9 +17,52 @@
         "remove_padding_top": true,
         "remove_padding_bottom": true
       }
+    },
+    "178069255034252544": {
+      "type": "apps",
+      "blocks": {
+        "loox_reviews_loox_agg_section_kGyiUG": {
+          "type": "shopify://apps/loox-reviews/blocks/loox-agg-section/5c3b337f-fd14-4df5-b1d6-80ec13e6e28e",
+          "settings": {
+            "reviews_to_display": "",
+            "default_tab": "automatic",
+            "only_photos": false,
+            "hide_thumbnails": false,
+            "product_handle": "",
+            "aggregated": true,
+            "data-limit": 20,
+            "maxwidth": 1080,
+            "is_sample": true
+          }
+        }
+      },
+      "block_order": [
+        "loox_reviews_loox_agg_section_kGyiUG"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "enable_mitushi_layout": true,
+        "show_section_header": true,
+        "subheading": "From Instagram",
+        "heading": "From Instagram",
+        "show_instagram_link": true,
+        "instagram_url": "",
+        "instagram_link_label": "Follow on Instagram",
+        "instagram_link_label_short": "Follow",
+        "cta_style": "split",
+        "show_hero_background": true,
+        "ghost_text": "FEED",
+        "vertical_jp": "ミツシ・フィード",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "enable_content_fullwidth": false,
+        "remove_padding_top": false,
+        "remove_padding_bottom": false
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "178069255034252544"
   ]
 }
