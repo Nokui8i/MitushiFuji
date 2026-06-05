@@ -79,9 +79,9 @@
         <div class="mt-3 mitushi-product-rating">
           {% render 'mitushi-judgeme-styles' %}
           {%- if settings.product_rating_app == 'judge_me' and product.metafields.judgeme.badge != blank -%}
-            <a href="/pages/reviews" class="td-none d-inline-block">
+            <div class="d-inline-block">
               {{ product.metafields.judgeme.badge }}
-            </a>
+            </div>
           {%- else -%}
             {%- render 'product-rating', product: product, star_rating_color: true, quick_buy_star_rating_color: false, main_product_star_rating_color: '--color-rating-star: #FFB82D' -%}
           {%- endif -%}
