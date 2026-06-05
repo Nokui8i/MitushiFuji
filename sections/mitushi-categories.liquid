@@ -70,44 +70,23 @@
     }
   }
 
-  /* Dynamic grid: first collection featured, rest stack beside / below */
+  /* Dynamic grid: first collection featured, rest stack in column 2 */
   .mitushi-categories-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
-  }
-
-  @media (min-width: 768px) {
-    .mitushi-categories-grid {
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-      grid-auto-rows: minmax(160px, 1fr);
-      gap: 12px;
-      min-height: 536px;
-    }
-
-    .mitushi-categories-grid--single {
-      grid-template-columns: 1fr;
-      min-height: 420px;
-    }
-  }
-
-  @media (min-width: 1200px) {
-    .mitushi-categories-grid {
-      min-height: 584px;
-    }
   }
 
   .mitushi-category-card {
     position: relative;
     display: block;
-    height: 100%;
-    min-height: 0;
     overflow: hidden;
     background-color: rgba(255, 255, 255, 0.05);
     text-decoration: none;
     color: inherit;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: border-color 0.3s;
+    min-height: 160px;
   }
 
   .mitushi-category-card:hover {
@@ -119,11 +98,34 @@
     min-height: min(68vw, 420px);
   }
 
+  .mitushi-category-card:not(.big) {
+    min-height: min(44vw, 200px);
+    aspect-ratio: 1 / 1;
+  }
+
   @media (min-width: 768px) {
+    .mitushi-categories-grid {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      grid-template-rows: repeat(var(--mitushi-cat-stack, 2), minmax(160px, 1fr));
+      gap: 12px;
+      min-height: 536px;
+    }
+
+    .mitushi-categories-grid--single {
+      grid-template-columns: 1fr;
+      min-height: 420px;
+    }
+
+    .mitushi-category-card {
+      min-height: 0;
+      height: 100%;
+      aspect-ratio: auto;
+    }
+
     .mitushi-category-card.big {
       grid-column: 1;
-      grid-row: 1 / span var(--mitushi-cat-stack, 2);
-      min-height: 0;
+      grid-row: 1 / span var(--mitushi-cat-span, var(--mitushi-cat-stack, 2));
+      min-height: 280px;
     }
 
     .mitushi-categories-grid--single .mitushi-category-card.big {
@@ -133,7 +135,14 @@
 
     .mitushi-category-card:not(.big) {
       grid-column: 2;
+      grid-row: var(--mitushi-cat-row, auto);
       min-height: 160px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .mitushi-categories-grid {
+      min-height: 584px;
     }
   }
 
@@ -362,6 +371,8 @@
               {%- render 'mitushi-category-card',
                 col_obj: col_obj,
                 is_big: forloop.first,
+                stack_span: stack_rows,
+                grid_row: forloop.index0,
                 japanese_label: '',
                 image_override: blank
               -%}
@@ -373,6 +384,8 @@
                 {%- render 'mitushi-category-card',
                   col_obj: col_obj,
                   is_big: auto_index == 0,
+                  stack_span: stack_rows,
+                  grid_row: auto_index,
                   japanese_label: '',
                   image_override: blank
                 -%}
@@ -395,6 +408,8 @@
               {%- render 'mitushi-category-card',
                 col_obj: col_obj,
                 is_big: forloop.first,
+                stack_span: stack_rows,
+                grid_row: forloop.index0,
                 japanese_label: col_jp,
                 image_override: image_override,
                 block: block
