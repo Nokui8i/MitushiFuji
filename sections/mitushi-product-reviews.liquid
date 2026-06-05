@@ -1,5 +1,6 @@
 {% comment %}
   Judge.me Review Widget for product pages.
+  Uses metafields or Judge.me app blocks — no judgeme_widgets snippet required.
 {% endcomment %}
 
 {% render 'mitushi-judgeme-styles' %}
@@ -39,6 +40,14 @@
     border-radius: 12px;
     padding: 28px 24px;
   }
+
+  .mitushi-product-reviews__empty {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0;
+  }
 </style>
 
 <section
@@ -54,7 +63,20 @@
     {%- endif -%}
 
     <div class="mitushi-product-reviews__widget mitushi-judgeme-review-widget">
-      {% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: true, product: product %}
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {% render block %}
+        {%- endfor -%}
+      {%- elsif product.metafields.judgeme.widget != blank -%}
+        <div class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}">
+          {{ product.metafields.judgeme.widget }}
+        </div>
+      {%- else -%}
+        <p class="mitushi-product-reviews__empty">
+          Reviews will appear here after Judge.me syncs.
+          In Judge.me click <strong>Install Review Widget</strong>, or add the <strong>Review Widget</strong> app block to this section in the theme editor.
+        </p>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -77,6 +99,11 @@
       "id": "heading",
       "label": "Heading",
       "default": "Customer Reviews"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
     }
   ],
   "presets": [

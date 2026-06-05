@@ -1,6 +1,5 @@
 {% comment %}
-  Judge.me All Reviews Page widget.
-  Uses app snippet when available, falls back to shop metafields.
+  Judge.me All Reviews Page — uses shop metafields (no judgeme_widgets snippet required).
 {% endcomment %}
 <div id="judgeme_all_reviews_page" class="mitushi-judgeme-all-reviews">
   {%- if shop.metafields.judgeme.all_reviews_header != blank -%}
@@ -14,6 +13,9 @@
       {{ current_metafield }}
     {%- endfor -%}
   {%- else -%}
-    {% render 'judgeme_widgets', widget_type: 'judgeme_all_reviews_page', concierge_install: true %}
+    <p class="mitushi-reviews-page__empty">
+      Reviews will appear here once Judge.me is connected.
+      In Judge.me go to <strong>Settings → Widgets</strong> and enable <strong>All Reviews Page</strong>, then refresh.
+    </p>
   {%- endif -%}
 </div>
