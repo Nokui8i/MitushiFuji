@@ -86,9 +86,13 @@
 
 
 
-  /* Reviews Grid / app block — ANIQI-style full-width masonry */
+  /* Reviews Grid / app block — Mitushi dark gallery */
 
-  .mitushi-reviews-page .shopify-app-block .jdgm-widget {
+  .mitushi-reviews-page .shopify-app-block,
+
+  .mitushi-reviews-page .shopify-app-block .jdgm-widget,
+
+  .mitushi-reviews-page .shopify-app-block [class*="jdgm"] {
 
     background: transparent !important;
 
@@ -99,6 +103,140 @@
     padding: 0 !important;
 
     margin: 0 !important;
+
+    color: var(--jdgm-text) !important;
+
+  }
+
+
+
+  /* Hide Judge.me default title + empty shop rating (we use Mitushi heading) */
+
+  .mitushi-reviews-page .shopify-app-block .jdgm-rev-widg__header,
+
+  .mitushi-reviews-page .shopify-app-block .jdgm-rev-widg__title,
+
+  .mitushi-reviews-page .shopify-app-block .jdgm-rev-widg__summary,
+
+  .mitushi-reviews-page .shopify-app-block .jdgm-rev-widg__summary-text,
+
+  .mitushi-reviews-page .shopify-app-block .jdgm-all-reviews-page__header,
+
+  .mitushi-reviews-page .shopify-app-block > div > h2,
+
+  .mitushi-reviews-page .shopify-app-block > div > h3,
+
+  .mitushi-reviews-page .shopify-app-block [class*="grid-header"],
+
+  .mitushi-reviews-page .shopify-app-block [class*="reviews-grid"] > h2,
+
+  .mitushi-reviews-page .shopify-app-block [class*="reviews-grid"] > h3 {
+
+    display: none !important;
+
+  }
+
+
+
+  .mitushi-reviews-page .shopify-app-block [class*="grid"],
+
+  .mitushi-reviews-page .shopify-app-block [class*="gallery"] {
+
+    gap: 14px !important;
+
+  }
+
+
+
+  .mitushi-reviews-page .shopify-app-block [class*="grid"] > *,
+
+  .mitushi-reviews-page .shopify-app-block [class*="gallery"] > *,
+
+  .mitushi-reviews-page .shopify-app-block [class*="card"],
+
+  .mitushi-reviews-page .shopify-app-block [class*="tile"] {
+
+    border-radius: 8px !important;
+
+    overflow: hidden !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+
+    background: rgba(255, 255, 255, 0.03) !important;
+
+    transition: border-color 0.25s ease, transform 0.25s ease !important;
+
+  }
+
+
+
+  .mitushi-reviews-page .shopify-app-block [class*="grid"] > *:hover,
+
+  .mitushi-reviews-page .shopify-app-block [class*="gallery"] > *:hover,
+
+  .mitushi-reviews-page .shopify-app-block [class*="card"]:hover {
+
+    border-color: rgba(204, 19, 42, 0.45) !important;
+
+    transform: translateY(-2px) !important;
+
+  }
+
+
+
+  .mitushi-reviews-page .shopify-app-block [class*="overlay"],
+
+  .mitushi-reviews-page .shopify-app-block [class*="caption"],
+
+  .mitushi-reviews-page .shopify-app-block [class*="footer"] {
+
+    background: linear-gradient(180deg, transparent 0%, rgba(20, 20, 22, 0.92) 72%) !important;
+
+  }
+
+
+
+  .mitushi-reviews-page .shopify-app-block button,
+
+  .mitushi-reviews-page .shopify-app-block [class*="show-more"],
+
+  .mitushi-reviews-page .shopify-app-block [class*="load-more"],
+
+  .mitushi-reviews-page .shopify-app-block a[class*="more"] {
+
+    color: #fff !important;
+
+    background: transparent !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+
+    border-radius: 999px !important;
+
+    padding: 10px 22px !important;
+
+    font-size: 11px !important;
+
+    letter-spacing: 0.14em !important;
+
+    text-transform: uppercase !important;
+
+    margin-top: 28px !important;
+
+    transition: border-color 0.2s ease, color 0.2s ease !important;
+
+  }
+
+
+
+  .mitushi-reviews-page .shopify-app-block button:hover,
+
+  .mitushi-reviews-page .shopify-app-block [class*="show-more"]:hover,
+
+  .mitushi-reviews-page .shopify-app-block a[class*="more"]:hover {
+
+    border-color: var(--jdgm-accent) !important;
+
+    color: var(--jdgm-accent) !important;
 
   }
 
