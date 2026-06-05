@@ -9,75 +9,17 @@
  */
 {
   "sections": {
-    "reviews": {
-      "type": "mitushi-reviews",
-      "disabled": true,
-      "settings": {
-        "show_demo_reviews": false,
-        "demo_review_count": 8,
-        "show_heading": true,
-        "heading": "Reviews"
-      }
-    },
-    "1780689643329d269e": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_reviews_grid_widget_f7C6Wm": {
-          "type": "shopify://apps/judge-me-reviews/blocks/reviews_grid_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "show_sample_reviews": true,
-            "review_selection": "all",
-            "products": [],
-            "show_media_only": false,
-            "display_order": "most_recent",
-            "card_grouping": "per_media",
-            "columns_desktop": 4,
-            "rows_desktop": 4,
-            "columns_mobile": "2",
-            "rows_mobile": 6,
-            "show_stars": true,
-            "show_reviewer_name": true,
-            "show_review_title_on_hover_desktop": true,
-            "max_width": 1200,
-            "corner_styling": "soft",
-            "card_spacing": "medium",
-            "header_text_color": "#000000",
-            "star_and_reviewer_name_color": "#F9F9F9",
-            "drop_shadow_color": "#000000",
-            "overlay_and_background_color": "#000000",
-            "content_color": "#F9F9F9",
-            "header_text": "",
-            "show_average_rating": false
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_reviews_grid_widget_f7C6Wm"
-      ],
+    "main": {
+      "type": "main-page",
       "settings": {
         "color_scheme": "",
-        "enable_mitushi_layout": true,
-        "show_section_header": false,
-        "subheading": "",
-        "heading": "",
-        "show_instagram_link": false,
-        "instagram_url": "",
-        "instagram_link_label": "",
-        "instagram_link_label_short": "",
-        "cta_style": "split",
-        "show_hero_background": true,
-        "ghost_text": "",
-        "vertical_jp": "",
-        "padding_top": 72,
-        "padding_bottom": 72,
-        "enable_content_fullwidth": false,
-        "remove_padding_top": false,
-        "remove_padding_bottom": false
+        "show_page_title": false,
+        "remove_padding_top": true,
+        "remove_padding_bottom": true
       }
     }
   },
   "order": [
-    "reviews",
-    "1780689643329d269e"
+    "main"
   ]
 }
