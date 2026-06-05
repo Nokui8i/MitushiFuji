@@ -50,9 +50,9 @@
           "type": "size_guide",
           "settings": {
             "heading": "Size chart",
-            "content_source": "static-page",
-            "static_page": "size-chars",
-            "product_metafield_name": "",
+            "content_source": "product-metafield",
+            "static_page": "",
+            "product_metafield_name": "custom.size_chart",
             "icon_source_size_guide": "theme_library",
             "size_options_icon": "ruler",
             "html_code_size_guide": ""
