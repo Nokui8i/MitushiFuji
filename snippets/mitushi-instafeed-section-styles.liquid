@@ -93,6 +93,26 @@
     border-bottom: none;
   }
 
+  {%- if reviews_only -%}
+  #shopify-section-{{ section.id }} .mitushi-apps-section--reviews .mitushi-apps-header {
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-section--reviews .mitushi-apps-eyebrow {
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-section--reviews .mitushi-apps-header-row {
+    justify-content: center;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-section--reviews .mitushi-apps-heading {
+    flex: none;
+    width: 100%;
+    text-align: center;
+  }
+  {%- endif -%}
+
   #shopify-section-{{ section.id }} .mitushi-apps-header-row {
     display: flex;
     align-items: flex-end;

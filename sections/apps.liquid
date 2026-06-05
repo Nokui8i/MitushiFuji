@@ -42,7 +42,7 @@
 {%- endif -%}
 
 {%- if use_mitushi_layout -%}
-  {%- render 'mitushi-instafeed-section-styles', section: section -%}
+  {%- render 'mitushi-instafeed-section-styles', section: section, reviews_only: reviews_only -%}
 {%- endif -%}
 
 <div
@@ -50,7 +50,7 @@
   data-ui-component="Apps Section"
 >
   {%- if use_mitushi_layout -%}
-    <div class="mitushi-apps-section w-100">
+    <div class="mitushi-apps-section w-100{% if reviews_only %} mitushi-apps-section--reviews{% endif %}">
       {%- if section.settings.show_hero_background -%}
         <div class="mitushi-apps-backdrop" aria-hidden="true"></div>
         <div class="mitushi-apps-grid" aria-hidden="true"></div>
