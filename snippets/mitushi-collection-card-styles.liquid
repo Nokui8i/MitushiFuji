@@ -43,6 +43,20 @@
     background: rgba(255, 255, 255, 0.03);
   }
 
+  /* Ensure product images show once loaded (image-loader overlay) */
+  body.template-collection .main-collection-product sht-image-atf.image-loader--loaded::before,
+  body.template-collection .main-collection-product sht-image-atf.image-loader--loaded::after,
+  body.template-search sht-srch sht-image-atf.image-loader--loaded::before,
+  body.template-search sht-srch sht-image-atf.image-loader--loaded::after {
+    display: none !important;
+  }
+
+  body.template-collection .main-collection-product sht-image-atf img,
+  body.template-search sht-srch sht-image-atf img {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
   body.template-collection .main-collection-product .product-card .card__media .media,
   body.template-collection .main-collection-product .product-card .card__media img,
   body.template-search sht-srch .product-card .card__media .media,

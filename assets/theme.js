@@ -55,6 +55,81 @@
   }
   window.SHTCustomComponent = SHTCustomComponent;
 
+  class SHTCoreDrawer extends SHTCustomComponent {
+    openDrawer(opener) {
+      this.classList.add("active");
+      this.removeAttribute("hidden");
+      this.setAttribute("aria-hidden", "false");
+      this._opener = opener;
+      document.body.classList.add("drawer-open");
+    }
+    closeDrawer() {
+      this.classList.remove("active");
+      this.setAttribute("hidden", "");
+      this.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("drawer-open");
+      this._opener?.focus?.();
+    }
+  }
+  window.SHTCoreDrawer = SHTCoreDrawer;
+
+  class SHTQuantityInput extends SHTCustomComponent {
+    connectedCallback() {
+      this.input = this.querySelector(".js-quantity-input");
+      if (!this.input) return;
+      this.changeEvent = new Event("change", { bubbles: true });
+      this.querySelectorAll(".js-quantity-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => this.onButtonClick(e));
+      });
+    }
+    onButtonClick(e) {
+      e.preventDefault();
+      const btn = e.currentTarget;
+      const prev = this.input.value;
+      if (btn.dataset.name === "plus") {
+        this.input.stepUp();
+      } else {
+        this.input.stepDown();
+      }
+      if (this.input.value !== prev) {
+        this.input.dispatchEvent(this.changeEvent);
+      }
+    }
+  }
+
+  class SHTImageATF extends HTMLElement {
+    connectedCallback() {
+      const markLoaded = () => this.classList.add("image-loader--loaded");
+      const imgs = this.querySelectorAll("img");
+      if (!imgs.length) {
+        markLoaded();
+        return;
+      }
+      let pending = imgs.length;
+      const done = () => {
+        pending -= 1;
+        if (pending <= 0) markLoaded();
+      };
+      imgs.forEach((img) => {
+        if (img.complete) done();
+        else {
+          img.addEventListener("load", done, { once: true });
+          img.addEventListener("error", done, { once: true });
+        }
+      });
+      setTimeout(markLoaded, 4000);
+    }
+  }
+
+  window.SHTElementLazyLoad = function SHTElementLazyLoad() {
+    document.querySelectorAll("sht-image-atf.image-loader:not(.image-loader--loaded)").forEach((el) => {
+      const imgs = el.querySelectorAll("img");
+      if (!imgs.length || Array.from(imgs).every((img) => img.complete)) {
+        el.classList.add("image-loader--loaded");
+      }
+    });
+  };
+
   function parseSectionHTML(html, selector) {
     const doc = new DOMParser().parseFromString(html, "text/html");
     const node = selector ? doc.querySelector(selector) : doc.body.firstElementChild;
@@ -155,6 +230,8 @@
 
   const registry = [
     ["sht-cart-noti", SHTCartNotification],
+    ["sht-qty-inp", SHTQuantityInput],
+    ["sht-image-atf", SHTImageATF],
     ["sht-dialog", SHTDialog],
     ["sht-dialog-open-btn", SHTDialogOpenBtn],
     ["sht-header", class extends HTMLElement {}],
@@ -179,10 +256,6 @@
     ["sht-localization", class extends HTMLElement {}],
     ["sht-menu-drwer-opner", class extends HTMLElement {}],
     ["sht-menu-header", class extends HTMLElement {}],
-    ["sht-coll-prd-drwer", class extends SHTCustomComponent {}],
-    ["sht-coll-prd-fltr-frm", class extends SHTCustomComponent {}],
-    ["sht-coll-prd-drwer-opner", class extends HTMLElement {}],
-    ["sht-coll-prd-fltr-frm-rst", class extends HTMLElement {}],
     ["sht-coll-prd-fltr-frm-rgn", class extends HTMLElement {}],
     ["sht-srch-fltr-frm", class extends SHTCustomComponent {}],
     ["sht-srch-fltr-frm-rst", class extends HTMLElement {}],
@@ -210,4 +283,15 @@
   registry.forEach(([name, cls]) => {
     if (!customElements.get(name)) customElements.define(name, cls);
   });
+
+  function bootImages() {
+    window.SHTElementLazyLoad();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootImages);
+  } else {
+    bootImages();
+  }
+  window.addEventListener("load", bootImages);
 })();

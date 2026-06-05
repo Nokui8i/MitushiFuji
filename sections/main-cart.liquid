@@ -64,6 +64,17 @@
       height: 2.5rem !important;
     }
 
+    /* Hide browser number spinners — use +/- buttons only */
+    #mainCartContainer .js-quantity-input::-webkit-outer-spin-button,
+    #mainCartContainer .js-quantity-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    #mainCartContainer .js-quantity-input {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
     #mainCartContainer .cart-item__unit-price {
       display: none !important;
     }

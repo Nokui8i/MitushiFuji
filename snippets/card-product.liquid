@@ -53,7 +53,13 @@
     assign ratio_second = product.media[1].aspect_ratio
   endif
 
-  assign product_image = product.featured_media | image_url: width: product.featured_media.width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_first_classes, id: product_image_id, loading: loading, fetchpriority: fetchpriority, decoding: decoding
+  if product.featured_media != blank
+    assign product_image = product.featured_media | image_url: width: product.featured_media.width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_first_classes, id: product_image_id, loading: loading, fetchpriority: fetchpriority, decoding: decoding
+  elsif product.featured_image != blank
+    assign product_image = product.featured_image | image_url: width: product.featured_image.width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_first_classes, id: product_image_id, loading: loading, fetchpriority: fetchpriority, decoding: decoding
+  else
+    assign product_image = product_placeholder
+  endif
   assign secondary_image_class = ' card'
   if product.media[1] != nil and show_second_image
     assign product_image_second = product.media[1] | image_url: width: product.featured_image.width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_second_classes, loading: "lazy", fetchpriority: "auto", decoding: "async"
