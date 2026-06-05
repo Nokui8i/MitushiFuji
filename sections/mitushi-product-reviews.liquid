@@ -1,0 +1,88 @@
+{% comment %}
+  Judge.me Review Widget for product pages.
+{% endcomment %}
+
+{% render 'mitushi-judgeme-styles' %}
+
+<style>
+  .mitushi-product-reviews {
+    background: var(--ink, #28282b);
+    color: #f7f7f8;
+    padding: 56px 0 72px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .mitushi-product-reviews__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .mitushi-product-reviews__header {
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .mitushi-product-reviews__title {
+    font-family: var(--font-display), inherit;
+    font-size: clamp(28px, 4vw, 36px);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .mitushi-product-reviews__widget {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 28px 24px;
+  }
+</style>
+
+<section
+  id="judgeme_product_reviews"
+  class="mitushi-product-reviews"
+  data-ui-component="Mitushi Product Reviews Section"
+>
+  <div class="mitushi-product-reviews__inner">
+    {%- if section.settings.show_heading -%}
+      <header class="mitushi-product-reviews__header">
+        <h2 class="mitushi-product-reviews__title">{{ section.settings.heading }}</h2>
+      </header>
+    {%- endif -%}
+
+    <div class="mitushi-product-reviews__widget mitushi-judgeme-review-widget">
+      {% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: true, product: product %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Mitushi Product Reviews",
+  "tag": "section",
+  "class": "mitushi-product-reviews-section",
+  "templates": ["product"],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show heading",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer Reviews"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mitushi Product Reviews"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,144 @@
+{% comment %}
+  Mitushi Reviews Page — Judge.me All Reviews (like ANIQI /pages/reviews)
+{% endcomment %}
+
+{% render 'mitushi-judgeme-styles' %}
+
+<style>
+  .mitushi-reviews-page {
+    background: var(--ink, #28282b);
+    color: #f7f7f8;
+    padding: 48px 0 80px;
+    min-height: 60vh;
+  }
+
+  .mitushi-reviews-page__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .mitushi-reviews-page__hero {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .mitushi-reviews-page__eyebrow {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: #cc132a;
+    margin-bottom: 12px;
+  }
+
+  .mitushi-reviews-page__title {
+    font-family: var(--font-display), inherit;
+    font-size: clamp(36px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0 0 12px;
+    line-height: 1.05;
+  }
+
+  .mitushi-reviews-page__subtitle {
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 520px;
+    margin: 0 auto;
+    letter-spacing: 0.02em;
+  }
+
+  .mitushi-reviews-page__widget {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 32px 28px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+  }
+
+  .mitushi-reviews-page__empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 768px) {
+    .mitushi-reviews-page {
+      padding: 32px 0 56px;
+    }
+
+    .mitushi-reviews-page__widget {
+      padding: 20px 16px;
+      border-radius: 8px;
+    }
+
+    .mitushi-reviews-page__hero {
+      margin-bottom: 32px;
+    }
+  }
+</style>
+
+<section class="mitushi-reviews-page" data-ui-component="Mitushi Reviews Section">
+  <div class="mitushi-reviews-page__inner">
+    <header class="mitushi-reviews-page__hero">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="mitushi-reviews-page__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 class="mitushi-reviews-page__title">
+        {{ section.settings.heading | default: page.title | escape }}
+      </h1>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="mitushi-reviews-page__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </header>
+
+    <div class="mitushi-reviews-page__widget">
+      {% render 'mitushi-judgeme-all-reviews' %}
+      <noscript>
+        <p class="mitushi-reviews-page__empty">Enable JavaScript to view customer reviews.</p>
+      </noscript>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Mitushi Reviews",
+  "tag": "section",
+  "class": "mitushi-reviews-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Customer love"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Reviews & Testimonials"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Real feedback from our community. See what customers are saying about Mitushi."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mitushi Reviews"
+    }
+  ]
+}
+{% endschema %}
