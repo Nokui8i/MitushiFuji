@@ -47,22 +47,47 @@
     assign product_img_second_classes = 'js-image-lazy media of-contain img-second w-100 h-100 opacity-0'
   endif
 
-  assign ratio_second = ratio
-  if ratio == 'auto'
-    assign ratio = product.featured_media.aspect_ratio
-    assign ratio_second = product.media[1].aspect_ratio
+  comment
+    Use first item in Shopify Media gallery (admin position #1), not featured_media
+    which can be a different pinned image.
+  endcomment
+  assign card_primary_media = product.media.first
+  if card_primary_media == blank
+    assign card_primary_media = product.featured_media
   endif
 
-  if product.featured_media != blank
-    assign product_image = product.featured_media | image_url: width: product.featured_media.width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_first_classes, id: product_image_id, loading: loading, fetchpriority: fetchpriority, decoding: decoding
+  assign ratio_second = ratio
+  if ratio == 'auto'
+    if card_primary_media != blank
+      assign ratio = card_primary_media.aspect_ratio
+    elsif product.featured_media != blank
+      assign ratio = product.featured_media.aspect_ratio
+    endif
+    if product.media.size > 1
+      assign ratio_second = product.media[1].aspect_ratio
+    endif
+  endif
+
+  if card_primary_media != blank
+    if card_primary_media.media_type == 'image'
+      assign product_image = card_primary_media | image_url: width: card_primary_media.width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_first_classes, id: product_image_id, loading: loading, fetchpriority: fetchpriority, decoding: decoding
+    elsif card_primary_media.preview_image != blank
+      assign product_image = card_primary_media.preview_image | image_url: width: card_primary_media.preview_image.width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_first_classes, id: product_image_id, loading: loading, fetchpriority: fetchpriority, decoding: decoding
+    endif
   elsif product.featured_image != blank
     assign product_image = product.featured_image | image_url: width: product.featured_image.width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_first_classes, id: product_image_id, loading: loading, fetchpriority: fetchpriority, decoding: decoding
   else
     assign product_image = product_placeholder
   endif
   assign secondary_image_class = ' card'
-  if product.media[1] != nil and show_second_image
-    assign product_image_second = product.media[1] | image_url: width: product.featured_image.width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_second_classes, loading: "lazy", fetchpriority: "auto", decoding: "async"
+  if product.media.size > 1 and show_second_image
+    assign card_secondary_media = product.media[1]
+    assign secondary_width = card_secondary_media.width | default: card_primary_media.width | default: 1200
+    if card_secondary_media.media_type == 'image'
+      assign product_image_second = card_secondary_media | image_url: width: secondary_width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_second_classes, loading: "lazy", fetchpriority: "auto", decoding: "async"
+    elsif card_secondary_media.preview_image != blank
+      assign product_image_second = card_secondary_media.preview_image | image_url: width: secondary_width | image_tag: widths: widths, sizes: sizes, alt: product.title, class: product_img_second_classes, loading: "lazy", fetchpriority: "auto", decoding: "async"
+    endif
     assign secondary_image_class = ' card--2-images'
      capture secondary_image
       render 'image', image_item: product_image_second, image_classes: ' w-100 h-100', image_wrap_classes: 'product__image-second p-absolute top-0 left-0 w-100 h-100', ratio: ratio_second

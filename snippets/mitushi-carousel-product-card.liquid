@@ -7,8 +7,16 @@
   assign variant_id = variant.id
   assign is_available = variant.available
 
+  assign carousel_primary = prod_obj.media.first | default: prod_obj.featured_media
+
   if block != blank and block.settings.front_image != blank
     assign front_img = block.settings.front_image | image_url: width: 720
+  elsif carousel_primary != blank
+    if carousel_primary.media_type == 'image'
+      assign front_img = carousel_primary | image_url: width: 720
+    elsif carousel_primary.preview_image != blank
+      assign front_img = carousel_primary.preview_image | image_url: width: 720
+    endif
   elsif prod_obj.featured_image != blank
     assign front_img = prod_obj.featured_image | image_url: width: 720
   else
@@ -17,8 +25,13 @@
 
   if block != blank and block.settings.back_image != blank
     assign back_img = block.settings.back_image | image_url: width: 720
-  elsif prod_obj.images[1] != blank
-    assign back_img = prod_obj.images[1] | image_url: width: 720
+  elsif prod_obj.media.size > 1
+    assign carousel_secondary = prod_obj.media[1]
+    if carousel_secondary.media_type == 'image'
+      assign back_img = carousel_secondary | image_url: width: 720
+    elsif carousel_secondary.preview_image != blank
+      assign back_img = carousel_secondary.preview_image | image_url: width: 720
+    endif
   elsif prod_obj.featured_image != blank
     assign back_img = prod_obj.featured_image | image_url: width: 720
   else
