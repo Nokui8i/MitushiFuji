@@ -1,0 +1,400 @@
+<style>
+  @keyframes mitushi-size-guide-in {
+    from { opacity: 0; transform: scale(0.98) translateY(4px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  sht-dialog.mitushi-size-guide {
+    background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 16px !important;
+  }
+
+  sht-dialog.mitushi-size-guide:not([hidden]) .mitushi-size-guide__panel {
+    animation: mitushi-size-guide-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__panel {
+    width: auto !important;
+    max-width: min(920px, calc(100vw - 20px)) !important;
+    max-height: min(86vh, 640px) !important;
+    margin: 0 !important;
+    border-radius: 12px !important;
+    background: linear-gradient(180deg, #181818 0%, #101010 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    box-shadow:
+      0 20px 50px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    overflow: hidden !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__content {
+    padding: 0 !important;
+    max-height: min(86vh, 640px) !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__header {
+    padding: 18px 24px !important;
+    margin: 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    gap: 12px !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 16px;
+    width: 48px;
+    height: 2px;
+    background: #cc132a;
+    border-radius: 2px;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__header {
+    position: relative !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__title {
+    font-family: var(--font-display, "Bebas Neue", sans-serif) !important;
+    font-size: 26px !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase !important;
+    color: #fff !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__close,
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__close.btn,
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__close.btn-icon,
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__close.btn-plain {
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    padding: 4px !important;
+    border: none !important;
+    outline: none !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    color: rgba(255, 255, 255, 0.55) !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__close:hover,
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__close.btn:hover,
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__close.btn-icon:hover,
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__close.btn-plain:hover {
+    border: none !important;
+    background: none !important;
+    box-shadow: none !important;
+    color: #cc132a !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__close svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__body {
+    padding: 18px 24px 24px !important;
+    overflow: hidden !important;
+    min-height: 0 !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap {
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    background: rgba(0, 0, 0, 0.25) !important;
+    max-height: calc(86vh - 88px) !important;
+  }
+
+  /* Kill global theme table + rte overrides inside size guide */
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap,
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap * {
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap p,
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap div {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap table {
+    width: max-content !important;
+    min-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    margin: 0 !important;
+    font-size: 15px !important;
+    line-height: 1.25 !important;
+    font-family: var(--font-body-family, Inter, sans-serif) !important;
+    color: rgba(255, 255, 255, 0.88) !important;
+    background: transparent !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap col.mitushi-sg-col-size { width: 72px !important; }
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap col.mitushi-sg-col-num { width: 108px !important; }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap thead {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 3 !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap th {
+    padding: 14px 12px !important;
+    padding-block: 14px !important;
+    padding-inline: 12px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    text-align: center !important;
+    vertical-align: bottom !important;
+    color: rgba(255, 255, 255, 0.45) !important;
+    background: #0f0f0f !important;
+    border-bottom: 2px solid rgba(204, 19, 42, 0.45) !important;
+    white-space: nowrap !important;
+    line-height: 1.15 !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap th .mitushi-sg-unit {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.28);
+    font-weight: 500;
+    margin-top: 2px;
+    text-transform: lowercase;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap th:first-child {
+    text-align: start !important;
+    padding-inline-start: 12px !important;
+    color: #cc132a !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap td {
+    padding: 13px 12px !important;
+    padding-block: 13px !important;
+    padding-inline: 12px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    background: transparent !important;
+    font-variant-numeric: tabular-nums !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap td:first-child {
+    text-align: start !important;
+    padding-inline-start: 12px !important;
+    font-family: var(--font-display, "Bebas Neue", sans-serif) !important;
+    font-size: 18px !important;
+    letter-spacing: 0.08em !important;
+    color: #fff !important;
+    font-weight: 400 !important;
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 2 !important;
+    background: #121212 !important;
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap tbody tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.015) !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap tbody tr:nth-child(even) td:first-child {
+    background: #141414 !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap tbody tr:hover td {
+    background: rgba(204, 19, 42, 0.06) !important;
+    color: #fff !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap tbody tr:hover td:first-child {
+    background: rgba(204, 19, 42, 0.14) !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap tbody tr:last-child td {
+    border-bottom: none !important;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap::-webkit-scrollbar-thumb {
+    background: rgba(204, 19, 42, 0.35);
+    border-radius: 4px;
+  }
+
+  @media (max-width: 768px) {
+    @keyframes mitushi-size-guide-in-mobile {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    sht-dialog.mitushi-size-guide {
+      padding:
+        max(8px, env(safe-area-inset-top))
+        8px
+        max(8px, env(safe-area-inset-bottom)) !important;
+      align-items: center !important;
+      overflow: hidden !important;
+      overscroll-behavior: none !important;
+    }
+
+    sht-dialog.mitushi-size-guide:not([hidden]) .mitushi-size-guide__panel {
+      animation: mitushi-size-guide-in-mobile 0.34s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__panel {
+      width: calc(100vw - 16px) !important;
+      max-width: calc(100vw - 16px) !important;
+      max-height: min(92dvh, 92vh) !important;
+      border-radius: 12px !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__content {
+      max-height: min(92dvh, 92vh) !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__header {
+      padding: 12px 14px !important;
+      gap: 8px !important;
+      flex-shrink: 0 !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__header::after {
+      left: 14px;
+      width: 36px;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__title {
+      font-size: 18px !important;
+      letter-spacing: 0.1em !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__close,
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__close.btn,
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__close.btn-icon,
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__close.btn-plain {
+      padding: 10px !important;
+      margin: -6px -6px -6px 0 !important;
+      min-width: 44px !important;
+      min-height: 44px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__close svg {
+      width: 18px !important;
+      height: 18px !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__body {
+      padding: 8px 10px 12px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      min-height: 0 !important;
+      flex: 1 !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap {
+      flex: 1 !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      overflow-x: auto !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-x pan-y !important;
+      border-radius: 8px !important;
+      position: relative !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 28px;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(10, 10, 10, 0.92));
+      z-index: 4;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap table {
+      width: max-content !important;
+      min-width: 560px !important;
+      table-layout: auto !important;
+      font-size: 12px !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap col.mitushi-sg-col-size {
+      width: 54px !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap col.mitushi-sg-col-num {
+      width: 82px !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap th {
+      font-size: 10px !important;
+      letter-spacing: 0.07em !important;
+      padding: 9px 10px !important;
+      padding-block: 9px !important;
+      padding-inline: 10px !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap th .mitushi-sg-unit {
+      font-size: 9px;
+      margin-top: 2px;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap th:first-child,
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap td:first-child {
+      padding-inline-start: 12px !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap td {
+      padding: 9px 10px !important;
+      padding-block: 9px !important;
+      padding-inline: 10px !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap td:first-child {
+      font-size: 14px !important;
+      box-shadow: 8px 0 12px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    sht-dialog.mitushi-size-guide .mitushi-size-guide__table-wrap::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+  }
+</style>

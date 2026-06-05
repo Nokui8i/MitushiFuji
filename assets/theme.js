@@ -197,6 +197,9 @@
   }
 
   class SHTDialog extends SHTCustomComponent {
+    static _openCount = 0;
+    static _scrollY = 0;
+
     connectedCallback() {
       this.addEventListener("click", (e) => {
         if (e.target === this || e.target.classList.contains("js-dialog-overlay")) this.close();
@@ -204,8 +207,39 @@
       this.querySelectorAll(".js-dialog-close-btn").forEach((btn) => {
         btn.addEventListener("click", () => this.close());
       });
+      this._onTouchMove = (e) => {
+        if (e.target.closest(".mitushi-size-guide__table-wrap, .js-dialog-body")) return;
+        if (e.target === this) e.preventDefault();
+      };
+      this.addEventListener("touchmove", this._onTouchMove, { passive: false });
       const id = this.id;
       if (id) window[id] = this;
+    }
+    _lockPageScroll() {
+      if (SHTDialog._openCount === 0) {
+        SHTDialog._scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+        document.body.style.position = "fixed";
+        document.body.style.top = `-${SHTDialog._scrollY}px`;
+        document.body.style.left = "0";
+        document.body.style.right = "0";
+        document.body.style.width = "100%";
+        document.documentElement.style.overflow = "hidden";
+      }
+      SHTDialog._openCount += 1;
+      document.body.classList.add("dialog-open");
+    }
+    _unlockPageScroll() {
+      SHTDialog._openCount = Math.max(0, SHTDialog._openCount - 1);
+      if (SHTDialog._openCount === 0) {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.left = "";
+        document.body.style.right = "";
+        document.body.style.width = "";
+        document.documentElement.style.overflow = "";
+        document.body.classList.remove("dialog-open");
+        window.scrollTo(0, SHTDialog._scrollY);
+      }
     }
     open(opener) {
       const body = this.querySelector(".js-dialog-body");
@@ -218,12 +252,12 @@
       }
       this.removeAttribute("hidden");
       this._opener = opener;
-      document.body.classList.add("dialog-open");
+      this._lockPageScroll();
       this.dispatchEvent(new CustomEvent("opening", { detail: { opener }, bubbles: true }));
     }
     close() {
       this.setAttribute("hidden", "");
-      document.body.classList.remove("dialog-open");
+      this._unlockPageScroll();
       this.dispatchEvent(new CustomEvent("closing", { bubbles: true }));
       this._opener?.focus?.();
     }

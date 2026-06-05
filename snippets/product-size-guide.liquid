@@ -1,13 +1,13 @@
-<sht-dialog class="sht-dialog no-focus-visible middle-md bottom-xs center-xs p-fixed left-0 top-0 h-100 w-100 o-auto zi-9" id="dialogSizeGuide{{ size_guide_dialog_id }}" hidden tabindex="-1">
-  <div class="dialog" role="dialog" aria-labelledby="dialogTitle{{ size_guide_dialog_id }}" aria-modal="true">
-    <div class="dialog__content d-flex fd-column h-100">
-      <div class="dialog__header d-flex between-xs middle-xs p-sticky top-0">
-        <h3 class="h5 m-zero" id="dialogTitle{{ size_guide_dialog_id }}">{{ size_guide_heading }}</h3>
-        <button type="button" aria-label="{{- "accessibility.close_modal" | t -}}" class="js-dialog-close-btn btn btn-icon btn-plain btn-large">
+<sht-dialog class="sht-dialog mitushi-size-guide no-focus-visible middle-md bottom-xs center-xs p-fixed left-0 top-0 h-100 w-100 o-auto zi-9" id="dialogSizeGuide{{ size_guide_dialog_id }}" hidden tabindex="-1">
+  <div class="dialog mitushi-size-guide__panel" role="dialog" aria-labelledby="dialogTitle{{ size_guide_dialog_id }}" aria-modal="true">
+    <div class="dialog__content mitushi-size-guide__content d-flex fd-column h-100">
+      <div class="dialog__header mitushi-size-guide__header d-flex between-xs middle-xs p-sticky top-0">
+        <h3 class="mitushi-size-guide__title m-zero" id="dialogTitle{{ size_guide_dialog_id }}">{{ size_guide_heading }}</h3>
+        <button type="button" aria-label="{{- "accessibility.close_modal" | t -}}" class="js-dialog-close-btn mitushi-size-guide__close btn btn-icon btn-plain btn-large">
           {%- render 'icon-close' -%}
         </button>
       </div>
-      <div class="dialog__body js-dialog-body">
+      <div class="dialog__body mitushi-size-guide__body js-dialog-body">
         {%- if size_guide_block.settings.content_source == 'product-metafield' and size_guide_block.settings.product_metafield_name != blank -%}
           {%- liquid
             assign size_guide_metafield_parts = size_guide_block.settings.product_metafield_name | split: '.'
@@ -15,7 +15,7 @@
             assign size_guide_metafield_key = size_guide_metafield_parts | last
             assign size_guide_metafield_value = product.metafields[size_guide_metafield_namespace][size_guide_metafield_key]
           -%}
-          <div class="hide-empty rte">
+          <div class="mitushi-size-guide__table-wrap hide-empty rte">
             {%- if size_guide_metafield_value.type == 'page_reference' -%}
               {{ size_guide_metafield_value.value.content }}
             {%- else -%}
@@ -23,7 +23,7 @@
             {%- endif -%}
           </div>
         {%- elsif size_guide_block.settings.content_source == 'static-page' and size_guide_block.settings.static_page != blank -%}
-          <div class="hide-empty rte">
+          <div class="mitushi-size-guide__table-wrap hide-empty rte">
             {{- size_guide_block.settings.static_page.content -}}
           </div>
         {%- endif -%}
@@ -34,3 +34,56 @@
     </div>
   </div>
 </sht-dialog>
+{% render 'mitushi-size-guide-styles' %}
+<script>
+  (function () {
+    const headerMap = [
+      { match: /size/i, label: 'Size', unit: '' },
+      { match: /height/i, label: 'Height', unit: 'cm' },
+      { match: /weight/i, label: 'Weight', unit: 'kg' },
+      { match: /length/i, label: 'Length', unit: 'cm' },
+      { match: /bust|chest/i, label: 'Bust', unit: 'cm' },
+      { match: /shoulder/i, label: 'Shoulder', unit: 'cm' },
+      { match: /sleeve/i, label: 'Sleeve', unit: 'cm' },
+    ];
+
+    function enhanceSizeGuideTable(dialog) {
+      const wrap = dialog.querySelector('.mitushi-size-guide__table-wrap');
+      const table = wrap && wrap.querySelector('table');
+      if (!table || table.dataset.mitushiEnhanced) return;
+      table.dataset.mitushiEnhanced = 'true';
+
+      const headerRow = table.querySelector('thead tr') || table.querySelector('tr');
+      if (headerRow) {
+        const colgroup = document.createElement('colgroup');
+        Array.from(headerRow.children).forEach((cell, i) => {
+          const col = document.createElement('col');
+          col.className = i === 0 ? 'mitushi-sg-col-size' : 'mitushi-sg-col-num';
+          colgroup.appendChild(col);
+        });
+        if (colgroup.children.length) table.insertBefore(colgroup, table.firstChild);
+      }
+
+      table.querySelectorAll('th').forEach((th) => {
+        const text = th.textContent.replace(/\s+/g, ' ').trim();
+        const rule = headerMap.find((r) => r.match.test(text));
+        if (!rule) return;
+        th.innerHTML = rule.unit
+          ? `${rule.label}<span class="mitushi-sg-unit">${rule.unit}</span>`
+          : rule.label;
+      });
+    }
+
+    function bindDialog(dialog) {
+      if (!dialog || dialog.dataset.mitushiBound) return;
+      dialog.dataset.mitushiBound = 'true';
+      dialog.addEventListener('opening', () => enhanceSizeGuideTable(dialog));
+      enhanceSizeGuideTable(dialog);
+    }
+
+    document.querySelectorAll('sht-dialog.mitushi-size-guide').forEach(bindDialog);
+    document.addEventListener('shopify:section:load', () => {
+      document.querySelectorAll('sht-dialog.mitushi-size-guide').forEach(bindDialog);
+    });
+  })();
+</script>
