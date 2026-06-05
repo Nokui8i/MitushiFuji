@@ -1,300 +1,174 @@
 {% comment %}
-
-  Mitushi Reviews Page — Judge.me Reviews Grid app block only.
-
+  Mitushi Reviews Page — ANIQI-style masonry demo + Judge.me when live.
 {% endcomment %}
-
-
 
 {% render 'mitushi-judgeme-styles' %}
 
-
-
 <style>
-
   .mitushi-reviews-page {
-
     background: var(--ink, #28282b);
-
     color: #f7f7f8;
-
     padding: 32px 0 72px;
-
     min-height: 60vh;
-
   }
-
-
 
   .mitushi-reviews-page__inner {
-
     max-width: 1360px;
-
     margin: 0 auto;
-
     padding: 0 20px;
-
   }
-
-
 
   .mitushi-reviews-page__hero {
-
     text-align: center;
-
     margin-bottom: 36px;
-
     padding-top: 8px;
-
   }
-
-
 
   .mitushi-reviews-page__eyebrow {
-
     display: block;
-
     font-size: 11px;
-
     font-weight: 600;
-
     letter-spacing: 0.28em;
-
     text-transform: uppercase;
-
     color: rgba(204, 19, 42, 0.9);
-
     margin: 0 0 10px;
-
   }
-
-
 
   .mitushi-reviews-page__title {
-
     font-family: var(--font-display), inherit;
-
     font-size: clamp(32px, 4vw, 48px);
-
     font-weight: 800;
-
     letter-spacing: 0.14em;
-
     text-transform: uppercase;
-
     color: #ffffff;
-
     margin: 0;
-
     line-height: 1.05;
-
   }
-
-
 
   .mitushi-reviews-page__widget {
-
     width: 100%;
-
   }
-
-
 
   .mitushi-reviews-page__widget--framed {
-
     background: rgba(255, 255, 255, 0.02);
-
     border: 1px solid rgba(255, 255, 255, 0.06);
-
     border-radius: 12px;
-
     padding: 24px 20px;
-
   }
 
-
-
-  .mitushi-reviews-page__embed-hint {
-
-    margin: 0 0 20px;
-
-    padding: 14px 16px;
-
-    border-radius: 8px;
-
-    border: 1px solid rgba(204, 19, 42, 0.35);
-
-    background: rgba(204, 19, 42, 0.08);
-
-    color: rgba(255, 255, 255, 0.82);
-
-    font-size: 13px;
-
-    line-height: 1.6;
-
+  .mitushi-reviews-page__judgeme {
+    display: none;
   }
 
-
-
-  .mitushi-reviews-page__embed-hint strong {
-
-    color: #fff;
-
+  .mitushi-reviews-page--live .mitushi-reviews-page__judgeme {
+    display: block;
   }
 
-
+  .mitushi-reviews-page--live .mitushi-reviews-page__demo {
+    display: none;
+  }
 
   @media (max-width: 768px) {
-
     .mitushi-reviews-page {
-
       padding: 24px 0 56px;
-
     }
-
-
 
     .mitushi-reviews-page__inner {
-
       padding: 0 16px;
-
     }
-
-
 
     .mitushi-reviews-page__widget--framed {
-
       padding: 16px 12px;
-
     }
-
   }
-
 </style>
 
+{%- liquid
+  assign use_demo = section.settings.show_demo_reviews
+  assign has_app_block = false
+  if section.blocks.size > 0
+    assign has_app_block = true
+  endif
+-%}
 
-
-<section class="mitushi-reviews-page" data-ui-component="Mitushi Reviews Section">
-
+<section
+  class="mitushi-reviews-page{% unless use_demo %} mitushi-reviews-page--live{% endunless %}"
+  data-ui-component="Mitushi Reviews Section"
+>
   <div class="mitushi-reviews-page__inner">
-
     {%- if section.settings.show_heading -%}
-
       <header class="mitushi-reviews-page__hero">
-
         <span class="mitushi-reviews-page__eyebrow">Mitushi</span>
-
         <h1 class="mitushi-reviews-page__title">{{ section.settings.heading | default: 'Reviews' | escape }}</h1>
-
       </header>
-
     {%- endif -%}
 
-
-
-    <div class="mitushi-reviews-page__widget mitushi-judgeme-all-reviews-wrap{% unless section.blocks.size > 0 %} mitushi-reviews-page__widget--framed{% endunless %}">
-
-      {%- if request.design_mode -%}
-
-        <p class="mitushi-reviews-page__embed-hint">
-
-          <strong>Judge.me not showing?</strong>
-
-          Add the <strong>Reviews Grid</strong> app block to this section, then open
-
-          <strong>Theme settings → App embeds</strong> (puzzle icon) and turn <strong>Judge.me</strong> ON.
-
-        </p>
-
+    <div class="mitushi-reviews-page__widget mitushi-judgeme-all-reviews-wrap{% if has_app_block == false and use_demo == false %} mitushi-reviews-page__widget--framed{% endif %}">
+      {%- if use_demo -%}
+        <div class="mitushi-reviews-page__demo">
+          {% render 'mitushi-reviews-demo', section: section %}
+        </div>
       {%- endif -%}
 
-
-
-      {%- if section.blocks.size > 0 -%}
-
-        {%- for block in section.blocks -%}
-
-          <div {{ block.shopify_attributes }}>
-
-            {% render block %}
-
-          </div>
-
-        {%- endfor -%}
-
-      {%- else -%}
-
+      {%- if has_app_block -%}
+        <div class="mitushi-reviews-page__judgeme">
+          {%- for block in section.blocks -%}
+            <div {{ block.shopify_attributes }}>
+              {% render block %}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- elsif use_demo == false -%}
         {% render 'mitushi-judgeme-all-reviews' %}
-
       {%- endif -%}
-
     </div>
-
   </div>
-
 </section>
 
-
-
 {% schema %}
-
 {
-
   "name": "Mitushi Reviews",
-
   "tag": "section",
-
   "class": "mitushi-reviews-section",
-
   "blocks": [
-
     {
-
       "type": "@app"
-
     }
-
   ],
-
   "settings": [
-
     {
-
       "type": "checkbox",
-
-      "id": "show_heading",
-
-      "label": "Show page heading",
-
-      "default": true
-
+      "id": "show_demo_reviews",
+      "label": "Show demo reviews grid",
+      "default": true,
+      "info": "Mitushi ANIQI-style preview with your product photos. Turn OFF when real Judge.me reviews are ready."
     },
-
     {
-
+      "type": "range",
+      "id": "demo_review_count",
+      "label": "Demo review cards",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show page heading",
+      "default": true
+    },
+    {
       "type": "text",
-
       "id": "heading",
-
       "label": "Heading",
-
       "default": "Reviews"
-
     }
-
   ],
-
   "presets": [
-
     {
-
       "name": "Mitushi Reviews"
-
     }
-
   ]
-
 }
-
 {% endschema %}
-
