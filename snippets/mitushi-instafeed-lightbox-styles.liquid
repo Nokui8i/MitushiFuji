@@ -8,23 +8,38 @@
     overflow: hidden !important;
   }
 
+  /* Overlay wrapper (if Instafeed adds one) */
+  body > div:has(.lightbox-instagram),
   body > div:has(> .lightbox-instagram),
-  body > div:has(.lightbox-instagram) {
+  [class*="instafeed"][class*="overlay"],
+  [class*="instafeed"][class*="lightbox"]:not(.lightbox-instagram) {
+    position: fixed !important;
+    inset: 0 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     padding: clamp(16px, 3vw, 32px) !important;
     box-sizing: border-box !important;
+    z-index: 2147483646 !important;
+    pointer-events: none !important;
   }
 
+  body > div:has(.lightbox-instagram) > *,
+  body > div:has(> .lightbox-instagram) > * {
+    pointer-events: auto !important;
+  }
+
+  /* Center the modal itself — overrides Instafeed inline top/left */
   .lightbox-instagram {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
     right: auto !important;
     bottom: auto !important;
-    transform: none !important;
-    margin: 0 auto !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    inset: auto !important;
+    z-index: 2147483647 !important;
     width: min(900px, 94vw) !important;
     max-width: min(900px, 94vw) !important;
     height: auto !important;
