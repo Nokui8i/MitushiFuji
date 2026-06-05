@@ -232,13 +232,6 @@
         "remove_padding_bottom": false
       }
     },
-    "mitushi_product_reviews": {
-      "type": "mitushi-product-reviews",
-      "settings": {
-        "show_heading": true,
-        "heading": "Customer Reviews"
-      }
-    },
     "featured_product_carousel_3zAawn": {
       "type": "featured-product-carousel",
       "custom_css": [
@@ -277,7 +270,6 @@
   },
   "order": [
     "main",
-    "mitushi_product_reviews",
     "collapsible_content_xg6FwX",
     "product-recommendation",
     "featured_product_carousel_3zAawn"
