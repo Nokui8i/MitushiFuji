@@ -1,6 +1,6 @@
 {% comment %}
-  Mitushi Reviews Page — ANIQI-style photo grid via Judge.me Reviews Grid app block.
-  Demo preview available until real reviews arrive.
+  Mitushi Reviews Page — ANIQI-style grid.
+  Theme demo shows until Judge.me Reviews Grid loads real/sample content.
 {% endcomment %}
 
 {% render 'mitushi-judgeme-styles' %}
@@ -46,6 +46,33 @@
     padding: 24px 20px;
   }
 
+  .mitushi-reviews-page__judgeme-slot {
+    min-height: 0;
+  }
+
+  .mitushi-reviews-page__judgeme-slot.is-empty {
+    display: none;
+  }
+
+  .mitushi-reviews-page__demo-fallback.is-hidden {
+    display: none !important;
+  }
+
+  .mitushi-reviews-page__embed-hint {
+    margin: 0 0 20px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(204, 19, 42, 0.35);
+    background: rgba(204, 19, 42, 0.08);
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .mitushi-reviews-page__embed-hint strong {
+    color: #fff;
+  }
+
   @media (max-width: 768px) {
     .mitushi-reviews-page {
       padding: 24px 0 56px;
@@ -61,6 +88,18 @@
   }
 </style>
 
+{%- liquid
+  assign has_judgeme_block = false
+  if section.blocks.size > 0
+    assign has_judgeme_block = true
+  endif
+  assign show_demo = section.settings.show_demo_reviews
+  assign show_demo_fallback = false
+  if show_demo and has_judgeme_block
+    assign show_demo_fallback = true
+  endif
+-%}
+
 <section class="mitushi-reviews-page" data-ui-component="Mitushi Reviews Section">
   <div class="mitushi-reviews-page__inner">
     {%- if section.settings.show_heading -%}
@@ -69,21 +108,75 @@
       </header>
     {%- endif -%}
 
-    <div class="mitushi-reviews-page__widget mitushi-judgeme-all-reviews-wrap{% if section.blocks.size == 0 and section.settings.show_demo_reviews == false %} mitushi-reviews-page__widget--framed{% endif %}">
-      {%- if section.blocks.size > 0 -%}
-        {%- for block in section.blocks -%}
-          <div {{ block.shopify_attributes }}>
-            {% render block %}
-          </div>
-        {%- endfor -%}
-      {%- elsif section.settings.show_demo_reviews -%}
+    <div class="mitushi-reviews-page__widget mitushi-judgeme-all-reviews-wrap{% if has_judgeme_block == false and show_demo == false %} mitushi-reviews-page__widget--framed{% endif %}">
+      {%- if request.design_mode and has_judgeme_block -%}
+        <p class="mitushi-reviews-page__embed-hint">
+          <strong>Judge.me grid empty?</strong>
+          Open <strong>Theme settings → App embeds</strong> (puzzle icon) and turn <strong>Judge.me</strong> ON, then Save.
+          Until then, the theme demo below is shown automatically.
+        </p>
+      {%- endif -%}
+
+      {%- if has_judgeme_block -%}
+        <div class="mitushi-reviews-page__judgeme-slot{% if show_demo_fallback %} is-empty{% endif %}" data-mitushi-judgeme-slot>
+          {%- for block in section.blocks -%}
+            <div {{ block.shopify_attributes }}>
+              {% render block %}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if show_demo and has_judgeme_block == false -%}
         {% render 'mitushi-reviews-demo', section: section %}
-      {%- else -%}
+      {%- elsif show_demo_fallback -%}
+        <div class="mitushi-reviews-page__demo-fallback" data-mitushi-reviews-demo>
+          {% render 'mitushi-reviews-demo', section: section %}
+        </div>
+      {%- elsif has_judgeme_block == false -%}
         {% render 'mitushi-judgeme-all-reviews' %}
       {%- endif -%}
     </div>
   </div>
 </section>
+
+{%- if show_demo_fallback -%}
+  <script>
+    (function () {
+      var slot = document.querySelector('[data-mitushi-judgeme-slot]');
+      var demo = document.querySelector('[data-mitushi-reviews-demo]');
+      if (!slot || !demo) return;
+
+      function slotHasReviews() {
+        if (slot.querySelector('.jdgm-widget, [class*="jdgm-rev"], [class*="jdgm-grid"], [class*="reviews-grid"] img')) {
+          return true;
+        }
+        var text = (slot.textContent || '').replace(/\s+/g, ' ').trim();
+        return slot.offsetHeight > 120 && text.length > 40;
+      }
+
+      function sync() {
+        if (slotHasReviews()) {
+          slot.classList.remove('is-empty');
+          demo.classList.add('is-hidden');
+        } else {
+          slot.classList.add('is-empty');
+          demo.classList.remove('is-hidden');
+        }
+      }
+
+      sync();
+      window.setTimeout(sync, 1200);
+      window.setTimeout(sync, 3500);
+      window.setTimeout(sync, 8000);
+
+      if (window.MutationObserver) {
+        var observer = new MutationObserver(sync);
+        observer.observe(slot, { childList: true, subtree: true, attributes: true });
+      }
+    })();
+  </script>
+{%- endif -%}
 
 {% schema %}
 {
@@ -101,7 +194,7 @@
       "id": "show_demo_reviews",
       "label": "Show demo reviews preview",
       "default": true,
-      "info": "Displays a sample grid like ANIQI until you add the Judge.me Reviews Grid block or real reviews arrive. Turn off when going live."
+      "info": "Shows sample cards when Judge.me has no content yet. Auto-hides once Reviews Grid loads."
     },
     {
       "type": "range",
