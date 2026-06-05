@@ -37,42 +37,11 @@
     },
     "mitushi_categories_1": {
       "type": "mitushi-categories",
-      "blocks": {
-        "cat_1": {
-          "type": "category",
-          "settings": {
-            "collection": "",
-            "title": "Shirts",
-            "japanese": "シャツ"
-          }
-        },
-        "cat_2": {
-          "type": "category",
-          "settings": {
-            "collection": "",
-            "title": "Shorts",
-            "japanese": "ショーツ"
-          }
-        },
-        "cat_3": {
-          "type": "category",
-          "settings": {
-            "collection": "",
-            "title": "Tanks",
-            "japanese": "タンク"
-          }
-        }
-      },
-      "block_order": [
-        "cat_1",
-        "cat_2",
-        "cat_3"
-      ],
       "settings": {
         "subheading": "/ 01 — Collections",
         "heading": "Shop by category",
-        "view_all_label": "View all →",
-        "view_all_link": ""
+        "use_shopify_collections": true,
+        "featured_collections": []
       }
     },
     "mitushi_carousel_1": {
@@ -185,7 +154,7 @@
         "heading": "From Instagram",
         "instagram_link_label_short": "Follow",
         "show_instagram_link": true,
-        "instagram_url": "https://www.instagram.com/",
+        "instagram_url": "https://www.instagram.com/mitushi.studios/",
         "instagram_link_label": "Follow on Instagram",
         "cta_style": "split",
         "show_hero_background": true,

@@ -1,0 +1,61 @@
+{% comment %}
+  Renders one category card from a Shopify collection.
+  Accepts: col_obj, is_big, japanese_label, image_override, block (optional)
+{% endcomment %}
+{%- liquid
+  assign col_url = col_obj.url
+  assign col_title = col_obj.title
+  assign has_image = false
+  assign cat_img = blank
+  assign col_jp = japanese_label
+
+  if image_override != blank
+    assign cat_img = image_override | image_url: width: 1200
+    assign has_image = true
+  elsif col_obj.featured_image != blank
+    assign cat_img = col_obj.featured_image | image_url: width: 1200
+    assign has_image = true
+  elsif col_obj.image != blank
+    assign cat_img = col_obj.image | image_url: width: 1200
+    assign has_image = true
+  elsif col_obj.products.first != blank and col_obj.products.first.featured_image != blank
+    assign cat_img = col_obj.products.first.featured_image | image_url: width: 1200
+    assign has_image = true
+  endif
+-%}
+
+<a
+  href="{{ col_url }}"
+  class="mitushi-category-card{% if is_big %} big{% endif %}"
+  {% if block %}{{ block.shopify_attributes }}{% endif %}
+>
+  <div class="mitushi-category-image-wrapper{% unless has_image %} mitushi-category-image--placeholder{% endunless %}">
+    {%- if has_image -%}
+      <img
+        src="{{ cat_img }}"
+        alt="{{ col_title | escape }}"
+        loading="lazy"
+        class="mitushi-category-image"
+        width="600"
+        height="800"
+      >
+    {%- endif -%}
+  </div>
+  <div class="mitushi-category-overlay"></div>
+  <div class="mitushi-category-content">
+    <div class="mitushi-category-top">
+      {%- if col_jp != blank -%}
+        <span class="mitushi-category-jp">{{ col_jp }}</span>
+      {%- endif -%}
+    </div>
+    <div class="mitushi-category-bottom">
+      <div class="mitushi-category-bottom-row">
+        <h3 class="mitushi-category-name">{{ col_title }}</h3>
+        <svg class="mitushi-category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M7 17L17 7M17 7H7m10 0v10"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="mitushi-category-ring"></div>
+</a>

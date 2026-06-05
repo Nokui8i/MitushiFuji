@@ -70,42 +70,30 @@
     }
   }
 
-  /* Mobile: big card full-width on top, two smaller cards side-by-side below */
+  /* Dynamic grid: first collection featured, rest stack beside / below */
   .mitushi-categories-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: minmax(280px, 68vw) minmax(180px, 44vw);
     gap: 8px;
-  }
-
-  .mitushi-category-card:nth-child(2) {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .mitushi-category-card:nth-child(3) {
-    grid-column: 2;
-    grid-row: 2;
   }
 
   @media (min-width: 768px) {
     .mitushi-categories-grid {
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: 268px 268px;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      grid-auto-rows: minmax(160px, 1fr);
       gap: 12px;
+      min-height: 536px;
     }
 
-    .mitushi-category-card:nth-child(2),
-    .mitushi-category-card:nth-child(3) {
-      grid-column: auto;
-      grid-row: auto;
+    .mitushi-categories-grid--single {
+      grid-template-columns: 1fr;
+      min-height: 420px;
     }
   }
 
   @media (min-width: 1200px) {
     .mitushi-categories-grid {
-      grid-template-rows: 292px 292px;
-      gap: 12px;
+      min-height: 584px;
     }
   }
 
@@ -128,14 +116,31 @@
 
   .mitushi-category-card.big {
     grid-column: 1 / -1;
-    grid-row: 1;
+    min-height: min(68vw, 420px);
   }
 
   @media (min-width: 768px) {
     .mitushi-category-card.big {
-      grid-column: span 2;
-      grid-row: span 2;
+      grid-column: 1;
+      grid-row: 1 / span var(--mitushi-cat-stack, 2);
+      min-height: 0;
     }
+
+    .mitushi-categories-grid--single .mitushi-category-card.big {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .mitushi-category-card:not(.big) {
+      grid-column: 2;
+      min-height: 160px;
+    }
+  }
+
+  .mitushi-category-image--placeholder {
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 30%, rgba(204, 19, 42, 0.18) 0%, transparent 70%),
+      linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
   }
 
   .mitushi-category-image-wrapper {
@@ -320,95 +325,85 @@
         <div>{{ section.settings.subheading | default: '/ 01 — Collections' }}</div>
         <h2>{{ section.settings.heading | default: 'Shop by category' }}</h2>
       </div>
-      {% if section.settings.view_all_label != blank %}
-        <a href="{{ section.settings.view_all_link | default: '#' }}" class="mitushi-categories-view-all">{{ section.settings.view_all_label }}</a>
-      {% endif %}
     </div>
 
-    <div class="mitushi-categories-grid">
-      {% for block in section.blocks %}
-        {%- liquid
-          assign is_big = false
-          if forloop.first
-            assign is_big = true
-          endif
+    {%- liquid
+      assign use_auto_collections = section.settings.use_shopify_collections
+      assign category_count = 0
 
-          assign col_url = '#'
-          assign col_title = block.settings.title
-          assign col_jp = block.settings.japanese
+      if use_auto_collections
+        if section.settings.featured_collections != blank and section.settings.featured_collections.size > 0
+          assign category_count = section.settings.featured_collections.size
+        else
+          for collection in collections
+            unless collection.handle == 'all' or collection.handle == 'frontpage'
+              assign category_count = category_count | plus: 1
+            endunless
+          endfor
+        endif
+      else
+        assign category_count = section.blocks.size
+      endif
 
-          if block.settings.collection != blank
-            assign col_obj = block.settings.collection
-            if col_obj.title == blank and block.settings.collection != blank
-              assign col_obj = collections[block.settings.collection]
-            endif
-          else
-            assign fallback_index = forloop.index0
-            assign count = 0
-            for collection in collections
-              if collection.handle != 'all' and collection.handle != 'frontpage'
-                if count == fallback_index
-                  assign col_obj = collection
-                  break
-                endif
-                assign count = count | plus: 1
+      assign stack_rows = category_count | minus: 1
+      if stack_rows < 1
+        assign stack_rows = 1
+      endif
+    -%}
+
+    {%- if category_count > 0 -%}
+      <div
+        class="mitushi-categories-grid{% if category_count == 1 %} mitushi-categories-grid--single{% endif %}"
+        style="--mitushi-cat-stack: {{ stack_rows }};"
+      >
+        {%- if use_auto_collections -%}
+          {%- if section.settings.featured_collections != blank and section.settings.featured_collections.size > 0 -%}
+            {%- for col_obj in section.settings.featured_collections -%}
+              {%- render 'mitushi-category-card',
+                col_obj: col_obj,
+                is_big: forloop.first,
+                japanese_label: '',
+                image_override: blank
+              -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- assign auto_index = 0 -%}
+            {%- for col_obj in collections -%}
+              {%- unless col_obj.handle == 'all' or col_obj.handle == 'frontpage' -%}
+                {%- render 'mitushi-category-card',
+                  col_obj: col_obj,
+                  is_big: auto_index == 0,
+                  japanese_label: '',
+                  image_override: blank
+                -%}
+                {%- assign auto_index = auto_index | plus: 1 -%}
+              {%- endunless -%}
+            {%- endfor -%}
+          {%- endif -%}
+        {%- else -%}
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign col_obj = blank
+              assign col_jp = block.settings.japanese
+              assign image_override = block.settings.image
+
+              if block.settings.collection != blank
+                assign col_obj = block.settings.collection
               endif
-            endfor
-          endif
-
-          if col_obj == blank
-            continue
-          endif
-
-          if col_obj != blank
-            assign col_url = col_obj.url
-            assign col_title = col_obj.title
-          endif
-
-          if block.settings.image != blank
-            assign cat_img = block.settings.image | img_url: '600x800'
-          elsif block.settings.collection != blank and col_obj.image != blank
-            assign cat_img = col_obj.image | img_url: '600x800'
-          elsif block.settings.collection != blank and col_obj.products.first.featured_image != blank
-            assign cat_img = col_obj.products.first.featured_image | img_url: '600x800'
-          else
-            if forloop.index == 1
-              assign cat_img = 'cat-shirts.jpg' | asset_url
-            elsif forloop.index == 2
-              assign cat_img = 'cat-shorts.jpg' | asset_url
-            else
-              assign cat_img = 'cat-tanks.jpg' | asset_url
-            endif
-          endif
-        -%}
-
-        <a href="{{ col_url }}" class="mitushi-category-card{% if is_big %} big{% endif %}" {{ block.shopify_attributes }}>
-          <div class="mitushi-category-image-wrapper">
-            <img
-              src="{{ cat_img }}"
-              alt="{{ col_title | escape }}"
-              loading="lazy"
-              class="mitushi-category-image"
-            />
-          </div>
-          <div class="mitushi-category-overlay"></div>
-          <div class="mitushi-category-content">
-            <div class="mitushi-category-top">
-              <span class="mitushi-category-jp">{{ col_jp }}</span>
-            </div>
-            <div class="mitushi-category-bottom">
-              <div class="mitushi-category-bottom-row">
-                <h3 class="mitushi-category-name">{{ col_title }}</h3>
-                <svg class="mitushi-category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M7 17L17 7M17 7H7m10 0v10"></path>
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div class="mitushi-category-ring"></div>
-        </a>
-      {% endfor %}
-    </div>
+            -%}
+            {%- if col_obj != blank -%}
+              {%- render 'mitushi-category-card',
+                col_obj: col_obj,
+                is_big: forloop.first,
+                japanese_label: col_jp,
+                image_override: image_override,
+                block: block
+              -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
   </div>
 </section>
 
@@ -429,43 +424,38 @@
       "default": "Shop by category"
     },
     {
-      "type": "text",
-      "id": "view_all_label",
-      "label": "View All Label",
-      "default": "View all →"
+      "type": "checkbox",
+      "id": "use_shopify_collections",
+      "label": "Use Shopify collections",
+      "default": true,
+      "info": "Shows your store collections with images from Shopify. New collections appear automatically."
     },
     {
-      "type": "url",
-      "id": "view_all_link",
-      "label": "View All Link"
+      "type": "collection_list",
+      "id": "featured_collections",
+      "label": "Collections to show",
+      "info": "Optional. Pick and drag to reorder. Leave empty to show all collections."
     }
   ],
   "blocks": [
     {
       "type": "category",
-      "name": "Category",
+      "name": "Category (manual mode)",
       "settings": [
         {
           "type": "collection",
           "id": "collection",
-          "label": "Select Collection"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Fallback/Override Title",
-          "default": "Shirts"
+          "label": "Collection"
         },
         {
           "type": "text",
           "id": "japanese",
-          "label": "Japanese Name",
-          "default": "シャツ"
+          "label": "Japanese label (optional)"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Category Image Override"
+          "label": "Image override (optional)"
         }
       ]
     }
