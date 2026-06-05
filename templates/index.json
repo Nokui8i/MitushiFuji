@@ -41,7 +41,8 @@
         "subheading": "/ 01 — Collections",
         "heading": "Shop by category",
         "use_shopify_collections": true,
-        "featured_collections": []
+        "hero_collection": "shirts",
+        "stack_collections": []
       }
     },
     "mitushi_carousel_1": {

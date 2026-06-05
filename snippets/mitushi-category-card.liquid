@@ -27,7 +27,6 @@
 <a
   href="{{ col_url }}"
   class="mitushi-category-card{% if is_big %} big{% endif %}"
-  {% if is_big and stack_span %}style="--mitushi-cat-span: {{ stack_span }};"{% elsif grid_row and grid_row > 0 %}style="--mitushi-cat-row: {{ grid_row }};"{% endif %}
   {% if block %}{{ block.shopify_attributes }}{% endif %}
 >
   <div class="mitushi-category-image-wrapper{% unless has_image %} mitushi-category-image--placeholder{% endunless %}">

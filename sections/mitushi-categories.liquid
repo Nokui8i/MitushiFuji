@@ -70,8 +70,8 @@
     }
   }
 
-  /* Dynamic grid: first collection featured, rest stack in column 2 */
-  .mitushi-categories-grid {
+  /* Flat grid: 1 big + up to 3 small cards */
+  .mitushi-categories-layout {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
@@ -86,7 +86,7 @@
     color: inherit;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: border-color 0.3s;
-    min-height: 160px;
+    isolation: isolate;
   }
 
   .mitushi-category-card:hover {
@@ -99,49 +99,73 @@
   }
 
   .mitushi-category-card:not(.big) {
-    min-height: min(44vw, 200px);
     aspect-ratio: 1 / 1;
+    min-height: 0;
+  }
+
+  /* Mobile: only 2 small cards below the big one */
+  .mitushi-categories-layout > .mitushi-category-card:nth-child(n+4) {
+    display: none;
   }
 
   @media (min-width: 768px) {
-    .mitushi-categories-grid {
+    .mitushi-categories-layout {
       grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-      grid-template-rows: repeat(var(--mitushi-cat-stack, 2), minmax(160px, 1fr));
+      grid-template-rows: repeat(3, minmax(160px, 1fr));
       gap: 12px;
       min-height: 536px;
     }
 
-    .mitushi-categories-grid--single {
+    .mitushi-categories-layout--single {
       grid-template-columns: 1fr;
+      grid-template-rows: minmax(420px, 1fr);
       min-height: 420px;
     }
 
-    .mitushi-category-card {
-      min-height: 0;
-      height: 100%;
-      aspect-ratio: auto;
+    .mitushi-categories-layout > .mitushi-category-card:nth-child(n+4) {
+      display: block;
     }
 
     .mitushi-category-card.big {
       grid-column: 1;
-      grid-row: 1 / span var(--mitushi-cat-span, var(--mitushi-cat-stack, 2));
-      min-height: 280px;
+      grid-row: 1 / span 3;
+      min-height: 536px;
+      aspect-ratio: auto;
     }
 
-    .mitushi-categories-grid--single .mitushi-category-card.big {
+    .mitushi-categories-layout--single .mitushi-category-card.big {
       grid-column: 1;
+      grid-row: 1;
+      min-height: 420px;
+    }
+
+    .mitushi-category-card:not(.big):nth-child(2) {
+      grid-column: 2;
       grid-row: 1;
     }
 
-    .mitushi-category-card:not(.big) {
+    .mitushi-category-card:not(.big):nth-child(3) {
       grid-column: 2;
-      grid-row: var(--mitushi-cat-row, auto);
+      grid-row: 2;
+    }
+
+    .mitushi-category-card:not(.big):nth-child(4) {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    .mitushi-category-card:not(.big) {
       min-height: 160px;
+      aspect-ratio: auto;
     }
   }
 
   @media (min-width: 1200px) {
-    .mitushi-categories-grid {
+    .mitushi-categories-layout {
+      min-height: 584px;
+    }
+
+    .mitushi-category-card.big {
       min-height: 584px;
     }
   }
@@ -338,83 +362,154 @@
 
     {%- liquid
       assign use_auto_collections = section.settings.use_shopify_collections
-      assign category_count = 0
+      assign max_stack = 3
+      assign hero_col = blank
+      assign stack_count = 0
 
       if use_auto_collections
-        if section.settings.featured_collections != blank and section.settings.featured_collections.size > 0
-          assign category_count = section.settings.featured_collections.size
+        if section.settings.hero_collection != blank
+          assign hero_col = section.settings.hero_collection
+        endif
+
+        if hero_col == blank or hero_col.handle == blank
+          if collections['shirts'] != blank
+            assign hero_col = collections['shirts']
+          endif
+        endif
+
+        if hero_col == blank or hero_col.handle == blank
+          for fallback_col in collections
+            unless fallback_col.handle == 'all' or fallback_col.handle == 'frontpage'
+              assign hero_col = fallback_col
+              break
+            endunless
+          endfor
+        endif
+
+        if section.settings.stack_collections != blank and section.settings.stack_collections.size > 0
+          for stack_col in section.settings.stack_collections
+            if stack_count >= max_stack
+              break
+            endif
+            if hero_col != blank and stack_col.id == hero_col.id
+              continue
+            endif
+            assign stack_count = stack_count | plus: 1
+          endfor
         else
-          for collection in collections
-            unless collection.handle == 'all' or collection.handle == 'frontpage'
-              assign category_count = category_count | plus: 1
+          for stack_col in collections
+            if stack_count >= max_stack
+              break
+            endif
+            unless stack_col.handle == 'all' or stack_col.handle == 'frontpage'
+              if hero_col != blank and stack_col.id == hero_col.id
+                continue
+              endif
+              assign stack_count = stack_count | plus: 1
             endunless
           endfor
         endif
       else
-        assign category_count = section.blocks.size
+        assign manual_blocks_shown = 0
+        for block in section.blocks
+          if block.settings.collection != blank
+            assign manual_blocks_shown = manual_blocks_shown | plus: 1
+          endif
+        endfor
+        if manual_blocks_shown > 4
+          assign manual_blocks_shown = 4
+        endif
+        if manual_blocks_shown > 0
+          assign hero_col = section.blocks.first.settings.collection
+          assign stack_count = manual_blocks_shown | minus: 1
+          if stack_count > max_stack
+            assign stack_count = max_stack
+          endif
+        endif
       endif
 
-      assign stack_rows = category_count | minus: 1
-      if stack_rows < 1
-        assign stack_rows = 1
+      assign category_count = 0
+      if hero_col != blank and hero_col.handle != blank
+        assign category_count = 1 | plus: stack_count
       endif
     -%}
 
-    {%- if category_count > 0 -%}
-      <div
-        class="mitushi-categories-grid{% if category_count == 1 %} mitushi-categories-grid--single{% endif %}"
-        style="--mitushi-cat-stack: {{ stack_rows }};"
-      >
+    {%- if hero_col != blank and hero_col.handle != blank -%}
+      <div class="mitushi-categories-layout{% if stack_count == 0 %} mitushi-categories-layout--single{% endif %}">
         {%- if use_auto_collections -%}
-          {%- if section.settings.featured_collections != blank and section.settings.featured_collections.size > 0 -%}
-            {%- for col_obj in section.settings.featured_collections -%}
+          {%- render 'mitushi-category-card',
+            col_obj: hero_col,
+            is_big: true,
+            japanese_label: '',
+            image_override: blank
+          -%}
+
+          {%- if section.settings.stack_collections != blank and section.settings.stack_collections.size > 0 -%}
+            {%- assign stack_rendered = 0 -%}
+            {%- for stack_col in section.settings.stack_collections -%}
+              {%- if stack_rendered >= max_stack -%}
+                {%- break -%}
+              {%- endif -%}
+              {%- if stack_col.id == hero_col.id -%}
+                {%- continue -%}
+              {%- endif -%}
               {%- render 'mitushi-category-card',
-                col_obj: col_obj,
-                is_big: forloop.first,
-                stack_span: stack_rows,
-                grid_row: forloop.index0,
+                col_obj: stack_col,
+                is_big: false,
                 japanese_label: '',
                 image_override: blank
               -%}
+              {%- assign stack_rendered = stack_rendered | plus: 1 -%}
             {%- endfor -%}
           {%- else -%}
-            {%- assign auto_index = 0 -%}
-            {%- for col_obj in collections -%}
-              {%- unless col_obj.handle == 'all' or col_obj.handle == 'frontpage' -%}
+            {%- assign stack_rendered = 0 -%}
+            {%- for stack_col in collections -%}
+              {%- if stack_rendered >= max_stack -%}
+                {%- break -%}
+              {%- endif -%}
+              {%- unless stack_col.handle == 'all' or stack_col.handle == 'frontpage' -%}
+                {%- if stack_col.id == hero_col.id -%}
+                  {%- continue -%}
+                {%- endif -%}
                 {%- render 'mitushi-category-card',
-                  col_obj: col_obj,
-                  is_big: auto_index == 0,
-                  stack_span: stack_rows,
-                  grid_row: auto_index,
+                  col_obj: stack_col,
+                  is_big: false,
                   japanese_label: '',
                   image_override: blank
                 -%}
-                {%- assign auto_index = auto_index | plus: 1 -%}
+                {%- assign stack_rendered = stack_rendered | plus: 1 -%}
               {%- endunless -%}
             {%- endfor -%}
           {%- endif -%}
         {%- else -%}
-          {%- for block in section.blocks -%}
-            {%- liquid
-              assign col_obj = blank
-              assign col_jp = block.settings.japanese
-              assign image_override = block.settings.image
+          {%- assign hero_block = section.blocks.first -%}
+          {%- render 'mitushi-category-card',
+            col_obj: hero_col,
+            is_big: true,
+            japanese_label: hero_block.settings.japanese,
+            image_override: hero_block.settings.image,
+            block: hero_block
+          -%}
 
-              if block.settings.collection != blank
-                assign col_obj = block.settings.collection
-              endif
-            -%}
-            {%- if col_obj != blank -%}
-              {%- render 'mitushi-category-card',
-                col_obj: col_obj,
-                is_big: forloop.first,
-                stack_span: stack_rows,
-                grid_row: forloop.index0,
-                japanese_label: col_jp,
-                image_override: image_override,
-                block: block
-              -%}
+          {%- assign manual_rendered = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if manual_rendered >= max_stack -%}
+              {%- break -%}
             {%- endif -%}
+            {%- if forloop.first -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- if block.settings.collection == blank -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- render 'mitushi-category-card',
+              col_obj: block.settings.collection,
+              is_big: false,
+              japanese_label: block.settings.japanese,
+              image_override: block.settings.image,
+              block: block
+            -%}
+            {%- assign manual_rendered = manual_rendered | plus: 1 -%}
           {%- endfor -%}
         {%- endif -%}
       </div>
@@ -443,13 +538,19 @@
       "id": "use_shopify_collections",
       "label": "Use Shopify collections",
       "default": true,
-      "info": "Shows your store collections with images from Shopify. New collections appear automatically."
+      "info": "Shows up to 4 collections: 1 large + 3 small. Extra collections are hidden to keep the layout fixed."
+    },
+    {
+      "type": "collection",
+      "id": "hero_collection",
+      "label": "Large category",
+      "info": "Shown in the big left card (e.g. Shirts). Defaults to Shirts if empty."
     },
     {
       "type": "collection_list",
-      "id": "featured_collections",
-      "label": "Collections to show",
-      "info": "Optional. Pick and drag to reorder. Leave empty to show all collections."
+      "id": "stack_collections",
+      "label": "Small categories (max 3)",
+      "info": "Up to 3 collections for the right column. Drag to reorder. Leave empty to auto-fill from your other collections."
     }
   ],
   "blocks": [
