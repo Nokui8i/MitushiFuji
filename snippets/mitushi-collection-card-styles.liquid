@@ -51,23 +51,48 @@
     display: none !important;
   }
 
-  body.template-collection .main-collection-product sht-image-atf img,
-  body.template-search sht-srch sht-image-atf img {
+  /* Only force visibility on the primary gallery image (not the hover swap layer) */
+  body.template-collection .main-collection-product .product__image-first sht-image-atf img,
+  body.template-search sht-srch .product__image-first sht-image-atf img {
     opacity: 1 !important;
     visibility: visible !important;
   }
 
-  body.template-collection .main-collection-product .product-card .card__media .media,
-  body.template-collection .main-collection-product .product-card .card__media img,
-  body.template-search sht-srch .product-card .card__media .media,
-  body.template-search sht-srch .product-card .card__media img {
+  /* card--2-images: second media sits on top — keep hidden until hover */
+  body.template-collection .main-collection-product .card--2-images .product__image-second .media,
+  body.template-collection .main-collection-product .card--2-images .product__image-second img,
+  body.template-search sht-srch .card--2-images .product__image-second .media,
+  body.template-search sht-srch .card--2-images .product__image-second img {
+    opacity: 0 !important;
+  }
+
+  body.template-collection .main-collection-product .product-card.card--2-images:hover .product__image-first .media,
+  body.template-collection .main-collection-product .product-card.card--2-images:hover .product__image-first img,
+  body.template-search sht-srch .product-card.card--2-images:hover .product__image-first .media,
+  body.template-search sht-srch .product-card.card--2-images:hover .product__image-first img {
+    opacity: 0 !important;
+  }
+
+  body.template-collection .main-collection-product .product-card.card--2-images:hover .product__image-second .media,
+  body.template-collection .main-collection-product .product-card.card--2-images:hover .product__image-second img,
+  body.template-search sht-srch .product-card.card--2-images:hover .product__image-second .media,
+  body.template-search sht-srch .product-card.card--2-images:hover .product__image-second img {
+    opacity: 1 !important;
+    transform: scale(1.05);
+    filter: brightness(1.05);
+  }
+
+  body.template-collection .main-collection-product .product-card:not(.card--2-images) .card__media .media,
+  body.template-collection .main-collection-product .product-card:not(.card--2-images) .card__media img,
+  body.template-search sht-srch .product-card:not(.card--2-images) .card__media .media,
+  body.template-search sht-srch .product-card:not(.card--2-images) .card__media img {
     transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), filter 0.5s ease;
   }
 
-  body.template-collection .main-collection-product .product-card:hover .card__media .media,
-  body.template-collection .main-collection-product .product-card:hover .card__media img,
-  body.template-search sht-srch .product-card:hover .card__media .media,
-  body.template-search sht-srch .product-card:hover .card__media img {
+  body.template-collection .main-collection-product .product-card:not(.card--2-images):hover .card__media .media,
+  body.template-collection .main-collection-product .product-card:not(.card--2-images):hover .card__media img,
+  body.template-search sht-srch .product-card:not(.card--2-images):hover .card__media .media,
+  body.template-search sht-srch .product-card:not(.card--2-images):hover .card__media img {
     transform: scale(1.05);
     filter: brightness(1.05);
   }
