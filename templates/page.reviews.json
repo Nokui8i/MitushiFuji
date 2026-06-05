@@ -12,6 +12,8 @@
     "reviews": {
       "type": "mitushi-reviews",
       "settings": {
+        "show_demo_reviews": true,
+        "demo_review_count": 8,
         "show_heading": false,
         "heading": "Reviews"
       }

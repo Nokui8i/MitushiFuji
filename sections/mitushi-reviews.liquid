@@ -1,6 +1,6 @@
 {% comment %}
   Mitushi Reviews Page — ANIQI-style photo grid via Judge.me Reviews Grid app block.
-  Reviews are collected by email after purchase, not written on this page.
+  Demo preview available until real reviews arrive.
 {% endcomment %}
 
 {% render 'mitushi-judgeme-styles' %}
@@ -46,20 +46,6 @@
     padding: 24px 20px;
   }
 
-  .mitushi-reviews-page__setup {
-    text-align: center;
-    padding: 40px 24px;
-    border: 1px dashed rgba(255, 255, 255, 0.14);
-    border-radius: 12px;
-    color: rgba(255, 255, 255, 0.55);
-    font-size: 14px;
-    line-height: 1.75;
-  }
-
-  .mitushi-reviews-page__setup strong {
-    color: #fff;
-  }
-
   @media (max-width: 768px) {
     .mitushi-reviews-page {
       padding: 24px 0 56px;
@@ -67,6 +53,10 @@
 
     .mitushi-reviews-page__inner {
       padding: 0 16px;
+    }
+
+    .mitushi-reviews-page__widget--framed {
+      padding: 16px 12px;
     }
   }
 </style>
@@ -79,18 +69,17 @@
       </header>
     {%- endif -%}
 
-    <div class="mitushi-reviews-page__widget mitushi-judgeme-all-reviews-wrap{% unless section.blocks.size > 0 %} mitushi-reviews-page__widget--framed{% endunless %}">
+    <div class="mitushi-reviews-page__widget mitushi-judgeme-all-reviews-wrap{% if section.blocks.size == 0 and section.settings.show_demo_reviews == false %} mitushi-reviews-page__widget--framed{% endif %}">
       {%- if section.blocks.size > 0 -%}
         {%- for block in section.blocks -%}
           <div {{ block.shopify_attributes }}>
             {% render block %}
           </div>
         {%- endfor -%}
+      {%- elsif section.settings.show_demo_reviews -%}
+        {% render 'mitushi-reviews-demo', section: section %}
       {%- else -%}
         {% render 'mitushi-judgeme-all-reviews' %}
-        <div class="mitushi-reviews-page__setup" hidden>
-          Add the Judge.me <strong>Reviews Grid</strong> app block to this section in the theme editor.
-        </div>
       {%- endif -%}
     </div>
   </div>
@@ -109,10 +98,25 @@
   "settings": [
     {
       "type": "checkbox",
+      "id": "show_demo_reviews",
+      "label": "Show demo reviews preview",
+      "default": true,
+      "info": "Displays a sample grid like ANIQI until you add the Judge.me Reviews Grid block or real reviews arrive. Turn off when going live."
+    },
+    {
+      "type": "range",
+      "id": "demo_review_count",
+      "label": "Demo review cards",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
       "id": "show_heading",
       "label": "Show page heading",
-      "default": false,
-      "info": "ANIQI-style pages usually show only the review count inside the widget."
+      "default": false
     },
     {
       "type": "text",
