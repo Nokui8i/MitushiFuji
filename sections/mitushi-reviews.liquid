@@ -20,37 +20,18 @@
 
   .mitushi-reviews-page__hero {
     text-align: center;
-    margin-bottom: 48px;
-  }
-
-  .mitushi-reviews-page__eyebrow {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: #cc132a;
-    margin-bottom: 12px;
+    margin-bottom: 40px;
   }
 
   .mitushi-reviews-page__title {
     font-family: var(--font-display), inherit;
-    font-size: clamp(36px, 5vw, 52px);
+    font-size: clamp(32px, 4.5vw, 44px);
     font-weight: 800;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: #ffffff;
-    margin: 0 0 12px;
-    line-height: 1.05;
-  }
-
-  .mitushi-reviews-page__subtitle {
-    font-size: 15px;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.6);
-    max-width: 520px;
-    margin: 0 auto;
-    letter-spacing: 0.02em;
+    margin: 0;
+    line-height: 1.1;
   }
 
   .mitushi-reviews-page__widget {
@@ -90,15 +71,9 @@
 <section class="mitushi-reviews-page" data-ui-component="Mitushi Reviews Section">
   <div class="mitushi-reviews-page__inner">
     <header class="mitushi-reviews-page__hero">
-      {%- if section.settings.eyebrow != blank -%}
-        <span class="mitushi-reviews-page__eyebrow">{{ section.settings.eyebrow }}</span>
-      {%- endif -%}
       <h1 class="mitushi-reviews-page__title">
-        {{ section.settings.heading | default: page.title | escape }}
+        {{ section.settings.heading | default: 'Reviews' | escape }}
       </h1>
-      {%- if section.settings.subtitle != blank -%}
-        <p class="mitushi-reviews-page__subtitle">{{ section.settings.subtitle }}</p>
-      {%- endif -%}
     </header>
 
     <div class="mitushi-reviews-page__widget mitushi-judgeme-all-reviews-wrap">
@@ -126,21 +101,9 @@
   "settings": [
     {
       "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Customer love"
-    },
-    {
-      "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Reviews & Testimonials"
-    },
-    {
-      "type": "textarea",
-      "id": "subtitle",
-      "label": "Subtitle",
-      "default": "Real feedback from our community. See what customers are saying about Mitushi."
+      "default": "Reviews"
     }
   ],
   "presets": [

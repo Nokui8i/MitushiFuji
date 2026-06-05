@@ -12,9 +12,7 @@
     "reviews": {
       "type": "mitushi-reviews",
       "settings": {
-        "eyebrow": "Customer love",
-        "heading": "Reviews & Testimonials",
-        "subtitle": "Real feedback from our community. See what customers are saying about Mitushi."
+        "heading": "Reviews"
       }
     }
   },
