@@ -1,0 +1,1059 @@
+{%- liquid
+  assign form_id = 'mitushi-waitlist-' | append: section.id
+  assign instagram_url = section.settings.instagram_url
+  if instagram_url == blank
+    assign instagram_url = settings.social_instagram_link
+  endif
+-%}
+
+<style>
+  .mitushi-waitlist {
+    position: relative;
+    min-height: 100svh;
+    overflow: hidden;
+    background-color: var(--ink);
+    color: var(--bone);
+    font-family: var(--font-sans);
+  }
+
+  .mitushi-waitlist__grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    pointer-events: none;
+    background-image: linear-gradient(var(--bone) 1px, transparent 1px), linear-gradient(90deg, var(--bone) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+  }
+
+  .mitushi-waitlist__glow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 80vmin;
+    height: 80vmin;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    opacity: 0.18;
+    filter: blur(64px);
+    pointer-events: none;
+    background: radial-gradient(circle, var(--crimson) 0%, transparent 60%);
+  }
+
+  .mitushi-waitlist__ghost {
+    pointer-events: none;
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: clamp(8rem, 28vw, 22rem);
+    line-height: 0.85;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--bone);
+    opacity: 0.08;
+    user-select: none;
+  }
+
+  .mitushi-waitlist__badge-left,
+  .mitushi-waitlist__badge-right {
+    position: absolute;
+    top: 24px;
+    z-index: 20;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(244, 244, 244, 0.55);
+  }
+
+  .mitushi-waitlist__badge-left {
+    inset-inline-start: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mitushi-waitlist__badge-right {
+    inset-inline-end: 24px;
+  }
+
+  .mitushi-waitlist__badge-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--crimson);
+    flex-shrink: 0;
+  }
+
+  .mitushi-waitlist__jp {
+    pointer-events: none;
+    position: absolute;
+    inset-inline-end: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    font-family: var(--font-jp);
+    font-size: 12px;
+    letter-spacing: 0.6em;
+    color: rgba(244, 244, 244, 0.4);
+    writing-mode: vertical-rl;
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-waitlist__jp {
+      display: block;
+    }
+  }
+
+  .mitushi-waitlist__wordmark {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 56px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  @media (min-width: 640px) {
+    .mitushi-waitlist__wordmark {
+      padding-top: 40px;
+    }
+  }
+
+  .mitushi-waitlist__wordmark-text {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .mitushi-waitlist__main {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media (min-width: 640px) {
+    .mitushi-waitlist__main {
+      padding-inline: 32px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-waitlist__main {
+      padding-top: 56px;
+    }
+  }
+
+  .mitushi-waitlist__hero-grid {
+    width: 100%;
+    display: grid;
+    gap: 48px;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-waitlist__hero-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+    }
+  }
+
+  .mitushi-waitlist__copy {
+    text-align: center;
+    animation: mitushi-waitlist-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-waitlist__copy {
+      text-align: start;
+    }
+  }
+
+  .mitushi-waitlist__live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(40, 40, 43, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .mitushi-waitlist__live-dot-wrap {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+  }
+
+  .mitushi-waitlist__live-dot-ping {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--crimson);
+    opacity: 0.75;
+    animation: mitushi-waitlist-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .mitushi-waitlist__live-dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--crimson);
+  }
+
+  .mitushi-waitlist__live-text {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(244, 244, 244, 0.9);
+  }
+
+  .mitushi-waitlist__title {
+    margin: 24px 0 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 0.88;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    font-size: clamp(3rem, 9vw, 6.5rem);
+  }
+
+  .mitushi-waitlist__title-crimson {
+    color: var(--crimson);
+    display: block;
+  }
+
+  .mitushi-waitlist__desc {
+    margin: 20px auto 0;
+    max-width: 28rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(244, 244, 244, 0.65);
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-waitlist__desc {
+      margin-inline: 0;
+    }
+  }
+
+  .mitushi-waitlist__form-wrap {
+    margin-top: 28px;
+    max-width: 28rem;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-waitlist__form-wrap {
+      margin-inline: 0;
+    }
+  }
+
+  .mitushi-waitlist__form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  @media (min-width: 640px) {
+    .mitushi-waitlist__form-row {
+      flex-direction: row;
+    }
+  }
+
+  .mitushi-waitlist__input {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(40, 40, 43, 0.6);
+    color: var(--bone);
+    font-size: 16px;
+    font-family: var(--font-sans);
+    outline: none;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .mitushi-waitlist__input::placeholder {
+    color: rgba(244, 244, 244, 0.45);
+  }
+
+  .mitushi-waitlist__input:focus {
+    border-color: var(--crimson);
+    box-shadow: 0 0 0 2px rgba(204, 19, 42, 0.35);
+  }
+
+  .mitushi-waitlist__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    padding: 0 24px;
+    border: none;
+    border-radius: 6px;
+    background: var(--crimson);
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: filter 0.2s, box-shadow 0.2s, transform 0.15s;
+  }
+
+  .mitushi-waitlist__submit:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 30px -6px rgba(204, 19, 42, 0.8);
+  }
+
+  .mitushi-waitlist__submit:active {
+    transform: scale(0.98);
+  }
+
+  .mitushi-waitlist__fine-print {
+    margin-top: 12px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: rgba(244, 244, 244, 0.5);
+  }
+
+  .mitushi-waitlist__error {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--crimson);
+  }
+
+  .mitushi-waitlist__success {
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(204, 19, 42, 0.4);
+    background: rgba(204, 19, 42, 0.1);
+    text-align: start;
+  }
+
+  .mitushi-waitlist__success-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bone);
+  }
+
+  .mitushi-waitlist__success-desc {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: rgba(244, 244, 244, 0.65);
+  }
+
+  .mitushi-waitlist__chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-waitlist__chips {
+      justify-content: flex-start;
+    }
+  }
+
+  .mitushi-waitlist__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(40, 40, 43, 0.4);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: rgba(244, 244, 244, 0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .mitushi-waitlist__chip svg {
+    width: 14px;
+    height: 14px;
+    color: var(--crimson);
+    flex-shrink: 0;
+  }
+
+  .mitushi-waitlist__stage {
+    position: relative;
+    width: 100%;
+    max-width: 28rem;
+    margin-inline: auto;
+    aspect-ratio: 4 / 5;
+    perspective: 1200px;
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-waitlist__stage {
+      display: block;
+    }
+  }
+
+  .mitushi-waitlist__panel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(40, 40, 43, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transform-style: preserve-3d;
+    transition: transform 200ms ease-out;
+    will-change: transform;
+  }
+
+  .mitushi-waitlist__panel-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(120% 80% at 30% 20%, rgba(204, 19, 42, 0.35), transparent 60%),
+      linear-gradient(160deg, #1b1b1d 0%, #28282b 60%, #131315 100%);
+  }
+
+  .mitushi-waitlist__panel-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 70%;
+    height: 70%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 52%, rgba(204, 19, 42, 0.55) 55%, transparent 62%);
+    filter: blur(8px);
+    pointer-events: none;
+  }
+
+  .mitushi-waitlist__panel-texture {
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+    mix-blend-mode: overlay;
+    background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4px);
+    pointer-events: none;
+  }
+
+  .mitushi-waitlist__panel-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+    background-image: linear-gradient(var(--bone) 1px, transparent 1px), linear-gradient(90deg, var(--bone) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .mitushi-waitlist__float-badge {
+    position: absolute;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: transform 200ms ease-out;
+  }
+
+  .mitushi-waitlist__float-badge--tl {
+    inset-inline-start: 20px;
+    top: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(40, 40, 43, 0.6);
+  }
+
+  .mitushi-waitlist__float-badge--br {
+    inset-inline-end: 20px;
+    bottom: 20px;
+    border: 1px solid rgba(204, 19, 42, 0.4);
+    background: rgba(204, 19, 42, 0.1);
+  }
+
+  .mitushi-waitlist__panel-kanji {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 22vmin;
+    line-height: 1;
+    color: rgba(244, 244, 244, 0.05);
+    pointer-events: none;
+  }
+
+  .mitushi-waitlist__mobile-panel {
+    position: relative;
+    width: 100%;
+    max-width: 24rem;
+    height: 160px;
+    margin-inline: auto;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(40, 40, 43, 0.4);
+  }
+
+  @media (min-width: 768px) {
+    .mitushi-waitlist__mobile-panel {
+      display: none;
+    }
+  }
+
+  .mitushi-waitlist__mobile-panel-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(80% 80% at 50% 30%, rgba(204, 19, 42, 0.35), transparent 65%),
+      linear-gradient(160deg, #1b1b1d, #28282b);
+  }
+
+  .mitushi-waitlist__mobile-panel-inner {
+    position: relative;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  .mitushi-waitlist__mobile-kanji {
+    font-family: var(--font-jp);
+    font-size: 1.875rem;
+    color: rgba(244, 244, 244, 0.8);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .mitushi-waitlist__steps {
+    width: 100%;
+    max-width: 56rem;
+    margin-top: 80px;
+  }
+
+  .mitushi-waitlist__steps-title {
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(244, 244, 244, 0.55);
+  }
+
+  .mitushi-waitlist__steps-list {
+    display: grid;
+    gap: 16px;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .mitushi-waitlist__steps-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .mitushi-waitlist__step {
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(40, 40, 43, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .mitushi-waitlist__step-num {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--crimson);
+    line-height: 1;
+  }
+
+  .mitushi-waitlist__step-text {
+    margin-top: 4px;
+    font-size: 14px;
+    color: rgba(244, 244, 244, 0.9);
+    line-height: 1.5;
+  }
+
+  .mitushi-waitlist__footer {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px 24px;
+    font-size: 11px;
+    color: rgba(244, 244, 244, 0.55);
+  }
+
+  @media (min-width: 640px) {
+    .mitushi-waitlist__footer {
+      padding-inline: 32px;
+    }
+  }
+
+  .mitushi-waitlist__ig {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .mitushi-waitlist__ig:hover {
+    color: var(--crimson);
+  }
+
+  .mitushi-waitlist__ig svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  @keyframes mitushi-waitlist-rise {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes mitushi-waitlist-ping {
+    75%, 100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+</style>
+
+<section class="mitushi-waitlist" id="mitushi-waitlist-{{ section.id }}">
+  <div class="mitushi-waitlist__grid" aria-hidden="true"></div>
+  <div class="mitushi-waitlist__glow" aria-hidden="true"></div>
+  <div class="mitushi-waitlist__ghost" aria-hidden="true">{{ section.settings.ghost_text | default: 'MITUSHI' }}</div>
+
+  <div class="mitushi-waitlist__badge-left">
+    <span class="mitushi-waitlist__badge-dot" aria-hidden="true"></span>
+    {{ section.settings.badge_left | default: 'DROP 01 · IN PRODUCTION' }}
+  </div>
+  <div class="mitushi-waitlist__badge-right">{{ section.settings.badge_right | default: 'TOKYO — USA' }}</div>
+
+  <div class="mitushi-waitlist__jp" aria-hidden="true">{{ section.settings.vertical_jp | default: '匠 · 二〇二六' }}</div>
+
+  <a href="{{ routes.root_url }}" class="mitushi-waitlist__wordmark" aria-label="{{ shop.name }}">
+    <span class="mitushi-waitlist__wordmark-text">{{ section.settings.wordmark | default: 'MITUSHI' }}</span>
+  </a>
+
+  <div class="mitushi-waitlist__main">
+    <div class="mitushi-waitlist__hero-grid">
+      <div class="mitushi-waitlist__copy">
+        <div class="mitushi-waitlist__live-badge">
+          <span class="mitushi-waitlist__live-dot-wrap" aria-hidden="true">
+            <span class="mitushi-waitlist__live-dot-ping"></span>
+            <span class="mitushi-waitlist__live-dot"></span>
+          </span>
+          <span class="mitushi-waitlist__live-text">{{ section.settings.live_badge | default: 'DROP 01 — COMING SOON' }}</span>
+        </div>
+
+        <h1 class="mitushi-waitlist__title">
+          <span class="mitushi-waitlist__title-line">{{ section.settings.title_line_1 | default: 'Wear the' }}</span>
+          <span class="mitushi-waitlist__title-crimson">{{ section.settings.title_line_2 | default: 'Legend' }}</span>
+          <span class="mitushi-waitlist__title-line">{{ section.settings.title_line_3 | default: 'In Silence' }}</span>
+        </h1>
+
+        <p class="mitushi-waitlist__desc">{{ section.settings.description | default: 'First drop in production. Join the list for early access — no payment required.' }}</p>
+
+        <div class="mitushi-waitlist__form-wrap">
+          {%- form 'customer', id: form_id, class: 'mitushi-waitlist__form' -%}
+            <input type="hidden" name="contact[tags]" value="{{ section.settings.form_tags | default: 'newsletter, waitlist, drop-01' }}">
+
+            {%- if form.posted_successfully? -%}
+              <div class="mitushi-waitlist__success" role="status">
+                <div class="mitushi-waitlist__success-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                  {{ section.settings.success_title | default: "You're on the list." }}
+                </div>
+                <p class="mitushi-waitlist__success-desc">{{ section.settings.success_message | default: "We'll email you before anyone else." }}</p>
+              </div>
+            {%- else -%}
+              <div class="mitushi-waitlist__form-row">
+                <label class="visually-hidden" for="{{ form_id }}-email">{{ 'general.newsletter.label' | t }}</label>
+                <input
+                  id="{{ form_id }}-email"
+                  class="mitushi-waitlist__input"
+                  type="email"
+                  name="contact[email]"
+                  value="{{ form.email }}"
+                  placeholder="{{ section.settings.email_placeholder | default: 'Enter your email' }}"
+                  autocomplete="email"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  required
+                  {% if form.errors %}aria-invalid="true" aria-describedby="{{ form_id }}-error"{% endif %}
+                >
+                <button type="submit" class="mitushi-waitlist__submit" name="commit">
+                  {{ section.settings.button_label | default: 'Get Early Access' }}
+                  <span aria-hidden="true">→</span>
+                </button>
+              </div>
+
+              {%- if form.errors -%}
+                <p class="mitushi-waitlist__error" id="{{ form_id }}-error" role="alert">
+                  {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+                </p>
+              {%- endif -%}
+
+              <p class="mitushi-waitlist__fine-print">{{ section.settings.fine_print | default: 'No spam. Unsubscribe anytime. Launch updates only.' }}</p>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+
+        <ul class="mitushi-waitlist__chips" aria-label="Benefits">
+          <li class="mitushi-waitlist__chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            {{ section.settings.chip_1 | default: 'No payment' }}
+          </li>
+          <li class="mitushi-waitlist__chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            {{ section.settings.chip_2 | default: 'Early access first' }}
+          </li>
+          <li class="mitushi-waitlist__chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m12 3-1.9 5.8H4l4.9 3.6-1.9 5.8L12 14.6l5 3.8-1.9-5.8L20 8.8h-6.1L12 3z"/></svg>
+            {{ section.settings.chip_3 | default: 'Limited drop' }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="mitushi-waitlist__stage" data-waitlist-stage>
+        <div class="mitushi-waitlist__panel" data-waitlist-panel>
+          <div class="mitushi-waitlist__panel-bg" aria-hidden="true"></div>
+          <div class="mitushi-waitlist__panel-ring" aria-hidden="true"></div>
+          <div class="mitushi-waitlist__panel-texture" aria-hidden="true"></div>
+          <div class="mitushi-waitlist__panel-grid" aria-hidden="true"></div>
+          <div class="mitushi-waitlist__float-badge mitushi-waitlist__float-badge--tl" data-waitlist-badge="1">{{ section.settings.float_badge_1 | default: 'LIMITED / TBA' }}</div>
+          <div class="mitushi-waitlist__float-badge mitushi-waitlist__float-badge--br" data-waitlist-badge="2">{{ section.settings.float_badge_2 | default: 'DROP 01 · 夢' }}</div>
+          <div class="mitushi-waitlist__panel-kanji" aria-hidden="true">{{ section.settings.panel_kanji | default: '夢' }}</div>
+        </div>
+      </div>
+
+      <div class="mitushi-waitlist__mobile-panel" aria-hidden="true">
+        <div class="mitushi-waitlist__mobile-panel-bg"></div>
+        <div class="mitushi-waitlist__mobile-panel-inner">
+          <span>{{ section.settings.float_badge_1 | default: 'LIMITED / TBA' }}</span>
+          <span class="mitushi-waitlist__mobile-kanji">{{ section.settings.panel_kanji | default: '夢' }}</span>
+          <span>DROP 01</span>
+        </div>
+      </div>
+    </div>
+
+    {%- if section.settings.show_steps -%}
+      <section class="mitushi-waitlist__steps" aria-labelledby="waitlist-steps-{{ section.id }}">
+        <h2 class="mitushi-waitlist__steps-title" id="waitlist-steps-{{ section.id }}">{{ section.settings.steps_heading | default: 'WHAT HAPPENS NEXT' }}</h2>
+        <ol class="mitushi-waitlist__steps-list">
+          <li class="mitushi-waitlist__step">
+            <div class="mitushi-waitlist__step-num">01</div>
+            <div class="mitushi-waitlist__step-text">{{ section.settings.step_1 | default: 'You join the list' }}</div>
+          </li>
+          <li class="mitushi-waitlist__step">
+            <div class="mitushi-waitlist__step-num">02</div>
+            <div class="mitushi-waitlist__step-text">{{ section.settings.step_2 | default: 'We email you 24h before launch' }}</div>
+          </li>
+          <li class="mitushi-waitlist__step">
+            <div class="mitushi-waitlist__step-num">03</div>
+            <div class="mitushi-waitlist__step-text">{{ section.settings.step_3 | default: 'You get first access to Drop 01' }}</div>
+          </li>
+        </ol>
+      </section>
+    {%- endif -%}
+  </div>
+
+  <footer class="mitushi-waitlist__footer">
+    <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}</span>
+    {%- if instagram_url != blank and instagram_url != '#' -%}
+      <a href="{{ instagram_url }}" class="mitushi-waitlist__ig" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
+    {%- endif -%}
+  </footer>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('mitushi-waitlist-{{ section.id }}');
+    if (!root) return;
+
+    var stage = root.querySelector('[data-waitlist-stage]');
+    var panel = root.querySelector('[data-waitlist-panel]');
+    var badge1 = root.querySelector('[data-waitlist-badge="1"]');
+    var badge2 = root.querySelector('[data-waitlist-badge="2"]');
+    if (!stage || !panel) return;
+
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
+    stage.addEventListener('mousemove', function (e) {
+      var r = stage.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width - 0.5;
+      var py = (e.clientY - r.top) / r.height - 0.5;
+      panel.style.transform = 'rotateX(' + (py * -8) + 'deg) rotateY(' + (px * 12) + 'deg)';
+      if (badge1) badge1.style.transform = 'translate3d(' + (px * 20) + 'px, ' + (py * 20) + 'px, 60px)';
+      if (badge2) badge2.style.transform = 'translate3d(' + (px * 28) + 'px, ' + (py * 28) + 'px, 80px)';
+    });
+
+    stage.addEventListener('mouseleave', function () {
+      panel.style.transform = '';
+      if (badge1) badge1.style.transform = '';
+      if (badge2) badge2.style.transform = '';
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Mitushi Waitlist",
+  "tag": "section",
+  "class": "mitushi-waitlist-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Branding"
+    },
+    {
+      "type": "text",
+      "id": "wordmark",
+      "label": "Wordmark",
+      "default": "MITUSHI"
+    },
+    {
+      "type": "text",
+      "id": "ghost_text",
+      "label": "Ghost background text",
+      "default": "MITUSHI"
+    },
+    {
+      "type": "text",
+      "id": "badge_left",
+      "label": "Top left badge",
+      "default": "DROP 01 · IN PRODUCTION"
+    },
+    {
+      "type": "text",
+      "id": "badge_right",
+      "label": "Top right badge",
+      "default": "TOKYO — USA"
+    },
+    {
+      "type": "text",
+      "id": "vertical_jp",
+      "label": "Vertical Japanese accent",
+      "default": "匠 · 二〇二六"
+    },
+    {
+      "type": "header",
+      "content": "Hero copy"
+    },
+    {
+      "type": "text",
+      "id": "live_badge",
+      "label": "Live badge",
+      "default": "DROP 01 — COMING SOON"
+    },
+    {
+      "type": "text",
+      "id": "title_line_1",
+      "label": "Title line 1",
+      "default": "Wear the"
+    },
+    {
+      "type": "text",
+      "id": "title_line_2",
+      "label": "Title line 2 (crimson)",
+      "default": "Legend"
+    },
+    {
+      "type": "text",
+      "id": "title_line_3",
+      "label": "Title line 3",
+      "default": "In Silence"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "First drop in production. Join the list for early access — no payment required."
+    },
+    {
+      "type": "header",
+      "content": "Email form"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Get Early Access"
+    },
+    {
+      "type": "text",
+      "id": "fine_print",
+      "label": "Fine print",
+      "default": "No spam. Unsubscribe anytime. Launch updates only."
+    },
+    {
+      "type": "text",
+      "id": "form_tags",
+      "label": "Customer tags (comma separated)",
+      "default": "newsletter, waitlist, drop-01",
+      "info": "Tags added in Shopify Admin → Customers when someone signs up."
+    },
+    {
+      "type": "text",
+      "id": "success_title",
+      "label": "Success title",
+      "default": "You're on the list."
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "We'll email you before anyone else."
+    },
+    {
+      "type": "text",
+      "id": "chip_1",
+      "label": "Trust chip 1",
+      "default": "No payment"
+    },
+    {
+      "type": "text",
+      "id": "chip_2",
+      "label": "Trust chip 2",
+      "default": "Early access first"
+    },
+    {
+      "type": "text",
+      "id": "chip_3",
+      "label": "Trust chip 3",
+      "default": "Limited drop"
+    },
+    {
+      "type": "header",
+      "content": "Visual panel"
+    },
+    {
+      "type": "text",
+      "id": "float_badge_1",
+      "label": "Floating badge (top)",
+      "default": "LIMITED / TBA"
+    },
+    {
+      "type": "text",
+      "id": "float_badge_2",
+      "label": "Floating badge (bottom)",
+      "default": "DROP 01 · 夢"
+    },
+    {
+      "type": "text",
+      "id": "panel_kanji",
+      "label": "Panel kanji",
+      "default": "夢"
+    },
+    {
+      "type": "header",
+      "content": "Steps"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_steps",
+      "label": "Show \"What happens next\"",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "steps_heading",
+      "label": "Steps heading",
+      "default": "WHAT HAPPENS NEXT"
+    },
+    {
+      "type": "text",
+      "id": "step_1",
+      "label": "Step 1",
+      "default": "You join the list"
+    },
+    {
+      "type": "text",
+      "id": "step_2",
+      "label": "Step 2",
+      "default": "We email you 24h before launch"
+    },
+    {
+      "type": "text",
+      "id": "step_3",
+      "label": "Step 3",
+      "default": "You get first access to Drop 01"
+    },
+    {
+      "type": "header",
+      "content": "Footer"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL",
+      "info": "Leave empty to use Theme settings → Social media."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mitushi Waitlist"
+    }
+  ]
+}
+{% endschema %}
