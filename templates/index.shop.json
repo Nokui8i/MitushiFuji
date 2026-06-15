@@ -1,0 +1,113 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+/*
+ * Backup storefront homepage — switch back in Theme Editor → Homepage template: shop
+ */
+{
+  "sections": {
+    "mitushi_hero_1": {
+      "type": "mitushi-hero",
+      "settings": {
+        "badge_text": "New Drop · Live Now",
+        "title_line_1": "Wear the",
+        "title_line_2": "Legend",
+        "title_line_3": "In Silence",
+        "description": "Limited-edition anime streetwear engineered in Tokyo silhouettes. Heavyweight cotton, pigment-dyed, built to outlive the season.",
+        "button_1_label": "Shop the Drop",
+        "button_1_link": "",
+        "badge_left_text": "FW · 26 / Drop 03",
+        "badge_right_text": "Tokyo — USA",
+        "vertical_jp_text": "匠 · 二〇二六",
+        "float_badge_1_label": "Drop 03",
+        "float_badge_1_val": "夢 DREAMS",
+        "float_badge_2_label": "Limited",
+        "float_badge_2_val": "/ 300",
+        "show_stats": true,
+        "stat_1_num": "OWN",
+        "stat_1_label": "Design",
+        "stat_2_num": "HIGH",
+        "stat_2_label": "Quality Clothing",
+        "stat_3_num": "夢",
+        "stat_3_label": "Dreams FW26"
+      }
+    },
+    "mitushi_categories_1": {
+      "type": "mitushi-categories",
+      "settings": {
+        "subheading": "/ 01 — Collections",
+        "heading": "Shop by category",
+        "use_shopify_collections": true,
+        "hero_collection": "shirts",
+        "stack_collections": []
+      }
+    },
+    "mitushi_carousel_1": {
+      "type": "mitushi-product-carousel",
+      "settings": {
+        "subheading": "/ 02 — Latest drop",
+        "heading": "Featured pieces",
+        "collection": "all",
+        "products_to_show": 8
+      }
+    },
+    "178055456171e92778": {
+      "type": "apps",
+      "blocks": {
+        "instafeed_app_block_WiebpD": {
+          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
+          "settings": {
+            "title": "",
+            "title_color": "",
+            "title_size_v2": 0,
+            "alignment": "center",
+            "instafeed_margin_top": 0,
+            "instafeed_margin_bottom": 0,
+            "instafeed_margin_sides": 0,
+            "show_instagram_link": false,
+            "link_alignment": "left",
+            "link_color": "#000000",
+            "background_color": "",
+            "feed_id": "",
+            "html_area": ""
+          }
+        }
+      },
+      "block_order": [
+        "instafeed_app_block_WiebpD"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "enable_mitushi_layout": true,
+        "show_section_header": true,
+        "subheading": "/ 03 — インスタグラム",
+        "heading": "From Instagram",
+        "instagram_link_label_short": "Follow",
+        "show_instagram_link": true,
+        "instagram_url": "https://www.instagram.com/mitushi.studios/",
+        "instagram_link_label": "Follow on Instagram",
+        "cta_style": "split",
+        "show_hero_background": true,
+        "ghost_text": "FEED",
+        "vertical_jp": "ミツシ・フィード",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "enable_content_fullwidth": false,
+        "remove_padding_top": true,
+        "remove_padding_bottom": true
+      }
+    }
+  },
+  "order": [
+    "mitushi_hero_1",
+    "mitushi_categories_1",
+    "mitushi_carousel_1",
+    "178055456171e92778"
+  ]
+}

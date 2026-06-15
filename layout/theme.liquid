@@ -560,6 +560,9 @@
     if template.suffix == 'early-access'
       assign mitushi_waitlist_landing = true
     endif
+    if request.page_type == 'index'
+      assign mitushi_waitlist_landing = true
+    endif
   -%}
   <body
     class="js-main-body background template-{{ request.page_type }}{% if mitushi_waitlist_landing %} mitushi-waitlist-layout{% endif %} {% if settings.enable_menu_item_uppercase %}menu-item--uppercase{% endif %} {{ settings.applies_uppercase_to_menu_item }}"
