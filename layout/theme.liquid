@@ -88,14 +88,6 @@
         text-transform: uppercase !important;
       }
 
-      /* Early-access waitlist landing — full-bleed, no theme chrome padding */
-      body.mitushi-waitlist-layout #mainContent,
-      body.mitushi-waitlist-layout .mitushi-waitlist-section {
-        padding: 0 !important;
-        margin: 0 !important;
-        max-width: none !important;
-      }
-
       /* Shopify cookie banner — keep compact body typography (not display headings) */
       #shopify-pc__banner h1,
       #shopify-pc__banner h2,
@@ -555,17 +547,8 @@
     {%- render 'custom-css' -%}
   </head>
 
-  {%- liquid
-    assign mitushi_waitlist_landing = false
-    if template.suffix == 'early-access'
-      assign mitushi_waitlist_landing = true
-    endif
-    if request.page_type == 'index'
-      assign mitushi_waitlist_landing = true
-    endif
-  -%}
   <body
-    class="js-main-body background template-{{ request.page_type }}{% if mitushi_waitlist_landing %} mitushi-waitlist-layout{% endif %} {% if settings.enable_menu_item_uppercase %}menu-item--uppercase{% endif %} {{ settings.applies_uppercase_to_menu_item }}"
+    class="js-main-body background template-{{ request.page_type }} {% if settings.enable_menu_item_uppercase %}menu-item--uppercase{% endif %} {{ settings.applies_uppercase_to_menu_item }}"
     data-cart-show-type="{{ settings.add_to_cart_confirmation }}"
     data-cart-type="{{ settings.cart_type }}"
   >
@@ -595,11 +578,9 @@
     <a class="visually-hidden skip-to-content btn btn-primary d-block ta-center" href="#mainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>
-    {%- unless mitushi_waitlist_landing -%}
-      {%- liquid
-        sections 'header-group'
-      -%}
-    {%- endunless -%}
+    {%- liquid
+      sections 'header-group'
+    -%}
     <script>
       {{ 'header-properties.js' | inline_asset_content }}
     </script>
@@ -609,13 +590,11 @@
         /*include_js_style_tag*/
       </script>
     </main>
-    {%- unless mitushi_waitlist_landing -%}
-      {%- liquid
-        sections 'overlay-group'
-        sections 'footer-group'
-        render 'quickshop'
-      -%}
-    {%- endunless -%}
+    {%- liquid
+      sections 'overlay-group'
+      sections 'footer-group'
+      render 'quickshop'
+    -%}
     <ul hidden><li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li><li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li></ul>
     <script id="theme-file-js" src="{{ 'theme.js' | asset_url }}"></script>
     <script src="{{ 'mitushi-cart-toast.js' | asset_url }}" defer="defer"></script>
