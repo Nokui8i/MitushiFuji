@@ -54,6 +54,25 @@
         "products_to_show": 8
       }
     },
+    "mitushi_instagram_header": {
+      "type": "mitushi-instagram-header",
+      "settings": {
+        "color_scheme": "",
+        "show_section_header": true,
+        "subheading": "/ 03 — インスタグラム",
+        "heading": "From Instagram",
+        "show_instagram_link": true,
+        "instagram_url": "https://www.instagram.com/mitushi.studios/",
+        "instagram_link_label": "Follow on Instagram",
+        "instagram_link_label_short": "Follow",
+        "cta_style": "split",
+        "show_hero_background": true,
+        "ghost_text": "FEED",
+        "vertical_jp": "ミツシ・フィード",
+        "padding_top": 80,
+        "remove_padding_top": true
+      }
+    },
     "178055456171e92778": {
       "type": "apps",
       "blocks": {
@@ -79,25 +98,17 @@
       "block_order": [
         "instafeed_app_block_WiebpD"
       ],
+      "custom_css": [
+        ".section { background: #28282B !important; padding-bottom: 80px !important; margin-top: -8px !important; border: none !important; }",
+        ".ctnr { max-width: 1360px; padding-inline: 24px; margin: 0 auto; width: 100%; }"
+      ],
       "settings": {
         "color_scheme": "",
-        "enable_mitushi_layout": true,
-        "show_section_header": true,
-        "subheading": "/ 03 — インスタグラム",
-        "heading": "From Instagram",
-        "instagram_link_label_short": "Follow",
-        "show_instagram_link": true,
-        "instagram_url": "https://www.instagram.com/mitushi.studios/",
-        "instagram_link_label": "Follow on Instagram",
-        "cta_style": "split",
-        "show_hero_background": true,
-        "ghost_text": "FEED",
-        "vertical_jp": "ミツシ・フィード",
-        "padding_top": 80,
-        "padding_bottom": 80,
-        "enable_content_fullwidth": false,
+        "enable_mitushi_layout": false,
+        "show_section_header": false,
         "remove_padding_top": true,
-        "remove_padding_bottom": true
+        "remove_padding_bottom": true,
+        "enable_content_fullwidth": true
       }
     }
   },
@@ -105,6 +116,7 @@
     "mitushi_hero_1",
     "mitushi_categories_1",
     "mitushi_carousel_1",
+    "mitushi_instagram_header",
     "178055456171e92778"
   ]
 }
