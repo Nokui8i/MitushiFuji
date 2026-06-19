@@ -67,21 +67,21 @@
 
 {%- if use_mitushi_layout and has_instafeed_block -%}
   <div
-    class="section mitushi-apps-section-wrap mitushi-apps-section-wrap--header-only {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} color-{{- section.settings.color_scheme -}}"
+    class="section mitushi-instafeed-unified {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} color-{{- section.settings.color_scheme -}}"
     data-ui-component="Apps Section"
   >
-    <div class="mitushi-apps-section w-100 mitushi-apps-section--instafeed mitushi-apps-section--header-only">
-      {%- if section.settings.show_hero_background -%}
-        <div class="mitushi-apps-backdrop" aria-hidden="true"></div>
-        <div class="mitushi-apps-grid" aria-hidden="true"></div>
-        {%- if display_ghost != blank -%}
-          <div class="mitushi-apps-ghost mitushi-apps-ghost--compact" aria-hidden="true">{{ display_ghost }}</div>
-        {%- endif -%}
-        {%- if display_vertical_jp != blank -%}
-          <div class="mitushi-apps-vertical-jp" aria-hidden="true">{{ display_vertical_jp }}</div>
-        {%- endif -%}
+    {%- if section.settings.show_hero_background -%}
+      <div class="mitushi-apps-backdrop" aria-hidden="true"></div>
+      <div class="mitushi-apps-grid" aria-hidden="true"></div>
+      {%- if display_ghost != blank -%}
+        <div class="mitushi-apps-ghost" aria-hidden="true">{{ display_ghost }}</div>
       {%- endif -%}
+      {%- if display_vertical_jp != blank -%}
+        <div class="mitushi-apps-vertical-jp" aria-hidden="true">{{ display_vertical_jp }}</div>
+      {%- endif -%}
+    {%- endif -%}
 
+    <div class="mitushi-instafeed-unified__inner">
       <div class="mitushi-apps-container">
         {%- if show_header -%}
           {%- if display_subheading != blank or display_heading != blank -%}
@@ -118,13 +118,13 @@
           {%- endif -%}
         {%- endif -%}
       </div>
-    </div>
-  </div>
 
-  <div class="mitushi-instafeed-block-host">
-    {%- for block in section.blocks -%}
-      {% render block %}
-    {%- endfor -%}
+      <div class="mitushi-instafeed-block-host">
+        {%- for block in section.blocks -%}
+          {% render block %}
+        {%- endfor -%}
+      </div>
+    </div>
   </div>
 
 {%- elsif use_mitushi_layout -%}

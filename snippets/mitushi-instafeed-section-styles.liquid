@@ -475,43 +475,59 @@
     color: #cc132a !important;
   }
 
-  #shopify-section-{{ section.id }} .mitushi-apps-section--header-only {
-    padding-bottom: 32px !important;
+  #shopify-section-{{ section.id }} .mitushi-instafeed-unified {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    background-color: var(--ink, #28282b);
+    padding-top: {{ section.settings.padding_top | default: 80 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | default: 80 }}px;
+    border-top: none !important;
+    border-bottom: none !important;
   }
 
-  #shopify-section-{{ section.id }} .mitushi-apps-section-wrap--header-only {
-    border: none !important;
-    padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
-  }
-
-  #shopify-section-{{ section.id }} .mitushi-apps-ghost--compact {
-    top: 58%;
-    font-size: clamp(3.5rem, 10vw, 8rem);
-    opacity: 0.2;
-  }
-
-  #shopify-section-{{ section.id }} .mitushi-instafeed-block-host {
-    background-color: #28282b;
+  #shopify-section-{{ section.id }} .mitushi-instafeed-unified__inner {
+    position: relative;
+    z-index: 2;
     width: 100%;
     max-width: 1360px;
-    margin: -4px auto 0;
-    padding: 0 24px {{ section.settings.padding_bottom | default: 80 }}px;
-    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0 24px;
   }
 
   @media (min-width: 1024px) {
-    #shopify-section-{{ section.id }} .mitushi-instafeed-block-host {
+    #shopify-section-{{ section.id }} .mitushi-instafeed-unified__inner {
       padding-left: 48px;
       padding-right: 48px;
     }
   }
 
   @media (max-width: 767px) {
-    #shopify-section-{{ section.id }} .mitushi-instafeed-block-host {
-      padding-left: 20px;
-      padding-right: 20px;
+    #shopify-section-{{ section.id }} .mitushi-instafeed-unified {
+      padding-top: 56px;
       padding-bottom: 56px;
     }
+
+    #shopify-section-{{ section.id }} .mitushi-instafeed-unified__inner {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    #shopify-section-{{ section.id }} .mitushi-instafeed-unified .mitushi-apps-header {
+      margin-bottom: 28px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-instafeed-unified .mitushi-apps-header {
+    margin-bottom: 40px;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-instafeed-unified .mitushi-instafeed-block-host {
+    background: transparent;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 </style>
