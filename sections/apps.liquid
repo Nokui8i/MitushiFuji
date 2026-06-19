@@ -136,15 +136,25 @@
           {%- endif -%}
         {%- endif -%}
 
-        <div class="mitushi-apps-feed-wrap">
-          <div class="mitushi-apps-feed">
-            {%- for block in section.blocks -%}
-              {% render block %}
-            {%- endfor -%}
+        {%- unless has_instafeed_block -%}
+          <div class="mitushi-apps-feed-wrap">
+            <div class="mitushi-apps-feed">
+              {%- for block in section.blocks -%}
+                {% render block %}
+              {%- endfor -%}
+            </div>
           </div>
-        </div>
+        {%- endunless -%}
       </div>
     </div>
+
+    {%- if has_instafeed_block -%}
+      <div class="mitushi-instagram-feed-root">
+        {%- for block in section.blocks -%}
+          {% render block %}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
   {%- else -%}
     <div class="{{ section.settings.enable_content_fullwidth | default: 'ctnr' | replace: 'true', '' }} w-100">
       {%- for block in section.blocks -%}

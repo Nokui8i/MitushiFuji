@@ -15,6 +15,7 @@
 
   #shopify-section-{{ section.id }} .mitushi-apps-section--instafeed {
     overflow: visible;
+    padding-bottom: 0;
   }
 
   #shopify-section-{{ section.id }} .mitushi-apps-backdrop {
@@ -411,6 +412,52 @@
 
   #shopify-section-{{ section.id }} .mitushi-apps-section--instafeed {
     overflow: visible;
+    padding-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-instagram-feed-root {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1360px;
+    margin: -8px auto 0;
+    padding: 0 24px {{ section.settings.padding_bottom | default: 80 }}px;
+  }
+
+  @media (min-width: 1024px) {
+    #shopify-section-{{ section.id }} .mitushi-instagram-feed-root {
+      padding-left: 48px;
+      padding-right: 48px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} .mitushi-instagram-feed-root {
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 56px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-instagram-feed-root .shopify-app-block,
+  #shopify-section-{{ section.id }} .mitushi-instagram-feed-root [id*="instafeed"],
+  #shopify-section-{{ section.id }} .mitushi-instagram-feed-root [class*="instafeed"] {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 1px;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-instagram-feed-root #insta-feed,
+  #shopify-section-{{ section.id }} .mitushi-instagram-feed-root .instafeed-new-layout-container {
+    width: 100% !important;
+    min-height: 120px;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-instagram-feed-root img,
+  #shopify-section-{{ section.id }} .mitushi-instagram-feed-root video {
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
   #shopify-section-{{ section.id }} .mitushi-apps-feed-wrap {
