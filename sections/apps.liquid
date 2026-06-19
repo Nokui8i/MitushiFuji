@@ -118,12 +118,12 @@
           {%- endif -%}
         {%- endif -%}
       </div>
+    </div>
 
-      <div class="mitushi-instafeed-block-host">
-        {%- for block in section.blocks -%}
-          {% render block %}
-        {%- endfor -%}
-      </div>
+    <div class="mitushi-instafeed-block-host mitushi-instafeed-block-host--full">
+      {%- for block in section.blocks -%}
+        {% render block %}
+      {%- endfor -%}
     </div>
   </div>
 
