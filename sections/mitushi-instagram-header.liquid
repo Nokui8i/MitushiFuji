@@ -1,7 +1,7 @@
 {%- render 'mitushi-instafeed-section-styles', section: section -%}
 
 <div
-  class="section mitushi-apps-section-wrap mitushi-apps-section-wrap--header-only {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} color-{{- section.settings.color_scheme -}}"
+  class="section mitushi-apps-section-wrap mitushi-apps-section-wrap--header-only color-{{- section.settings.color_scheme -}}"
   data-ui-component="Mitushi Instagram Header"
 >
   <div class="mitushi-apps-section w-100 mitushi-apps-section--instafeed mitushi-apps-section--header-only">
@@ -9,7 +9,7 @@
       <div class="mitushi-apps-backdrop" aria-hidden="true"></div>
       <div class="mitushi-apps-grid" aria-hidden="true"></div>
       {%- if section.settings.ghost_text != blank -%}
-        <div class="mitushi-apps-ghost" aria-hidden="true">{{ section.settings.ghost_text }}</div>
+        <div class="mitushi-apps-ghost mitushi-apps-ghost--compact" aria-hidden="true">{{ section.settings.ghost_text }}</div>
       {%- endif -%}
       {%- if section.settings.vertical_jp != blank -%}
         <div class="mitushi-apps-vertical-jp" aria-hidden="true">{{ section.settings.vertical_jp }}</div>
@@ -30,12 +30,7 @@
           {%- assign instagram_url = section.settings.instagram_url | default: settings.social_instagram_link -%}
           {%- if section.settings.show_instagram_link and instagram_url != blank -%}
             {%- assign cta_style = section.settings.cta_style | default: 'split' -%}
-            <a
-              class="mitushi-ig-cta mitushi-ig-cta--{{ cta_style }}"
-              href="{{ instagram_url }}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a class="mitushi-ig-cta mitushi-ig-cta--{{ cta_style }}" href="{{ instagram_url }}" target="_blank" rel="noopener noreferrer">
               <span class="mitushi-ig-cta__label">
                 <span class="mitushi-ig-cta__label-desktop">{{ section.settings.instagram_link_label | default: 'Follow on Instagram' }}</span>
                 <span class="mitushi-ig-cta__label-mobile">{{ section.settings.instagram_link_label_short | default: 'Follow' }}</span>
@@ -61,12 +56,19 @@
 
 <style>
   #shopify-section-{{ section.id }} .mitushi-apps-section--header-only {
-    padding-bottom: 24px;
+    padding-top: {{ section.settings.padding_top | default: 80 }}px;
+    padding-bottom: 0 !important;
+    overflow: hidden;
   }
 
-  #shopify-section-{{ section.id }} .mitushi-apps-section-wrap--header-only {
-    border-top: none !important;
-    border-bottom: none !important;
+  #shopify-section-{{ section.id }} .mitushi-apps-ghost--compact {
+    top: 55%;
+    font-size: clamp(4rem, 12vw, 9rem);
+    opacity: 0.22;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-header {
+    margin-bottom: 0;
   }
 </style>
 
@@ -159,12 +161,6 @@
       "step": 4,
       "unit": "px",
       "default": 80
-    },
-    {
-      "type": "checkbox",
-      "id": "remove_padding_top",
-      "default": true,
-      "label": "t:general.remove_padding_top"
     }
   ],
   "presets": [
