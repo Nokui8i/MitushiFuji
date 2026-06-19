@@ -68,7 +68,7 @@
 {%- endif -%}
 
 <div
-  class="o-hidden section mitushi-apps-section-wrap {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} color-{{- section.settings.color_scheme -}}"
+  class="{% unless has_instafeed_block %}o-hidden {% endunless %}section mitushi-apps-section-wrap {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} color-{{- section.settings.color_scheme -}}"
   data-ui-component="Apps Section"
 >
   {%- if use_mitushi_layout -%}
