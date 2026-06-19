@@ -532,4 +532,43 @@
     text-align: start !important;
     color: #cc132a !important;
   }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-section--header-only {
+    padding-bottom: 32px !important;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-apps-section-wrap--header-only {
+    border: none !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-instafeed-block-host {
+    background-color: #28282b;
+    width: 100%;
+    max-width: 1360px;
+    margin: -8px auto 0;
+    padding: 0 24px {{ section.settings.padding_bottom | default: 80 }}px;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 1024px) {
+    #shopify-section-{{ section.id }} .mitushi-instafeed-block-host {
+      padding-left: 48px;
+      padding-right: 48px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} .mitushi-instafeed-block-host {
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 56px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .mitushi-instafeed-block-host .shopify-app-block {
+    display: block;
+    width: 100%;
+  }
 </style>
