@@ -1243,115 +1243,165 @@ Combines a collapsible announcement bar with a sticky header.
       }
 
       function rgbOf(bg) {
-        var m = String(bg || '').match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+        if (!bg) return null;
+        var hex = String(bg).match(/^#([0-9a-f]{3,8})$/i);
+        if (hex) {
+          var h = hex[1];
+          if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+          return { r: parseInt(h.slice(0,2),16), g: parseInt(h.slice(2,4),16), b: parseInt(h.slice(4,6),16) };
+        }
+        var m = String(bg).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
         if (!m) return null;
         return { r: +m[1], g: +m[2], b: +m[3] };
       }
 
       function isBright(bg) {
         var c = rgbOf(bg);
-        if (!c) return false;
-        return (c.r + c.g + c.b) / 3 > 200;
+        if (!c) return /white|#fff|f2f3f8|f4f4f4|f7f7f8|fafafa|e5e5e5/i.test(String(bg||''));
+        return (c.r + c.g + c.b) / 3 > 180;
       }
 
       function describeEl(el) {
-        if (!el || el === document.documentElement) return null;
+        if (!el || el.nodeType !== 1) return null;
         var cs = window.getComputedStyle(el);
+        var before = null;
+        var after = null;
+        try {
+          var b = window.getComputedStyle(el, '::before');
+          var a = window.getComputedStyle(el, '::after');
+          if (b && b.content && b.content !== 'none') {
+            before = { content: b.content.slice(0,40), bg: b.backgroundColor, w: b.width, h: b.height, display: b.display };
+          }
+          if (a && a.content && a.content !== 'none') {
+            after = { content: a.content.slice(0,40), bg: a.backgroundColor, w: a.width, h: a.height, display: a.display };
+          }
+        } catch (err) {}
+        var r = el.getBoundingClientRect();
         return {
           tag: el.tagName,
           id: el.id || '',
-          class: (el.className && String(el.className).slice(0, 120)) || '',
+          class: (el.className && String(el.className).baseVal !== undefined ? String(el.className.baseVal) : String(el.className || '')).slice(0, 160),
           hidden: !!el.hidden,
           display: cs.display,
           visibility: cs.visibility,
           opacity: cs.opacity,
           bg: cs.backgroundColor,
-          bgImage: (cs.backgroundImage || '').slice(0, 80),
-          w: Math.round(el.getBoundingClientRect().width),
-          h: Math.round(el.getBoundingClientRect().height),
-          top: Math.round(el.getBoundingClientRect().top),
-          left: Math.round(el.getBoundingClientRect().left),
+          bgImage: (cs.backgroundImage || '').slice(0, 100),
+          border: cs.borderTop + ' | ' + cs.borderBottom,
+          outline: cs.outline,
+          boxShadow: (cs.boxShadow || '').slice(0, 100),
+          filter: cs.filter,
+          backdrop: cs.backdropFilter || cs.webkitBackdropFilter || '',
+          w: Math.round(r.width),
+          h: Math.round(r.height),
+          top: Math.round(r.top),
+          bottom: Math.round(r.bottom),
+          left: Math.round(r.left),
           overflow: cs.overflow + '/' + cs.overflowX + '/' + cs.overflowY,
           position: cs.position,
-          z: cs.zIndex
+          z: cs.zIndex,
+          before: before,
+          after: after
         };
       }
 
-      function scanBrightElements() {
-        var hits = [];
-        var nodes = document.body.querySelectorAll('*');
-        for (var i = 0; i < nodes.length; i++) {
-          var el = nodes[i];
-          var r = el.getBoundingClientRect();
-          if (r.width < 80 || r.height < 2 || r.height > 80) continue;
-          if (r.top > 220 || r.bottom < 40) continue;
-          var cs = window.getComputedStyle(el);
-          if (cs.display === 'none' || cs.visibility === 'hidden' || Number(cs.opacity) === 0) continue;
-          if (isBright(cs.backgroundColor) || /#fff|#f[0-9a-f]{5}|rgb\(\s*2[4-5]\d/i.test(cs.backgroundColor)) {
-            hits.push(describeEl(el));
-          }
-        }
-        return hits;
-      }
-
-      function sampleBarLine() {
-        if (!stickyHeader) return [];
-        var hr = stickyHeader.getBoundingClientRect();
-        var y = Math.round(hr.bottom + 4);
-        var samples = [];
-        var xs = [40, 120, 200, 320, 480, 640, 800, 960];
+      function sampleAt(y) {
+        var xs = [60, 160, 220, 300, 450, 600, 750, 900];
+        var rows = [];
         for (var i = 0; i < xs.length; i++) {
           var x = xs[i];
-          if (x >= window.innerWidth) continue;
-          var stack = document.elementsFromPoint(x, y).slice(0, 6).map(describeEl).filter(Boolean);
-          samples.push({ x: x, y: y, stack: stack });
+          if (x >= window.innerWidth - 8) continue;
+          var stack = document.elementsFromPoint(x, y).slice(0, 8);
+          rows.push({
+            x: x,
+            y: y,
+            stack: stack.map(function (el) {
+              var d = describeEl(el);
+              if (!d) return null;
+              d._bright = isBright(d.bg);
+              return d;
+            }).filter(Boolean)
+          });
         }
-        return samples;
+        return rows;
       }
 
       function runDebug(reason, evt) {
+        var hr = stickyHeader ? stickyHeader.getBoundingClientRect() : { top: 0, bottom: 100 };
+        var ys = [
+          Math.round(hr.bottom - 8),
+          Math.round(hr.bottom - 2),
+          Math.round(hr.bottom),
+          Math.round(hr.bottom + 4),
+          Math.round(hr.bottom + 10),
+          Math.round(hr.bottom + 18)
+        ];
+
+        var samples = {};
+        for (var i = 0; i < ys.length; i++) {
+          samples['y' + ys[i]] = sampleAt(ys[i]);
+        }
+
         var loader = document.querySelector('loading-bar');
         var cartNoti = document.getElementById('cartNotificationPanel');
+        var section = document.getElementById('shopify-section-mitushi-header');
+        var group = document.querySelector('.shopify-section-group-header-group');
+
         var payload = {
           reason: reason,
           time: new Date().toISOString(),
           eventType: evt && evt.type,
           scrollY: window.scrollY,
           viewport: { w: window.innerWidth, h: window.innerHeight },
-          stickyHeader: describeEl(stickyHeader),
+          stickyRect: stickyHeader ? {
+            top: Math.round(hr.top),
+            bottom: Math.round(hr.bottom),
+            h: Math.round(hr.height),
+            bg: window.getComputedStyle(stickyHeader).backgroundColor
+          } : null,
+          section: describeEl(section),
+          group: describeEl(group),
           logo: describeEl(logo),
-          loadingBar: loader ? describeEl(loader) : null,
-          cartNotification: cartNoti ? describeEl(cartNoti) : null,
-          brightNearHeader: scanBrightElements(),
-          elementsFromPointBelowHeader: sampleBarLine()
+          loadingBar: describeEl(loader),
+          cartNotification: describeEl(cartNoti),
+          samples: samples
         };
 
-        console.log('%c[MitushiDebug:white-bar]', 'color:#cc132a;font-weight:bold', reason);
-        console.log(payload);
+        // Always print as plain text so nothing is collapsed/hidden
+        console.log('%c[MitushiDebug:white-bar] ' + reason, 'color:#cc132a;font-weight:bold');
+        console.log('[MitushiDebug] stickyRect', JSON.stringify(payload.stickyRect));
+        console.log('[MitushiDebug] section', JSON.stringify(payload.section));
+        console.log('[MitushiDebug] group', JSON.stringify(payload.group));
+        console.log('[MitushiDebug] logo', JSON.stringify(payload.logo));
+        console.log('[MitushiDebug] loadingBar', JSON.stringify(payload.loadingBar));
+        console.log('[MitushiDebug] cartNotification', JSON.stringify(payload.cartNotification));
 
-        // Highlight suspects briefly
-        var suspects = (payload.brightNearHeader || []).slice(0, 5);
-        suspects.forEach(function (s, idx) {
-          console.warn('[MitushiDebug] bright suspect #' + (idx + 1), s);
-        });
-
-        var firstStacks = payload.elementsFromPointBelowHeader || [];
-        firstStacks.forEach(function (sample) {
-          if (!sample.stack || !sample.stack.length) return;
-          var top = sample.stack[0];
-          if (top && isBright(top.bg)) {
-            console.error('[MitushiDebug] WHITE ELEMENT at x=' + sample.x + ' y=' + sample.y, top);
-          }
+        Object.keys(samples).forEach(function (key) {
+          samples[key].forEach(function (row) {
+            var top = row.stack[0];
+            var line = row.stack.map(function (s) {
+              return (s._bright ? '⚠BRIGHT ' : '') + s.tag + (s.id ? '#' + s.id : '') + '.' + (s.class || '').split(' ')[0] +
+                ' bg=' + s.bg + ' h=' + s.h + ' top=' + s.top;
+            }).join('  <  ');
+            console.log('[MitushiDebug] ' + key + ' x=' + row.x + ' :: ' + line);
+            if (top && top._bright) {
+              console.error('[MitushiDebug] WHITE HIT', JSON.stringify(top));
+            }
+          });
         });
 
         window.__MITUSHI_LAST_WHITE_BAR_DEBUG__ = payload;
+        console.log('[MitushiDebug] full object also in window.__MITUSHI_LAST_WHITE_BAR_DEBUG__');
+        console.log('[MitushiDebug] copy JSON:', JSON.stringify(payload));
         return payload;
       }
 
-      ['mouseenter', 'mouseover', 'focus', 'mousedown', 'click'].forEach(function (type) {
+      ['mouseenter', 'focus', 'mousedown', 'click'].forEach(function (type) {
         logo.addEventListener(type, function (e) {
           requestAnimationFrame(function () {
-            runDebug('logo:' + type, e);
+            requestAnimationFrame(function () {
+              runDebug('logo:' + type, e);
+            });
           });
         }, true);
       });
@@ -1360,12 +1410,11 @@ Combines a collapsible announcement bar with a sticky header.
         runDebug('logo:mouseleave', e);
       }, true);
 
-      // Manual trigger from console: window.__mitushiDebugWhiteBar()
       window.__mitushiDebugWhiteBar = function () {
         return runDebug('manual');
       };
 
-      console.log('%c[MitushiDebug] ready — hover/click the logo, then check Console. Or run: __mitushiDebugWhiteBar()', 'color:#cc132a');
+      console.log('%c[MitushiDebug] v2 ready — hover logo, then COPY the [MitushiDebug] lines (they are plain text now)', 'color:#cc132a');
     })();
 
     // Currency dropdown toggle
