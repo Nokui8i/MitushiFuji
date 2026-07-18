@@ -67,14 +67,15 @@ Combines a collapsible announcement bar with a sticky header.
 
     .mitushi-sticky-header {
       border-bottom: 1px solid transparent;
-      transition: background 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
       background: #28282b;
+      /* Promote a stable compositor layer — prevents Chrome white-bar paint glitch on logo hover */
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
 
     .mitushi-sticky-header.scrolled {
-      background: rgba(40, 40, 43, 0.94);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
+      background: rgba(40, 40, 43, 0.96);
       border-color: rgba(255, 255, 255, 0.08);
       padding-block: 8px;
     }
@@ -83,7 +84,7 @@ Combines a collapsible announcement bar with a sticky header.
       padding-block: 12px;
     }
 
-    /* Kill light color-scheme bleed under the dark header */
+    /* Single sticky shell — dark, opaque, isolated from page paint */
     .shopify-section-group-header-group,
     #shopify-section-mitushi-header,
     div[id*="mitushi-header"],
@@ -94,6 +95,11 @@ Combines a collapsible announcement bar with a sticky header.
       background: #28282b !important;
       background-color: #28282b !important;
       color: #f7f7f8;
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      isolation: isolate;
+      /* do NOT set overflow:clip — clips product dropdowns */
     }
 
     .mitushi-header-inner {
@@ -104,6 +110,8 @@ Combines a collapsible announcement bar with a sticky header.
       justify-content: space-between;
       gap: 3rem;
       padding: 0 2rem;
+      position: relative;
+      z-index: 1;
     }
 
     .mitushi-logo-link {
@@ -116,30 +124,27 @@ Combines a collapsible announcement bar with a sticky header.
       box-shadow: none !important;
       outline: none !important;
       -webkit-tap-highlight-color: transparent;
+      /* Avoid new compositor layers on hover */
+      transform: translateZ(0);
     }
 
     .mitushi-logo-link:hover,
     .mitushi-logo-link:focus,
     .mitushi-logo-link:focus-visible,
-    .mitushi-logo-link:active {
+    .mitushi-logo-link:active,
+    .mitushi-logo-link:hover *,
+    .mitushi-header-section a.mitushi-logo-link:hover {
       color: inherit !important;
       background: transparent !important;
       text-decoration: none !important;
       outline: none !important;
       box-shadow: none !important;
+      filter: none !important;
     }
 
+    /* Soft glow via box-shadow on the image — no separate blurred layer */
     .mitushi-logo-glow {
-      position: absolute;
-      left: -8px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(204, 19, 42, 0.75) 0%, rgba(204, 19, 42, 0.2) 55%, transparent 72%);
-      pointer-events: none;
-      z-index: 0;
+      display: none !important;
     }
 
     .mitushi-logo-image {
@@ -149,7 +154,9 @@ Combines a collapsible announcement bar with a sticky header.
       width: auto;
       display: block;
       max-width: 200px;
-      /* No CSS filter — baked into mitushi-logo-header.png (filter+hover causes white bar GPU bug) */
+      border-radius: 0;
+      box-shadow: -10px 0 28px rgba(204, 19, 42, 0.45);
+      pointer-events: none;
     }
 
     .mitushi-nav {
@@ -1233,189 +1240,6 @@ Combines a collapsible announcement bar with a sticky header.
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', updateScrollState);
     }
-
-    /* ─── WHITE BAR DEBUG (remove after fix) ─── */
-    (function setupWhiteBarDebug() {
-      var logo = document.querySelector('.mitushi-logo-link');
-      if (!logo) {
-        console.warn('[MitushiDebug] logo link not found');
-        return;
-      }
-
-      function rgbOf(bg) {
-        if (!bg) return null;
-        var hex = String(bg).match(/^#([0-9a-f]{3,8})$/i);
-        if (hex) {
-          var h = hex[1];
-          if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
-          return { r: parseInt(h.slice(0,2),16), g: parseInt(h.slice(2,4),16), b: parseInt(h.slice(4,6),16) };
-        }
-        var m = String(bg).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
-        if (!m) return null;
-        return { r: +m[1], g: +m[2], b: +m[3] };
-      }
-
-      function isBright(bg) {
-        var c = rgbOf(bg);
-        if (!c) return /white|#fff|f2f3f8|f4f4f4|f7f7f8|fafafa|e5e5e5/i.test(String(bg||''));
-        return (c.r + c.g + c.b) / 3 > 180;
-      }
-
-      function describeEl(el) {
-        if (!el || el.nodeType !== 1) return null;
-        var cs = window.getComputedStyle(el);
-        var before = null;
-        var after = null;
-        try {
-          var b = window.getComputedStyle(el, '::before');
-          var a = window.getComputedStyle(el, '::after');
-          if (b && b.content && b.content !== 'none') {
-            before = { content: b.content.slice(0,40), bg: b.backgroundColor, w: b.width, h: b.height, display: b.display };
-          }
-          if (a && a.content && a.content !== 'none') {
-            after = { content: a.content.slice(0,40), bg: a.backgroundColor, w: a.width, h: a.height, display: a.display };
-          }
-        } catch (err) {}
-        var r = el.getBoundingClientRect();
-        return {
-          tag: el.tagName,
-          id: el.id || '',
-          class: (el.className && String(el.className).baseVal !== undefined ? String(el.className.baseVal) : String(el.className || '')).slice(0, 160),
-          hidden: !!el.hidden,
-          display: cs.display,
-          visibility: cs.visibility,
-          opacity: cs.opacity,
-          bg: cs.backgroundColor,
-          bgImage: (cs.backgroundImage || '').slice(0, 100),
-          border: cs.borderTop + ' | ' + cs.borderBottom,
-          outline: cs.outline,
-          boxShadow: (cs.boxShadow || '').slice(0, 100),
-          filter: cs.filter,
-          backdrop: cs.backdropFilter || cs.webkitBackdropFilter || '',
-          w: Math.round(r.width),
-          h: Math.round(r.height),
-          top: Math.round(r.top),
-          bottom: Math.round(r.bottom),
-          left: Math.round(r.left),
-          overflow: cs.overflow + '/' + cs.overflowX + '/' + cs.overflowY,
-          position: cs.position,
-          z: cs.zIndex,
-          before: before,
-          after: after
-        };
-      }
-
-      function sampleAt(y) {
-        var xs = [60, 160, 220, 300, 450, 600, 750, 900];
-        var rows = [];
-        for (var i = 0; i < xs.length; i++) {
-          var x = xs[i];
-          if (x >= window.innerWidth - 8) continue;
-          var stack = document.elementsFromPoint(x, y).slice(0, 8);
-          rows.push({
-            x: x,
-            y: y,
-            stack: stack.map(function (el) {
-              var d = describeEl(el);
-              if (!d) return null;
-              d._bright = isBright(d.bg);
-              return d;
-            }).filter(Boolean)
-          });
-        }
-        return rows;
-      }
-
-      function runDebug(reason, evt) {
-        var hr = stickyHeader ? stickyHeader.getBoundingClientRect() : { top: 0, bottom: 100 };
-        var ys = [
-          Math.round(hr.bottom - 8),
-          Math.round(hr.bottom - 2),
-          Math.round(hr.bottom),
-          Math.round(hr.bottom + 4),
-          Math.round(hr.bottom + 10),
-          Math.round(hr.bottom + 18)
-        ];
-
-        var samples = {};
-        for (var i = 0; i < ys.length; i++) {
-          samples['y' + ys[i]] = sampleAt(ys[i]);
-        }
-
-        var loader = document.querySelector('loading-bar');
-        var cartNoti = document.getElementById('cartNotificationPanel');
-        var section = document.getElementById('shopify-section-mitushi-header');
-        var group = document.querySelector('.shopify-section-group-header-group');
-
-        var payload = {
-          reason: reason,
-          time: new Date().toISOString(),
-          eventType: evt && evt.type,
-          scrollY: window.scrollY,
-          viewport: { w: window.innerWidth, h: window.innerHeight },
-          stickyRect: stickyHeader ? {
-            top: Math.round(hr.top),
-            bottom: Math.round(hr.bottom),
-            h: Math.round(hr.height),
-            bg: window.getComputedStyle(stickyHeader).backgroundColor
-          } : null,
-          section: describeEl(section),
-          group: describeEl(group),
-          logo: describeEl(logo),
-          loadingBar: describeEl(loader),
-          cartNotification: describeEl(cartNoti),
-          samples: samples
-        };
-
-        // Always print as plain text so nothing is collapsed/hidden
-        console.log('%c[MitushiDebug:white-bar] ' + reason, 'color:#cc132a;font-weight:bold');
-        console.log('[MitushiDebug] stickyRect', JSON.stringify(payload.stickyRect));
-        console.log('[MitushiDebug] section', JSON.stringify(payload.section));
-        console.log('[MitushiDebug] group', JSON.stringify(payload.group));
-        console.log('[MitushiDebug] logo', JSON.stringify(payload.logo));
-        console.log('[MitushiDebug] loadingBar', JSON.stringify(payload.loadingBar));
-        console.log('[MitushiDebug] cartNotification', JSON.stringify(payload.cartNotification));
-
-        Object.keys(samples).forEach(function (key) {
-          samples[key].forEach(function (row) {
-            var top = row.stack[0];
-            var line = row.stack.map(function (s) {
-              return (s._bright ? '⚠BRIGHT ' : '') + s.tag + (s.id ? '#' + s.id : '') + '.' + (s.class || '').split(' ')[0] +
-                ' bg=' + s.bg + ' h=' + s.h + ' top=' + s.top;
-            }).join('  <  ');
-            console.log('[MitushiDebug] ' + key + ' x=' + row.x + ' :: ' + line);
-            if (top && top._bright) {
-              console.error('[MitushiDebug] WHITE HIT', JSON.stringify(top));
-            }
-          });
-        });
-
-        window.__MITUSHI_LAST_WHITE_BAR_DEBUG__ = payload;
-        console.log('[MitushiDebug] full object also in window.__MITUSHI_LAST_WHITE_BAR_DEBUG__');
-        console.log('[MitushiDebug] copy JSON:', JSON.stringify(payload));
-        return payload;
-      }
-
-      ['mouseenter', 'focus', 'mousedown', 'click'].forEach(function (type) {
-        logo.addEventListener(type, function (e) {
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              runDebug('logo:' + type, e);
-            });
-          });
-        }, true);
-      });
-
-      logo.addEventListener('mouseleave', function (e) {
-        runDebug('logo:mouseleave', e);
-      }, true);
-
-      window.__mitushiDebugWhiteBar = function () {
-        return runDebug('manual');
-      };
-
-      console.log('%c[MitushiDebug] v2 ready — hover logo, then COPY the [MitushiDebug] lines (they are plain text now)', 'color:#cc132a');
-    })();
 
     // Currency dropdown toggle
     var currencyBtn = document.getElementById('mitushi-currency-btn');
