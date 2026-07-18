@@ -10,7 +10,6 @@ Combines a collapsible announcement bar with a sticky header.
       color: #f7f7f8;
       font-family: var(--font-sans);
       position: relative;
-      isolation: isolate;
     }
 
     .mitushi-announcement {
@@ -70,27 +69,22 @@ Combines a collapsible announcement bar with a sticky header.
     }
 
     /*
-      One sticky shell only. Nested sticky + hero translate3d layers caused page
-      content (FW badges / portrait) to paint over and "stick" under the nav.
+      Sticky on the section (reliable). Keep main/hero in a lower stacking
+      context so 3D layers cannot paint over the nav.
     */
-    .shopify-section-group-header-group {
+    .shopify-section-group-header-group,
+    #shopify-section-mitushi-header,
+    [id^="shopify-section"][id*="mitushi-header"] {
       position: sticky;
       top: 0;
       z-index: 1000;
-      isolation: isolate;
       background: #28282b !important;
       background-color: #28282b !important;
       color: #f7f7f8;
     }
 
-    #shopify-section-mitushi-header,
-    div[id*="mitushi-header"],
-    .shopify-section-group-header-group .shopify-section {
-      position: relative;
-      z-index: auto;
-      background: #28282b !important;
-      background-color: #28282b !important;
-      color: #f7f7f8;
+    .shopify-section-group-header-group {
+      isolation: isolate;
     }
 
     .mitushi-header-inner {

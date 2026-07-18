@@ -522,7 +522,11 @@
         isolation: isolate;
       }
 
-      .shopify-section-group-header-group {
+      .shopify-section-group-header-group,
+      #shopify-section-mitushi-header,
+      [id^="shopify-section"][id*="mitushi-header"] {
+        position: sticky !important;
+        top: 0 !important;
         z-index: 1000 !important;
       }
 
