@@ -507,15 +507,23 @@
       }
 
       .mitushi-sticky-header.scrolled {
-        background: rgba(40, 40, 43, 0.96) !important;
+        background: #28282B !important;
       }
 
       .mitushi-announcement {
         background: #cc132a !important;
       }
 
+      /* Keep page/hero compositing layers under the sticky header */
       #mainContent {
         background: #28282B !important;
+        position: relative;
+        z-index: 0;
+        isolation: isolate;
+      }
+
+      .shopify-section-group-header-group {
+        z-index: 1000 !important;
       }
 
       .mitushi-marquee {

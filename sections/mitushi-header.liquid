@@ -65,18 +65,29 @@ Combines a collapsible announcement bar with a sticky header.
     }
 
     .mitushi-sticky-header.scrolled {
-      background: rgba(40, 40, 43, 0.96);
+      background: #28282b;
       border-color: rgba(255, 255, 255, 0.08);
     }
 
-    /* Sticky shell — no transform (transform + sticky = double-header ghost in Chrome) */
-    .shopify-section-group-header-group,
+    /*
+      One sticky shell only. Nested sticky + hero translate3d layers caused page
+      content (FW badges / portrait) to paint over and "stick" under the nav.
+    */
+    .shopify-section-group-header-group {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      isolation: isolate;
+      background: #28282b !important;
+      background-color: #28282b !important;
+      color: #f7f7f8;
+    }
+
     #shopify-section-mitushi-header,
     div[id*="mitushi-header"],
     .shopify-section-group-header-group .shopify-section {
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: relative;
+      z-index: auto;
       background: #28282b !important;
       background-color: #28282b !important;
       color: #f7f7f8;
