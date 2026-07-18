@@ -69,7 +69,6 @@ Combines a collapsible announcement bar with a sticky header.
       border-bottom: 1px solid transparent;
       transition: background 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
       background: #28282b;
-      overflow: hidden;
     }
 
     .mitushi-sticky-header.scrolled {
@@ -111,8 +110,23 @@ Combines a collapsible announcement bar with a sticky header.
       position: relative;
       display: inline-flex;
       align-items: center;
-      text-decoration: none;
+      text-decoration: none !important;
       flex-shrink: 0;
+      background: transparent !important;
+      box-shadow: none !important;
+      outline: none !important;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mitushi-logo-link:hover,
+    .mitushi-logo-link:focus,
+    .mitushi-logo-link:focus-visible,
+    .mitushi-logo-link:active {
+      color: inherit !important;
+      background: transparent !important;
+      text-decoration: none !important;
+      outline: none !important;
+      box-shadow: none !important;
     }
 
     .mitushi-logo-glow {
@@ -134,8 +148,8 @@ Combines a collapsible announcement bar with a sticky header.
       height: 56px;
       width: auto;
       display: block;
-      filter: brightness(2.2) contrast(1.25);
       max-width: 200px;
+      /* No CSS filter — baked into mitushi-logo-header.png (filter+hover causes white bar GPU bug) */
     }
 
     .mitushi-nav {
@@ -905,9 +919,9 @@ Combines a collapsible announcement bar with a sticky header.
         {% if section.settings.logo_image != blank %}
           {% assign logo_img_url = section.settings.logo_image | image_url: width: 400 %}
         {% else %}
-          {% assign logo_img_url = 'mitushi-logo.png' | asset_url %}
+          {% assign logo_img_url = 'mitushi-logo-header.png' | asset_url %}
         {% endif %}
-        <img src="{{ logo_img_url }}" alt="{{ section.settings.logo_alt | escape }}" class="mitushi-logo-image" width="220" height="56" style="height: 56px; width: auto; filter: brightness(2.2) contrast(1.25);" />
+        <img src="{{ logo_img_url }}" alt="{{ section.settings.logo_alt | escape }}" class="mitushi-logo-image" width="220" height="56" style="height: 56px; width: auto;" />
       </a>
 
       <nav class="mitushi-nav hidden items-center gap-1 md:flex" aria-label="Primary navigation">
@@ -1187,13 +1201,6 @@ Combines a collapsible announcement bar with a sticky header.
 
     function setAnnouncementOpen(open) {
       if (!announcementBar || announceOpen === open) return;
-
-      var scrollY = window.scrollY || window.pageYOffset;
-      var barHeight = getAnnouncementHeight();
-
-      if (!open && announceOpen && scrollY > 0 && scrollY <= barHeight + SCROLL_TOP_THRESHOLD) {
-        window.scrollTo(0, 0);
-      }
 
       announceOpen = open;
       announcementBar.classList.toggle('is-open', open);
