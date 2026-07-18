@@ -69,29 +69,29 @@ Combines a collapsible announcement bar with a sticky header.
     }
 
     /*
-      Fixed header (not sticky). Chrome sticky + iframe/Instafeed leaves ghost
-      paint strips under the nav that clear only after more scroll.
+      Sticky on the section only (not the group, not fixed).
+      Fixed hid the header; nested sticky caused ghost paint strips.
     */
     .shopify-section-group-header-group {
-      position: fixed;
-      top: 0;
-      inset-inline: 0;
-      width: 100%;
+      position: relative;
       z-index: 1000;
-      isolation: isolate;
-      overflow: clip;
       background: #28282b !important;
       background-color: #28282b !important;
-      color: #f7f7f8;
     }
 
     #shopify-section-mitushi-header,
     [id^="shopify-section"][id*="mitushi-header"] {
-      position: relative;
-      z-index: auto;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
       background: #28282b !important;
       background-color: #28282b !important;
       color: #f7f7f8;
+      overflow: hidden;
+      /* Own compositor layer — blocks iframe/Instafeed ghost strips under nav */
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
 
     .mitushi-header-section {
