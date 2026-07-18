@@ -260,16 +260,15 @@
     background-color: rgba(244, 244, 244, 0.15);
   }
 
-  /* Right Column Image & 3D Stage — kept 2D-safe so it cannot punch through header */
+  /* Right Column Image — red sun stays BEHIND the portrait */
   .mitushi-hero-media {
     position: relative;
     z-index: 1;
     width: 100%;
     max-width: 520px;
     margin: 0 auto;
-    overflow: hidden;
+    overflow: visible;
     isolation: isolate;
-    contain: paint;
     perspective: 900px;
   }
 
@@ -281,6 +280,7 @@
     transform: translate3d(0, calc(var(--scroll-progress, 0) * -36px), 0) rotateX(calc(var(--tilt-y, 0) * -5deg)) rotateY(calc(var(--tilt-x, 0) * 8deg));
     transform-style: flat;
     z-index: 2;
+    overflow: visible;
   }
 
   .mitushi-hero-red-sun {
@@ -293,7 +293,7 @@
     background-color: var(--crimson);
     filter: blur(1px);
     pointer-events: none;
-    z-index: 1;
+    z-index: 0;
     transform: translate(-50%, -50%) translate3d(calc(var(--tilt-x, 0) * -20px), calc(var(--tilt-y, 0) * -20px), 0) scale(calc(1 + var(--scroll-progress, 0) * 0.2));
   }
 
@@ -306,11 +306,15 @@
     border-radius: 50%;
     border: 1px solid rgba(204, 19, 42, 0.4);
     pointer-events: none;
+    z-index: 0;
     transform: translate(-50%, -50%) scale(calc(1 + var(--scroll-progress, 0) * 0.12));
     box-shadow: 0 0 80px rgba(204, 19, 42, 0.35);
   }
 
   .mitushi-hero-image {
+    position: relative;
+    z-index: 2;
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -319,7 +323,7 @@
     transform: translate3d(calc(var(--tilt-x, 0) * 8px), calc(var(--tilt-y, 0) * 8px), 0);
   }
 
-  /* Angled badges — 2D only (no translateZ) */
+  /* Angled badges */
   .mitushi-hero-badge-float {
     position: absolute;
     z-index: 10;
