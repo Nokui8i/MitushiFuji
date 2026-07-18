@@ -1,15 +1,28 @@
 {% comment %}
 Mitushi Header Section
-Combines a collapsible announcement bar with a sticky header.
+Announcement bar + fixed header (spacer in flow). Avoids Chrome sticky paint ghosts.
 {% endcomment %}
 
-<sht-header class="mitushi-header-section d-block">
-  <style>
+<style>
     .mitushi-header-section {
       background: #28282b;
       color: #f7f7f8;
       font-family: var(--font-sans);
-      position: relative;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    /* In-flow slot so content is not under the fixed header */
+    .mitushi-header-spacer {
+      display: block;
+      width: 100%;
+      height: var(--header-height, 96px);
+      pointer-events: none;
+      visibility: hidden;
     }
 
     .mitushi-announcement {
@@ -69,29 +82,19 @@ Combines a collapsible announcement bar with a sticky header.
     }
 
     /*
-      Sticky on the section only (not the group, not fixed).
-      Fixed hid the header; nested sticky caused ghost paint strips.
+      No sticky / no transform on Shopify wrappers — those caused white ghost strips.
+      Only .mitushi-header-section is fixed; spacer keeps layout height.
     */
-    .shopify-section-group-header-group {
-      position: relative;
-      z-index: 1000;
-      background: #28282b !important;
-      background-color: #28282b !important;
-    }
-
+    .shopify-section-group-header-group,
     #shopify-section-mitushi-header,
     [id^="shopify-section"][id*="mitushi-header"] {
-      position: sticky;
-      top: 0;
+      position: relative !important;
+      top: auto !important;
+      transform: none !important;
+      overflow: visible !important;
       z-index: 1000;
-      background: #28282b !important;
-      background-color: #28282b !important;
-      color: #f7f7f8;
-      overflow: hidden;
-      /* Own compositor layer — blocks iframe/Instafeed ghost strips under nav */
-      transform: translateZ(0);
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
+      background: transparent !important;
+      background-color: transparent !important;
     }
 
     .mitushi-header-section {
@@ -880,6 +883,9 @@ Combines a collapsible announcement bar with a sticky header.
       }
     }
   </style>
+
+  <div class="mitushi-header-spacer" aria-hidden="true"></div>
+  <sht-header class="mitushi-header-section d-block">
 
   <div id="mitushi-announcement-bar" class="mitushi-announcement is-open" aria-hidden="false">
     <div class="mitushi-announcement-inner">
