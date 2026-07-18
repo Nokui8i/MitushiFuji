@@ -519,6 +519,18 @@
         background-color: #28282B !important;
         z-index: 9999 !important;
       }
+      .loading-bar.is-hidden {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        display: none !important;
+      }
+      #cartNotificationPanel.cart-notification[hidden] {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
     </style>
     <script>
       /* Global checkout cart interceptor & localhost analytics blocker to prevent CORS errors */

@@ -1229,11 +1229,144 @@ Combines a collapsible announcement bar with a sticky header.
 
     updateScrollState();
     window.addEventListener('scroll', onScroll, { passive: true });
-    
-    // Also run on DOMContentLoaded just in case it is still loading
+
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', updateScrollState);
     }
+
+    /* ─── WHITE BAR DEBUG (remove after fix) ─── */
+    (function setupWhiteBarDebug() {
+      var logo = document.querySelector('.mitushi-logo-link');
+      if (!logo) {
+        console.warn('[MitushiDebug] logo link not found');
+        return;
+      }
+
+      function rgbOf(bg) {
+        var m = String(bg || '').match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+        if (!m) return null;
+        return { r: +m[1], g: +m[2], b: +m[3] };
+      }
+
+      function isBright(bg) {
+        var c = rgbOf(bg);
+        if (!c) return false;
+        return (c.r + c.g + c.b) / 3 > 200;
+      }
+
+      function describeEl(el) {
+        if (!el || el === document.documentElement) return null;
+        var cs = window.getComputedStyle(el);
+        return {
+          tag: el.tagName,
+          id: el.id || '',
+          class: (el.className && String(el.className).slice(0, 120)) || '',
+          hidden: !!el.hidden,
+          display: cs.display,
+          visibility: cs.visibility,
+          opacity: cs.opacity,
+          bg: cs.backgroundColor,
+          bgImage: (cs.backgroundImage || '').slice(0, 80),
+          w: Math.round(el.getBoundingClientRect().width),
+          h: Math.round(el.getBoundingClientRect().height),
+          top: Math.round(el.getBoundingClientRect().top),
+          left: Math.round(el.getBoundingClientRect().left),
+          overflow: cs.overflow + '/' + cs.overflowX + '/' + cs.overflowY,
+          position: cs.position,
+          z: cs.zIndex
+        };
+      }
+
+      function scanBrightElements() {
+        var hits = [];
+        var nodes = document.body.querySelectorAll('*');
+        for (var i = 0; i < nodes.length; i++) {
+          var el = nodes[i];
+          var r = el.getBoundingClientRect();
+          if (r.width < 80 || r.height < 2 || r.height > 80) continue;
+          if (r.top > 220 || r.bottom < 40) continue;
+          var cs = window.getComputedStyle(el);
+          if (cs.display === 'none' || cs.visibility === 'hidden' || Number(cs.opacity) === 0) continue;
+          if (isBright(cs.backgroundColor) || /#fff|#f[0-9a-f]{5}|rgb\(\s*2[4-5]\d/i.test(cs.backgroundColor)) {
+            hits.push(describeEl(el));
+          }
+        }
+        return hits;
+      }
+
+      function sampleBarLine() {
+        if (!stickyHeader) return [];
+        var hr = stickyHeader.getBoundingClientRect();
+        var y = Math.round(hr.bottom + 4);
+        var samples = [];
+        var xs = [40, 120, 200, 320, 480, 640, 800, 960];
+        for (var i = 0; i < xs.length; i++) {
+          var x = xs[i];
+          if (x >= window.innerWidth) continue;
+          var stack = document.elementsFromPoint(x, y).slice(0, 6).map(describeEl).filter(Boolean);
+          samples.push({ x: x, y: y, stack: stack });
+        }
+        return samples;
+      }
+
+      function runDebug(reason, evt) {
+        var loader = document.querySelector('loading-bar');
+        var cartNoti = document.getElementById('cartNotificationPanel');
+        var payload = {
+          reason: reason,
+          time: new Date().toISOString(),
+          eventType: evt && evt.type,
+          scrollY: window.scrollY,
+          viewport: { w: window.innerWidth, h: window.innerHeight },
+          stickyHeader: describeEl(stickyHeader),
+          logo: describeEl(logo),
+          loadingBar: loader ? describeEl(loader) : null,
+          cartNotification: cartNoti ? describeEl(cartNoti) : null,
+          brightNearHeader: scanBrightElements(),
+          elementsFromPointBelowHeader: sampleBarLine()
+        };
+
+        console.log('%c[MitushiDebug:white-bar]', 'color:#cc132a;font-weight:bold', reason);
+        console.log(payload);
+
+        // Highlight suspects briefly
+        var suspects = (payload.brightNearHeader || []).slice(0, 5);
+        suspects.forEach(function (s, idx) {
+          console.warn('[MitushiDebug] bright suspect #' + (idx + 1), s);
+        });
+
+        var firstStacks = payload.elementsFromPointBelowHeader || [];
+        firstStacks.forEach(function (sample) {
+          if (!sample.stack || !sample.stack.length) return;
+          var top = sample.stack[0];
+          if (top && isBright(top.bg)) {
+            console.error('[MitushiDebug] WHITE ELEMENT at x=' + sample.x + ' y=' + sample.y, top);
+          }
+        });
+
+        window.__MITUSHI_LAST_WHITE_BAR_DEBUG__ = payload;
+        return payload;
+      }
+
+      ['mouseenter', 'mouseover', 'focus', 'mousedown', 'click'].forEach(function (type) {
+        logo.addEventListener(type, function (e) {
+          requestAnimationFrame(function () {
+            runDebug('logo:' + type, e);
+          });
+        }, true);
+      });
+
+      logo.addEventListener('mouseleave', function (e) {
+        runDebug('logo:mouseleave', e);
+      }, true);
+
+      // Manual trigger from console: window.__mitushiDebugWhiteBar()
+      window.__mitushiDebugWhiteBar = function () {
+        return runDebug('manual');
+      };
+
+      console.log('%c[MitushiDebug] ready — hover/click the logo, then check Console. Or run: __mitushiDebugWhiteBar()', 'color:#cc132a');
+    })();
 
     // Currency dropdown toggle
     var currencyBtn = document.getElementById('mitushi-currency-btn');
