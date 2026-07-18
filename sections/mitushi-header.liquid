@@ -17,16 +17,9 @@ Combines a collapsible announcement bar with a sticky header.
       overflow: hidden;
       background: #cc132a;
       color: #fff;
-      height: 0;
-      max-height: 0;
-      opacity: 1;
-      pointer-events: none;
-      transition: none;
-    }
-
-    .mitushi-announcement.is-open {
       height: 36px;
       max-height: 36px;
+      opacity: 1;
       pointer-events: auto;
     }
 
@@ -68,23 +61,15 @@ Combines a collapsible announcement bar with a sticky header.
     .mitushi-sticky-header {
       border-bottom: 1px solid transparent;
       background: #28282b;
-      /* Promote a stable compositor layer — prevents Chrome white-bar paint glitch on logo hover */
-      transform: translateZ(0);
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
+      padding-block: 12px;
     }
 
     .mitushi-sticky-header.scrolled {
       background: rgba(40, 40, 43, 0.96);
       border-color: rgba(255, 255, 255, 0.08);
-      padding-block: 8px;
     }
 
-    .mitushi-sticky-header:not(.scrolled) {
-      padding-block: 12px;
-    }
-
-    /* Single sticky shell — dark, opaque, isolated from page paint */
+    /* Sticky shell — no transform (transform + sticky = double-header ghost in Chrome) */
     .shopify-section-group-header-group,
     #shopify-section-mitushi-header,
     div[id*="mitushi-header"],
@@ -95,11 +80,6 @@ Combines a collapsible announcement bar with a sticky header.
       background: #28282b !important;
       background-color: #28282b !important;
       color: #f7f7f8;
-      transform: translateZ(0);
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      isolation: isolate;
-      /* do NOT set overflow:clip — clips product dropdowns */
     }
 
     .mitushi-header-inner {
@@ -126,7 +106,6 @@ Combines a collapsible announcement bar with a sticky header.
       border: none !important;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
-      transform: translateZ(0);
       color: inherit !important;
     }
 
@@ -144,7 +123,16 @@ Combines a collapsible announcement bar with a sticky header.
     }
 
     .mitushi-logo-glow {
-      display: none !important;
+      position: absolute;
+      left: -10px;
+      top: 50%;
+      width: 56px;
+      height: 56px;
+      margin-top: -28px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(204, 19, 42, 0.8) 0%, rgba(204, 19, 42, 0.25) 45%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .mitushi-logo-image {
@@ -850,17 +838,14 @@ Combines a collapsible announcement bar with a sticky header.
       }
 
       .mitushi-logo-glow {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         left: -6px;
+        margin-top: -22px;
       }
 
-      .mitushi-sticky-header:not(.scrolled) {
+      .mitushi-sticky-header {
         padding-block: 10px;
-      }
-
-      .mitushi-sticky-header.scrolled {
-        padding-block: 8px;
       }
 
       .mitushi-marquee {
@@ -944,6 +929,7 @@ Combines a collapsible announcement bar with a sticky header.
         data-logo-href="{{ logo_href }}"
         aria-label="{{ section.settings.logo_alt | escape }}"
       >
+        <span aria-hidden="true" class="mitushi-logo-glow"></span>
         <img
           src="{{ logo_img_url }}"
           alt="{{ section.settings.logo_alt | escape }}"
@@ -1219,33 +1205,19 @@ Combines a collapsible announcement bar with a sticky header.
   (function () {
     var announcementBar = document.getElementById('mitushi-announcement-bar');
     var stickyHeader = document.getElementById('mitushi-sticky-header');
-    var announceOpen = true;
-    var SCROLL_TOP_THRESHOLD = 8;
-    var ANNOUNCE_BAR_HEIGHT = 36;
     var scrollTicking = false;
+    var SCROLL_TOP_THRESHOLD = 24;
 
-    function getAnnouncementHeight() {
-      if (!announcementBar) return ANNOUNCE_BAR_HEIGHT;
-      var inner = announcementBar.querySelector('.mitushi-announcement-inner');
-      return inner && inner.offsetHeight ? inner.offsetHeight : ANNOUNCE_BAR_HEIGHT;
-    }
-
-    function setAnnouncementOpen(open) {
-      if (!announcementBar || announceOpen === open) return;
-
-      announceOpen = open;
-      announcementBar.classList.toggle('is-open', open);
-      announcementBar.setAttribute('aria-hidden', open ? 'false' : 'true');
+    /* Announcement stays open — collapsing it on scroll caused jump/fight + double-header ghost */
+    if (announcementBar) {
+      announcementBar.classList.add('is-open');
+      announcementBar.setAttribute('aria-hidden', 'false');
     }
 
     function updateScrollState() {
       var scrollY = window.scrollY || window.pageYOffset;
-      var atTop = scrollY <= SCROLL_TOP_THRESHOLD;
-
-      setAnnouncementOpen(atTop);
-
       if (stickyHeader) {
-        stickyHeader.classList.toggle('scrolled', !atTop);
+        stickyHeader.classList.toggle('scrolled', scrollY > SCROLL_TOP_THRESHOLD);
       }
     }
 
