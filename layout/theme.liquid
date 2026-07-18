@@ -192,12 +192,23 @@
         color: #f7f7f8 !important;
       }
 
-      /* Links */
+      /* Links — never force hover paint inside the sticky header (Chrome white-bar bug) */
       a {
         color: inherit;
         transition: color 0.3s;
       }
       a:hover {
+        color: #cc132a !important;
+      }
+      .mitushi-header-section a:hover,
+      .mitushi-sticky-header a:hover,
+      .shopify-section-group-header-group a:hover {
+        color: inherit !important;
+      }
+      .mitushi-header-section .mitushi-nav-link:hover {
+        color: #f7f7f8 !important;
+      }
+      .mitushi-header-section .mitushi-nav-link.active {
         color: #cc132a !important;
       }
 

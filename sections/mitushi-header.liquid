@@ -123,26 +123,26 @@ Combines a collapsible announcement bar with a sticky header.
       background: transparent !important;
       box-shadow: none !important;
       outline: none !important;
+      border: none !important;
+      cursor: pointer;
       -webkit-tap-highlight-color: transparent;
-      /* Avoid new compositor layers on hover */
       transform: translateZ(0);
+      color: inherit !important;
     }
 
     .mitushi-logo-link:hover,
     .mitushi-logo-link:focus,
     .mitushi-logo-link:focus-visible,
-    .mitushi-logo-link:active,
-    .mitushi-logo-link:hover *,
-    .mitushi-header-section a.mitushi-logo-link:hover {
+    .mitushi-logo-link:active {
       color: inherit !important;
       background: transparent !important;
       text-decoration: none !important;
       outline: none !important;
       box-shadow: none !important;
       filter: none !important;
+      opacity: 1 !important;
     }
 
-    /* Soft glow via box-shadow on the image — no separate blurred layer */
     .mitushi-logo-glow {
       display: none !important;
     }
@@ -154,9 +154,13 @@ Combines a collapsible announcement bar with a sticky header.
       width: auto;
       display: block;
       max-width: 200px;
-      border-radius: 0;
-      box-shadow: -10px 0 28px rgba(204, 19, 42, 0.45);
+      border: 0 !important;
+      outline: none !important;
+      box-shadow: none !important;
+      filter: none !important;
       pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
     .mitushi-nav {
@@ -921,15 +925,35 @@ Combines a collapsible announcement bar with a sticky header.
         </button>
       </div>
 
-      <a href="{{ section.settings.logo_link | default: routes.root_url }}" class="mitushi-logo-link">
-        <span aria-hidden="true" class="mitushi-logo-glow"></span>
-        {% if section.settings.logo_image != blank %}
-          {% assign logo_img_url = section.settings.logo_image | image_url: width: 400 %}
-        {% else %}
-          {% assign logo_img_url = 'mitushi-logo-header.png' | asset_url %}
-        {% endif %}
-        <img src="{{ logo_img_url }}" alt="{{ section.settings.logo_alt | escape }}" class="mitushi-logo-image" width="220" height="56" style="height: 56px; width: auto;" />
-      </a>
+      {%- liquid
+        assign logo_href = section.settings.logo_link | default: routes.root_url
+        if section.settings.logo_image != blank
+          assign logo_img_url = section.settings.logo_image | image_url: width: 400
+        else
+          assign logo_img_url = 'mitushi-logo-header.png' | asset_url
+        endif
+      -%}
+      {%- comment -%}
+        Use a non-<a> logo control. Chrome paints a white compositor strip under sticky
+        headers when hovering an <a> that contains a filtered/shadowed image.
+      {%- endcomment -%}
+      <span
+        class="mitushi-logo-link"
+        role="link"
+        tabindex="0"
+        data-logo-href="{{ logo_href }}"
+        aria-label="{{ section.settings.logo_alt | escape }}"
+      >
+        <img
+          src="{{ logo_img_url }}"
+          alt="{{ section.settings.logo_alt | escape }}"
+          class="mitushi-logo-image"
+          width="220"
+          height="56"
+          decoding="async"
+          fetchpriority="high"
+        >
+      </span>
 
       <nav class="mitushi-nav hidden items-center gap-1 md:flex" aria-label="Primary navigation">
         {%- assign menu_links = linklists[section.settings.menu].links -%}
@@ -1239,6 +1263,25 @@ Combines a collapsible announcement bar with a sticky header.
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', updateScrollState);
+    }
+
+    /* Logo navigation without <a>:hover paint path (Chrome sticky white-bar bug) */
+    var logoLink = document.querySelector('.mitushi-logo-link[data-logo-href]');
+    if (logoLink) {
+      var goLogo = function () {
+        var href = logoLink.getAttribute('data-logo-href');
+        if (href) window.location.assign(href);
+      };
+      logoLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        goLogo();
+      });
+      logoLink.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          goLogo();
+        }
+      });
     }
 
     // Currency dropdown toggle
