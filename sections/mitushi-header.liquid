@@ -69,22 +69,34 @@ Combines a collapsible announcement bar with a sticky header.
     }
 
     /*
-      Sticky on the section (reliable). Keep main/hero in a lower stacking
-      context so 3D layers cannot paint over the nav.
+      Fixed header (not sticky). Chrome sticky + iframe/Instafeed leaves ghost
+      paint strips under the nav that clear only after more scroll.
     */
-    .shopify-section-group-header-group,
-    #shopify-section-mitushi-header,
-    [id^="shopify-section"][id*="mitushi-header"] {
-      position: sticky;
+    .shopify-section-group-header-group {
+      position: fixed;
       top: 0;
+      inset-inline: 0;
+      width: 100%;
       z-index: 1000;
+      isolation: isolate;
+      overflow: clip;
       background: #28282b !important;
       background-color: #28282b !important;
       color: #f7f7f8;
     }
 
-    .shopify-section-group-header-group {
-      isolation: isolate;
+    #shopify-section-mitushi-header,
+    [id^="shopify-section"][id*="mitushi-header"] {
+      position: relative;
+      z-index: auto;
+      background: #28282b !important;
+      background-color: #28282b !important;
+      color: #f7f7f8;
+    }
+
+    .mitushi-header-section {
+      background: #28282b !important;
+      background-color: #28282b !important;
     }
 
     .mitushi-header-inner {

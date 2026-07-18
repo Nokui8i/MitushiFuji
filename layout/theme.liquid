@@ -514,20 +514,30 @@
         background: #cc132a !important;
       }
 
-      /* Keep page/hero compositing layers under the sticky header */
-      #mainContent {
+      /* Fixed header spacer — keeps content below the floating header */
+      body.js-main-body:not(.mitushi-waitlist-layout) #mainContent {
         background: #28282B !important;
         position: relative;
         z-index: 0;
         isolation: isolate;
+        padding-top: var(--header-height, 100px);
       }
 
-      .shopify-section-group-header-group,
+      .shopify-section-group-header-group {
+        position: fixed !important;
+        top: 0 !important;
+        inset-inline: 0 !important;
+        width: 100% !important;
+        z-index: 1000 !important;
+        overflow: clip !important;
+        isolation: isolate;
+      }
+
       #shopify-section-mitushi-header,
       [id^="shopify-section"][id*="mitushi-header"] {
-        position: sticky !important;
-        top: 0 !important;
-        z-index: 1000 !important;
+        position: relative !important;
+        top: auto !important;
+        z-index: auto !important;
       }
 
       .mitushi-marquee {
