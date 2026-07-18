@@ -25,7 +25,7 @@
       ],
       "settings": {
         "color_scheme": "",
-        "show_page_title": false,
+        "show_page_title": true,
         "remove_padding_top": false,
         "remove_padding_bottom": false
       }

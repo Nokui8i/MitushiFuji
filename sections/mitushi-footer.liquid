@@ -470,7 +470,11 @@
           </ul>
         </div>
         <div class="mitushi-footer-link-group">
+          {%- comment -%} Prefer theme setting; always fall back to Navigation menu handle "footer" {%- endcomment -%}
           {%- assign footer_menu_2 = linklists[section.settings.menu_2] -%}
+          {%- if footer_menu_2 == blank or footer_menu_2.links == blank -%}
+            {%- assign footer_menu_2 = linklists.footer -%}
+          {%- endif -%}
           <h4>{{ footer_menu_2.title | default: 'Help' }}</h4>
           <ul>
             {%- if footer_menu_2.links != blank -%}
@@ -485,17 +489,12 @@
               <li><a href="/pages/copyrights">Copyrights</a></li>
               <li><a href="/pages/data-sharing-opt-out">Your Privacy Choices</a></li>
             {%- endif -%}
-            {%- comment -%} Always ensure required CCPA link is present even if menu omits it {%- endcomment -%}
             {%- assign has_privacy_choices = false -%}
-            {%- if footer_menu_2.links != blank -%}
-              {%- for link in footer_menu_2.links -%}
-                {%- if link.url contains 'data-sharing-opt-out' or link.title contains 'Privacy Choices' -%}
-                  {%- assign has_privacy_choices = true -%}
-                {%- endif -%}
-              {%- endfor -%}
-            {%- else -%}
-              {%- assign has_privacy_choices = true -%}
-            {%- endif -%}
+            {%- for link in footer_menu_2.links -%}
+              {%- if link.url contains 'data-sharing-opt-out' or link.title contains 'Privacy Choices' -%}
+                {%- assign has_privacy_choices = true -%}
+              {%- endif -%}
+            {%- endfor -%}
             {%- unless has_privacy_choices -%}
               <li><a href="/pages/data-sharing-opt-out">Your Privacy Choices</a></li>
             {%- endunless -%}
