@@ -485,21 +485,28 @@
       }
 
       /* Header & Announcement bar overrides globally */
-      .mitushi-header-section {
-        background: #28282B !important;
-      }
-      
+      .shopify-section-group-header-group,
+      #shopify-section-mitushi-header,
+      div[id*="mitushi-header"],
+      .shopify-section-group-header-group .shopify-section,
+      .mitushi-header-section,
       .mitushi-sticky-header {
         background: #28282B !important;
+        background-color: #28282B !important;
       }
+
       .mitushi-sticky-header.scrolled {
-        background: rgba(40, 40, 43, 0.88) !important;
+        background: rgba(40, 40, 43, 0.94) !important;
         backdrop-filter: blur(22px) !important;
         -webkit-backdrop-filter: blur(22px) !important;
       }
-      
+
       .mitushi-announcement {
-        background: #cc132a !important; /* Japanese crimson background */
+        background: #cc132a !important;
+      }
+
+      #mainContent {
+        background: #28282B !important;
       }
 
       .mitushi-marquee {

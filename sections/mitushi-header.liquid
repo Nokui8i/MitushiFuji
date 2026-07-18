@@ -6,10 +6,11 @@ Combines a collapsible announcement bar with a sticky header.
 <sht-header class="mitushi-header-section d-block">
   <style>
     .mitushi-header-section {
-      background: var(--ink);
+      background: #28282b;
       color: #f7f7f8;
       font-family: var(--font-sans);
       position: relative;
+      isolation: isolate;
     }
 
     .mitushi-announcement {
@@ -67,30 +68,33 @@ Combines a collapsible announcement bar with a sticky header.
     .mitushi-sticky-header {
       border-bottom: 1px solid transparent;
       transition: background 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
-      background: #28282B;
+      background: #28282b;
+      overflow: hidden;
     }
 
     .mitushi-sticky-header.scrolled {
-      background: rgba(40, 40, 43, 0.88);
+      background: rgba(40, 40, 43, 0.94);
       backdrop-filter: blur(22px);
       -webkit-backdrop-filter: blur(22px);
-    }
-
-    .shopify-section-group-header-group,
-    #shopify-section-mitushi-header,
-    div[id*="mitushi-header"] {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .mitushi-sticky-header.scrolled {
       border-color: rgba(255, 255, 255, 0.08);
       padding-block: 8px;
     }
 
     .mitushi-sticky-header:not(.scrolled) {
       padding-block: 12px;
+    }
+
+    /* Kill light color-scheme bleed under the dark header */
+    .shopify-section-group-header-group,
+    #shopify-section-mitushi-header,
+    div[id*="mitushi-header"],
+    .shopify-section-group-header-group .shopify-section {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #28282b !important;
+      background-color: #28282b !important;
+      color: #f7f7f8;
     }
 
     .mitushi-header-inner {
@@ -113,19 +117,20 @@ Combines a collapsible announcement bar with a sticky header.
 
     .mitushi-logo-glow {
       position: absolute;
-      left: -12px;
+      left: -8px;
       top: 50%;
       transform: translateY(-50%);
-      width: 64px;
-      height: 64px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
-      background-color: #cc132a;
-      filter: blur(12px);
-      opacity: 0.7;
+      background: radial-gradient(circle, rgba(204, 19, 42, 0.75) 0%, rgba(204, 19, 42, 0.2) 55%, transparent 72%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .mitushi-logo-image {
       position: relative;
+      z-index: 1;
       height: 56px;
       width: auto;
       display: block;
@@ -820,9 +825,9 @@ Combines a collapsible announcement bar with a sticky header.
       }
 
       .mitushi-logo-glow {
-        width: 48px;
-        height: 48px;
-        left: -8px;
+        width: 40px;
+        height: 40px;
+        left: -6px;
       }
 
       .mitushi-sticky-header:not(.scrolled) {
