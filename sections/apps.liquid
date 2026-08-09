@@ -65,10 +65,6 @@
   {%- render 'mitushi-instafeed-section-styles', section: section -%}
 {%- endif -%}
 
-{%- if has_instafeed_block -%}
-  {%- render 'mitushi-instafeed-lightbox-styles' -%}
-{%- endif -%}
-
 {%- if use_mitushi_layout and has_instafeed_block -%}
   <div
     class="section mitushi-instafeed-unified {{ section.settings.remove_padding_top | replace: 'true', 'section-top-zero' | replace: section.settings.remove_padding_top, '' }} {{ section.settings.remove_padding_bottom | replace: 'true', 'section-bottom-zero' | replace: section.settings.remove_padding_bottom, '' }} color-{{- section.settings.color_scheme -}}"
