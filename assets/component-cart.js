@@ -284,12 +284,20 @@ class SHTCartForm extends SHTCustomComponent {
     if (summaryTotal) summaryTotal.textContent = formatted;
 
     const threshold = parseInt(this.querySelector(".mitushi-freeship")?.dataset?.freeshipThreshold, 10) || 19900;
+    const summaryEl = this.querySelector(".mitushi-cart-summary");
     const shippingRow = this.querySelector(".mitushi-cart-summary dl > div:nth-child(2) dd");
     if (shippingRow) {
-      shippingRow.innerHTML =
-        cart.total_price >= threshold
-          ? '<span class="text-crimson font-bold">FREE</span>'
-          : "Calculated at checkout";
+      const freeLabel = summaryEl?.dataset?.freeShippingLabel || "FREE";
+      const calculatedLabel = summaryEl?.dataset?.shippingCalculatedLabel || "Calculated at checkout";
+      shippingRow.textContent = "";
+      if (cart.total_price >= threshold) {
+        const span = document.createElement("span");
+        span.className = "text-crimson font-bold";
+        span.textContent = freeLabel;
+        shippingRow.appendChild(span);
+      } else {
+        shippingRow.textContent = calculatedLabel;
+      }
     }
 
     if (window.MitushiCart?.updateProgress) {

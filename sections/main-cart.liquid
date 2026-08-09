@@ -517,7 +517,7 @@
 
           <!-- Right Column: Sidebar Order Summary -->
           <aside class="lg:sticky lg:top-28 lg:self-start js-cart-form-footer {% if cart == empty %}d-none{% endif %}">
-            <div class="mitushi-cart-summary border border-border/60 bg-card p-7 js-cart-form-content-cart-total">
+            <div class="mitushi-cart-summary border border-border/60 bg-card p-7 js-cart-form-content-cart-total" data-free-shipping-label="{{ section.settings.free_shipping_text | default: 'FREE' | escape }}" data-shipping-calculated-label="{{ section.settings.shipping_calculated_text | default: 'Calculated at checkout' | escape }}">
               
               <!-- Title -->
               <h2 class="font-display text-2xl text-foreground">{{ section.settings.order_summary_heading | default: 'Order summary' }}</h2>
