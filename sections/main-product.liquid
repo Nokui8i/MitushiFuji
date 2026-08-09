@@ -7,6 +7,12 @@
   assign sticky_product_form_id = 'productStickyForm-' | append: section.id
   assign product_form_installment_id = 'productFormInstallment-' | append: section.id
   assign first_3d_model = product.media | where: 'media_type', 'model' | first
+  assign ratio_thubnails = section.settings.thumbnails_ratio
+  assign object_fit = 'of-cover'
+  if ratio_thubnails contains 'fit'
+    assign ratio_thubnails = ratio_thubnails | replace: 'fit', ''
+    assign object_fit = 'of-contain'
+  endif
   assign size_guide_block = nil
   assign size_guide_dialog_id = ''
   assign popup_content_block = nil
@@ -45,7 +51,7 @@
               data-index="{{ forloop.index0 }}"
               class="thumb-btn relative aspect-square w-20 flex-shrink-0 overflow-hidden border transition-all {% if forloop.first %}border-crimson{% else %}border-border/60 hover:border-foreground/40{% endif %} bg-card cursor-pointer"
             >
-              <img src="{{ media.src | image_url: width: 160 }}" alt="{{ media.alt | escape }}" class="h-full w-full object-cover" />
+              <img src="{{ media.src | image_url: width: 160 }}" alt="{{ media.alt | escape }}" width="160" height="160" class="h-full w-full object-cover" />
             </button>
           {%- endfor -%}
         </div>
@@ -58,6 +64,8 @@
                 src="{{ media.src | image_url: width: 1000 }}"
                 alt="{{ media.alt | escape }}"
                 data-index="{{ forloop.index0 }}"
+                width="1000"
+                height="1250"
                 class="main-gallery-img absolute inset-0 h-full w-full object-cover transition-opacity duration-500 {% if forloop.first %}opacity-100{% else %}opacity-0{% endif %}"
               />
             {%- endfor -%}

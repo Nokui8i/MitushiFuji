@@ -35,7 +35,7 @@
     "cart_show_free_shipping_notification": true,
     "cart_minimum_order_price_for_free_shipping": "199",
     "product_information_new_in_date_limit": 10,
-    "product_rating_app": "judge_me",
+    "product_rating_app": "loox",
     "color_badge_text": "#ffffff",
     "color_sale_badge": "#121212",
     "color_sold_out_badge_text": "#121212",
