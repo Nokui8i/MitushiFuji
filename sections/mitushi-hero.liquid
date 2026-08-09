@@ -235,6 +235,8 @@
   .mitushi-hero-stats {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    row-gap: 16px;
     gap: 32px;
     font-size: 10px;
     text-transform: uppercase;
@@ -248,6 +250,13 @@
     color: var(--bone);
     line-height: 1;
     margin-bottom: 4px;
+    word-break: keep-all;
+    white-space: nowrap;
+  }
+
+  .mitushi-hero-stat-item {
+    word-break: normal;
+    overflow-wrap: break-word;
   }
 
   .mitushi-hero-stat-item .stat-num.crimson {
