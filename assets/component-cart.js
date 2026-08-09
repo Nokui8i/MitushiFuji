@@ -326,6 +326,12 @@ class SHTCartForm extends SHTCustomComponent {
   }
 
   applyOptimisticUI(lineIndex, quantity) {
+    // Intentionally does NOT touch price totals or the free-shipping progress
+    // bar here. Those are driven once, directly from the server-confirmed
+    // cart in applyOrderTotals(); updating them twice (an instant client-side
+    // estimate here, then the real value moments later) caused a visible
+    // "jump forward, snap back, jump forward again" as the progress bar's
+    // eased width transition got retriggered mid-flight.
     const qty = parseInt(quantity, 10) || 0;
     const row = document.getElementById("cartItem-" + lineIndex);
 
@@ -335,21 +341,7 @@ class SHTCartForm extends SHTCustomComponent {
         this.renderEmptyCart();
         return;
       }
-    } else if (row) {
-      const unit = parseInt(row.dataset.unitPrice, 10) || 0;
-      const priceEl = row.querySelector(".cart-item__price .font-display");
-      if (priceEl && unit) priceEl.textContent = this.formatMoney(unit * qty);
     }
-
-    const total = this.estimateCartTotalCents();
-    const formatted = this.formatMoney(total);
-    this.querySelectorAll(".js-cart-total").forEach((el) => {
-      el.textContent = formatted;
-    });
-    const summaryTotal = this.querySelector(".mitushi-cart-summary dl .font-display.text-2xl");
-    if (summaryTotal) summaryTotal.textContent = formatted;
-
-    if (window.MitushiCart?.updateProgress) window.MitushiCart.updateProgress(total);
 
     this.syncCartCountBadges(this.estimateCartItemCount(), { animate: true });
   }
