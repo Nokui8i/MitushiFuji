@@ -1179,7 +1179,7 @@ Announcement bar + fixed header (spacer in flow). Avoids Chrome sticky paint gho
     <div class="mitushi-mobile-drawer__backdrop" id="mitushi-mobile-drawer-backdrop" aria-hidden="true"></div>
     <div class="mitushi-mobile-drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
       <div class="mitushi-mobile-drawer__head">
-        <span class="mitushi-mobile-drawer__title">Menu</span>
+        <span class="mitushi-mobile-drawer__title">{{ section.settings.mobile_menu_title | default: 'Menu' }}</span>
         <button type="button" class="mitushi-mobile-drawer__close" id="mitushi-mobile-drawer-close" aria-label="Close menu">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -1207,7 +1207,7 @@ Announcement bar + fixed header (spacer in flow). Avoids Chrome sticky paint gho
           id="mitushi-search-input"
           type="search"
           name="q"
-          placeholder="Search products, drops, collections…"
+          placeholder="{{ section.settings.search_placeholder | default: 'Search products, drops, collections…' }}"
           autocomplete="off"
           class="mitushi-search-input"
           aria-label="Search"
@@ -1468,6 +1468,22 @@ Announcement bar + fixed header (spacer in flow). Avoids Chrome sticky paint gho
       "label": "Show currency selector",
       "default": true,
       "info": "Only shows if your store has multiple currencies enabled in Shopify Markets"
+    },
+    {
+      "type": "header",
+      "content": "Search & mobile menu text"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search box placeholder text",
+      "default": "Search products, drops, collections…"
+    },
+    {
+      "type": "text",
+      "id": "mobile_menu_title",
+      "label": "Mobile menu drawer title",
+      "default": "Menu"
     }
   ],
   "blocks": [
