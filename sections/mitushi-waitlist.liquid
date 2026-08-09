@@ -782,7 +782,7 @@
         <div class="mitushi-waitlist__mobile-panel-inner">
           <span>{{ section.settings.float_badge_1 | default: 'LIMITED / TBA' }}</span>
           <span class="mitushi-waitlist__mobile-kanji">{{ section.settings.panel_kanji | default: '夢' }}</span>
-          <span>DROP 01</span>
+          <span>{{ section.settings.mobile_panel_label | default: 'DROP 01' }}</span>
         </div>
       </div>
     </div>
@@ -1004,6 +1004,12 @@
       "id": "panel_kanji",
       "label": "Panel kanji",
       "default": "夢"
+    },
+    {
+      "type": "text",
+      "id": "mobile_panel_label",
+      "label": "Mobile panel label",
+      "default": "DROP 01"
     },
     {
       "type": "header",

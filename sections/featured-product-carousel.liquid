@@ -122,10 +122,10 @@
               <div class="mitushi-product-cta">
                 <div class="mitushi-product-cta-content">
                   <div class="mitushi-product-cta-info">
-                    <div class="mitushi-product-cta-label">Quick add</div>
+                    <div class="mitushi-product-cta-label">{{ section.settings.quick_add_label | default: 'Quick add' }}</div>
                     <div class="mitushi-product-price">{{ prod_price }}</div>
                   </div>
-                  <button class="mitushi-product-cart-btn" {% if variant_id != blank %}onclick="addProductToCart('{{ variant_id }}')"{% endif %}>Add to cart</button>
+                  <button class="mitushi-product-cart-btn" {% if variant_id != blank %}onclick="addProductToCart('{{ variant_id }}')"{% endif %}>{{ section.settings.add_to_cart_label | default: 'Add to cart' }}</button>
                 </div>
               </div>
             </div>
@@ -476,6 +476,22 @@
           "label": "t:general.asterisk"
         }
       ]
+    },
+    {
+      "type": "header",
+      "content": "Text content"
+    },
+    {
+      "type": "text",
+      "id": "quick_add_label",
+      "label": "Quick add label",
+      "default": "Quick add"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "Add to cart button text",
+      "default": "Add to cart"
     }
   ],
   "presets": [
