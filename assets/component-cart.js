@@ -182,6 +182,7 @@ class SHTCartForm extends SHTCustomComponent {
     this.clearCartItemsDOM();
     this.toggleCartEmpty(true);
     this.syncCartCountBadges(0);
+    this._lastAppliedTotalCents = 0;
 
     this.querySelectorAll(".js-cart-total").forEach((el) => {
       el.textContent = this.formatMoney(0);
@@ -275,8 +276,20 @@ class SHTCartForm extends SHTCustomComponent {
 
   applyOrderTotals(cart) {
     if (typeof cart.total_price !== "number") return;
+    this.writeOrderTotals(cart.total_price);
+  }
 
-    const formatted = this.formatMoney(cart.total_price);
+  // Writes the total/shipping-row/progress-bar UI for a given total in cents.
+  // Skips the write entirely if it matches what's already on screen, so an
+  // instant optimistic estimate and the slightly-later server-confirmed value
+  // (when they agree, the common case) don't both trigger the progress bar's
+  // eased width transition and produce a visible double-animation "jump".
+  writeOrderTotals(totalCents) {
+    if (typeof totalCents !== "number") return;
+    if (this._lastAppliedTotalCents === totalCents) return;
+    this._lastAppliedTotalCents = totalCents;
+
+    const formatted = this.formatMoney(totalCents);
     this.querySelectorAll(".js-cart-total").forEach((el) => {
       el.textContent = formatted;
     });
@@ -290,7 +303,7 @@ class SHTCartForm extends SHTCustomComponent {
       const freeLabel = summaryEl?.dataset?.freeShippingLabel || "FREE";
       const calculatedLabel = summaryEl?.dataset?.shippingCalculatedLabel || "Calculated at checkout";
       shippingRow.textContent = "";
-      if (cart.total_price >= threshold) {
+      if (totalCents >= threshold) {
         const span = document.createElement("span");
         span.className = "text-crimson font-bold";
         span.textContent = freeLabel;
@@ -301,7 +314,7 @@ class SHTCartForm extends SHTCustomComponent {
     }
 
     if (window.MitushiCart?.updateProgress) {
-      window.MitushiCart.updateProgress(cart.total_price);
+      window.MitushiCart.updateProgress(totalCents);
     }
   }
 
@@ -326,12 +339,6 @@ class SHTCartForm extends SHTCustomComponent {
   }
 
   applyOptimisticUI(lineIndex, quantity) {
-    // Intentionally does NOT touch price totals or the free-shipping progress
-    // bar here. Those are driven once, directly from the server-confirmed
-    // cart in applyOrderTotals(); updating them twice (an instant client-side
-    // estimate here, then the real value moments later) caused a visible
-    // "jump forward, snap back, jump forward again" as the progress bar's
-    // eased width transition got retriggered mid-flight.
     const qty = parseInt(quantity, 10) || 0;
     const row = document.getElementById("cartItem-" + lineIndex);
 
@@ -341,7 +348,16 @@ class SHTCartForm extends SHTCustomComponent {
         this.renderEmptyCart();
         return;
       }
+    } else if (row) {
+      const unit = parseInt(row.dataset.unitPrice, 10) || 0;
+      const priceEl = row.querySelector(".cart-item__price .font-display");
+      if (priceEl && unit) priceEl.textContent = this.formatMoney(unit * qty);
     }
+
+    // Instant estimate. writeOrderTotals() no-ops later if the confirmed
+    // server total ends up matching this estimate, so the progress bar only
+    // animates once in the common case (see writeOrderTotals for why).
+    this.writeOrderTotals(this.estimateCartTotalCents());
 
     this.syncCartCountBadges(this.estimateCartItemCount(), { animate: true });
   }
