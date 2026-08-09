@@ -1,4 +1,11 @@
 <style>
+  /* Ensure space before the footer — the default page template has no
+     inherent bottom spacing of its own (unlike sections with large
+     headings/imagery), so short content pages ran straight into the footer. */
+  [data-ui-component="Main Page Section"]:not(.section-bottom-zero) {
+    padding-block-end: 64px;
+  }
+
   /* FAQ Page Styling overrides */
   .mitushi-faq {
     max-width: 900px !important;
