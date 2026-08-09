@@ -385,7 +385,7 @@
           {% endif %}
           <img
             src="{{ footer_logo_url }}"
-            alt="Mitushi"
+            alt="{{ section.settings.logo_alt | default: 'Mitushi' }}"
             class="mitushi-footer-logo"
             width="220"
             height="56"
@@ -504,7 +504,7 @@
 
       <!-- Newsletter -->
       <div class="mitushi-footer-newsletter">
-        <h4>Join the drop list</h4>
+        <h4>{{ section.settings.newsletter_heading | default: 'Join the drop list' }}</h4>
         <p class="mitushi-footer-newsletter-desc">
           {{ section.settings.newsletter_text }}
         </p>
@@ -524,20 +524,20 @@
             </svg>
           </button>
         {% endform %}
-        <p class="mitushi-footer-newsletter-legal">限定ドロップ · ミツシ・コミュニティへようこそ</p>
+        <p class="mitushi-footer-newsletter-legal">{{ section.settings.newsletter_legal_text | default: '限定ドロップ · ミツシ・コミュニティへようこそ' }}</p>
       </div>
     </div>
 
     <!-- Giant Brandmark -->
     <div class="mitushi-footer-brandmark-wrapper">
       <div class="mitushi-footer-brandmark">
-        MITUSHI
+        {{ section.settings.brandmark_text | default: 'MITUSHI' }}
       </div>
     </div>
 
     <!-- Bottom metadata -->
     <div class="mitushi-footer-bottom">
-      <div>© {{ 'now' | date: "%Y" }} Mitushi Studio · All rights reserved</div>
+      <div>© {{ 'now' | date: "%Y" }} {{ section.settings.copyright_text | default: 'Mitushi Studio · All rights reserved' }}</div>
       <div class="mitushi-footer-bottom-links">
         {%- assign footer_menu_bottom = linklists[section.settings.menu_bottom] -%}
         {%- if footer_menu_bottom.links != blank -%}
@@ -626,6 +626,40 @@
       "type": "link_list",
       "id": "menu_bottom",
       "label": "Bottom Link List (e.g. Policies)"
+    },
+    {
+      "type": "header",
+      "content": "Text content"
+    },
+    {
+      "type": "text",
+      "id": "logo_alt",
+      "label": "Logo alt text",
+      "default": "Mitushi"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "Join the drop list"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_legal_text",
+      "label": "Newsletter legal / tagline text",
+      "default": "限定ドロップ · ミツシ・コミュニティへようこそ"
+    },
+    {
+      "type": "text",
+      "id": "brandmark_text",
+      "label": "Giant brandmark text",
+      "default": "MITUSHI"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright text (year is added automatically)",
+      "default": "Mitushi Studio · All rights reserved"
     }
   ],
   "presets": [
