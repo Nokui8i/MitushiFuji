@@ -220,6 +220,8 @@
 	   "update": "Mettre à jour",
 	   "empty": "Votre panier est vide",
 	   "cart_quantity_error": "Vous ne pouvez ajouter que {{ quantity }} de cet article à votre panier.",
+	   "inventory_limit_update": "Il ne reste que {{ count }} en stock — c'est le maximum pour cet article.",
+	   "inventory_limit_add": "Seulement {{ count }} disponible(s) — nous avons ajouté le maximum à votre panier.",
 	   "cart_error": "Une erreur s'est produite lors de la mise à jour de votre panier. Veuillez réessayer.",
 	   "free_shipping_notification_html": "Vous êtes <b>{{ remaining_amount }}</b> de la livraison gratuite",
 	   "free_shipping_notification_qualified": "Vos commandes se qualifient pour la livraison gratuite",
@@ -235,6 +237,7 @@
 	   "view_cart": "View cart"
 	  },
 	  "main_collection_product": {
+	   "back_to_home_page": "Continuer les achats",
 	   "filter_form": {
 	    "apply": "Appliquer",
 	    "clear": "Effacer",
@@ -462,6 +465,7 @@
 	 "products": {
 	  "product": {
 	   "add_to_cart": "Ajouter au panier",
+	   "buy_it_now": "Acheter maintenant",
 	   "description": "Description",
 	   "on_sale": "Vente",
 	   "product_variants": "Variantes de produit",

@@ -237,6 +237,7 @@
 	   "view_cart": "View cart"
 	  },
 	  "main_collection_product": {
+	   "back_to_home_page": "Continue shopping",
 	   "filter_form": {
 	    "apply": "Apply",
 	    "clear": "Clear",
@@ -464,6 +465,7 @@
 	 "products": {
 	  "product": {
 	   "add_to_cart": "Add to cart",
+	   "buy_it_now": "Buy it now",
 	   "description": "Description",
 	   "on_sale": "Sale",
 	   "product_variants": "Product variants",

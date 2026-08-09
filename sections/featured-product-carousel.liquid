@@ -84,7 +84,7 @@
                   assign prod_badge = 'HOT'
                   break
                 elsif tag_down contains 'drop'
-                  assign prod_badge = tag | uppercase
+                  assign prod_badge = tag | upcase
                   break
                 endif
               endfor

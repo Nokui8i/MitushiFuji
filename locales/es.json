@@ -220,6 +220,8 @@
 	   "update": "Actualizar",
 	   "empty": "Su carrito está vacío",
 	   "cart_quantity_error": "Sólo puede agregar {{ quantity }} de este artículo al carrito.",
+	   "inventory_limit_update": "Solo quedan {{ count }} en stock — es el máximo para este artículo.",
+	   "inventory_limit_add": "Solo hay {{ count }} disponibles — hemos añadido el máximo a tu carrito.",
 	   "cart_error": "Se ha producido un error al actualizar su carrito. Por favor, inténtalo de nuevo.",
 	   "free_shipping_notification_html": "Está a <b>{{ remaining_amount }}</b> de envío gratuito",
 	   "free_shipping_notification_qualified": "Su compra califica para envío gratuito",
@@ -235,6 +237,7 @@
 	   "view_cart": "View cart"
 	  },
 	  "main_collection_product": {
+	   "back_to_home_page": "Seguir comprando",
 	   "filter_form": {
 	    "apply": "Aplicar",
 	    "clear": "Borrar",
@@ -462,6 +465,7 @@
 	 "products": {
 	  "product": {
 	   "add_to_cart": "Añadir al carrito",
+	   "buy_it_now": "Cómpralo ahora",
 	   "description": "Descripción",
 	   "on_sale": "Venta",
 	   "product_variants": "Variantes del producto",

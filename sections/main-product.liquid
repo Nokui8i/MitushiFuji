@@ -68,7 +68,7 @@
       <!-- Info -->
       <div class="lg:pl-8">
         <div class="mb-2 text-[10px] font-medium uppercase tracking-[0.5em] text-crimson">
-          / {{ product.type | default: 'GHOST' | uppercase }} — 鬼
+          / {{ product.type | default: 'GHOST' | upcase }} — 鬼
         </div>
         <h1 class="font-display text-5xl md:text-6xl leading-none text-foreground uppercase">{{ product.title }}</h1>
         <div class="mt-4 flex items-baseline gap-3">
@@ -345,7 +345,7 @@
 
     function formatStockMessage(template, count) {
       if (!template) return 'Only ' + count + ' available.';
-      return template.replace('[count]', String(count)).replace('{{ count }}', String(count));
+      return template.replace('[count]', String(count)).replace('{% raw %}{{ count }}{% endraw %}', String(count));
     }
 
     function setProductQuantity(value, options = {}) {

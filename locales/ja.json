@@ -220,6 +220,8 @@
 	   "update": "更新",
 	   "empty": "あなたのカートは空です。",
 	   "cart_quantity_error": "この商品は{{ quantity }}個までしかカートに追加できません。",
+	   "inventory_limit_update": "在庫は{{ count }}点のみです — これがこの商品の上限です。",
+	   "inventory_limit_add": "{{ count }}点のみ在庫があります — 上限までカートに追加しました。",
 	   "cart_error": "カートの更新中にエラーが発生しました。もう一度お試しください。",
 	   "free_shipping_notification_html": "送料無料まであと<b>{{ remaining_amount }}</b>です。",
 	   "free_shipping_notification_qualified": "ご注文は送料無料の対象となります。",
@@ -235,6 +237,7 @@
 	   "view_cart": "カートを見る"
 	  },
 	  "main_collection_product": {
+	   "back_to_home_page": "ショッピングを続ける",
 	   "filter_form": {
 	    "apply": "適用する",
 	    "clear": "クリア",
@@ -462,6 +465,7 @@
 	 "products": {
 	  "product": {
 	   "add_to_cart": "カートに追加",
+	   "buy_it_now": "今すぐ購入",
 	   "description": "説明",
 	   "on_sale": "セール",
 	   "product_variants": "製品バリアント",
