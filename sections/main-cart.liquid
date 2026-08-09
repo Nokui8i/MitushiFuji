@@ -355,9 +355,9 @@
       <div class="js-cart-page-header mitushi-cart-header mb-10 flex items-end justify-between gap-6 {{ cart_empty_hide }}">
         <div>
           <div class="mitushi-cart-header-eyebrow mb-3 text-[10px] font-medium uppercase tracking-[0.5em] text-crimson">
-            / Bag
+            {{ section.settings.bag_eyebrow | default: '/ Bag' }}
           </div>
-          <h1 class="font-display text-5xl md:text-6xl text-foreground">Your cart</h1>
+          <h1 class="font-display text-5xl md:text-6xl text-foreground">{{ section.settings.cart_title | default: 'Your cart' }}</h1>
           <p class="mitushi-cart-item-count text-xs uppercase tracking-[0.3em] text-foreground/50 md:hidden">
             <span class="js-cart-form-item_count">{{ cart.item_count }}</span> item{% if cart.item_count != 1 %}s{% endif %}
           </p>
@@ -369,11 +369,11 @@
 
       <!-- Empty State Header -->
       <div class="js-cart-page-empty border border-border/60 py-24 text-center {{ cart_empty_show }}">
-        <div class="mb-4 text-[10px] uppercase tracking-[0.5em] text-crimson">/ Empty</div>
-        <h2 class="font-display text-4xl text-foreground">Your bag is quiet</h2>
-        <p class="mt-3 text-sm text-foreground/60">No drops yet. The next release won't wait.</p>
+        <div class="mb-4 text-[10px] uppercase tracking-[0.5em] text-crimson">{{ section.settings.empty_eyebrow | default: '/ Empty' }}</div>
+        <h2 class="font-display text-4xl text-foreground">{{ section.settings.empty_heading | default: 'Your bag is quiet' }}</h2>
+        <p class="mt-3 text-sm text-foreground/60">{{ section.settings.empty_description | default: "No drops yet. The next release won't wait." }}</p>
         <a class="mt-8 inline-flex items-center gap-2 bg-crimson px-6 py-3 text-[11px] font-bold uppercase tracking-[0.3em] text-white hover:bg-crimson-glow transition" href="{{ routes.all_products_collection_url }}">
-          Explore the drop
+          {{ section.settings.empty_cta_text | default: 'Explore the drop' }}
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
@@ -520,31 +520,33 @@
             <div class="mitushi-cart-summary border border-border/60 bg-card p-7 js-cart-form-content-cart-total">
               
               <!-- Title -->
-              <h2 class="font-display text-2xl text-foreground">Order summary</h2>
+              <h2 class="font-display text-2xl text-foreground">{{ section.settings.order_summary_heading | default: 'Order summary' }}</h2>
 
               {%- render 'mitushi-free-shipping-bar' -%}
 
               <!-- Subtotal & Shipping summary rows -->
               <dl class="mt-6 space-y-3 text-sm">
                 <div class="flex items-center justify-between">
-                  <dt class="text-foreground/70">Subtotal</dt>
+                  <dt class="text-foreground/70">{{ section.settings.subtotal_label | default: 'Subtotal' }}</dt>
                   <dd class="text-foreground font-semibold js-cart-total">{{ cart.total_price | money }}</dd>
                 </div>
                 <div class="flex items-center justify-between">
-                  <dt class="text-foreground/70">Shipping</dt>
+                  <dt class="text-foreground/70">{{ section.settings.shipping_label | default: 'Shipping' }}</dt>
                   <dd class="text-foreground font-semibold">
                     {%- liquid
+                      assign free_shipping_text = section.settings.free_shipping_text | default: 'FREE'
+                      assign shipping_calculated_text = section.settings.shipping_calculated_text | default: 'Calculated at checkout'
                       if cart.total_price >= free_shipping_threshold
-                        echo '<span class="text-crimson font-bold">FREE</span>'
+                        echo '<span class="text-crimson font-bold">' | append: free_shipping_text | append: '</span>'
                       else
-                        echo 'Calculated at checkout'
+                        echo shipping_calculated_text
                       endif
                     -%}
                   </dd>
                 </div>
                 <div class="my-4 h-px bg-border/60"></div>
                 <div class="flex items-center justify-between">
-                  <dt class="text-[11px] uppercase tracking-[0.3em] text-foreground/70">Total</dt>
+                  <dt class="text-[11px] uppercase tracking-[0.3em] text-foreground/70">{{ section.settings.total_label | default: 'Total' }}</dt>
                   <dd class="font-display text-2xl text-foreground">{{ cart.total_price | money }}</dd>
                 </div>
               </dl>
@@ -564,7 +566,7 @@
                   >
                     <span class="absolute inset-0 origin-left scale-x-0 bg-crimson transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"></span>
                     <span class="relative flex h-14 items-center justify-center gap-3 text-[12px] font-bold uppercase tracking-[0.35em] text-white">
-                      Proceed to checkout
+                      {{ section.settings.checkout_button_text | default: 'Proceed to checkout' }}
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1.5">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
@@ -705,6 +707,88 @@
       "id": "remove_padding_bottom",
       "label": "t:general.remove_padding_bottom",
       "default": false
+    },
+    {
+      "type": "header",
+      "content": "Text content"
+    },
+    {
+      "type": "text",
+      "id": "subtotal_label",
+      "label": "Subtotal label",
+      "default": "Subtotal"
+    },
+    {
+      "type": "text",
+      "id": "shipping_label",
+      "label": "Shipping label",
+      "default": "Shipping"
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_text",
+      "label": "Text shown when shipping is free",
+      "default": "FREE"
+    },
+    {
+      "type": "text",
+      "id": "shipping_calculated_text",
+      "label": "Text shown when shipping isn't free yet",
+      "default": "Calculated at checkout"
+    },
+    {
+      "type": "text",
+      "id": "bag_eyebrow",
+      "label": "Small label above cart title",
+      "default": "/ Bag"
+    },
+    {
+      "type": "text",
+      "id": "cart_title",
+      "label": "Cart page title",
+      "default": "Your cart"
+    },
+    {
+      "type": "text",
+      "id": "empty_eyebrow",
+      "label": "Small label above empty-cart heading",
+      "default": "/ Empty"
+    },
+    {
+      "type": "text",
+      "id": "empty_heading",
+      "label": "Empty cart heading",
+      "default": "Your bag is quiet"
+    },
+    {
+      "type": "text",
+      "id": "empty_description",
+      "label": "Empty cart description",
+      "default": "No drops yet. The next release won't wait."
+    },
+    {
+      "type": "text",
+      "id": "empty_cta_text",
+      "label": "Empty cart button text",
+      "default": "Explore the drop"
+    },
+    {
+      "type": "text",
+      "id": "order_summary_heading",
+      "label": "Order summary heading",
+      "default": "Order summary"
+    },
+    {
+      "type": "text",
+      "id": "total_label",
+      "label": "Total label",
+      "default": "Total"
+    },
+    {
+      "type": "text",
+      "id": "checkout_button_text",
+      "label": "Checkout button text",
+      "default": "Proceed to checkout"
     }
   ]
 }
