@@ -517,13 +517,7 @@
           <div class="mitushi-nl-popup__eyebrow">{{ eyebrow }}</div>
         {%- endif -%}
         {%- if title_before != blank or title_highlight != blank or title_after != blank -%}
-          <h2 id="mitushi-newsletter-title-{{ section.id }}" class="mitushi-nl-popup__title">
-            {{- title_before -}}
-            {%- if title_highlight != blank -%}
-              <span>{{ title_highlight }}</span>
-            {%- endif -%}
-            {{- title_after -}}
-          </h2>
+          <h2 id="mitushi-newsletter-title-{{ section.id }}" class="mitushi-nl-popup__title">{% if title_before != blank %}{{ title_before }} {% endif %}{% if title_highlight != blank %}<span>{{ title_highlight }}</span> {% endif %}{{ title_after }}</h2>
         {%- endif -%}
         {%- if description_text != blank -%}
           <p class="mitushi-nl-popup__desc">{{ description_text | newline_to_br }}</p>
