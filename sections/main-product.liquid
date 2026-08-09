@@ -76,7 +76,7 @@
       <!-- Info -->
       <div class="lg:pl-8">
         <div class="mb-2 text-[10px] font-medium uppercase tracking-[0.5em] text-crimson">
-          / {{ product.type | default: 'GHOST' | upcase }} — 鬼
+          / {{ product.type | default: section.settings.product_type_fallback | upcase }} — {{ section.settings.product_type_suffix | default: '鬼' }}
         </div>
         <h1 class="font-display text-5xl md:text-6xl leading-none text-foreground uppercase">{{ product.title }}</h1>
         <div class="mt-4 flex items-baseline gap-3">
@@ -227,7 +227,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 text-crimson">
             <rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle>
           </svg>
-          Free worldwide shipping over $199
+          {{ section.settings.shipping_tagline | default: 'Free worldwide shipping over $199' }}
         </div>
 
         <!-- Accordions -->
@@ -235,7 +235,7 @@
           <!-- Tab 1: Description -->
           <div class="border-b border-border/60 accordion-item">
             <button type="button" class="accordion-trigger flex w-full items-center justify-between py-5 text-left font-bold text-[11px] uppercase tracking-[0.3em] cursor-pointer bg-transparent border-none">
-              <span class="text-foreground">Description</span>
+              <span class="text-foreground">{{ section.settings.description_tab_label | default: 'Description' }}</span>
               <span class="accordion-icon relative grid h-5 w-5 place-items-center transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-foreground"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
               </span>
@@ -246,7 +246,7 @@
                   {%- if product.description != blank -%}
                     {{ product.description }}
                   {%- else -%}
-                    <p>No description available for this product.</p>
+                    <p>{{ section.settings.no_description_text | default: 'No description available for this product.' }}</p>
                   {%- endif -%}
                 </div>
               </div>
@@ -258,7 +258,7 @@
           <!-- Tab 2: Fabric & Care -->
           <div class="border-b border-border/60 accordion-item">
             <button type="button" class="accordion-trigger flex w-full items-center justify-between py-5 text-left font-bold text-[11px] uppercase tracking-[0.3em] cursor-pointer bg-transparent border-none">
-              <span class="text-foreground">Fabric &amp; Care</span>
+              <span class="text-foreground">{{ section.settings.fabric_care_tab_label | default: 'Fabric & Care' }}</span>
               <span class="accordion-icon relative grid h-5 w-5 place-items-center transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-foreground"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
               </span>
@@ -269,9 +269,7 @@
                   {%- if product.metafields.custom.fabric_care != blank -%}
                     {{ product.metafields.custom.fabric_care }}
                   {%- else -%}
-                    <p><strong>Material:</strong> Heavyweight pre-shrunk 100% cotton.</p>
-                    <p><strong>Fit:</strong> Oversized / relaxed fit.</p>
-                    <p><strong>Care:</strong> Cold wash inside-out. Hang dry to preserve print. Do not iron directly on graphics.</p>
+                    {{ section.settings.fabric_care_fallback | default: '<p><strong>Material:</strong> Heavyweight pre-shrunk 100% cotton.</p><p><strong>Fit:</strong> Oversized / relaxed fit.</p><p><strong>Care:</strong> Cold wash inside-out. Hang dry to preserve print. Do not iron directly on graphics.</p>' }}
                   {%- endif -%}
                 </div>
               </div>
@@ -893,6 +891,52 @@
         }
       ],
       "default": "right-0 product__sticky--right"
+    },
+    {
+      "type": "header",
+      "content": "Text content"
+    },
+    {
+      "type": "text",
+      "id": "shipping_tagline",
+      "label": "Shipping tagline",
+      "default": "Free worldwide shipping over $199"
+    },
+    {
+      "type": "text",
+      "id": "description_tab_label",
+      "label": "Description tab label",
+      "default": "Description"
+    },
+    {
+      "type": "text",
+      "id": "no_description_text",
+      "label": "Fallback text when product has no description",
+      "default": "No description available for this product."
+    },
+    {
+      "type": "text",
+      "id": "fabric_care_tab_label",
+      "label": "Fabric & Care tab label",
+      "default": "Fabric & Care"
+    },
+    {
+      "type": "richtext",
+      "id": "fabric_care_fallback",
+      "label": "Fallback fabric & care text (used when product has no metafield)",
+      "default": "<p><strong>Material:</strong> Heavyweight pre-shrunk 100% cotton.</p><p><strong>Fit:</strong> Oversized / relaxed fit.</p><p><strong>Care:</strong> Cold wash inside-out. Hang dry to preserve print. Do not iron directly on graphics.</p>"
+    },
+    {
+      "type": "text",
+      "id": "product_type_fallback",
+      "label": "Fallback product type label (used when product has no type set)",
+      "default": "GHOST"
+    },
+    {
+      "type": "text",
+      "id": "product_type_suffix",
+      "label": "Decorative suffix after product type",
+      "default": "鬼"
     }
   ],
   "blocks": [

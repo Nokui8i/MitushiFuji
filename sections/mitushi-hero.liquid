@@ -481,7 +481,7 @@
         {% endif %}
         <img
           src="{{ hero_img_url }}"
-          alt="Mitushi anime streetwear model"
+          alt="{{ section.settings.hero_image.alt | default: 'Mitushi anime streetwear model' }}"
           width="520"
           height="650"
           class="mitushi-hero-image"
