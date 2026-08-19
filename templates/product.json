@@ -129,7 +129,14 @@
         "show_variants_sticky_bar": true,
         "show_product_information_on_mobile": true,
         "sticky_button_type": "add_to_cart",
-        "purchasing_bar_position": "right-0 product__sticky--right"
+        "purchasing_bar_position": "right-0 product__sticky--right",
+        "shipping_tagline": "Free worldwide shipping over $199",
+        "description_tab_label": "Description",
+        "no_description_text": "No description available for this product.",
+        "fabric_care_tab_label": "Fabric & Care",
+        "fabric_care_fallback": "<p><strong>Material:</strong> Heavyweight pre-shrunk 100% cotton.</p><p><strong>Fit:</strong> Oversized / relaxed fit.</p><p><strong>Care:</strong> Cold wash inside-out. Hang dry to preserve print. Do not iron directly on graphics.</p>",
+        "product_type_fallback": "GHOST",
+        "product_type_suffix": "鬼"
       }
     },
     "collapsible_content_xg6FwX": {
@@ -229,7 +236,9 @@
         "enable_carousel": true,
         "show_navigation": true,
         "remove_padding_top": true,
-        "remove_padding_bottom": false
+        "remove_padding_bottom": false,
+        "quick_add_label": "Quick add",
+        "add_to_cart_label": "Add to cart"
       }
     },
     "featured_product_carousel_3zAawn": {
@@ -264,7 +273,50 @@
         "badge_text": "",
         "badge_color": "color-accent-1",
         "badge_position": "p-badge--bottom-right",
-        "badge_shape": "badge--asterisk"
+        "badge_shape": "badge--asterisk",
+        "quick_add_label": "Quick add",
+        "add_to_cart_label": "Add to cart"
+      }
+    },
+    "17871284712c6e2d84": {
+      "type": "apps",
+      "blocks": {
+        "loox_reviews_loox_dynamic_section_8QLneH": {
+          "type": "shopify://apps/loox-reviews/blocks/loox-dynamic-section/5c3b337f-fd14-4df5-b1d6-80ec13e6e28e",
+          "settings": {
+            "reviews_to_display": "",
+            "default_tab": "automatic",
+            "only_photos": false,
+            "aggregated": false,
+            "limit": 20,
+            "hide_thumbnails": false,
+            "maxwidth": 1080,
+            "is_sample": true
+          }
+        }
+      },
+      "block_order": [
+        "loox_reviews_loox_dynamic_section_8QLneH"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "enable_mitushi_layout": true,
+        "show_section_header": true,
+        "subheading": "/ 03 — インスタグラム",
+        "heading": "From Instagram",
+        "show_instagram_link": true,
+        "instagram_url": "",
+        "instagram_link_label": "Follow on Instagram",
+        "instagram_link_label_short": "Follow",
+        "cta_style": "split",
+        "show_hero_background": true,
+        "ghost_text": "FEED",
+        "vertical_jp": "ミツシ・フィード",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "enable_content_fullwidth": false,
+        "remove_padding_top": false,
+        "remove_padding_bottom": false
       }
     }
   },
@@ -272,6 +324,7 @@
     "main",
     "collapsible_content_xg6FwX",
     "product-recommendation",
-    "featured_product_carousel_3zAawn"
+    "featured_product_carousel_3zAawn",
+    "17871284712c6e2d84"
   ]
 }
